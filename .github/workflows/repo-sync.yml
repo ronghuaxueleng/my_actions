@@ -59,7 +59,7 @@ jobs:
           rm -rf .gitignore
           rm -rf git_pull.sh
           cd ../
-          git clone git@jd_scripts_githup:ronghuahaha/my_actions.git
+          git clone git@github.com:ronghuaxueleng/my_actions.git
           cp -f ./my_actions/jd.sh ./JD-FreeFuck
           cp -f ./my_actions/git_pull.sh ./JD-FreeFuck
           cp -rf ./my_actions/sample ./JD-FreeFuck/
