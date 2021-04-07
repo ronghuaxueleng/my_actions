@@ -78,7 +78,7 @@ jobs:
       - name: 'sync github -> gitee'
         uses: Yikun/hub-mirror-action@master
         with:
-          src: github/ronghuahaha
+          src: github/ronghuaxueleng
           dst: gitee/getready
           static_list: "my_actions"
           dst_key: ${{ secrets.GITEE_KEY }}
