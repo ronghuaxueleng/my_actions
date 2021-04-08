@@ -31,6 +31,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && cd ${JD_DIR}/panel \
     && npm install \
     && npm install -g pm2 \
+    && cd ${JD_DIR}/panel \
+    && npm install \
     && touch ${JD_DIR}/run_all.sh \
     && ln -sf ${JD_DIR}/run_all.sh /usr/local/bin/run_all \
     && ln -sf ${JD_DIR}/jd.sh /usr/local/bin/jd \
