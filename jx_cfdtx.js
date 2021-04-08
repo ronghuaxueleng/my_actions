@@ -16,6 +16,7 @@
 
 const $ = new Env("京喜财富岛提现");
 const JD_API_HOST = "https://m.jingxi.com/";
+const notify = $.isNode() ? require('./sendNotify.js') : '';
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const jdTokenNode = $.isNode() ? require('./jdJxncTokens.js') : '';
 $.result = [];
@@ -135,9 +136,11 @@ function showMsg() {
         notifyTimes.some((x) => x[0] === now[0] && (!x[1] || x[1] === now[1]))
       ) {
         $.msg($.name, "", `\n${$.result.join("\n")}`);
+        notify.sendNotify($.name, `\n${$.result.join("\n")}`);
       }
     } else {
       $.msg($.name, "", `\n${$.result.join("\n")}`);
+      notify.sendNotify($.name, `\n${$.result.join("\n")}`);
     }
     resolve();
   });
