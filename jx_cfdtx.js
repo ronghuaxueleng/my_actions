@@ -42,7 +42,7 @@ $.userName = "";
       $.log(`\n开始【京东账号${i + 1}】${$.userName}`);
 
       await cashOut();
-      await $.wait(1000);
+      await $.wait(500);
       await getTotal();
     }
   }
