@@ -36,7 +36,7 @@ ContentNewTask=${ShellDir}/new_task
 ContentDropTask=${ShellDir}/drop_task
 SendCount=${ShellDir}/send_count
 isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
-ScriptsURL=https://github.com.cnpmjs.org/gossh520/jd_scripts
+ScriptsURL=https://hub.fastgit.org/gossh520/jd_scripts
 Scripts2URL=https://gitee.com/shuye72/MyActions.git
 Scripts3URL=https://gitee.com/getready/my_actions.git
 
