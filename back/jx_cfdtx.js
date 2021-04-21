@@ -19,51 +19,52 @@ const JD_API_HOST = "https://m.jingxi.com/";
 const notify = $.isNode() ? require("./sendNotify.js") : "";
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const jdTokenNode = $.isNode() ? require("./jdJxncTokens.js") : "";
+$.result = [];
 $.cookieArr = [];
+$.currentCookie = "";
 $.tokenArr = [];
+$.currentToken = {};
 $.strPhoneID = "";
 $.strPgUUNum = "";
+$.userName = "";
 
-if (!getCookies()) return;
-if (!getTokens()) return;
-
-for (let i = 0; i < $.cookieArr.length; i++) {
-  !(async (index) => {
-    let result = [];
-    let currentCookie = $.cookieArr[index];
-    let currentToken = $.tokenArr[index];
-    if (currentCookie) {
-      let userName = decodeURIComponent(
-        currentCookie.match(/pt_pin=(.+?);/) &&
-          currentCookie.match(/pt_pin=(.+?);/)[1]
+!(async () => {
+  if (!getCookies()) return;
+  if (!getTokens()) return;
+  for (let i = 0; i < $.cookieArr.length; i++) {
+    $.currentCookie = $.cookieArr[i];
+    $.currentToken = $.tokenArr[i];
+    if ($.currentCookie) {
+      $.userName = decodeURIComponent(
+        $.currentCookie.match(/pt_pin=(.+?);/) &&
+          $.currentCookie.match(/pt_pin=(.+?);/)[1]
       );
-      $.log(`\n开始【京东账号${index + 1}】${userName}`);
+      $.log(`\n开始【京东账号${i + 1}】${$.userName}`);
 
-      await cashOut(currentCookie, currentToken, userName, result);
+      await cashOut();
       await $.wait(500);
-      await getTotal(currentCookie, result);
-      await showMsg(result);
+      await getTotal();
     }
-  })(i)
-    .catch((e) => $.logErr(e))
-    .finally(() => $.done());
-}
+  }
+  await showMsg();
+})()
+  .catch((e) => $.logErr(e))
+  .finally(() => $.done());
 
-function cashOut(currentCookie, currentToken, userName, result) {
+function cashOut() {
   return new Promise(async (resolve) => {
     $.get(
       taskUrl(
         `consume/CashOut`,
-        `ddwMoney=100&dwIsCreateToken=0&ddwMinPaperMoney=100000&strPgtimestamp=${currentToken["timestamp"]}&strPhoneID=${currentToken["phoneid"]}&strPgUUNum=${currentToken["farm_jstoken"]}`,
-        currentCookie
+        `ddwMoney=100&dwIsCreateToken=0&ddwMinPaperMoney=100000&strPgtimestamp=${$.currentToken["timestamp"]}&strPhoneID=${$.currentToken["phoneid"]}&strPgUUNum=${$.currentToken["farm_jstoken"]}`
       ),
       async (err, resp, data) => {
         try {
           $.log(data);
           let { iRet, sErrMsg } = JSON.parse(data);
           $.log(data);
-          result.push(
-            `【${userName}】\n ${
+          $.result.push(
+            `【${$.userName}】\n ${
               sErrMsg == "" ? (sErrMsg = "今天手气太棒了") : sErrMsg
             }`
           );
@@ -78,13 +79,13 @@ function cashOut(currentCookie, currentToken, userName, result) {
   });
 }
 
-function getTotal(currentCookie, result) {
+function getTotal() {
   return new Promise(async (resolve) => {
-    $.get(queryUserRedEnvelopes(currentCookie), async (err, resp, data) => {
+    $.get(queryUserRedEnvelopes(), async (err, resp, data) => {
       try {
         $.log(data);
         let res = JSON.parse(data);
-        result.push(`现有现金总数：${res.data.balance}`);
+        $.result.push(`现有现金总数：${res.data.balance}`);
         $.log(res);
         resolve(res);
       } catch (e) {
@@ -96,11 +97,11 @@ function getTotal(currentCookie, result) {
   });
 }
 
-function taskUrl(function_path, body, currentCookie) {
+function taskUrl(function_path, body) {
   return {
     url: `${JD_API_HOST}jxcfd/${function_path}?strZone=jxcfd&bizCode=jxcfd&source=jxcfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&${body}&_stk=_cfd_t%2CbizCode%2CddwMinPaperMoney%2CddwMoney%2CdwEnv%2CdwIsCreateToken%2Cptag%2Csource%2CstrPgUUNum%2CstrPgtimestamp%2CstrPhoneID%2CstrZone&_ste=1&_=${Date.now()}&sceneval=2&g_login_type=1&g_ty=ls`,
     headers: {
-      Cookie: currentCookie,
+      Cookie: $.currentCookie,
       Accept: "*/*",
       Connection: "keep-alive",
       Referer:
@@ -114,11 +115,11 @@ function taskUrl(function_path, body, currentCookie) {
   };
 }
 
-function queryUserRedEnvelopes(currentCookie) {
+function queryUserRedEnvelopes() {
   return {
     url: `${JD_API_HOST}user/info/QueryUserRedEnvelopes?channel=3&orgFlag=JD_PinGou_New&cashRedType=2&_=${Date.now()}&sceneval=2`,
     headers: {
-      Cookie: currentCookie,
+      Cookie: $.currentCookie,
       Accept: "*/*",
       Connection: "keep-alive",
       Referer:
@@ -174,7 +175,7 @@ function getTokens() {
   return true;
 }
 
-function showMsg(result) {
+function showMsg() {
   return new Promise((resolve) => {
     if ($.notifyTime) {
       const notifyTimes = $.notifyTime.split(",").map((x) => x.split(":"));
@@ -184,12 +185,12 @@ function showMsg(result) {
       if (
         notifyTimes.some((x) => x[0] === now[0] && (!x[1] || x[1] === now[1]))
       ) {
-        $.msg($.name, "", `\n${result.join("\n")}`);
-        notify.sendNotify($.name, `\n${result.join("\n")}`);
+        $.msg($.name, "", `\n${$.result.join("\n")}`);
+        notify.sendNotify($.name, `\n${$.result.join("\n")}`);
       }
     } else {
-      $.msg($.name, "", `\n${result.join("\n")}`);
-      notify.sendNotify($.name, `\n${result.join("\n")}`);
+      $.msg($.name, "", `\n${$.result.join("\n")}`);
+      notify.sendNotify($.name, `\n${$.result.join("\n")}`);
     }
     resolve();
   });
