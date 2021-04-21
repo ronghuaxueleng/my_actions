@@ -62,7 +62,7 @@ function cashOut() {
         try {
           $.log(data);
           let { iRet, sErrMsg } = JSON.parse(data);
-          $.log(sErrMsg);
+          $.log(data);
           $.result.push(
             `【${$.userName}】\n ${
               sErrMsg == "" ? (sErrMsg = "今天手气太棒了") : sErrMsg
