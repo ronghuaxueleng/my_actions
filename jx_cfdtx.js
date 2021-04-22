@@ -27,6 +27,8 @@ $.strPgUUNum = "";
 if (!getCookies()) return;
 if (!getTokens()) return;
 
+let doneResults = [];
+
 for (let i = 0; i < $.cookieArr.length; i++) {
   !(async (index) => {
     let result = [];
@@ -37,12 +39,21 @@ for (let i = 0; i < $.cookieArr.length; i++) {
         currentCookie.match(/pt_pin=(.+?);/) &&
           currentCookie.match(/pt_pin=(.+?);/)[1]
       );
-      let logs = [`\n开始【京东账号${index + 1}】${userName}`];
+      userName = `【京东账号${index + 1}】${userName}`;
+      let logs = [`\n开始 ${userName}`];
 
       await cashOut(currentCookie, currentToken, userName, result, logs);
       await $.wait(500);
       await getTotal(currentCookie, result, logs);
-      await showMsg(result, logs);
+      let results = doneResults["results"] || [];
+      let runlogs = doneResults["runlogs"] || [];
+      results.push(result);
+      runlogs.push(logs);
+      doneResults.results = results;
+      doneResults.runlogs = runlogs;
+      if (results.length == $.cookieArr.length) {
+        await showMsg(doneResults);
+      }
     }
   })(i)
     .catch((e) => $.logErr(e))
@@ -172,23 +183,25 @@ function getTokens() {
   return true;
 }
 
-function showMsg(result, logs) {
+function showMsg(doneResults) {
   return new Promise((resolve) => {
+    let results = doneResults["results"] || [];
+    let runlogs = doneResults["runlogs"] || [];
     if ($.notifyTime) {
       const notifyTimes = $.notifyTime.split(",").map((x) => x.split(":"));
       const now = $.time("HH:mm").split(":");
-      logs.push(`${JSON.stringify(notifyTimes)}`);
-      logs.push(`${JSON.stringify(now)}`);
-      $.log(logs.join("\n"));
+      runlogs.push(`${JSON.stringify(notifyTimes)}`);
+      runlogs.push(`${JSON.stringify(now)}`);
+      $.log(runlogs.join("\n"));
       if (
         notifyTimes.some((x) => x[0] === now[0] && (!x[1] || x[1] === now[1]))
       ) {
-        $.msg($.name, "", `\n${result.join("\n")}`);
-        notify.sendNotify($.name, `\n${result.join("\n")}`);
+        $.msg($.name, "", `\n${results.join("\n")}`);
+        notify.sendNotify($.name, `\n${results.join("\n")}`);
       }
     } else {
-      $.msg($.name, "", `\n${result.join("\n")}`);
-      notify.sendNotify($.name, `\n${result.join("\n")}`);
+      $.msg($.name, "", `\n${results.join("\n")}`);
+      notify.sendNotify($.name, `\n${results.join("\n")}`);
     }
     resolve();
   });
