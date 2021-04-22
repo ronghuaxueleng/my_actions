@@ -37,19 +37,19 @@ for (let i = 0; i < $.cookieArr.length; i++) {
         currentCookie.match(/pt_pin=(.+?);/) &&
           currentCookie.match(/pt_pin=(.+?);/)[1]
       );
-      $.log(`\n开始【京东账号${index + 1}】${userName}`);
+      let logs = [`\n开始【京东账号${index + 1}】${userName}`];
 
-      await cashOut(currentCookie, currentToken, userName, result);
+      await cashOut(currentCookie, currentToken, userName, result, logs);
       await $.wait(500);
-      await getTotal(currentCookie, result);
-      await showMsg(result);
+      await getTotal(currentCookie, result, logs);
+      await showMsg(result, logs);
     }
   })(i)
     .catch((e) => $.logErr(e))
     .finally(() => $.done());
 }
 
-function cashOut(currentCookie, currentToken, userName, result) {
+function cashOut(currentCookie, currentToken, userName, result, logs) {
   return new Promise(async (resolve) => {
     $.get(
       taskUrl(
@@ -59,9 +59,8 @@ function cashOut(currentCookie, currentToken, userName, result) {
       ),
       async (err, resp, data) => {
         try {
-          $.log(data);
+          logs.push(data);
           let { iRet, sErrMsg } = JSON.parse(data);
-          $.log(data);
           result.push(
             `【${userName}】\n ${
               sErrMsg == "" ? (sErrMsg = "今天手气太棒了") : sErrMsg
@@ -78,14 +77,13 @@ function cashOut(currentCookie, currentToken, userName, result) {
   });
 }
 
-function getTotal(currentCookie, result) {
+function getTotal(currentCookie, result, logs) {
   return new Promise(async (resolve) => {
     $.get(queryUserRedEnvelopes(currentCookie), async (err, resp, data) => {
       try {
-        $.log(data);
+        logs.push(data);
         let res = JSON.parse(data);
         result.push(`现有现金总数：${res.data.balance}`);
-        $.log(res);
         resolve(res);
       } catch (e) {
         $.logErr(e, resp);
@@ -174,13 +172,14 @@ function getTokens() {
   return true;
 }
 
-function showMsg(result) {
+function showMsg(result, logs) {
   return new Promise((resolve) => {
     if ($.notifyTime) {
       const notifyTimes = $.notifyTime.split(",").map((x) => x.split(":"));
       const now = $.time("HH:mm").split(":");
-      $.log(`\n${JSON.stringify(notifyTimes)}`);
-      $.log(`\n${JSON.stringify(now)}`);
+      logs.push(`${JSON.stringify(notifyTimes)}`);
+      logs.push(`${JSON.stringify(now)}`);
+      $.log(logs.join("\n"));
       if (
         notifyTimes.some((x) => x[0] === now[0] && (!x[1] || x[1] === now[1]))
       ) {
