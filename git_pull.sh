@@ -187,7 +187,7 @@ function Diff_Cron() {
 
     cat ${ListCronSh} | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >${ListJs}
     if [[ ${EnableExtraShell} == true ]]; then
-      cat ${FileDiy} | grep -v "#" | grep "my_scripts_list" | grep -io "j[drx]_[a-z]*\w[a-z]*" | sort -u >>${ListJs}
+      cat ${FileDiy} | grep -v "#" | grep "my_scripts_list" | grep -v "jx_tokens.js" | grep -io "j[drx]_[a-z]*\w[a-z]*\w[a-z]*" | sort -u >>${ListJs}
     fi
 
     grep -vwf ${ListTask} ${ListJs} >${ListJsAdd}
@@ -423,11 +423,10 @@ function Run_All() {
   ## 例：sed -i '/xxx/d' ${ShellDir}/run_all.sh
   sed -i '/jd_delCoupon/d' ${ShellDir}/run_all.sh ## 不执行 "京东家庭号" 活动
   sed -i '/jd_family/d' ${ShellDir}/run_all.sh    ## 不执行 "删除优惠券" 活动
+  sed -i '/jd_shop_lottery/d' ${ShellDir}/run_all.sh
 
   ## 去除脚本中的空行
   sed -i '/^\s*$/d' ${ShellDir}/run_all.sh
-  ## 赋权
-  chmod 777 ${ShellDir}/run_all.sh
 }
 
 ## 在日志中记录时间与路径
@@ -453,7 +452,7 @@ Combined_Cron
 # [ -d ${ScriptsCombined}/.git ] && Git_PullScripts || Git_CloneScripts
 echo -e "+----------------------- 郑 重 提 醒 -----------------------+"
 echo -e ""
-echo -e "  本项目开源免费使用，并且不可分享在国内的任何媒体与网站上！"
+echo -e "  本项目开源免费使用但不可传播分享在国内任何的媒体与网站上！"
 echo -e ""
 echo -e "  如果在其它地方发现以付费的形式传播与使用请举报并向我反馈！"
 echo -e ""
