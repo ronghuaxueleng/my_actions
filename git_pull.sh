@@ -37,7 +37,7 @@ ContentDropTask=${ShellDir}/drop_task
 SendCount=${ShellDir}/send_count
 isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
 ScriptsURL=https://hub.fastgit.org/gossh520/jd_scripts
-Scripts2URL=https://gitee.com/shuye72/MyActions.git
+Scripts2URL=https://hub.fastgit.org/wuzhi03/MyActions
 Scripts3URL=https://gitee.com/getready/my_actions.git
 
 ## 更新crontab，gitee服务器同一时间限制5个链接，因此每个人更新代码必须错开时间，每次执行git_pull随机生成。
@@ -159,13 +159,12 @@ function Change_ALL() {
 
 ## 合并脚本 
 function Combined_Cron {
-  cat ${ListCronScripts} ${ListCronScripts3} | grep -E "j[drx]_\w+\.js" | sort -u > ${ListCronSh}
-  # cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | grep -E "j[drx]_\w+\.js" | sort -u > ${ListCronSh}
+  cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | grep -E "j[drx]_\w+\.js" | sort -u > ${ListCronSh}
   [ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
-  # [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
+  [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
   [ -d ${Scripts3Dir}/.git ] && Git_PullScripts3 || Git_CloneScripts3
   rm -rf ${ScriptsCombined}/*.*
-  # cp -rf `ls ${Scripts2Dir} | grep -v docker |sed "s:^:${Scripts2Dir}/:" | xargs` ${ScriptsCombined}
+  cp -rf `ls ${Scripts2Dir} | grep -v docker |sed "s:^:${Scripts2Dir}/:" | xargs` ${ScriptsCombined}
   cp -rf `ls ${ScriptsDir} | grep -v docker |sed "s:^:${ScriptsDir}/:" | xargs` ${ScriptsCombined}
   cp -rf `ls ${Scripts3Dir} | grep -v docker |sed "s:^:${Scripts3Dir}/:" | xargs` ${ScriptsCombined}
   rm -rf ${ScriptsCombined}/*.md
