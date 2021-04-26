@@ -474,6 +474,7 @@ if [[ ${ExitStatusScripts} -eq 0 ]]; then
   Del_Cron
   Add_Cron
   ExtraShell
+  cp -rf `ls ${Scripts3Dir} | grep -v docker |sed "s:^:${Scripts3Dir}/:" | xargs` ${ScriptsCombined}
   Run_All
   echo -e "活动脚本更新完成......\n"
 else
