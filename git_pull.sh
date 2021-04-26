@@ -159,12 +159,13 @@ function Change_ALL() {
 
 ## 合并脚本 
 function Combined_Cron {
-  cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | grep -E "j[drx]_\w+\.js" | sort -u > ${ListCronSh}
+  cat ${ListCronScripts} ${ListCronScripts3} | grep -E "j[drx]_\w+\.js" | sort -u > ${ListCronSh}
+  # cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | grep -E "j[drx]_\w+\.js" | sort -u > ${ListCronSh}
   [ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
-  [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
+  # [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
   [ -d ${Scripts3Dir}/.git ] && Git_PullScripts3 || Git_CloneScripts3
   rm -rf ${ScriptsCombined}/*.*
-  cp -rf `ls ${Scripts2Dir} | grep -v docker |sed "s:^:${Scripts2Dir}/:" | xargs` ${ScriptsCombined}
+  # cp -rf `ls ${Scripts2Dir} | grep -v docker |sed "s:^:${Scripts2Dir}/:" | xargs` ${ScriptsCombined}
   cp -rf `ls ${ScriptsDir} | grep -v docker |sed "s:^:${ScriptsDir}/:" | xargs` ${ScriptsCombined}
   cp -rf `ls ${Scripts3Dir} | grep -v docker |sed "s:^:${Scripts3Dir}/:" | xargs` ${ScriptsCombined}
   rm -rf ${ScriptsCombined}/*.md
