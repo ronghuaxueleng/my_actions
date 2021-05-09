@@ -425,6 +425,7 @@ function Run_All() {
   sed -i '/jd_delCoupon/d' ${ShellDir}/run_all.sh ## 不执行 "京东家庭号" 活动
   sed -i '/jd_family/d' ${ShellDir}/run_all.sh    ## 不执行 "删除优惠券" 活动
   sed -i '/jd_shop_lottery/d' ${ShellDir}/run_all.sh
+  sed -i '/jd_try/d' ${ShellDir}/run_all.sh
 
   ## 去除脚本中的空行
   sed -i '/^\s*$/d' ${ShellDir}/run_all.sh
