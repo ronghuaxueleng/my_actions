@@ -166,7 +166,7 @@ function Combined_Cron {
   cp -rf `ls ${Scripts2Dir} | grep -v docker |sed "s:^:${Scripts2Dir}/:" | xargs` ${ScriptsCombined}
   cp -rf `ls ${ScriptsDir} | grep -v docker |sed "s:^:${ScriptsDir}/:" | xargs` ${ScriptsCombined}
   cp -rf `ls ${Scripts3Dir} | grep -v docker |sed "s:^:${Scripts3Dir}/:" | xargs` ${ScriptsCombined}
-  cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | grep -E "j[drx]_\w+\.js" | sort -u > ${ListCronSh}
+  cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "j[drx]_\w+\.js" | sort -u > ${ListCronSh}
   rm -rf ${ScriptsCombined}/*.md
   rm -rf ${ScriptsCombined}/package-lock.json
 }
