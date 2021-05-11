@@ -373,6 +373,7 @@ function ExtraShell() {
       echo -e "自定义 DIY 脚本同步完成......"
       echo -e ''
       sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/raw.fastgit.org/' ${FileDiy}
+      sed -i 's/ScriptsDir/ScriptsCombined/' ${FileDiy}
       sleep 2s
     else
       echo -e "\033[31m自定义 DIY 脚本同步失败！\033[0m"
