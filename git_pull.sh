@@ -166,6 +166,7 @@ function Combined_Cron {
   cp -rf `ls ${Scripts2Dir} | grep -v docker |sed "s:^:${Scripts2Dir}/:" | xargs` ${ScriptsCombined}
   cp -rf `ls ${ScriptsDir} | grep -v docker |sed "s:^:${ScriptsDir}/:" | xargs` ${ScriptsCombined}
   cp -rf `ls ${Scripts3Dir} | grep -v docker |sed "s:^:${Scripts3Dir}/:" | xargs` ${ScriptsCombined}
+  ExtraShell
   cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "j[drx]_\w+\.js" | sort -u > ${ListCronSh}
   rm -rf ${ScriptsCombined}/*.md
   rm -rf ${ScriptsCombined}/package-lock.json
@@ -476,7 +477,6 @@ if [[ ${ExitStatusScripts} -eq 0 ]]; then
   Output_ListJsDrop
   Del_Cron
   Add_Cron
-  ExtraShell
   cp -rf `ls ${Scripts3Dir} | grep -v docker |sed "s:^:${Scripts3Dir}/:" | xargs` ${ScriptsCombined}
   Run_All
   echo -e "活动脚本更新完成......\n"
