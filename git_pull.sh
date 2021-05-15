@@ -27,6 +27,7 @@ FileConf=${ConfigDir}/config.sh
 FileDiy=${ConfigDir}/diy.sh
 FileConfSample=${ShellDir}/sample/config.sh.sample
 ListCron=${ConfigDir}/crontab.list
+ListCronUniq=${ConfigDir}/crontab.list.uniq
 ListTask=${LogDir}/task.list
 ListJs=${LogDir}/js.list
 ListJsAdd=${LogDir}/js-add.list
@@ -57,6 +58,8 @@ function Update_Cron() {
       RanHour="${RanHour},${RanHourArray[i]}"
     done
     perl -i -pe "s|.+(bash.+git_pull.+log.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCron}
+    sort -u ${ListCron} > ${ListCronUniq}
+    mv ${ListCronUniq} ${ListCron}
     crontab ${ListCron}
   fi
 }
@@ -315,6 +318,8 @@ function Del_Cron() {
     for Cron in ${JsDrop}; do
       perl -i -ne "{print unless / ${Cron}( |$)/}" ${ListCron}
     done
+    sort -u ${ListCron} > ${ListCronUniq}
+    mv ${ListCronUniq} ${ListCron}
     crontab ${ListCron}
     echo -e "成功删除失效的脚本与定时任务，当前的定时任务清单如下：\n\n--------------------------------------------------------------\n"
     crontab -l
@@ -346,6 +351,8 @@ function Add_Cron() {
     done
 
     if [ $? -eq 0 ]; then
+      sort -u ${ListCron} > ${ListCronUniq}
+      mv ${ListCronUniq} ${ListCron}
       crontab ${ListCron}
       echo -e "成功添加新的定时任务，当前的定时任务清单如下：\n\n--------------------------------------------------------------\n"
       crontab -l
