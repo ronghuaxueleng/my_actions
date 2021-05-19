@@ -128,7 +128,7 @@ function Git_PullScripts3 {
 ## 克隆scripts4
 function Git_CloneScripts4 {
   echo -e "克隆${Scripts4URL}脚本\n"
-  git clone -b scripts ${Scripts4URL} ${Scripts4Dir}
+  git clone -b dust ${Scripts4URL} ${Scripts4Dir}
   ExitStatusScripts2=$?
   echo
 }
