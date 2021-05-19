@@ -190,7 +190,7 @@ function Combined_Cron {
   cp -rf `ls ${Scripts3Dir} | grep -v docker |sed "s:^:${Scripts3Dir}/:" | xargs` ${ScriptsCombined}
   for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/monkcoder_${jsname##*/}; done
   cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "j[drx]_\w+\.js" | sort -u > ${ListCronSh}
-  for jsname in $(find ./monkcoder -name "*.js" | grep -vE "\/backup\/"); do
+  for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do
     croname=${jsname##*/}
     jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
     if [ -n "${jsnamecron}" ]; then
