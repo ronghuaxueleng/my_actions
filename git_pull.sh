@@ -406,7 +406,7 @@ function ExtraShell() {
     if [ $? -eq 0 ]; then
       echo -e "自定义 DIY 脚本同步完成......"
       echo -e ''
-      sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/raw.fastgit.org/' ${FileDiy}
+      # sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/raw.fastgit.org/' ${FileDiy}
       sed -i 's/ScriptsDir/ScriptsCombined/' ${FileDiy}
       sleep 2s
     else
