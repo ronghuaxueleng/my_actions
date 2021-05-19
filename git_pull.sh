@@ -194,7 +194,7 @@ function Combined_Cron {
     croname=${jsname##*/}
     jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
     if [ -n "${jsnamecron}" ]; then
-        echo "$jsnamecron bash jd monkcoder_$croname" >> ${ListCronSh}
+        echo "$jsnamecron bash jd monkcoder_${croname%.*}" >> ${ListCronSh}
     fi
   done
   rm -rf ${ScriptsCombined}/*.md
