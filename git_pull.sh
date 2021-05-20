@@ -215,7 +215,7 @@ function Diff_Cron() {
       grep -E " monkcoder_\w+" ${ListCron} | perl -pe "s|.+ (monkcoder_\w+).*|\1|" | sort -u >>${ListTask}
     else
       grep "${ShellDir}/" ${ListCron} | grep -E " j[drx]_\w+" | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | sort -u >${ListTask}
-      grep "${ShellDir}/" ${ListCron} | perl -E " monkcoder_\w+" | perl -pe "s|.+ (monkcoder_\w+).*|\1|" | sort -u >>${ListTask}
+      # grep "${ShellDir}/" ${ListCron} | perl -E " monkcoder_\w+" | perl -pe "s|.+ (monkcoder_\w+).*|\1|" | sort -u >>${ListTask}
     fi
 
     cat ${ListCronSh} | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >${ListJs}
@@ -378,7 +378,7 @@ function Add_Cron() {
         echo "4 0,9 * * * bash ${ShellJd} ${Cron}" | sort -u >>${ListCron}
       else
         cat ${ListCronSh} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
-        cat ${ListCronSh} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(monkcoder_\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
+        # cat ${ListCronSh} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(monkcoder_\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
       fi
     done
 
