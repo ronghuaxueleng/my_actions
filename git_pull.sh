@@ -378,7 +378,7 @@ function Add_Cron() {
         echo "4 0,9 * * * bash ${ShellJd} ${Cron}" | sort -u >>${ListCron}
       else
         cat ${ListCronSh} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
-        cat ${ListCronSh} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(monkcoder_\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
+        # cat ${ListCronSh} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(monkcoder_\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
       fi
     done
 
