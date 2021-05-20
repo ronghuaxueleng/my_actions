@@ -188,14 +188,13 @@ function Combined_Cron {
   cp -rf `ls ${Scripts2Dir} | grep -v docker |sed "s:^:${Scripts2Dir}/:" | xargs` ${ScriptsCombined}
   cp -rf `ls ${ScriptsDir} | grep -v docker |sed "s:^:${ScriptsDir}/:" | xargs` ${ScriptsCombined}
   cp -rf `ls ${Scripts3Dir} | grep -v docker |sed "s:^:${Scripts3Dir}/:" | xargs` ${ScriptsCombined}
-  for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/monkcoder_${jsname##*/}; done
+  for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
   cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "j[drx]_\w+\.js" | sort -u > ${ListCronSh}
   for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do
     croname=${jsname##*/}
     jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
     if [ -n "${jsnamecron}" ]; then
-        # echo "$jsnamecron bash jd monkcoder_${croname%.*}" >> ${ListCron}
-        echo "$jsnamecron node /scripts/monkcoder_$croname >> /scripts/logs/monkcoder_${croname%.*}.log 2>&1" >> ${ListCronSh}
+        echo "$jsnamecron node /scripts/jd_monkcoder_$croname >> /scripts/logs/jd_monkcoder_${croname%.*}.log 2>&1" >> ${ListCronSh}
     fi
   done
   rm -rf ${ScriptsCombined}/*.md
@@ -212,16 +211,14 @@ function Diff_Cron() {
   if [ -f ${ListCron} ]; then
     if [ -n "${JD_DIR}" ]; then
       grep -E " j[drx]_\w+" ${ListCron} | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | sort -u >${ListTask}
-      grep -E " monkcoder_\w+" ${ListCron} | perl -pe "s|.+ (monkcoder_\w+).*|\1|" | sort -u >>${ListTask}
     else
       grep "${ShellDir}/" ${ListCron} | grep -E " j[drx]_\w+" | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | sort -u >${ListTask}
-      grep "${ShellDir}/" ${ListCron} | perl -E " monkcoder_\w+" | perl -pe "s|.+ (monkcoder_\w+).*|\1|" | sort -u >>${ListTask}
     fi
 
     cat ${ListCronSh} | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >${ListJs}
-    cat ${ListCronSh} | grep -E "monkcoder_\w+\.js" | perl -pe "s|.+(monkcoder_\w+)\.js.+|\1|" | sort -u >>${ListJs}
     if [[ ${EnableExtraShell} == true ]]; then
       cat ${FileDiy} | grep -v "#" | grep "my_scripts_list" | grep -io "j[drx]_[a-z]*\w[a-z]*\w[a-z]*" | sort -u >>${ListJs}
+      cat ${FileDiy} | grep -v "#" | grep "my_scripts_list" | grep -io "adolf_[a-z]*\w[a-z]*\w[a-z]*" | sort -u >>${ListJs}
     fi
 
     grep -vwf ${ListTask} ${ListJs} >${ListJsAdd}
@@ -378,7 +375,6 @@ function Add_Cron() {
         echo "4 0,9 * * * bash ${ShellJd} ${Cron}" | sort -u >>${ListCron}
       else
         cat ${ListCronSh} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
-        # cat ${ListCronSh} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(monkcoder_\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
       fi
     done
 
