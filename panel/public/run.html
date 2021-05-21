@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>手动执行脚本 · 京东薅羊毛控制面板</title>
+    <title>手动执行 · 京东薅羊毛控制面板</title>
     <script type="text/javascript" src="./js/jquery.min.js"></script>
     <script type="text/javascript" src="./js/codemirror.min.js"></script>
     <script type="text/javascript" src="./js/shell.js"></script>
@@ -25,19 +25,10 @@
         <div class="diffs">
             <nav>
                 <ul>
-                    <li><a href="./home">首页</a></li>
-                    <li><a href="./diff">对比工具</a></li>
-                    <li><a href="./crontab">定时任务设定</a></li>
-                    <li class="active"><a href="./run">手动执行脚本</a></li>
-                    <li><a href="./diy">自定义脚本</a></li>
-                    <li><a href="./terminal">终端</a></li>
-                    <li><a href="./log">日志查询</a></li>
-                    <li><a href="./viewScripts">查看脚本</a></li>
-                    <li><a href="./changepwd">修改密码</a></li>
-                    <li><a href="./logout">退出</a></li>
+                    <li><a href="./home">首页</a></li><li><a href="./diff">对比工具</a></li><li><a href="./crontab">定时任务设定</a></li><li class="active"><a href="./run">手动执行</a></li><li><a href="./diy">自定义脚本</a></li><li><a href="./terminal">终端</a></li><li><a href="./log">日志查询</a></li><li><a href="./viewScripts">查看脚本</a></li><li><a href="./changepwd">修改密码</a></li><li><a href="./logout">退出</a></li>
                     <li>
                         <span style="float:right; font-size:0.7em;"><button
-                                onclick="toggleAnimation(this)">Start</button></span>
+                                onclick="toggleAnimation(this)">开启动画</button></span>
                     </li>
                 </ul>
             </nav>
@@ -48,10 +39,10 @@
                         title="更新脚本文件">更新脚本文件</button><button id="rm_log" title="删除日志">删除日志</button><button
                         id="jd_get_share_code" class="cmd-btn" title="获取互助码">获取互助码</button><button
                         id="export_sharecodes" title="导出互助码">导出互助码</button><button id="jd_unsubscribe" class="cmd-btn"
-                        title="取关店铺和商品">取关店铺和商品</button><button id="ttyd" title="启动/重启网页终端">启动/重启网页终端</button><button
-                        id="hangup" title="启动/重启后台挂机程序">启动/重启后台挂机程序</button><button id="crazy_joy_coin"
-                        title="停止后台挂机程序">停止后台挂机程序</button><button id="ps" title="查看进程">查看进程</button><button id="wrap"
-                        class="cmd-btn" title="切换换行">切换换行</button><button id="move-bottom" class="cmd-btn"
+                        title="取关店铺和商品">取关店铺和商品</button><button id="ps" title="查看进程">查看进程</button><button id="hangup"
+                        title="启动/重启后台挂机程序">启动/重启后台挂机程序</button><button id="crazy_joy_coin"
+                        title="停止后台挂机程序">停止后台挂机程序</button><button id="ttyd" title="启动/重启网页终端">启动/重启网页终端</button><button
+                        id="wrap" class="cmd-btn" title="切换换行">切换换行</button><button id="move-bottom" class="cmd-btn"
                         title="跳转底部">跳转底部</button>
                     <br />
                     <button id="jd_bean_change" class="cmd-btn" title="京豆变动通知">京豆变动通知</button><button id="jd_fruit"
