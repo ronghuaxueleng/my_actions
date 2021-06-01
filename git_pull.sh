@@ -11,7 +11,6 @@ LogDir=${ShellDir}/log
 ScriptsDir=${ShellDir}/jd_scripts
 Scripts2Dir=${ShellDir}/MyActions
 Scripts3Dir=${ShellDir}/ownActions
-Scripts4Dir=${ShellDir}/monkcoder
 ScriptsCombined=${ShellDir}/scripts
 [ ! -d ${ScriptsCombined} ] && mkdir -p ${ScriptsCombined}
 DockerDir=${ScriptsCombined}/docker
@@ -38,7 +37,6 @@ isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
 ScriptsURL=https://hub.fastgit.org/gossh520/jd_scripts
 Scripts2URL=https://hub.fastgit.org/wuzhi03/MyActions
 Scripts3URL=https://gitee.com/getready/my_actions.git
-Scripts4URL=https://hub.fastgit.org/monk-coder/dust
 
 ## 更新crontab，gitee服务器同一时间限制5个链接，因此每个人更新代码必须错开时间，每次执行git_pull随机生成。
 ## 每天次数随机，更新时间随机，更新秒数随机，至少6次，至多12次，大部分为8-10次，符合正态分布。
@@ -123,22 +121,6 @@ function Git_PullScripts3 {
     echo
 }
 
-## 克隆scripts4
-function Git_CloneScripts4 {
-    echo -e "克隆${Scripts4URL}脚本\n"
-    git clone -b dust ${Scripts4URL} ${Scripts4Dir}
-    ExitStatusScripts2=$?
-    echo
-}
-
-## 更新scripts3
-function Git_PullScripts4 {
-    echo -e "更新${Scripts4URL}脚本\n"
-    cd ${Scripts4Dir}
-    git pull
-    echo
-}
-
 ## 用户数量UserSum
 function Count_UserSum() {
     i=1
@@ -181,20 +163,19 @@ function Combined_Cron {
     [ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
     [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
     [ -d ${Scripts3Dir}/.git ] && Git_PullScripts3 || Git_CloneScripts3
-    [ -d ${Scripts4Dir}/.git ] && Git_PullScripts4 || Git_CloneScripts4
     rm -rf ${ScriptsCombined}/*.*
     cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
-    for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
+    # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
     cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "j[drx]_\w+\.js" | sort -u >${ListCronSh}
-    for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do
-        croname=${jsname##*/}
-        jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
-        if [ -n "${jsnamecron}" ]; then
-            echo "$jsnamecron node /scripts/jd_monkcoder_$croname >> /scripts/logs/jd_monkcoder_${croname%.*}.log 2>&1" >>${ListCronSh}
-        fi
-    done
+    # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do
+    #     croname=${jsname##*/}
+    #     jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
+    #     if [ -n "${jsnamecron}" ]; then
+    #         echo "$jsnamecron node /scripts/jd_monkcoder_$croname >> /scripts/logs/jd_monkcoder_${croname%.*}.log 2>&1" >>${ListCronSh}
+    #     fi
+    # done
     rm -rf ${ScriptsCombined}/*.md
     rm -rf ${ScriptsCombined}/package-lock.json
 }
