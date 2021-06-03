@@ -15,6 +15,10 @@ ListScripts=($(
   cd ${ScriptsDir}
   ls *.js | grep -E "j[drx]_"
 ))
+ListOtherScripts=($(
+  cd ${ScriptsDir}
+  ls *.js | grep -E "\w*[a-z]_" | grep -iv "j[drx]_"
+))
 ListCron=${ConfigDir}/crontab.list
 
 ## 导入config.sh
@@ -155,18 +159,25 @@ function Random_Delay() {
 ## 使用说明
 function Help() {
   echo -e "本脚本的用法为："
-  echo -e "1. bash ${HelpJd} xxx        # 如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数"
-  echo -e "2. bash ${HelpJd} xxx now  # 无论是否设置了随机延迟，均立即运行"
-  echo -e "3. bash ${HelpJd} hangup   # 启动/重启后台挂机程序"
-  echo -e "4. bash ${HelpJd} resetpwd # 重置控制面板的用户名和密码"
-  echo -e "5. source run_all    # 一键执行所有活动脚本（Ctrl + Z 跳过执行某脚本，Ctrl + C 停止执行）"
-  echo -e "\n针对用法1、用法2中的\"xxx\"，可以不输入后缀\".js\"，另外，如果前缀是\"jd_\"的话前缀也可以省略。"
-  echo -e "当前有以下脚本可以运行（仅列出以jd_、jr_、jx_开头的脚本）："
+  echo -e "1. ${HelpJd} xxx        # 如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数"
+  echo -e "2. ${HelpJd} xxx now    # 无论是否设置了随机延迟，均立即运行"
+  echo -e "3. runall       # 执行所有活动脚本（Ctrl + Z 跳过执行某个脚本，Ctrl + C 停止执行全部脚本）"
+  echo -e "4. ${HelpJd} hangup     # 启动或重启后台挂机程序"
+  echo -e "5. ${HelpJd} resetpwd   # 重置控制面板的用户名和密码"
+  echo -e "\n针对用法1、2中的\"xxx\"，可以不输入后缀\".js\"，另外，如果前缀是\"jd_\"的话前缀也可以省略。"
+  echo -e "\n当前有以下活动脚本可以运行："
   cd ${ScriptsDir}
+  echo -e "\nScripts仓库的脚本：\n"
   for ((i = 0; i < ${#ListScripts[*]}; i++)); do
     Name=$(grep "new Env" ${ListScripts[i]} | awk -F "'|\"" '{print $2}')
     echo -e "$(($i + 1)).${Name}：${ListScripts[i]}"
   done
+  echo -e "\n第三方作者的脚本：\n"
+  for ((i = 0; i < ${#ListOtherScripts[*]}; i++)); do
+    Name=$(grep "new Env" ${ListOtherScripts[i]} | awk -F "'|\"" '{print $2}')
+    echo -e "$(($i + 1)).${Name}：${ListOtherScripts[i]}"
+  done
+  echo -e "\n注：所有以 jd、jr、jx 开头的脚本会被识别成 lxk0301 大佬的脚本，本地导入的脚本不会随更新而自动删除\n"
 }
 
 ## nohup
