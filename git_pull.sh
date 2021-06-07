@@ -182,7 +182,7 @@ function Combined_Cron {
 
 ## 检测文件：lxk0301/jd_scripts 仓库中的 docker/crontab_list.sh
 ## 检测定时任务是否有变化，此函数会在Log文件夹下生成四个文件，分别为：
-## task.list    crontab.list中的所有任务清单，仅保留脚本名
+## task.                       list    crontab.list中的所有任务清单，仅保留脚本名
 ## js.list      上述检测文件中用来运行js脚本的清单（去掉后缀.js，非运行脚本的不会包括在内）
 ## js-add.list  如果上述检测文件增加了定时任务，这个文件内容将不为空
 ## js-drop.list 如果上述检测文件删除了定时任务，这个文件内容将不为空
@@ -195,9 +195,9 @@ function Diff_Cron() {
         fi
 
         cat ${ListCronSh} | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >${ListJs}
-        if [[ ${EnableExtraShell} == true ]]; then
-            grep "my_scripts_list" ${FileDiy} | grep -v "#" | grep -io "\w*[a-z]_[a-z]*\w[a-z]*\w[a-z]*" | sort -u >>${ListJs}
-            grep "my_scripts_list" ${FileDiy} | grep -v "#" | grep -io "\w*[a-z]_[a-z]*\w[a-z]*\w[a-z]*" | grep -iv "j[drx]_[a-z]*\w[a-z]*\w[a-z]*" | sort -u >>${ListTask}
+        if [ ${EnableExtraShell} = "true" ]; then
+            grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -Eio "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListJs}
+            grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -Eio "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListTask}
         fi
 
         grep -vwf ${ListTask} ${ListJs} >${ListJsAdd}
@@ -469,13 +469,13 @@ Combined_Cron
 # [ -d ${ScriptsCombined}/.git ] && Git_PullScripts || Git_CloneScripts
 echo -e "+----------------------- 郑 重 提 醒 -----------------------+"
 echo -e ""
-echo -e "  本项目开源免费使用但不可传播分享在国内任何的媒体与网站上！"
+echo -e "  本项目目前闭源并且仅面向内部开放，脚本免费使用仅供于学习！"
 echo -e ""
-echo -e "  如果在其它地方发现以付费的形式传播与使用请举报并向我反馈！"
+echo -e "  圈内资源禁止以任何形式发布到咸鱼等国内平台，否则后果自负！"
 echo -e ""
-echo -e "  近期发现有人通过本项目和活动脚本非法牟利，已收集相关证据！"
+echo -e "  我们不会放纵某些行为，不保证不采取非常手段，请勿挑战底线！"
 echo -e ""
-echo -e "  请停止你的违法行为，立即从咸鱼等国内平台上下架，好自为之！"
+echo -e "  我们始终致力于打击使用本项目进行违法贩卖行为的个人或组织！"
 echo -e ""
 echo -e "+-----------------------------------------------------------+"
 echo -e ''
@@ -498,3 +498,6 @@ else
     echo -e "\033[31m活动脚本更新失败，请检查原因或再次运行 git_pull.sh ......\033[0m"
     Change_ALL
 fi
+
+## 赋权
+chmod 777 ${ShellDir}/*
