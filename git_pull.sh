@@ -9,7 +9,6 @@ ShellDir=${JD_DIR:-$(
 LogDir=${ShellDir}/log
 [ ! -d ${LogDir} ] && mkdir -p ${LogDir}
 ScriptsDir=${ShellDir}/jd_scripts
-Scripts2Dir=${ShellDir}/MyActions
 Scripts3Dir=${ShellDir}/ownActions
 ScriptsCombined=${ShellDir}/scripts
 [ ! -d ${ScriptsCombined} ] && mkdir -p ${ScriptsCombined}
@@ -17,7 +16,6 @@ DockerDir=${ScriptsCombined}/docker
 [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
 ListCronSh=${DockerDir}/crontab_list.sh
 ListCronScripts=${ScriptsDir}/docker/crontab_list.sh
-ListCronScripts2=${Scripts2Dir}/docker/crontab_list.sh
 ListCronScripts3=${Scripts3Dir}/docker/crontab_list.sh
 ConfigDir=${ShellDir}/config
 FileConf=${ConfigDir}/config.sh
@@ -89,22 +87,6 @@ function Git_PullScripts() {
     echo
 }
 
-## 克隆scripts2
-function Git_CloneScripts2 {
-    echo -e "克隆${Scripts2URL}脚本\n"
-    git clone -b main ${Scripts2URL} ${Scripts2Dir}
-    ExitStatusScripts2=$?
-    echo
-}
-
-## 更新scripts2
-function Git_PullScripts2 {
-    echo -e "更新${Scripts2URL}脚本\n"
-    cd ${Scripts2Dir}
-    git pull
-    echo
-}
-
 ## 克隆scripts3
 function Git_CloneScripts3 {
     echo -e "克隆${Scripts3URL}脚本\n"
@@ -161,14 +143,12 @@ function Change_ALL() {
 ## 合并脚本
 function Combined_Cron {
     [ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
-    # [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
     [ -d ${Scripts3Dir}/.git ] && Git_PullScripts3 || Git_CloneScripts3
     rm -rf ${ScriptsCombined}/*.*
-    # cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
-    cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "j[drx]_\w+\.js" | sort -u >${ListCronSh}
+    cat ${ListCronScripts} ${ListCronScripts3} | tr -s [:space:] | grep -E "j[drx]_\w+\.js" | sort -u >${ListCronSh}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do
     #     croname=${jsname##*/}
     #     jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
