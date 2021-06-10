@@ -497,6 +497,7 @@ if [[ ${ExitStatusScripts} -eq 0 ]]; then
 else
     echo -e "\033[31m活动脚本更新失败，请检查原因或再次运行 git_pull.sh ......\033[0m"
     Change_ALL
+    ExtraShell
 fi
 
 ## 赋权
