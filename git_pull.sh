@@ -70,7 +70,7 @@ function Git_PullShell() {
 function Git_CloneScripts3 {
     echo -e "克隆${Scripts3URL}脚本\n"
     git clone -b scripts ${Scripts3URL} ${Scripts3Dir}
-    ExitStatusScripts2=$?
+    ExitStatusScripts=$?
     echo
 }
 
