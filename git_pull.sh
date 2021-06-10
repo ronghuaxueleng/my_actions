@@ -79,6 +79,7 @@ function Git_PullScripts3 {
     echo -e "更新${Scripts3URL}脚本\n"
     cd ${Scripts3Dir}
     git pull
+    ExitStatusScripts=$?
     echo
 }
 
