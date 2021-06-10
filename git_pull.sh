@@ -164,7 +164,7 @@ function Combined_Cron {
     # [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
     [ -d ${Scripts3Dir}/.git ] && Git_PullScripts3 || Git_CloneScripts3
     rm -rf ${ScriptsCombined}/*.*
-    cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
+    # cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
@@ -386,7 +386,7 @@ function ExtraShell() {
         if [ $? -eq 0 ]; then
             echo -e "自定义 DIY 脚本同步完成......"
             echo -e ''
-            # sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/raw.fastgit.org/' ${FileDiy}
+            sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/raw.fastgit.org/' ${FileDiy}
             sed -i 's/ScriptsDir/ScriptsCombined/' ${FileDiy}
             sleep 2s
         else
