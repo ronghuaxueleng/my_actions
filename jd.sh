@@ -15,6 +15,10 @@ ListScripts=($(
   cd ${ScriptsDir}
   ls *.js | grep -E "j[drx]_"
 ))
+ListOtherScripts=($(
+  cd ${ScriptsDir}
+  ls *.js | grep -Eiv "j[drx]_|$(git ls-files)|ShareCodes|AGENTS|index.js|tencentscf.js|Notify|Cookie|Tokens"
+))
 ListCron=${ConfigDir}/crontab.list
 
 ## 导入config.sh
@@ -40,46 +44,59 @@ function Detect_Cron() {
 
 ## 用户数量UserSum
 function Count_UserSum() {
-  for ((i = 1; i <= 1000; i++)); do
+  for ((i = 1; i <= 35; i++)); do
     Tmp=Cookie$i
     CookieTmp=${!Tmp}
     [[ ${CookieTmp} ]] && UserSum=$i || break
+  done
+
+  for ((d = 36; d <= 1000; d++)); do
+    Del=Cookie$d
+    sed -i "/${!Del}/d" ${FileConf} || break
   done
 }
 
 ## 组合Cookie和互助码子程序
 function Combin_Sub() {
   CombinAll=""
-  if [[ ${AutoHelpOther} == true ]] && [[ $1 == ForOther* ]]; then
-
-    ForOtherAll=""
-    MyName=$(echo $1 | perl -pe "s|ForOther|My|")
-
-    for ((m = 1; m <= ${UserSum}; m++)); do
-      TmpA=${MyName}$m
-      TmpB=${!TmpA}
-      ForOtherAll="${ForOtherAll}@${TmpB}"
+  for ((i = 1; i <= ${UserSum}; i++)); do
+    for num in ${TempBlockCookie}; do
+      if [[ $i -eq $num ]]; then
+        continue 2
+      fi
     done
-
-    for ((n = 1; n <= ${UserSum}; n++)); do
-      for num in ${TempBlockCookie}; do
-        [[ $n -eq $num ]] && continue 2
-      done
-      CombinAll="${CombinAll}&${ForOtherAll}"
-    done
-
-  else
-    for ((i = 1; i <= ${UserSum}; i++)); do
-      for num in ${TempBlockCookie}; do
-        [[ $i -eq $num ]] && continue 2
-      done
-      Tmp1=$1$i
-      Tmp2=${!Tmp1}
+    Tmp1=$1$i
+    Tmp2=${!Tmp1}
+    case $# in
+    1)
       CombinAll="${CombinAll}&${Tmp2}"
-    done
-  fi
-
-  echo ${CombinAll} | perl -pe "{s|^&||; s|^@+||; s|&@|&|g; s|@+&|&|g; s|@+|@|g; s|@+$||}"
+      ;;
+    2)
+      CombinAll="${CombinAll}&${Tmp2}@$2"
+      ;;
+    3)
+      if [ $(($i % 2)) -eq 1 ]; then
+        CombinAll="${CombinAll}&${Tmp2}@$2"
+      else
+        CombinAll="${CombinAll}&${Tmp2}@$3"
+      fi
+      ;;
+    4)
+      case $(($i % 3)) in
+      1)
+        CombinAll="${CombinAll}&${Tmp2}@$2"
+        ;;
+      2)
+        CombinAll="${CombinAll}&${Tmp2}@$3"
+        ;;
+      0)
+        CombinAll="${CombinAll}&${Tmp2}@$4"
+        ;;
+      esac
+      ;;
+    esac
+  done
+  echo ${CombinAll} | perl -pe "{s|^&||; s|^@+||; s|&@|&|g; s|@+|@|g}"
 }
 
 ## 组合Cookie、Token与互助码
@@ -109,8 +126,8 @@ function Combin_All() {
   export JDSGMH_SHARECODES=$(Combin_Sub ForOtherSgmh)
   ## 京喜财富岛(jd_cfd.js)
   export JDCFD_SHARECODES=$(Combin_Sub ForOtherCfd)
-  #京东手机狂欢城(jd_carnivalcity.js) 截至至4月20号
-  export JD818_SHARECODES=$(Combin_Sub ForOtherCarni)
+  ## 东东健康社区(jd_health.js)
+  export JDHEALTH_SHARECODES=$(Combin_Sub ForOtherHealth)
   ## 京喜农场token，现在只用来京喜财富岛提现
   export JXNCTOKENS=$(Combin_Sub TokenJxnc)
 }
@@ -155,17 +172,25 @@ function Random_Delay() {
 ## 使用说明
 function Help() {
   echo -e "本脚本的用法为："
-  echo -e "1. bash ${HelpJd} xxx      # 如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数"
-  echo -e "2. bash ${HelpJd} xxx now  # 无论是否设置了随机延迟，均立即运行"
-  echo -e "3. bash ${HelpJd} hangup   # 重启挂机程序"
-  echo -e "4. bash ${HelpJd} resetpwd # 重置控制面板用户名和密码"
-  echo -e "\n针对用法1、用法2中的\"xxx\"，可以不输入后缀\".js\"，另外，如果前缀是\"jd_\"的话前缀也可以省略。"
-  echo -e "当前有以下脚本可以运行（仅列出以jd_、jr_、jx_开头的脚本）："
+  echo -e "1. bash ${HelpJd} xxx        # 如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数"
+  echo -e "2. bash ${HelpJd} xxx now    # 无论是否设置了随机延迟，均立即运行"
+  echo -e "3. source runall       # 执行所有活动脚本（Ctrl + Z 跳过执行某个脚本，Ctrl + C 停止执行全部脚本）"
+  echo -e "4. bash ${HelpJd} hangup     # 启动或重启后台挂机程序"
+  echo -e "5. bash ${HelpJd} resetpwd   # 重置控制面板的用户名和密码"
+  echo -e "\n针对用法1、2中的\"xxx\"，可以不输入后缀\".js\"，另外，如果前缀是\"jd_\"的话前缀也可以省略。"
+  echo -e "\n当前有以下活动脚本可以运行："
   cd ${ScriptsDir}
+  echo -e "\nScripts 仓库的脚本：\n"
   for ((i = 0; i < ${#ListScripts[*]}; i++)); do
     Name=$(grep "new Env" ${ListScripts[i]} | awk -F "'|\"" '{print $2}')
     echo -e "$(($i + 1)).${Name}：${ListScripts[i]}"
   done
+  echo -e "\n第三方作者的脚本：\n"
+  for ((i = 0; i < ${#ListOtherScripts[*]}; i++)); do
+    Name=$(grep "new Env" ${ListOtherScripts[i]} | awk -F "'|\"" '{print $2}')
+    echo -e "$(($i + 1)).${Name}：${ListOtherScripts[i]}"
+  done
+  echo -e "\n注：所有以 jd、jr、jx 开头的脚本会被识别成 lxk0301 大佬的脚本，本地导入的脚本不会随更新而自动删除\n"
 }
 
 ## nohup
