@@ -3,8 +3,6 @@
 [ ! -d sngxprov2p/docker ] && mkdir -p sngxprov2p/docker
 
 json=$(curl -s "https://raw.fastgit.org/sngxpro/QuanX/master/V2pTaskSub/sngxprov2p.json")
-#美丽研究院
-#41 7,12,19 * * * node /scripts/jd_beauty.js >> /scripts/logs/jd_beauty.log 2>&1
 crontab_list=""
 pattern='京[东|喜].*'
 for row in $(echo "${json}" | jq -r '.list[] | @base64'); do

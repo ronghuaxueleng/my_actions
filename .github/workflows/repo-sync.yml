@@ -79,7 +79,7 @@ jobs:
           git checkout sngxprov2p
           rm -rf !(.git | .githup)
           cd ../
-          bash -x sngxprov2p.sh
+          bash ./sngxprov2p.sh
           cp -rf ./sngxprov2p/* ./my_actions
           cd ./my_actions
           git add .
