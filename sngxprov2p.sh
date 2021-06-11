@@ -1,8 +1,8 @@
 #!/bin/bash
 
 [ ! -d sngxprov2p/docker ] && mkdir -p sngxprov2p/docker
-
-json=$(curl --connect-timeout 5 -s "https://raw.fastgit.org/sngxpro/QuanX/master/V2pTaskSub/sngxprov2p.json")
+wget "https://raw.fastgit.org/sngxpro/QuanX/master/V2pTaskSub/sngxprov2p.json" -O sngxprov2p.json
+json=$(cat ./sngxprov2p.json)
 crontab_list=""
 pattern='京[东|喜].*'
 for row in $(echo "${json}" | jq -r '.list[] | @base64'); do
