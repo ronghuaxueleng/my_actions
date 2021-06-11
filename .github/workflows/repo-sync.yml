@@ -2,7 +2,7 @@
 name: A🔄自动同步🔄A
 on:
   schedule:
-    - cron: '0 */1 * * *'
+    - cron: "0 */1 * * *"
   workflow_dispatch:
   watch:
     types: started
@@ -12,13 +12,13 @@ jobs:
   repo-sync:
     name: A创建脚本A
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Setup Git Infomation
         env:
           email: ${{ secrets.EMAIL }}
           username: ${{ secrets.USERNAME }}
-        run: | 
+        run: |
           git config --global user.name "$username"
           git config --global user.email "$email"
       - name: Setup SSH Private Key
@@ -65,6 +65,7 @@ jobs:
           cp -rf ./my_actions/sample ./JD-FreeFuck/
           cp -rf ./my_actions/diy ./JD-FreeFuck
           cp -rf ./my_actions/docker ./JD-FreeFuck
+          cp -f ./my_actions/sngxprov2p.sh ./
           cd ./my_actions
           git checkout source
           shopt -s extglob
@@ -75,7 +76,16 @@ jobs:
           git add .
           git commit --allow-empty -m "up"
           git push
-      - name: 'sync github -> gitee'
+          git checkout sngxprov2p
+          rm -rf !(.git | .githup)
+          cd ../
+          bash sngxprov2p.sh
+          cp -rf ./sngxprov2p/* ./my_actions
+          cd ./my_actions
+          git add .
+          git commit --allow-empty -m "up"
+          git push
+      - name: "sync github -> gitee"
         uses: Yikun/hub-mirror-action@master
         with:
           src: github/ronghuaxueleng
