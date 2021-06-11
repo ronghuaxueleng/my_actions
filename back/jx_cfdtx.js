@@ -19,52 +19,61 @@ const JD_API_HOST = "https://m.jingxi.com/";
 const notify = $.isNode() ? require("./sendNotify.js") : "";
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const jdTokenNode = $.isNode() ? require("./jdJxncTokens.js") : "";
-$.result = [];
 $.cookieArr = [];
-$.currentCookie = "";
 $.tokenArr = [];
-$.currentToken = {};
 $.strPhoneID = "";
 $.strPgUUNum = "";
-$.userName = "";
 
-!(async () => {
-  if (!getCookies()) return;
-  if (!getTokens()) return;
-  for (let i = 0; i < $.cookieArr.length; i++) {
-    $.currentCookie = $.cookieArr[i];
-    $.currentToken = $.tokenArr[i];
-    if ($.currentCookie) {
-      $.userName = decodeURIComponent(
-        $.currentCookie.match(/pt_pin=(.+?);/) &&
-          $.currentCookie.match(/pt_pin=(.+?);/)[1]
+if (!getCookies()) return;
+if (!getTokens()) return;
+
+let doneResults = [];
+
+for (let i = 0; i < $.cookieArr.length; i++) {
+  !(async (index) => {
+    let result = [];
+    let currentCookie = $.cookieArr[index];
+    let currentToken = $.tokenArr[index];
+    if (currentCookie) {
+      let userName = decodeURIComponent(
+        currentCookie.match(/pt_pin=(.+?);/) &&
+          currentCookie.match(/pt_pin=(.+?);/)[1]
       );
-      $.log(`\n开始【京东账号${i + 1}】${$.userName}`);
+      userName = `【京东账号${index + 1}】${userName}`;
+      let logs = [`\n开始 ${userName}`];
 
-      await cashOut();
+      await cashOut(currentCookie, currentToken, userName, result, logs);
       await $.wait(500);
-      await getTotal();
+      await getTotal(currentCookie, result, logs);
+      let results = doneResults["results"] || [];
+      let runlogs = doneResults["runlogs"] || [];
+      results.push(result);
+      runlogs.push(logs);
+      doneResults.results = results;
+      doneResults.runlogs = runlogs;
+      if (results.length == $.cookieArr.length) {
+        await showMsg(doneResults);
+      }
     }
-  }
-  await showMsg();
-})()
-  .catch((e) => $.logErr(e))
-  .finally(() => $.done());
+  })(i)
+    .catch((e) => $.logErr(e))
+    .finally(() => $.done());
+}
 
-function cashOut() {
+function cashOut(currentCookie, currentToken, userName, result, logs) {
   return new Promise(async (resolve) => {
     $.get(
       taskUrl(
         `consume/CashOut`,
-        `ddwMoney=100&dwIsCreateToken=0&ddwMinPaperMoney=100000&strPgtimestamp=${$.currentToken["timestamp"]}&strPhoneID=${$.currentToken["phoneid"]}&strPgUUNum=${$.currentToken["farm_jstoken"]}`
+        `ddwMoney=100&dwIsCreateToken=0&ddwMinPaperMoney=150000&strPgtimestamp=${currentToken["timestamp"]}&strPhoneID=${currentToken["phoneid"]}&strPgUUNum=${currentToken["farm_jstoken"]}`,
+        currentCookie
       ),
       async (err, resp, data) => {
         try {
-          $.log(data);
+          logs.push(data);
           let { iRet, sErrMsg } = JSON.parse(data);
-          $.log(data);
-          $.result.push(
-            `【${$.userName}】\n ${
+          result.push(
+            `【${userName}】\n ${
               sErrMsg == "" ? (sErrMsg = "今天手气太棒了") : sErrMsg
             }`
           );
@@ -79,14 +88,13 @@ function cashOut() {
   });
 }
 
-function getTotal() {
+function getTotal(currentCookie, result, logs) {
   return new Promise(async (resolve) => {
-    $.get(queryUserRedEnvelopes(), async (err, resp, data) => {
+    $.get(queryUserRedEnvelopes(currentCookie), async (err, resp, data) => {
       try {
-        $.log(data);
+        logs.push(data);
         let res = JSON.parse(data);
-        $.result.push(`现有现金总数：${res.data.balance}`);
-        $.log(res);
+        result.push(`现有现金总数：${res.data.balance}`);
         resolve(res);
       } catch (e) {
         $.logErr(e, resp);
@@ -97,11 +105,11 @@ function getTotal() {
   });
 }
 
-function taskUrl(function_path, body) {
+function taskUrl(function_path, body, currentCookie) {
   return {
     url: `${JD_API_HOST}jxcfd/${function_path}?strZone=jxcfd&bizCode=jxcfd&source=jxcfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&${body}&_stk=_cfd_t%2CbizCode%2CddwMinPaperMoney%2CddwMoney%2CdwEnv%2CdwIsCreateToken%2Cptag%2Csource%2CstrPgUUNum%2CstrPgtimestamp%2CstrPhoneID%2CstrZone&_ste=1&_=${Date.now()}&sceneval=2&g_login_type=1&g_ty=ls`,
     headers: {
-      Cookie: $.currentCookie,
+      Cookie: currentCookie,
       Accept: "*/*",
       Connection: "keep-alive",
       Referer:
@@ -115,11 +123,11 @@ function taskUrl(function_path, body) {
   };
 }
 
-function queryUserRedEnvelopes() {
+function queryUserRedEnvelopes(currentCookie) {
   return {
     url: `${JD_API_HOST}user/info/QueryUserRedEnvelopes?channel=3&orgFlag=JD_PinGou_New&cashRedType=2&_=${Date.now()}&sceneval=2`,
     headers: {
-      Cookie: $.currentCookie,
+      Cookie: currentCookie,
       Accept: "*/*",
       Connection: "keep-alive",
       Referer:
@@ -175,22 +183,25 @@ function getTokens() {
   return true;
 }
 
-function showMsg() {
+function showMsg(doneResults) {
   return new Promise((resolve) => {
+    let results = doneResults["results"] || [];
+    let runlogs = doneResults["runlogs"] || [];
     if ($.notifyTime) {
       const notifyTimes = $.notifyTime.split(",").map((x) => x.split(":"));
       const now = $.time("HH:mm").split(":");
-      $.log(`\n${JSON.stringify(notifyTimes)}`);
-      $.log(`\n${JSON.stringify(now)}`);
+      runlogs.push(`${JSON.stringify(notifyTimes)}`);
+      runlogs.push(`${JSON.stringify(now)}`);
+      $.log(runlogs.join("\n"));
       if (
         notifyTimes.some((x) => x[0] === now[0] && (!x[1] || x[1] === now[1]))
       ) {
-        $.msg($.name, "", `\n${$.result.join("\n")}`);
-        notify.sendNotify($.name, `\n${$.result.join("\n")}`);
+        $.msg($.name, "", `\n${results.join("\n")}`);
+        notify.sendNotify($.name, `\n${results.join("\n")}`);
       }
     } else {
-      $.msg($.name, "", `\n${$.result.join("\n")}`);
-      notify.sendNotify($.name, `\n${$.result.join("\n")}`);
+      $.msg($.name, "", `\n${results.join("\n")}`);
+      notify.sendNotify($.name, `\n${results.join("\n")}`);
     }
     resolve();
   });
