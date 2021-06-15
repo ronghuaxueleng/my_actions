@@ -9,6 +9,7 @@ ShellDir=${JD_DIR:-$(
 LogDir=${ShellDir}/log
 [ ! -d ${LogDir} ] && mkdir -p ${LogDir}
 ScriptsDir=${ShellDir}/jd_scripts
+Scripts2Dir=${ShellDir}/sngxprov2p
 Scripts3Dir=${ShellDir}/ownActions
 ScriptsCombined=${ShellDir}/scripts
 [ ! -d ${ScriptsCombined} ] && mkdir -p ${ScriptsCombined}
@@ -16,8 +17,10 @@ DockerDir=${ScriptsCombined}/docker
 [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
 ListCronSh=${DockerDir}/crontab_list.sh
 ListCronScripts=${ScriptsDir}/docker/crontab_list.sh
+ListCronScripts2=${Scripts2Dir}/docker/crontab_list.sh
 ListCronScripts3=${Scripts3Dir}/docker/crontab_list.sh
 ConfigDir=${ShellDir}/config
+FileRunAll=${ShellDir}/run_all.sh
 FileConf=${ConfigDir}/config.sh
 FileDiy=${ConfigDir}/diy.sh
 FileConfSample=${ShellDir}/sample/config.sh.sample
@@ -32,8 +35,7 @@ ContentNewTask=${ShellDir}/new_task
 ContentDropTask=${ShellDir}/drop_task
 SendCount=${ShellDir}/send_count
 isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
-ScriptsURL=https://hub.fastgit.org/gossh520/jd_scripts
-Scripts2URL=https://hub.fastgit.org/wuzhi04/MyActions
+ScriptsURL=https://hub.fastgit.org/chinnkarahoi/jd_scripts
 Scripts3URL=https://gitee.com/getready/my_actions.git
 
 ## 更新crontab，gitee服务器同一时间限制5个链接，因此每个人更新代码必须错开时间，每次执行git_pull随机生成。
@@ -87,9 +89,25 @@ function Git_PullScripts() {
     echo
 }
 
+## 克隆scripts2
+function Git_CloneScripts2 {
+    echo -e "克隆${Scripts3URL} sngxprov2p分支脚本\n"
+    git clone -b sngxprov2p ${Scripts3URL} ${Scripts2Dir}
+    ExitStatusScripts2=$?
+    echo
+}
+
+## 更新scripts2
+function Git_PullScripts2 {
+    echo -e "更新${Scripts3URL}脚本\n"
+    cd ${Scripts2Dir}
+    git pull
+    echo
+}
+
 ## 克隆scripts3
 function Git_CloneScripts3 {
-    echo -e "克隆${Scripts3URL}脚本\n"
+    echo -e "克隆${Scripts3URL} scripts分支脚本\n"
     git clone -b scripts ${Scripts3URL} ${Scripts3Dir}
     ExitStatusScripts2=$?
     echo
@@ -143,12 +161,14 @@ function Change_ALL() {
 ## 合并脚本
 function Combined_Cron {
     [ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
+    [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
     [ -d ${Scripts3Dir}/.git ] && Git_PullScripts3 || Git_CloneScripts3
     rm -rf ${ScriptsCombined}/*.*
     cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
+    cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
-    cat ${ListCronScripts} ${ListCronScripts3} | tr -s [:space:] | grep -E "j[drx]_\w+\.js" | sort -u >${ListCronSh}
+    cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "j[drx]_\w+\.js" | sort -u >${ListCronSh}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do
     #     croname=${jsname##*/}
     #     jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
@@ -175,9 +195,20 @@ function Diff_Cron() {
         fi
 
         cat ${ListCronSh} | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >${ListJs}
-        if [ ${EnableExtraShell} = "true" ]; then
-            grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -Eio "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListJs}
-            grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -Eio "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListTask}
+        if [ ${EnableExtraShell} == "true" ]; then
+            if [ ${EnableExtraShellUpdate} == "true" ]; then
+                echo ${EnableExtraShellURL} | grep "SuperManito" -q
+                if [ $? -eq 0 ]; then
+                    grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sed "s/jd_zoo/jd_cute_animals/g" | sed "s/jd_jxmc/jx_pasture/g" | sed "s/jd_star_shop/jd_star_store/g" | sort -u >>${ListJs}
+                    grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sed "s/jd_zoo/jd_cute_animals/g" | sed "s/jd_jxmc/jx_pasture/g" | sed "s/jd_star_shop/jd_star_store/g" | sort -u >>${ListTask}
+                else
+                    grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListJs}
+                    grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListTask}
+                fi
+            else
+                grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListJs}
+                grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListTask}
+            fi
         fi
 
         grep -vwf ${ListTask} ${ListJs} >${ListJsAdd}
@@ -389,41 +420,29 @@ function ExtraShell() {
 
 ## 一键执行所有活动脚本
 function Run_All() {
-    ## 临时删除以旧版脚本
-    rm -rf ${ShellDir}/run-all.sh
     ## 默认将 "jd、jx、jr" 开头的活动脚本加入其中
-    rm -rf ${ShellDir}/run_all.sh
-    bash ${ShellDir}/jd.sh | grep -io 'j[drx]_[a-z].*' | grep -v 'bean_change' >${ShellDir}/run_all.sh
-    sed -i "1i\jd_bean_change.js" ${ShellDir}/run_all.sh ## 置顶京豆变动通知
-    sed -i "s#^#bash ${ShellDir}/jd.sh &#g" ${ShellDir}/run_all.sh
-    sed -i 's#.js# now#g' ${ShellDir}/run_all.sh
-    sed -i '1i\#!/bin/env bash' ${ShellDir}/run_all.sh
+    rm -rf ${FileRunAll}
+    cat ${ListJs} | grep -v bean_change >${FileRunAll}
+
+    ## 调整执行顺序
+    sed -i "1i\jd_bean_change" ${FileRunAll} ## 置顶京豆变动通知
+    echo "jd_crazy_joy_coin" >>${FileRunAll} ## 末尾加入挂机脚本
+
+    ## 去除不适合的活动脚本
+    ## 例：sed -i '/xxx/d' ${FileRunAll}
+    sed -i '/jd_delCoupon/d' ${FileRunAll} ## 不执行 "京东家庭号" 活动
+    sed -i '/jd_family/d' ${FileRunAll}    ## 不执行 "删除优惠券" 活动
+    ## 第三方脚本
+    sed -i '/jd_try/d' ${FileRunAll}
+    sed -i '/jx_cfdtx/d' ${FileRunAll}
+
     ## 自定义添加脚本
-    ## 例：echo "bash ${ShellDir}/jd.sh xxx now" >>${ShellDir}/run_all.sh
+    ## echo "bash ${ShellDir}/jd.sh xxx now" >>${FileRunAll}
 
-    ## 将挂机活动移至末尾从而最后执行
-    ## 目前仅有 "疯狂的JOY" 这一个活动
-    ## 模板如下 ：
-    ## cat run_all.sh | grep xxx -wq
-    ## if [ $? -eq 0 ];then
-    ##   sed -i '/xxx/d' ${ShellDir}/run_all.sh
-    ##   echo "bash jd.sh xxx now" >>${ShellDir}/run_all.sh
-    ## fi
-    cat ${ShellDir}/run_all.sh | grep jd_crazy_joy_coin -wq
-    if [ $? -eq 0 ]; then
-        sed -i '/jd_crazy_joy_coin/d' ${ShellDir}/run_all.sh
-        echo "bash ${ShellDir}/jd.sh jd_crazy_joy_coin now" >>${ShellDir}/run_all.sh
-    fi
-
-    ## 去除不想加入到此脚本中的活动
-    ## 例：sed -i '/xxx/d' ${ShellDir}/run_all.sh
-    sed -i '/jd_delCoupon/d' ${ShellDir}/run_all.sh ## 不执行 "京东家庭号" 活动
-    sed -i '/jd_family/d' ${ShellDir}/run_all.sh    ## 不执行 "删除优惠券" 活动
-    sed -i '/jd_shop_lottery/d' ${ShellDir}/run_all.sh
-    sed -i '/jd_try/d' ${ShellDir}/run_all.sh
-
-    ## 去除脚本中的空行
-    sed -i '/^\s*$/d' ${ShellDir}/run_all.sh
+    sed -i "s/^/bash ${ShellJd} &/g" ${FileRunAll}
+    sed -i 's/$/&.js now/g' ${FileRunAll}
+    sed -i '1i\#!/bin/env bash' ${FileRunAll}
+    sed -i '/^\s*$/d' ${FileRunAll}
 }
 
 ## 在日志中记录时间与路径
@@ -453,9 +472,9 @@ echo -e "  本项目目前闭源并且仅面向内部开放，脚本免费使用
 echo -e ""
 echo -e "  圈内资源禁止以任何形式发布到咸鱼等国内平台，否则后果自负！"
 echo -e ""
-echo -e "  我们不会放纵某些行为，不保证不采取非常手段，请勿挑战底线！"
-echo -e ""
 echo -e "  我们始终致力于打击使用本项目进行违法贩卖行为的个人或组织！"
+echo -e ""
+echo -e "  我们不会放纵某些行为，不保证不采取非常手段，请勿挑战底线！"
 echo -e ""
 echo -e "+-----------------------------------------------------------+"
 echo -e ''
@@ -471,7 +490,7 @@ if [[ ${ExitStatusScripts} -eq 0 ]]; then
     Del_Cron
     Add_Cron
     ExtraShell
-    cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
+#    cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
     Run_All
     echo -e "活动脚本更新完成......\n"
 else

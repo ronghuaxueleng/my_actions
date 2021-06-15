@@ -128,8 +128,6 @@ function Combin_All() {
   export JDCFD_SHARECODES=$(Combin_Sub ForOtherCfd)
   ## 东东健康社区(jd_health.js)
   export JDHEALTH_SHARECODES=$(Combin_Sub ForOtherHealth)
-  ## 京喜农场token，现在只用来京喜财富岛提现
-  export JXNCTOKENS=$(Combin_Sub TokenJxnc)
 }
 
 ## 转换JD_BEAN_SIGN_STOP_NOTIFY或JD_BEAN_SIGN_NOTIFY_SIMPLE
@@ -190,7 +188,7 @@ function Help() {
     Name=$(grep "new Env" ${ListOtherScripts[i]} | awk -F "'|\"" '{print $2}')
     echo -e "$(($i + 1)).${Name}：${ListOtherScripts[i]}"
   done
-  echo -e "\n注：所有以 jd、jr、jx 开头的脚本会被识别成 lxk0301 大佬的脚本，本地导入的脚本不会随更新而自动删除\n"
+  echo -e "\n注：所有以 jd、jr、jx 开头的脚本会被识别成 lxk 大佬的脚本，本地导入的脚本不会随更新而自动删除\n"
 }
 
 ## nohup
