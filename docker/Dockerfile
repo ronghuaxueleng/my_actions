@@ -30,7 +30,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && echo "Asia/Shanghai" > /etc/timezone \
     && git clone -b ${JD_BASE_BRANCH} ${JD_BASE_URL} ${JD_DIR} \
     && yarn config set registry https://registry.npm.taobao.org \
-    && cd ${JD_DIR} \
+    && cd ${JD_DIR}/docker \
     && pip3 install -r requirements.txt \
     && cd ${JD_DIR}/panel \
     && npm install \
