@@ -490,7 +490,7 @@ if [[ ${ExitStatusScripts} -eq 0 ]]; then
     Output_ListJsDrop
     Del_Cron
     Add_Cron
-   cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
+   cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
     Run_All
     echo -e "活动脚本更新完成......\n"
 else
