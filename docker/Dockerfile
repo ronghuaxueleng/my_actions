@@ -1,3 +1,5 @@
+FROM dreamacro/clash as clash
+
 FROM node:lts-alpine
 LABEL maintainer="jishuixiansheng"
 ARG JD_BASE_URL=https://gitee.com/getready/my_actions.git
@@ -12,7 +14,7 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
     && apk update -f \
     && apk upgrade \
-    && apk --no-cache add -f bash \
+    && apk --no-cache ca-certificates add -f bash \
                              coreutils \
                              moreutils \
                              git \
@@ -49,4 +51,10 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && rm -rf /root/.npm \
     && rm -rf ${JD_DIR}/docker
 WORKDIR ${JD_DIR}
+
+COPY --from=clash /root/.config/clash/Country.mmdb /root/.config/clash/
+COPY --from=clash /clash /
+RUN chmod 777 /clash
+RUN ln -sf /clash /usr/local/bin/clash
+
 ENTRYPOINT docker-entrypoint.sh
