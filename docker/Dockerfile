@@ -56,5 +56,7 @@ COPY --from=clash /root/.config/clash/Country.mmdb /root/.config/clash/
 COPY --from=clash /clash /
 RUN chmod 777 /clash
 RUN ln -sf /clash /usr/local/bin/clash
+ADD refresh.sh /root/.config/clash/
+RUN chmod 777 /root/.config/clash/refresh.sh
 
 ENTRYPOINT docker-entrypoint.sh
