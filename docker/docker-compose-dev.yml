@@ -4,9 +4,9 @@ services:
     image: ronghuaxueleng/jd
     container_name: jd
     volumes:
-      - /home/myid/jd/jishui/scripts:/jd/scripts
-      - /home/myid/jd/jishui/config:/jd/config
-      - /home/myid/jd/jishui/log:/jd/log
+      - /scripts:/jd/scripts
+      - /config:/jd/config
+      - /log:/jd/log
     ports:
       - "5680:5678"
     environment: 
@@ -16,7 +16,7 @@ services:
       password: "xinyan1203"
       api_id: 6798896
       api_hash: "a82f9d37e7cd1509b50a30801e611c8b"
-      host: "172.17.0.8"
+      host: "172.17.0.2"
       port: 7890
       sharedCodesJsonPath: "/jd/scripts/sharedCodes.json"
     restart: always

@@ -62,9 +62,11 @@ jobs:
           git clone git@jd_scripts_githup:ronghuaxueleng/my_actions.git
           cp -f ./my_actions/jd.sh ./JD-FreeFuck
           cp -f ./my_actions/git_pull.sh ./JD-FreeFuck
+          cp -f ./my_actions/shareCode.py ./JD-FreeFuck
           cp -rf ./my_actions/sample ./JD-FreeFuck/
           cp -rf ./my_actions/diy ./JD-FreeFuck
-          cp -rf ./my_actions/docker ./JD-FreeFuck
+          cp -rf ./my_actions/docker/docker-entrypoint.sh ./JD-FreeFuck
+          cp -rf ./my_actions/docker/requirements.txt ./JD-FreeFuck
           cp -f ./my_actions/sngxprov2p.sh ./
           cd ./my_actions
           git checkout source
