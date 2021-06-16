@@ -120,4 +120,5 @@ fi
 
 UseNotes
 
+exec clash
 exec "$@"
