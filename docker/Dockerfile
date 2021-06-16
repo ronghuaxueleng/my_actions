@@ -24,11 +24,14 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
                              openssl \
                              openssh \
 			     jq \
+			     python3 \
     && rm -rf /var/cache/apk/* \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && git clone -b ${JD_BASE_BRANCH} ${JD_BASE_URL} ${JD_DIR} \
     && yarn config set registry https://registry.npm.taobao.org \
+    && cd ${JD_DIR}/docker \
+    && pip3 install -r requirements.txt \
     && cd ${JD_DIR}/panel \
     && npm install \
     && npm install -g pm2 \
@@ -43,6 +46,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && cp -f ${JD_DIR}/docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh \
     && chmod 777 /usr/local/bin/docker-entrypoint.sh \
     && chmod 777 ${JD_DIR}/* && rm -rf /tmp/* \
-    && rm -rf /root/.npm
+    && rm -rf /root/.npm \
+    && rm -rf ${JD_DIR}/docker
 WORKDIR ${JD_DIR}
 ENTRYPOINT docker-entrypoint.sh
