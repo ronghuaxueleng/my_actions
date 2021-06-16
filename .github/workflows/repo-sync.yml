@@ -65,8 +65,8 @@ jobs:
           cp -f ./my_actions/shareCode.py ./JD-FreeFuck
           cp -rf ./my_actions/sample ./JD-FreeFuck/
           cp -rf ./my_actions/diy ./JD-FreeFuck
-          cp -rf ./my_actions/docker/docker-entrypoint.sh ./JD-FreeFuck
-          cp -rf ./my_actions/docker/requirements.txt ./JD-FreeFuck
+          cp -rf ./my_actions/docker/docker-entrypoint.sh ./JD-FreeFuck/docker
+          cp -rf ./my_actions/docker/requirements.txt ./JD-FreeFuck/docker
           cp -f ./my_actions/sngxprov2p.sh ./
           cd ./my_actions
           git checkout source
