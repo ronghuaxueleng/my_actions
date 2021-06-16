@@ -10,9 +10,9 @@ password = os.getenv('password')
 api_id = os.getenv('api_id')
 api_hash = os.getenv('api_hash')
 
-host = os.getenv('host')
-port = os.getenv('port')
-proxy = (socks.SOCKS5, host, int(port))
+host = '127.0.0.1'
+port = 7891
+proxy = (socks.SOCKS5, host, port)
 
 client = TelegramClient("sharecode", api_id, api_hash, proxy=proxy).start(phone=phone, password=password)
 
