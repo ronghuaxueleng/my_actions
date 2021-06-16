@@ -1,0 +1,24 @@
+version: '3'
+services:
+  jd:
+    image: ronghuaxueleng/jd
+    container_name: jd
+    volumes:
+      - /home/myid/jd/jishui/scripts:/jd/scripts
+      - /home/myid/jd/jishui/config:/jd/config
+      - /home/myid/jd/jishui/log:/jd/log
+    ports:
+      - "5680:5678"
+    environment: 
+      ENABLE_HANGUP: true
+      ENABLE_WEB_PANEL: true
+      phone: "+8615901254680"
+      password: "xinyan1203"
+      api_id: 6798896
+      api_hash: "a82f9d37e7cd1509b50a30801e611c8b"
+      host: "172.17.0.8"
+      port: 7890
+      sharedCodesJsonPath: "/jd/scripts/sharedCodes.json"
+    restart: always
+    hostname: jd
+    network_mode: "bridge"
