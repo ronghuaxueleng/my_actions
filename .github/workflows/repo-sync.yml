@@ -78,15 +78,15 @@ jobs:
           git add .
           git commit --allow-empty -m "up"
           git push
-          git checkout sngxprov2p
-          rm -rf !(.git | .githup)
-          cd ../
-          bash ./sngxprov2p.sh
-          cp -rf ./sngxprov2p/* ./my_actions
-          cd ./my_actions
-          git add .
-          git commit --allow-empty -m "up"
-          git push
+#          git checkout sngxprov2p
+#          rm -rf !(.git | .githup)
+#          cd ../
+#          bash ./sngxprov2p.sh
+#          cp -rf ./sngxprov2p/* ./my_actions
+#          cd ./my_actions
+#          git add .
+#          git commit --allow-empty -m "up"
+#          git push
       - name: "sync github -> gitee"
         uses: Yikun/hub-mirror-action@master
         with:
