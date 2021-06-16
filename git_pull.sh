@@ -483,14 +483,14 @@ echo -e ''
 if [[ ${ExitStatusScripts} -eq 0 ]]; then
     Change_ALL
     [ -d ${ScriptsCombined}/node_modules ] && Notify_Version
+    ExtraShell
     Diff_Cron
     Npm_Install
     Output_ListJsAdd
     Output_ListJsDrop
     Del_Cron
     Add_Cron
-    ExtraShell
-#    cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
+   cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
     Run_All
     echo -e "活动脚本更新完成......\n"
 else
