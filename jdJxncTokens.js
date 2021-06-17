@@ -2,10 +2,10 @@
 let JxncTokens = [];
 
 var fs = require("fs");
-fs.readFile("jxncTokens.json", "utf8", function (err, data) {
-  if (err) console.log(err);
-  JxncTokens = JSON.parse(data); //读取的值
-});
+let JxncTokensString = fs.readFileSync("jxncTokens.json", "utf8");
+if (JxncTokensString) {
+  JxncTokens = JSON.parse(JxncTokensString)
+}
 
 // JxncTokens = [...new Set(JxncTokens.filter(item => !!item))]
 for (let i = 0; i < JxncTokens.length; i++) {
