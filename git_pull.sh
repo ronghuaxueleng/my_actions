@@ -328,7 +328,7 @@ function Output_ListJsDrop() {
 ## 检测文件：lxk0301/jd_scripts 仓库中的 docker/crontab_list.sh
 ## 如果检测到某个定时任务在上述检测文件中已删除，那么在本地也删除对应定时任务
 function Del_Cron() {
-    if [ "${AutoDelCron}" = "true" ] && [ -s ${ListJsDrop} ] && [ -s ${ListCron} ] && [ -d ${ScriptsCombined}/node_modules ]; then
+    if [ -s ${ListJsDrop} ] && [ -s ${ListCron} ] && [ -d ${ScriptsCombined}/node_modules ]; then
         echo -e "开始尝试自动删除定时任务如下：\n"
         cat ${ListJsDrop}
         echo
@@ -354,7 +354,7 @@ function Del_Cron() {
 ## 如果检测到检测文件中增加新的定时任务，那么在本地也增加
 ## 本功能生效时，会自动从检测文件新增加的任务中读取时间，该时间为北京时间
 function Add_Cron() {
-    if [ "${AutoAddCron}" = "true" ] && [ -s ${ListJsAdd} ] && [ -s ${ListCron} ] && [ -d ${ScriptsCombined}/node_modules ]; then
+    if [ -s ${ListJsAdd} ] && [ -s ${ListCron} ] && [ -d ${ScriptsCombined}/node_modules ]; then
         echo -e "开始尝试自动添加定时任务如下：\n"
         cat ${ListJsAdd}
         echo
