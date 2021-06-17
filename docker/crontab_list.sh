@@ -5,4 +5,3 @@
 #生成财富岛提现token
 59 23 * * * node /scripts/get_jx_token.js >> /scripts/logs/get_jx_token.log 2>&1
 0 * * * * node /scripts/jd_get_share_code_4_bot.js >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
-5 * * * * /usr/bin/python3 /jd/shareCode.py >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
