@@ -24,6 +24,7 @@ FileRunAll=${ShellDir}/run_all.sh
 FileConf=${ConfigDir}/config.sh
 FileDiy=${ConfigDir}/diy.sh
 FileConfSample=${ShellDir}/sample/config.sh.sample
+ListCronSample=${ShellDir}/sample/docker.list.sample
 ListCron=${ConfigDir}/crontab.list
 ListCronUniq=${ConfigDir}/crontab.list.uniq
 ListTask=${LogDir}/task.list
@@ -359,7 +360,7 @@ function Add_Cron() {
         cat ${ListJsAdd}
         echo
         JsAdd=$(cat ${ListJsAdd})
-
+        cp ${ListCronSample} ${ListCron}
         for Cron in ${JsAdd}; do
             if [[ ${Cron} == jd_bean_sign ]]; then
                 echo "4 0,9 * * * bash ${ShellJd} ${Cron}" | sort -u >>${ListCron}
