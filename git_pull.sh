@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+shopt -s extglob
 ## 文件路径、脚本网址、文件版本以及各种环境的判断
 ShellDir=${JD_DIR:-$(
     cd $(dirname $0)
@@ -163,7 +163,8 @@ function Combined_Cron {
     [ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
     [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
     [ -d ${Scripts3Dir}/.git ] && Git_PullScripts3 || Git_CloneScripts3
-    rm -rf ${ScriptsCombined}/*.*
+    cd ${ScriptsCombined}
+    rm -rf !(*.json)
     cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
