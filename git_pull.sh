@@ -488,8 +488,8 @@ if [[ ${ExitStatusScripts} -eq 0 ]]; then
     Diff_Cron
     Npm_Install
     Output_ListJsAdd
-    Output_ListJsDrop
-    Del_Cron
+    # Output_ListJsDrop
+    # Del_Cron
     Add_Cron
    cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
     Run_All
