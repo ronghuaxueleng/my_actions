@@ -189,12 +189,12 @@ function Combined_Cron {
 function Diff_Cron() {
     if [ -f ${ListCron} ]; then
         if [ -n "${JD_DIR}" ]; then
-            grep -E " j[drx]_\w+" ${ListCron} | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | sort -u >${ListTask}
+            grep -E " \w+_\w+" ${ListCron} | perl -pe "s|.+ (\w+_\w+).*|\1|" | sort -u >${ListTask}
         else
-            grep "${ShellDir}/" ${ListCron} | grep -E " j[drx]_\w+" | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | sort -u >${ListTask}
+            grep "${ShellDir}/" ${ListCron} | grep -E " \w+_\w+" | perl -pe "s|.+ (\w+_\w+).*|\1|" | sort -u >${ListTask}
         fi
 
-        cat ${ListCronSh} | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >${ListJs}
+        cat ${ListCronSh} | grep -E "\S+_\w+\.js" | perl -pe "s|^.+node */scripts/(\S+_\w+\.js).+|\1|" | sort -u >${ListJs}
         if [ ${EnableExtraShell} == "true" ]; then
             if [ ${EnableExtraShellUpdate} == "true" ]; then
                 echo ${EnableExtraShellURL} | grep "SuperManito" -q
