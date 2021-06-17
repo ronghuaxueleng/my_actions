@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+shopt -s extglob
 ## 文件路径、脚本网址、文件版本以及各种环境的判断
 ShellDir=${JD_DIR:-$(
     cd $(dirname $0)
