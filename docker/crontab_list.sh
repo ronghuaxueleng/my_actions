@@ -17,4 +17,4 @@
 #获取助力码
 0 * * * * node /scripts/jd_get_share_code_4_bot.js >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
 # 提交助力码
-5 * * * * /usr/bin/python3 /jd/shareCode.py >> /scripts/logs/shareCode.log 2>&1
+5 * * * * /usr/bin/python3 /jd/shareCode.py >> /jd/log/shareCode.log 2>&1
