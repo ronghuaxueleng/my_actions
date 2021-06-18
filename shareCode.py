@@ -15,8 +15,11 @@ port = 7891
 proxy = (socks.SOCKS5, host, port)
 
 sessionFilePath = os.getenv('sessionFilePath') if os.getenv('sessionFilePath') else ''
+sessionFilePath = sessionFilePath + "/sharecode/"
+if not os.path.exists:
+    os.makedirs(sessionFilePath)
 
-client = TelegramClient(sessionFilePath + "/sharecode/" + phone, api_id, api_hash, proxy=proxy).start(phone=phone, password=password)
+client = TelegramClient(sessionFilePath + phone, api_id, api_hash, proxy=proxy).start(phone=phone, password=password)
 
 async def main():
     await client.get_me()
