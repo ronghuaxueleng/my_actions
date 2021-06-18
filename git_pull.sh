@@ -370,7 +370,7 @@ function Add_Cron() {
             if [[ ${Cron} == jd_bean_sign ]]; then
                 echo "4 0,9 * * * bash ${ShellJd} ${Cron}" | sort -u >>${ListCron}
             else
-                cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^.+)node */scripts/(\S+_?\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
+                cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s\S+\s).+node\s+[/scripts/]?(\S+_?\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
             fi
         done
 
