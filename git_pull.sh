@@ -218,8 +218,8 @@ function Diff_Cron() {
         mv -f ${ListJs}.sort ${ListJs}
         mv -f ${ListTask}.sort ${ListTask}
 
-        grep -vwf ${ListTask} ${ListJs} | sort -u >${ListJsDrop}
-        grep -vwf ${ListJs} ${ListTask} | sort -u >${ListJsAdd}
+        grep -vwf ${ListTask} ${ListJs} | sort -u >${ListJsAdd}
+        grep -vwf ${ListJs} ${ListTask} | sort -u >${ListJsDrop}
     else
         echo -e "${ListCron} 文件不存在，请先定义您自己的crontab.list...\n"
     fi
