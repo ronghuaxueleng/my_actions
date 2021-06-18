@@ -57,7 +57,7 @@ function Update_Cron() {
         done
         perl -i -pe "s|.+(bash.+git_pull.+log.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCron}
         sort -u ${ListCron} >${ListCronUniq}
-        mv ${ListCronUniq} ${ListCron}
+        mv -f ${ListCronUniq} ${ListCron}
         crontab ${ListCron}
     fi
 }
@@ -169,7 +169,8 @@ function Combined_Cron {
     cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
-    cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "/scripts/\S+_\w+\.js" | sort -u >${ListCronSh}
+    # cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "/scripts/\S+_?\w+\.js" | sort -u >${ListCronSh}
+    cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -v '#' | sort -u >${ListCronSh}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do
     #     croname=${jsname##*/}
     #     jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
@@ -190,12 +191,12 @@ function Combined_Cron {
 function Diff_Cron() {
     if [ -f ${ListCron} ]; then
         if [ -n "${JD_DIR}" ]; then
-            grep -E " \w+_\w+" ${ListCron} | perl -pe "s|.+ (\w+_\w+).*|\1|" | sort -u >${ListTask}
+            grep -E " \w+_\w+" ${ListCron} | perl -pe "s|.+ (\S+_?\w+).*|\1|" | sort -u >${ListTask}
         else
-            grep "${ShellDir}/" ${ListCron} | grep -E " \w+_\w+" | perl -pe "s|.+ (\w+_\w+).*|\1|" | sort -u >${ListTask}
+            grep "${ShellDir}/" ${ListCron} | grep -E " \w+_\w+" | perl -pe "s|.+ (\S+_?\w+).*|\1|" | sort -u >${ListTask}
         fi
 
-        cat ${ListCronSh} | grep -E "\S+_\w+\.js" | perl -pe "s|^.+node */scripts/(\S+_\w+\.js).+|\1|" | sort -u >${ListJs}
+        cat ${ListCronSh} | grep -E "\S+_?\w+\.js" | perl -pe "s|^.+node */scripts/(\S+_?\w+)\.js.+|\1|" | sort -u >${ListJs}
         if [ ${EnableExtraShell} == "true" ]; then
             if [ ${EnableExtraShellUpdate} == "true" ]; then
                 echo ${EnableExtraShellURL} | grep "SuperManito" -q
@@ -212,8 +213,13 @@ function Diff_Cron() {
             fi
         fi
 
-        grep -vwf ${ListTask} ${ListJs} >${ListJsDrop}
-        grep -vwf ${ListJs} ${ListTask} >${ListJsAdd}
+        sort -u ${ListJs} > ${ListJs}.sort
+        sort -u ${ListTask} > ${ListTask}.sort
+        mv -f ${ListJs}.sort ${ListJs}
+        mv -f ${ListTask}.sort ${ListTask}
+
+        grep -vwf ${ListTask} ${ListJs} | sort -u >${ListJsDrop}
+        grep -vwf ${ListJs} ${ListTask} | sort -u >${ListJsAdd}
     else
         echo -e "${ListCron} 文件不存在，请先定义您自己的crontab.list...\n"
     fi
@@ -338,7 +344,7 @@ function Del_Cron() {
             perl -i -ne "{print unless / ${Cron}( |$)/}" ${ListCron}
         done
         sort -u ${ListCron} >${ListCronUniq}
-        mv ${ListCronUniq} ${ListCron}
+        mv -f ${ListCronUniq} ${ListCron}
         crontab ${ListCron}
         echo -e "成功删除失效的脚本与定时任务，当前的定时任务清单如下：\n\n--------------------------------------------------------------\n"
         crontab -l
@@ -371,7 +377,7 @@ function Add_Cron() {
 
         if [ $? -eq 0 ]; then
             sort -u ${ListCron} >${ListCronUniq}
-            mv ${ListCronUniq} ${ListCron}
+            mv -f ${ListCronUniq} ${ListCron}
             crontab ${ListCron}
             echo -e "成功添加新的定时任务，当前的定时任务清单如下：\n\n--------------------------------------------------------------\n"
             crontab -l
@@ -488,8 +494,8 @@ if [[ ${ExitStatusScripts} -eq 0 ]]; then
     Diff_Cron
     Npm_Install
     Output_ListJsAdd
-    # Output_ListJsDrop
-    # Del_Cron
+    Output_ListJsDrop
+    Del_Cron
     Add_Cron
    cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
     Run_All
