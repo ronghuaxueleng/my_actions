@@ -55,7 +55,6 @@ function Update_Cron() {
         for ((i = 1; i < ${#RanHourArray[*]}; i++)); do
             RanHour="${RanHour},${RanHourArray[i]}"
         done
-        perl -i -pe "s|.+(bash.+git_pull.+log.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCron}
         sort -u ${ListCron} >${ListCronUniq}
         mv -f ${ListCronUniq} ${ListCron}
         crontab ${ListCron}
@@ -191,26 +190,15 @@ function Combined_Cron {
 function Diff_Cron() {
     if [ -f ${ListCron} ]; then
         if [ -n "${JD_DIR}" ]; then
-            grep -E " \S+_?\w+" ${ListCron} | perl -pe "s|.+ (\S+_?\w+).*|\1|" | sort -u >${ListTask}
+            grep -E " \S+_?\w+" ${ListCron} | grep -v "#" | sort -u >${ListTask}
         else
-            grep "${ShellDir}/" ${ListCron} | grep -E " \S+_?\w+" | perl -pe "s|.+ (\S+_?\w+).*|\1|" | sort -u >${ListTask}
+            grep "${ShellDir}/" ${ListCron} | grep -E " \S+_?\w+" | grep -v "#" | sort -u >${ListTask}
         fi
 
-        cat ${ListCronSh} | grep -E "\S+_?\w+(\.[js|py|sh])?" | perl -pe "s|^.+node *(?:/scripts/)?(\S+_?\w+)\.js.+|\1|" | sort -u >${ListJs}
-        if [ ${EnableExtraShell} == "true" ]; then
-            if [ ${EnableExtraShellUpdate} == "true" ]; then
-                echo ${EnableExtraShellURL} | grep "SuperManito" -q
-                if [ $? -eq 0 ]; then
-                    grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sed "s/jd_zoo/jd_cute_animals/g" | sed "s/jd_jxmc/jx_pasture/g" | sed "s/jd_star_shop/jd_star_store/g" | sort -u >>${ListJs}
-                    grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sed "s/jd_zoo/jd_cute_animals/g" | sed "s/jd_jxmc/jx_pasture/g" | sed "s/jd_star_shop/jd_star_store/g" | sort -u >>${ListTask}
-                else
-                    grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListJs}
-                    grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListTask}
-                fi
-            else
-                grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListJs}
-                grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js" | sed "s/\.js//g" | sort -u >>${ListTask}
-            fi
+        cat ${ListCronSh} | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)(?:.+)?node\s+(?:/scripts/)?(\S+_?\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >${ListJs}
+        if [ "${EnableExtraShell}" == "true" ]; then
+            grep "my_scripts_list" ${FileDiy} | grep -v '#' | sort -u >>${ListJs}
+            grep "my_scripts_list" ${FileDiy} | grep -v '#' | sort -u >>${ListTask}
         fi
 
         sort -u ${ListJs} > ${ListJs}.sort
@@ -341,7 +329,7 @@ function Del_Cron() {
         cat ${ListJsDrop}
         echo
         JsDrop=$(cat ${ListJsDrop})
-        for Cron in ${JsDrop}; do
+        for Cron in "${JsDrop}"; do
             perl -i -ne "{print unless / ${Cron}( |$)/}" ${ListCron}
         done
         sort -u ${ListCron} >${ListCronUniq}
@@ -404,12 +392,12 @@ function Add_Cron() {
 ## 自定义脚本功能
 function ExtraShell() {
     ## 自动同步用户自定义的diy.sh
-    if [[ ${EnableExtraShellUpdate} == true ]]; then
+    if [[ "${EnableExtraShellUpdate}" == "true" ]]; then
         wget -q $EnableExtraShellURL -O ${FileDiy}
         if [ $? -eq 0 ]; then
             echo -e "自定义 DIY 脚本同步完成......"
             echo -e ''
-            sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/raw.fastgit.org/' ${FileDiy}
+            sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
             sed -i 's/ScriptsDir/ScriptsCombined/' ${FileDiy}
             sleep 2s
         else
@@ -420,7 +408,7 @@ function ExtraShell() {
     fi
 
     ## 调用用户自定义的diy.sh
-    if [[ ${EnableExtraShell} == true ]]; then
+    if [[ "${EnableExtraShell}" == "true" ]]; then
         if [ -f ${FileDiy} ]; then
             . ${FileDiy}
         else
