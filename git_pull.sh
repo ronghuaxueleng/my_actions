@@ -191,12 +191,12 @@ function Combined_Cron {
 function Diff_Cron() {
     if [ -f ${ListCron} ]; then
         if [ -n "${JD_DIR}" ]; then
-            grep -E " \w+_\w+" ${ListCron} | perl -pe "s|.+ (\S+_?\w+).*|\1|" | sort -u >${ListTask}
+            grep -E " \S+_?\w+" ${ListCron} | perl -pe "s|.+ (\S+_?\w+).*|\1|" | sort -u >${ListTask}
         else
-            grep "${ShellDir}/" ${ListCron} | grep -E " \w+_\w+" | perl -pe "s|.+ (\S+_?\w+).*|\1|" | sort -u >${ListTask}
+            grep "${ShellDir}/" ${ListCron} | grep -E " \S+_?\w+" | perl -pe "s|.+ (\S+_?\w+).*|\1|" | sort -u >${ListTask}
         fi
 
-        cat ${ListCronSh} | grep -E "\S+_?\w+\.js" | perl -pe "s|^.+node */scripts/(\S+_?\w+)\.js.+|\1|" | sort -u >${ListJs}
+        cat ${ListCronSh} | grep -E "\S+_?\w+(\.[js|py|sh])?" | perl -pe "s|^.+node *(?:/scripts/)?(\S+_?\w+)\.js.+|\1|" | sort -u >${ListJs}
         if [ ${EnableExtraShell} == "true" ]; then
             if [ ${EnableExtraShellUpdate} == "true" ]; then
                 echo ${EnableExtraShellURL} | grep "SuperManito" -q
@@ -366,12 +366,17 @@ function Add_Cron() {
         echo -e "开始尝试自动添加定时任务如下：\n"
         cat ${ListJsAdd}
         echo
-        JsAdd=$(cat ${ListJsAdd})
-        for Cron in ${JsAdd}; do
-            if [[ ${Cron} == jd_bean_sign ]]; then
+        JsAdd=$(cat "${ListJsAdd}")
+        for Cron in "${JsAdd}"; do
+            if [[ "${Cron}" == jd_bean_sign ]]; then
                 echo "4 0,9 * * * bash ${ShellJd} ${Cron}" | sort -u >>${ListCron}
             else
-                cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)(?:.+)?node\s+(?:/scripts/)?(\S+_?\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
+                result=$(echo "${Cron}" | grep -E "\S+\s\S+\s\S+\s\S+\s(\S+\s)?")
+                if [[ "$result" != "" ]]; then
+                    echo "${Cron}" | sort -u >>${ListCron}
+                else
+                    cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)(?:.+)?node\s+(?:/scripts/)?(\S+_?\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
+                fi
             fi
         done
 
@@ -472,7 +477,6 @@ Combined_Cron
 
 ## 克隆或更新js脚本
 [ -f ${ScriptsCombined}/package.json ] && PackageListOld=$(cat ${ScriptsCombined}/package.json)
-# [ -d ${ScriptsCombined}/.git ] && Git_PullScripts || Git_CloneScripts
 echo -e "+----------------------- 郑 重 提 醒 -----------------------+"
 echo -e ""
 echo -e "  本项目目前闭源并且仅面向内部开放，脚本免费使用仅供于学习！"
