@@ -10,8 +10,6 @@ password = os.getenv('password')
 api_id = os.getenv('api_id')
 api_hash = os.getenv('api_hash')
 
-print(phone)
-
 host = '127.0.0.1'
 port = 7891
 proxy = (socks.SOCKS5, host, port)
