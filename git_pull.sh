@@ -218,8 +218,8 @@ function Diff_Cron() {
         mv -f ${ListJs}.sort ${ListJs}
         mv -f ${ListTask}.sort ${ListTask}
 
-        grep -vwf ${ListTask} ${ListJs} | sort -u >${ListJsAdd}
-        grep -vwf ${ListJs} ${ListTask} | sort -u >${ListJsDrop}
+        grep -vwf ${ListTask} ${ListJs} | sort -u >${ListJsDrop}
+        grep -vwf ${ListJs} ${ListTask} | sort -u >${ListJsAdd}
     else
         echo -e "${ListCron} 文件不存在，请先定义您自己的crontab.list...\n"
     fi
@@ -370,7 +370,7 @@ function Add_Cron() {
             if [[ ${Cron} == jd_bean_sign ]]; then
                 echo "4 0,9 * * * bash ${ShellJd} ${Cron}" | sort -u >>${ListCron}
             else
-                cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s\S+\s).+node\s+[/scripts/]?(\S+_?\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
+                cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^.+)node */scripts/(\S+_?\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
             fi
         done
 
