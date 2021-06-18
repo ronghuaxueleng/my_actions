@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+shopt -s extglob
 ## 文件路径、脚本网址、文件版本以及各种环境的判断
 ShellDir=${JD_DIR:-$(
     cd $(dirname $0)
@@ -24,6 +24,7 @@ FileRunAll=${ShellDir}/run_all.sh
 FileConf=${ConfigDir}/config.sh
 FileDiy=${ConfigDir}/diy.sh
 FileConfSample=${ShellDir}/sample/config.sh.sample
+ListCronSample=${ShellDir}/sample/docker.list.sample
 ListCron=${ConfigDir}/crontab.list
 ListCronUniq=${ConfigDir}/crontab.list.uniq
 ListTask=${LogDir}/task.list
@@ -56,7 +57,7 @@ function Update_Cron() {
         done
         perl -i -pe "s|.+(bash.+git_pull.+log.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCron}
         sort -u ${ListCron} >${ListCronUniq}
-        mv ${ListCronUniq} ${ListCron}
+        mv -f ${ListCronUniq} ${ListCron}
         crontab ${ListCron}
     fi
 }
@@ -163,12 +164,13 @@ function Combined_Cron {
     [ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
     [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
     [ -d ${Scripts3Dir}/.git ] && Git_PullScripts3 || Git_CloneScripts3
-    rm -rf ${ScriptsCombined}/*.*
+    rm -rf `ls ${ScriptsCombined}/*.* | grep -v '\.json'`
     cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
-    cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "j[drx]_\w+\.js" | sort -u >${ListCronSh}
+    # cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "/scripts/\S+_?\w+\.js" | sort -u >${ListCronSh}
+    cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -v '#' | sort -u >${ListCronSh}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do
     #     croname=${jsname##*/}
     #     jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
@@ -189,12 +191,12 @@ function Combined_Cron {
 function Diff_Cron() {
     if [ -f ${ListCron} ]; then
         if [ -n "${JD_DIR}" ]; then
-            grep -E " j[drx]_\w+" ${ListCron} | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | sort -u >${ListTask}
+            grep -E " \w+_\w+" ${ListCron} | perl -pe "s|.+ (\S+_?\w+).*|\1|" | sort -u >${ListTask}
         else
-            grep "${ShellDir}/" ${ListCron} | grep -E " j[drx]_\w+" | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | sort -u >${ListTask}
+            grep "${ShellDir}/" ${ListCron} | grep -E " \w+_\w+" | perl -pe "s|.+ (\S+_?\w+).*|\1|" | sort -u >${ListTask}
         fi
 
-        cat ${ListCronSh} | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >${ListJs}
+        cat ${ListCronSh} | grep -E "\S+_?\w+\.js" | perl -pe "s|^.+node */scripts/(\S+_?\w+)\.js.+|\1|" | sort -u >${ListJs}
         if [ ${EnableExtraShell} == "true" ]; then
             if [ ${EnableExtraShellUpdate} == "true" ]; then
                 echo ${EnableExtraShellURL} | grep "SuperManito" -q
@@ -211,8 +213,13 @@ function Diff_Cron() {
             fi
         fi
 
-        grep -vwf ${ListTask} ${ListJs} >${ListJsAdd}
-        grep -vwf ${ListJs} ${ListTask} >${ListJsDrop}
+        sort -u ${ListJs} > ${ListJs}.sort
+        sort -u ${ListTask} > ${ListTask}.sort
+        mv -f ${ListJs}.sort ${ListJs}
+        mv -f ${ListTask}.sort ${ListTask}
+
+        grep -vwf ${ListTask} ${ListJs} | sort -u >${ListJsDrop}
+        grep -vwf ${ListJs} ${ListTask} | sort -u >${ListJsAdd}
     else
         echo -e "${ListCron} 文件不存在，请先定义您自己的crontab.list...\n"
     fi
@@ -328,7 +335,7 @@ function Output_ListJsDrop() {
 ## 检测文件：lxk0301/jd_scripts 仓库中的 docker/crontab_list.sh
 ## 如果检测到某个定时任务在上述检测文件中已删除，那么在本地也删除对应定时任务
 function Del_Cron() {
-    if [ "${AutoDelCron}" = "true" ] && [ -s ${ListJsDrop} ] && [ -s ${ListCron} ] && [ -d ${ScriptsCombined}/node_modules ]; then
+    if [ -s ${ListJsDrop} ] && [ -s ${ListCron} ] && [ -d ${ScriptsCombined}/node_modules ]; then
         echo -e "开始尝试自动删除定时任务如下：\n"
         cat ${ListJsDrop}
         echo
@@ -337,7 +344,7 @@ function Del_Cron() {
             perl -i -ne "{print unless / ${Cron}( |$)/}" ${ListCron}
         done
         sort -u ${ListCron} >${ListCronUniq}
-        mv ${ListCronUniq} ${ListCron}
+        mv -f ${ListCronUniq} ${ListCron}
         crontab ${ListCron}
         echo -e "成功删除失效的脚本与定时任务，当前的定时任务清单如下：\n\n--------------------------------------------------------------\n"
         crontab -l
@@ -354,23 +361,22 @@ function Del_Cron() {
 ## 如果检测到检测文件中增加新的定时任务，那么在本地也增加
 ## 本功能生效时，会自动从检测文件新增加的任务中读取时间，该时间为北京时间
 function Add_Cron() {
-    if [ "${AutoAddCron}" = "true" ] && [ -s ${ListJsAdd} ] && [ -s ${ListCron} ] && [ -d ${ScriptsCombined}/node_modules ]; then
+    if [ -s ${ListJsAdd} ] && [ -s ${ListCron} ] && [ -d ${ScriptsCombined}/node_modules ]; then
         echo -e "开始尝试自动添加定时任务如下：\n"
         cat ${ListJsAdd}
         echo
         JsAdd=$(cat ${ListJsAdd})
-
         for Cron in ${JsAdd}; do
             if [[ ${Cron} == jd_bean_sign ]]; then
                 echo "4 0,9 * * * bash ${ShellJd} ${Cron}" | sort -u >>${ListCron}
             else
-                cat ${ListCronSh} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
+                cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^.+)node */scripts/(\S+_\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
             fi
         done
 
         if [ $? -eq 0 ]; then
             sort -u ${ListCron} >${ListCronUniq}
-            mv ${ListCronUniq} ${ListCron}
+            mv -f ${ListCronUniq} ${ListCron}
             crontab ${ListCron}
             echo -e "成功添加新的定时任务，当前的定时任务清单如下：\n\n--------------------------------------------------------------\n"
             crontab -l
@@ -483,14 +489,14 @@ echo -e ''
 if [[ ${ExitStatusScripts} -eq 0 ]]; then
     Change_ALL
     [ -d ${ScriptsCombined}/node_modules ] && Notify_Version
+    ExtraShell
     Diff_Cron
     Npm_Install
     Output_ListJsAdd
     Output_ListJsDrop
     Del_Cron
     Add_Cron
-    ExtraShell
-#    cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
+   cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
     Run_All
     echo -e "活动脚本更新完成......\n"
 else

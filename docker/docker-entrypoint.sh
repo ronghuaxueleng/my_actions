@@ -120,4 +120,5 @@ fi
 
 UseNotes
 
+cd /root/.config/clash && bash refresh.sh
 exec "$@"
