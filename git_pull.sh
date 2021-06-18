@@ -359,7 +359,7 @@ function Add_Cron() {
             if [[ "${Cron}" == jd_bean_sign ]]; then
                 echo "4 0,9 * * * bash ${ShellJd} ${Cron}" | sort -u >>${ListCron}
             else
-                result=$(echo "${Cron}" | grep -E "\S+\s\S+\s\S+\s\S+\s(\S+\s)?")
+                result=$(echo "${Cron}" | grep -E "^\S+\s\S+\s\S+\s\S+\s(\S+\s)?")
                 if [[ "$result" != "" ]]; then
                     echo "${Cron}" | sort -u >>${ListCron}
                 else
