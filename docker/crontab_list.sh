@@ -19,4 +19,4 @@
 #获取助力码
 0 * * * * node /scripts/jd_get_share_code_4_bot.js >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
 # 提交助力码
-5 * * * * bash /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
+5 * * * * bash -x /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
