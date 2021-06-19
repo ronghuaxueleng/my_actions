@@ -16,7 +16,7 @@ proxy = (socks.SOCKS5, host, port)
 
 sessionFilePath = os.getenv('sessionFilePath') if os.getenv('sessionFilePath') else ''
 sessionFilePath = sessionFilePath + "/sharecode/"
-if not os.path.exists:
+if not os.path.exists(sessionFilePath):
     os.makedirs(sessionFilePath)
 
 client = TelegramClient(sessionFilePath + phone, api_id, api_hash, proxy=proxy).start(phone=phone, password=password)
