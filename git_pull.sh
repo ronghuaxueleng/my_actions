@@ -399,6 +399,7 @@ function ExtraShell() {
             echo -e ''
             sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
             sed -i 's/ScriptsDir/ScriptsCombined/' ${FileDiy}
+            sed -i -E 's/^rm\s+-rf\s+\$\{ScriptsCombined\}.+\$\{ListCron\}//g' ${FileDiy}
             sleep 2s
         else
             echo -e "\033[31m自定义 DIY 脚本同步失败！\033[0m"
