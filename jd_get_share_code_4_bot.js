@@ -61,85 +61,63 @@ let sgmhCodes = [];
       await getShareCode()
     }
   }
-  if (beanCodes.length > 5) {
-    beanCodes.reverse();
-  }
-  if (ddfactoryCodes.length > 5) {
-    ddfactoryCodes.reverse();
-  }
-  if (farmCodes.length > 5) {
-    farmCodes.reverse();
-  }
-  if (jxcfdCodes.length > 5) {
-    jxcfdCodes.reverse();
-  }
-  if (jxfactoryCodes.length > 5) {
-    jxfactoryCodes.reverse();
-  }
-  if (petCodes.length > 5) {
-    petCodes.reverse();
-  }
-  if (sgmhCodes.length > 5) {
-    sgmhCodes.reverse();
-  }
-  beanCodes = beanCodes.slice(0,5)
-  ddfactoryCodes = ddfactoryCodes.slice(0,5)
-  farmCodes = farmCodes.slice(0,5)
-  jxcfdCodes = jxcfdCodes.slice(0,5)
-  jxfactoryCodes = jxfactoryCodes.slice(0,5)
-  petCodes = petCodes.slice(0,5)
-  sgmhCodes = sgmhCodes.slice(0,5)
-
-  let exportJson = [{
-    "name": "种豆得豆",
-    "cmd": "/bean",
-    "bot": "@JD_ShareCode_Bot",
-    "codes": beanCodes.join("&")
-  },{
-    "name": "东东工厂",
-    "cmd": "/ddfactory",
-    "bot": "@JD_ShareCode_Bot",
-    "codes": ddfactoryCodes.join("&")
-  },{
-    "name": "东东农场",
-    "cmd": "/farm",
-    "bot": "@JD_ShareCode_Bot",
-    "codes": farmCodes.join("&")
-  },{
-    "name": "财富岛",
-    "cmd": "/jxcfd",
-    "bot": "@JD_ShareCode_Bot",
-    "codes": jxcfdCodes.join("&")
-  },{
-    "name": "京喜工厂",
-    "cmd": "/jxfactory",
-    "bot": "@JD_ShareCode_Bot",
-    "codes": jxfactoryCodes.join("&")
-  },{
-    "name": "东东萌宠",
-    "cmd": "/pet",
-    "bot": "@JD_ShareCode_Bot",
-    "codes": petCodes.join("&")
-  },{
-    "name": "闪购盲盒",
-    "cmd": "/sgmh",
-    "bot": "@JD_ShareCode_Bot",
-    "codes": sgmhCodes.join("&")
-  }]
-  const data = JSON.stringify(exportJson);
-  console.log(`【exportJson】${data}`);
-
+  
   const fs = require('fs');
   // write JSON string to a file
 
-  let savePath = process.env.sharedCodesJsonPath ? process.env.sharedCodesJsonPath : 'sharedCodes.json'
-
-  fs.writeFile(savePath, data, (err) => {
+  let savePath = process.env.sharedCodesJsonPath ? process.env.sharedCodesJsonPath : 'sharedCodes.json@sharedCodes1.json'
+  let savepaths = savePath.split("@");
+  writeFile(savepaths[0], beanCodes.reverse(), ddfactoryCodes.reverse(), farmCodes.reverse(), jxcfdCodes.reverse(), jxfactoryCodes.reverse(), petCodes.reverse(), sgmhCodes.reverse())
+  writeFile(savepaths[1], beanCodes, ddfactoryCodes, farmCodes, jxcfdCodes, jxfactoryCodes, petCodes, sgmhCodes)
+  
+  function writeFile(savepath, beanCodes, ddfactoryCodes, farmCodes, jxcfdCodes, jxfactoryCodes, petCodes, sgmhCodes) {
+    let exportJson = [
+      {
+      "name": "种豆得豆",
+      "cmd": "/bean",
+      "bot": "@JD_ShareCode_Bot",
+      "codes": beanCodes.join("&")
+    },{
+      "name": "东东工厂",
+      "cmd": "/ddfactory",
+      "bot": "@JD_ShareCode_Bot",
+      "codes": ddfactoryCodes.join("&")
+    },{
+      "name": "东东农场",
+      "cmd": "/farm",
+      "bot": "@JD_ShareCode_Bot",
+      "codes": farmCodes.join("&")
+    },{
+      "name": "财富岛",
+      "cmd": "/jxcfd",
+      "bot": "@JD_ShareCode_Bot",
+      "codes": jxcfdCodes.join("&")
+    },{
+      "name": "京喜工厂",
+      "cmd": "/jxfactory",
+      "bot": "@JD_ShareCode_Bot",
+      "codes": jxfactoryCodes.join("&")
+    },{
+      "name": "东东萌宠",
+      "cmd": "/pet",
+      "bot": "@JD_ShareCode_Bot",
+      "codes": petCodes.join("&")
+    },{
+      "name": "闪购盲盒",
+      "cmd": "/sgmh",
+      "bot": "@JD_ShareCode_Bot",
+      "codes": sgmhCodes.join("&")
+    }]
+    const data = JSON.stringify(exportJson);
+    console.log(`【exportJson】${data}`);
+    fs.writeFile(savepath, data, (err) => {
       if (err) {
           throw err;
       }
       console.log("JSON data is saved.");
   });
+  }
+
 })()
   .catch((e) => {
     $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
