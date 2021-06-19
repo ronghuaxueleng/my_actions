@@ -67,8 +67,8 @@ let sgmhCodes = [];
 
   let savePath = process.env.sharedCodesJsonPath ? process.env.sharedCodesJsonPath : 'sharedCodes.json@sharedCodes1.json'
   let savepaths = savePath.split("@");
-  writeFile(savepaths[0], beanCodes.reverse(), ddfactoryCodes.reverse(), farmCodes.reverse(), jxcfdCodes.reverse(), jxfactoryCodes.reverse(), petCodes.reverse(), sgmhCodes.reverse())
   writeFile(savepaths[1], beanCodes, ddfactoryCodes, farmCodes, jxcfdCodes, jxfactoryCodes, petCodes, sgmhCodes)
+  writeFile(savepaths[0], beanCodes.reverse(), ddfactoryCodes.reverse(), farmCodes.reverse(), jxcfdCodes.reverse(), jxfactoryCodes.reverse(), petCodes.reverse(), sgmhCodes.reverse())
   
   function writeFile(savepath, beanCodes, ddfactoryCodes, farmCodes, jxcfdCodes, jxfactoryCodes, petCodes, sgmhCodes) {
     let exportJson = [
