@@ -1,3 +1,4 @@
+// 获得京喜农场token 用于财富岛提现
 // {"farm_jstoken":"749a90f871adsfads8ffda7bf3b1576760","timestamp":"1610165423873","phoneid":"42c7e3dadfadsfdsaac-18f0e4f4a0cf"}
 let JxncTokens = [];
 

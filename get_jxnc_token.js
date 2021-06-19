@@ -17,10 +17,20 @@ if (!getCookies()) return;
         await getJxNc(cookie);
       }
     }
+
+    let resList = []
+
     const data = JSON.stringify($.tokenArr);
-    $.log(data);
+    for (let index = 0; index < $.tokenArr.length; index++) {
+      let one = JSON.parse(data);
+      one.splice(index, 1);
+      resList.push(one.join("@"))
+    }
+
+    const resData = JSON.stringify(resList);
+
     // write JSON string to a file
-    fs.writeFile('jxncShareCodes.json', data, (err) => {
+    fs.writeFile('jxncShareCodes.json', resData, (err) => {
         if (err) {
             throw err;
         }
@@ -57,7 +67,7 @@ function getCookies() {
   return true;
 }
 
-function getJxNc(cookie){
+function getJxNc(cookie) {
   const JXNC_API_HOST = "https://wq.jd.com/";
 
   function JXNC_taskurl(function_path, body) {
@@ -100,7 +110,6 @@ function getJxNc(cookie){
                   $.tokenArr.push(JSON.stringify(shareCodeJson))
                 } else {
                   console.log(`【京东账号${$.index}（${$.UserName}）京喜农场】未选择种子，请先去京喜农场选择种子`);
-                  $.tokenArr.push("")
                 }
               }
             } else {
