@@ -329,10 +329,22 @@ function Del_Cron() {
         cat ${ListJsDrop}
         echo
         JsDrop=$(cat ${ListJsDrop})
-        for Cron in "${JsDrop}"; do
-            perl -i -ne "{print unless / ${Cron}( |$)/}" ${ListCron}
-        done
-        sort -u ${ListCron} >${ListCronUniq}
+        # for Cron in "${JsDrop}"; do
+        #     result=$(echo "${Cron}" | grep -E "^\S+\s\S+\s\S+\s\S+\s(\S+\s)?")
+        #     if [[ "$result" != "" ]]; then
+        #         regx=$(echo "${Cron}" | sed -e 's/\([[\/.*]\|\]\)/\\&/g' | sed -e 's/ /\\s/g')
+        #         cat ${ListCron} | grep -v -E "${regx}" | sort -u >${ListCronUniq}
+        #         mv -f ${ListCronUniq} ${ListCron}
+        #     else
+        #         perl -i -ne "{print unless / ${Cron}( |$)/}" ${ListCron}
+        #     fi
+        # done
+        regx=$(cat ${ListJsDrop} | sed -e 's/\([[\/.*]\|\]\)/\\&/g' | sed -e 's/ /\\s/g' |tr '\n' '|')
+        final=${regx: -1}
+        if [ final=='|' ]; then
+            regx=${regx%?}
+        fi
+        cat ${ListCron} | grep -v -E "${regx}" | sort -u >${ListCronUniq}
         mv -f ${ListCronUniq} ${ListCron}
         crontab ${ListCron}
         echo -e "成功删除失效的脚本与定时任务，当前的定时任务清单如下：\n\n--------------------------------------------------------------\n"
@@ -356,15 +368,11 @@ function Add_Cron() {
         echo
         JsAdd=$(cat "${ListJsAdd}")
         for Cron in "${JsAdd}"; do
-            if [[ "${Cron}" == jd_bean_sign ]]; then
-                echo "4 0,9 * * * bash ${ShellJd} ${Cron}" | sort -u >>${ListCron}
+            result=$(echo "${Cron}" | grep -E "^\S+\s\S+\s\S+\s\S+\s(\S+\s)?")
+            if [[ "$result" != "" ]]; then
+                echo "${Cron}" | sort -u >>${ListCron}
             else
-                result=$(echo "${Cron}" | grep -E "^\S+\s\S+\s\S+\s\S+\s(\S+\s)?")
-                if [[ "$result" != "" ]]; then
-                    echo "${Cron}" | sort -u >>${ListCron}
-                else
-                    cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)(?:.+)?node\s+(?:/scripts/)?(\S+_?\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
-                fi
+                cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)(?:.+)?node\s+(?:/scripts/)?(\S+_?\w+)\.js.+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
             fi
         done
 
@@ -399,7 +407,7 @@ function ExtraShell() {
             echo -e ''
             sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
             sed -i 's/ScriptsDir/ScriptsCombined/' ${FileDiy}
-            sed -i -E 's/^rm\s+-rf\s+\$\{ScriptsCombined\}.+\$\{ListCron\}//g' ${FileDiy}
+            sed -i -E '/^rm\s+-rf\s+\$\{ScriptsCombined\}.+\$\{ListCron\}/d' ${FileDiy}
             sleep 2s
         else
             echo -e "\033[31m自定义 DIY 脚本同步失败！\033[0m"
