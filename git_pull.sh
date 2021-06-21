@@ -408,7 +408,7 @@ function ExtraShell() {
             sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
             sed -i 's/ScriptsDir/ScriptsCombined/' ${FileDiy}
             sed -i -E '/^rm\s+-rf\s+\$\{ScriptsCombined\}.+\$\{ListCron\}/d' ${FileDiy}
-            sed -i -E '/^\[\s+-f\s+\$\{ScriptsCombined\}/jd_try\.js\s+\]\s.+\nif.+\n.+\nfi?/d' ${FileDiy}
+            # sed -i -E '/^\[\s+-f\s+\$\{ScriptsCombined\}/jd_try\.js\s+\]\s.+\nif.+\n.+\nfi?/d' ${FileDiy}
             sleep 2s
         else
             echo -e "\033[31m自定义 DIY 脚本同步失败！\033[0m"
