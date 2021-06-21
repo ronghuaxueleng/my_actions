@@ -74,7 +74,7 @@ function Git_PullShell() {
 ## 克隆scripts
 function Git_CloneScripts() {
     echo -e "克隆${ScriptsURL}脚本\n"
-    git clone -b master ${ScriptsURL} ${ScriptsDir}
+    git clone -b main ${ScriptsURL} ${ScriptsDir}
     ExitStatusScripts=$?
     echo
 }
@@ -85,7 +85,7 @@ function Git_PullScripts() {
     cd ${ScriptsDir}
     git fetch --all
     ExitStatusScripts=$?
-    git reset --hard origin/master
+    git reset --hard origin/main
     echo
 }
 
@@ -408,6 +408,7 @@ function ExtraShell() {
             sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
             sed -i 's/ScriptsDir/ScriptsCombined/' ${FileDiy}
             sed -i -E '/^rm\s+-rf\s+\$\{ScriptsCombined\}.+\$\{ListCron\}/d' ${FileDiy}
+            sed -i -E '/^\[\s+-f\s+\$\{ScriptsCombined\}/jd_try\.js\s+\]\s.+\nif.+\n.+\nfi?/d' ${FileDiy}
             sleep 2s
         else
             echo -e "\033[31m自定义 DIY 脚本同步失败！\033[0m"
@@ -498,7 +499,7 @@ if [[ ${ExitStatusScripts} -eq 0 ]]; then
     Output_ListJsDrop
     Del_Cron
     Add_Cron
-   cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
+    cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
     Run_All
     echo -e "活动脚本更新完成......\n"
 else
