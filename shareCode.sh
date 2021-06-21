@@ -8,4 +8,5 @@ sharedCodesJsonPaths=(${sharedCodesJsonPath//@/ })
 
 for ((i = 0; i < ${#phones[@]}; i++)); do
     /usr/bin/python3 /jd/shareCode.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]}
+    /usr/bin/python3 /jd/verificationShareCodeUrl.py ${sharedCodesJsonPaths[i]}
 done
