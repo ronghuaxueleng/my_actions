@@ -339,7 +339,7 @@ function Del_Cron() {
         #         perl -i -ne "{print unless / ${Cron}( |$)/}" ${ListCron}
         #     fi
         # done
-        regx=$(cat ${ListJsDrop} | sed -e 's/\([[\/.*]\|\]\)/\\&/g' | sed -e 's/ /\\s/g' |tr '\n' '|')
+        regx=$(cat ${ListJsDrop} | sed -e 's/\([[\/.*+]\|\]\)/\\&/g' | sed -e 's/ /\\s/g' |tr '\n' '|')
         final=${regx: -1}
         if [ final=='|' ]; then
             regx=${regx%?}
