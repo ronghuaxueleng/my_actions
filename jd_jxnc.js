@@ -321,7 +321,7 @@ async function jdJXNC() {
         // if (next) {
         //   while ($.helpNum < $.maxHelpNum) {
         //     $.helpNum++;
-        //     assistUserShareCodeJson = await getAssistUser();
+            assistUserShareCodeJson = await getAssistUser();
         //     if (assistUserShareCodeJson) {
         //       await $.wait(500);
         //       next = await helpShareCode(assistUserShareCodeJson['smp'], assistUserShareCodeJson['active'], assistUserShareCodeJson['joinnum']);
