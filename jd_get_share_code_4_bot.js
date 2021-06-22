@@ -49,6 +49,7 @@ let jxcfdCodes = [];
 let jxfactoryCodes = [];
 let petCodes = [];
 let sgmhCodes = [];
+$.CFDGroupIds = [];
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -83,6 +84,13 @@ let sgmhCodes = [];
   writeFile(savepaths[1], beanCodes, ddfactoryCodes, farmCodes, jxcfdCodes, jxfactoryCodes, petCodes, sgmhCodes)
   writeFile(savepaths[0], beanCodes.reverse(), ddfactoryCodes.reverse(), farmCodes.reverse(), jxcfdCodes.reverse(), jxfactoryCodes.reverse(), petCodes.reverse(), sgmhCodes.reverse())
   
+  fs.writeFile('CFDGroupIds.json', JSON.stringify($.CFDGroupIds), (err) => {
+    if (err) {
+        throw err;
+    }
+    console.log("JSON data is saved.");
+  });
+
   function writeFile(savepath, beanCodes, ddfactoryCodes, farmCodes, jxcfdCodes, jxfactoryCodes, petCodes, sgmhCodes) {
     let exportJson = [
       {
@@ -128,7 +136,7 @@ let sgmhCodes = [];
           throw err;
       }
       console.log("JSON data is saved.");
-  });
+    });
   }
 
 })()
@@ -660,6 +668,57 @@ function getCFD() {
       },
     };
   }
+  function submitGroupId(dwIsNewUser) {
+    return new Promise(resolve => {
+      $.get(taskUrl(`user/GatherForture`), async (err, resp, g_data) => {
+        try {
+          if (err) {
+            console.log(`${JSON.stringify(err)}`)
+            console.log(`${$.name} GatherForture API请求失败，请检查网路重试`)
+          } else {
+            const { GroupInfo:{ strGroupId }, strPin } = JSON.parse(g_data);
+            if(!strGroupId) {
+              const status = await openGroup(dwIsNewUser);
+              if(status === 0) {
+                await submitGroupId(dwIsNewUser);
+              } else {
+                resolve();
+              }
+            } else {
+              $.log('\n\n你的【🏝寻宝大作战】互助码: ' + strGroupId + '(每天都变化,旧的不可用)\n\n');
+              $.CFDGroupIds.push(strGroupId)
+            }
+          }
+        } catch (e) {
+          $.logErr(e, resp);
+        } finally {
+          resolve();
+        }
+      });
+    });
+  }
+  
+  //开启寻宝大作战
+  function openGroup(dwIsNewUser) {
+    return new Promise( async (resolve) => {
+      $.get(taskUrl(`user/OpenGroup`, `dwIsNewUser=${dwIsNewUser}`), async (err, resp, data) => {
+        try {
+          if (err) {
+            console.log(`${JSON.stringify(err)}`)
+            console.log(`${$.name} OpenGroup API请求失败，请检查网路重试`)
+          } else {
+            const { sErrMsg } = JSON.parse(data);
+            $.log(`\n【🏝寻宝大作战】${sErrMsg}\n${$.showLog ? data : ''}`);
+            resolve(0);
+          }
+        } catch (e) {
+          $.logErr(e, resp);
+        } finally {
+          resolve();
+        }
+      });
+    });
+  }
   return new Promise(async (resolve) => {
     $.get(taskUrl(`user/QueryUserInfo`), (err, resp, data) => {
       try {
@@ -676,6 +735,11 @@ function getCFD() {
         jxcfdCodes.push(strMyShareId);
         $.get({url: `http://47.100.61.159:10080/add?user=${$.UserName}&code=${strMyShareId}&type=jxcfd`, 'timeout': 20000})
         console.log(`【京东账号${$.index}（${$.UserName}）财富岛】${strMyShareId}`)
+        try {
+          submitGroupId(dwIsNewUser)
+        } catch (error) {
+          
+        }
       } catch (e) {
         $.logErr(e, resp);
       } finally {
