@@ -8,9 +8,10 @@ ShellDir=${JD_DIR:-$(
 [[ ${JD_DIR} ]] && ShellJd=jd || ShellJd=${ShellDir}/jd.sh
 LogDir=${ShellDir}/log
 [ ! -d ${LogDir} ] && mkdir -p ${LogDir}
+OwnActionsDir=${ShellDir}/ownActions
 ScriptsDir=${ShellDir}/jd_scripts
 Scripts2Dir=${ShellDir}/sngxprov2p
-Scripts3Dir=${ShellDir}/ownActions
+Scripts3Dir=${ShellDir}/MyActions
 ScriptsCombined=${ShellDir}/scripts
 [ ! -d ${ScriptsCombined} ] && mkdir -p ${ScriptsCombined}
 DockerDir=${ScriptsCombined}/docker
@@ -18,7 +19,7 @@ DockerDir=${ScriptsCombined}/docker
 ListCronSh=${DockerDir}/crontab_list.sh
 ListCronScripts=${ScriptsDir}/docker/crontab_list.sh
 ListCronScripts2=${Scripts2Dir}/docker/crontab_list.sh
-ListCronScripts3=${Scripts3Dir}/docker/crontab_list.sh
+ListCronScripts3=${OwnActionsDir}/docker/crontab_list.sh
 ConfigDir=${ShellDir}/config
 FileRunAll=${ShellDir}/run_all.sh
 FileConf=${ConfigDir}/config.sh
@@ -36,8 +37,9 @@ ContentNewTask=${ShellDir}/new_task
 ContentDropTask=${ShellDir}/drop_task
 SendCount=${ShellDir}/send_count
 isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
+OwnActionsURL=https://gitee.com/getready/my_actions.git
 ScriptsURL=https://hub.fastgit.org/gossh520/jd_scripts
-Scripts3URL=https://gitee.com/getready/my_actions.git
+Scripts3URL=https://hub.fastgit.org/wuzhi04/MyActions
 
 ## 更新crontab，gitee服务器同一时间限制5个链接，因此每个人更新代码必须错开时间，每次执行git_pull随机生成。
 ## 每天次数随机，更新时间随机，更新秒数随机，至少6次，至多12次，大部分为8-10次，符合正态分布。
@@ -71,6 +73,22 @@ function Git_PullShell() {
     git pull
 }
 
+## 克隆OwnActions
+function Git_CloneOwnActionsScripts {
+    echo -e "克隆${OwnActionsURL} scripts分支脚本\n"
+    git clone -b scripts ${OwnActionsURL} ${OwnActionsDir}
+    ExitStatusScripts2=$?
+    echo
+}
+
+## 更新OwnActions
+function Git_PullOwnActionsScripts {
+    echo -e "更新${OwnActionsURL}脚本\n"
+    cd ${OwnActionsDir}
+    git pull
+    echo
+}
+
 ## 克隆scripts
 function Git_CloneScripts() {
     echo -e "克隆${ScriptsURL}脚本\n"
@@ -91,15 +109,15 @@ function Git_PullScripts() {
 
 ## 克隆scripts2
 function Git_CloneScripts2 {
-    echo -e "克隆${Scripts3URL} sngxprov2p分支脚本\n"
-    git clone -b sngxprov2p ${Scripts3URL} ${Scripts2Dir}
+    echo -e "克隆${OwnActionsURL} sngxprov2p分支脚本\n"
+    git clone -b sngxprov2p ${OwnActionsURL} ${Scripts2Dir}
     ExitStatusScripts2=$?
     echo
 }
 
 ## 更新scripts2
 function Git_PullScripts2 {
-    echo -e "更新${Scripts3URL}脚本\n"
+    echo -e "更新${OwnActionsURL}脚本\n"
     cd ${Scripts2Dir}
     git pull
     echo
@@ -108,7 +126,7 @@ function Git_PullScripts2 {
 ## 克隆scripts3
 function Git_CloneScripts3 {
     echo -e "克隆${Scripts3URL} scripts分支脚本\n"
-    git clone -b scripts ${Scripts3URL} ${Scripts3Dir}
+    git clone -b main ${Scripts3URL} ${Scripts3Dir}
     ExitStatusScripts2=$?
     echo
 }
@@ -160,13 +178,16 @@ function Change_ALL() {
 
 ## 合并脚本
 function Combined_Cron {
+    [ -d ${OwnActionsDir}/.git ] && Git_PullOwnActionsScripts || Git_CloneOwnActionsScripts
     [ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
     [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
     [ -d ${Scripts3Dir}/.git ] && Git_PullScripts3 || Git_CloneScripts3
+    
     rm -rf `ls ${ScriptsCombined}/*.* | grep -v '\.json'`
     cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
+    cp -rf $(ls ${OwnActionsDir} | grep -v docker | sed "s:^:${OwnActionsDir}/:" | xargs) ${ScriptsCombined}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
     # cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "/scripts/\S+_?\w+\.js" | sort -u >${ListCronSh}
     cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -v '#' | sort -u >${ListCronSh}
@@ -499,7 +520,7 @@ if [[ ${ExitStatusScripts} -eq 0 ]]; then
     Output_ListJsDrop
     Del_Cron
     Add_Cron
-    cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
+    cp -rf $(ls ${OwnActionsDir} | grep -v docker | sed "s:^:${OwnActionsDir}/:" | xargs) ${ScriptsCombined}
     Run_All
     echo -e "活动脚本更新完成......\n"
 else
