@@ -36,7 +36,7 @@ ContentNewTask=${ShellDir}/new_task
 ContentDropTask=${ShellDir}/drop_task
 SendCount=${ShellDir}/send_count
 isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
-ScriptsURL=https://hub.fastgit.org/JDHelloWorld/jd_scripts
+ScriptsURL=https://hub.fastgit.org/gossh520/jd_scripts
 Scripts3URL=https://gitee.com/getready/my_actions.git
 
 ## 更新crontab，gitee服务器同一时间限制5个链接，因此每个人更新代码必须错开时间，每次执行git_pull随机生成。
@@ -74,7 +74,7 @@ function Git_PullShell() {
 ## 克隆scripts
 function Git_CloneScripts() {
     echo -e "克隆${ScriptsURL}脚本\n"
-    git clone -b main ${ScriptsURL} ${ScriptsDir}
+    git clone -b master ${ScriptsURL} ${ScriptsDir}
     ExitStatusScripts=$?
     echo
 }
@@ -85,7 +85,7 @@ function Git_PullScripts() {
     cd ${ScriptsDir}
     git fetch --all
     ExitStatusScripts=$?
-    git reset --hard origin/main
+    git reset --hard origin/master
     echo
 }
 
