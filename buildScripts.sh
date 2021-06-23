@@ -15,8 +15,8 @@ for row in $(echo "${json}" | jq -r '.list[] | @base64'); do
     target=$(_jq '.job|.target')
     if [[ $name =~ $pattern ]]; then
         jsname=${target##*/}
-        wget $target -O sngxprov2p/$jsname
-        # wget $(echo "${target}" | perl -pe "s|(?:https:\/\/ghproxy\.com/)?(https:\/\/raw\.githubusercontent\.com.+)|https:\/\/ghproxy\.com/\1|") -O sngxprov2p/$jsname
+        # wget $target -O sngxprov2p/$jsname
+        wget $(echo "${target}" | perl -pe "s|(?:https:\/\/ghproxy\.com/)?(https:\/\/raw\.githubusercontent\.com.+)|https:\/\/ghproxy\.com/\1|") -O sngxprov2p/$jsname
         crontab_list+="#$name \n"
         crontab_list+="$time node /scripts/$jsname >> /scripts/logs/${jsname%.*}.log 2>&1\n"
     fi
@@ -61,5 +61,4 @@ cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${Script
 cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsCombined}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsCombined}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsCombined}
-cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | >${ListCronSh}
-sed '$!N; /^\(.*\)\n\1$/!P; D' ${ListCronSh}
+cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
