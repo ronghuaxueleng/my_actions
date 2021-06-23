@@ -16,7 +16,7 @@ for row in $(echo "${json}" | jq -r '.list[] | @base64'); do
     if [[ $name =~ $pattern ]]; then
         jsname=${target##*/}
         # wget $target -O sngxprov2p/$jsname
-        wget $(echo "${target}" | perl -pe "s|(?:https:\/\/ghproxy\.com/)?(https:\/\/raw\.githubusercontent\.com.+)|https:\/\/ghproxy\.com/\1|") -O sngxprov2p/$jsname
+        wget -q $(echo "${target}" | perl -pe "s|(?:https:\/\/ghproxy\.com/)?(https:\/\/raw\.githubusercontent\.com.+)|https:\/\/ghproxy\.com/\1|") -O sngxprov2p/$jsname
         crontab_list+="#$name \n"
         crontab_list+="$time node /scripts/$jsname >> /scripts/logs/${jsname%.*}.log 2>&1\n"
     fi
@@ -69,6 +69,7 @@ EnableExtraShellProxyDownload="false"
 ExtraShellProxyUrl="https://ghproxy.com/"
 EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/diy.sh"
 wget -q $EnableExtraShellURL -O ${FileDiy}
+. ${FileDiy}
 
 if [ $? -eq 0 ]; then
     echo -e "自定义 DIY 脚本同步完成......"
