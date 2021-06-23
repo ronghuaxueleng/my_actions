@@ -71,6 +71,7 @@ jobs:
           cp -rf ./my_actions/docker/requirements.txt ./JD-FreeFuck/docker/
           cp -rf ./my_actions/docker/refresh.sh ./JD-FreeFuck/docker/
           cp -f ./my_actions/sngxprov2p.sh ./
+          cp -f ./my_actions/JDHelloWorld.sh ./
           cd ./my_actions
           git checkout source
           shopt -s extglob
@@ -86,6 +87,15 @@ jobs:
           cd ../
           bash ./sngxprov2p.sh
           cp -rf ./sngxprov2p/* ./my_actions
+          cd ./my_actions
+          git add .
+          git commit --allow-empty -m "up"
+          git push
+          git checkout JDHelloWorld
+          rm -rf !(.git | .githup)
+          cd ../
+          bash ./JDHelloWorld.sh
+          cp -rf ./JDHelloWorld/* ./my_actions
           cd ./my_actions
           git add .
           git commit --allow-empty -m "up"
