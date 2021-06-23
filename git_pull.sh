@@ -38,7 +38,6 @@ ContentDropTask=${ShellDir}/drop_task
 SendCount=${ShellDir}/send_count
 isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
 OwnActionsURL=https://gitee.com/getready/my_actions.git
-ScriptsURL=https://hub.fastgit.org/gossh520/jd_scripts
 Scripts3URL=https://hub.fastgit.org/wuzhi04/MyActions
 
 ## 更新crontab，gitee服务器同一时间限制5个链接，因此每个人更新代码必须错开时间，每次执行git_pull随机生成。
@@ -91,19 +90,19 @@ function Git_PullOwnActionsScripts {
 
 ## 克隆scripts
 function Git_CloneScripts() {
-    echo -e "克隆${ScriptsURL}脚本\n"
-    git clone -b master ${ScriptsURL} ${ScriptsDir}
+    echo -e "克隆${OwnActionsURL} JDHelloWorld分支脚本\n"
+    git clone -b JDHelloWorld ${OwnActionsURL} ${ScriptsDir}
     ExitStatusScripts=$?
     echo
 }
 
 ## 更新scripts
 function Git_PullScripts() {
-    echo -e "更新${ScriptsURL}脚本\n"
+    echo -e "更新${OwnActionsURL} JDHelloWorld分支脚本\n"
     cd ${ScriptsDir}
     git fetch --all
     ExitStatusScripts=$?
-    git reset --hard origin/master
+    git reset --hard origin/JDHelloWorld
     echo
 }
 
@@ -184,9 +183,9 @@ function Combined_Cron {
     [ -d ${Scripts3Dir}/.git ] && Git_PullScripts3 || Git_CloneScripts3
     
     rm -rf `ls ${ScriptsCombined}/*.* | grep -v '\.json'`
-    cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
+    cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${OwnActionsDir} | grep -v docker | sed "s:^:${OwnActionsDir}/:" | xargs) ${ScriptsCombined}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
     # cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "/scripts/\S+_?\w+\.js" | sort -u >${ListCronSh}
