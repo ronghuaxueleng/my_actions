@@ -8,18 +8,12 @@ ShellDir=${JD_DIR:-$(
 [[ ${JD_DIR} ]] && ShellJd=jd || ShellJd=${ShellDir}/jd.sh
 LogDir=${ShellDir}/log
 [ ! -d ${LogDir} ] && mkdir -p ${LogDir}
-OwnActionsDir=${ShellDir}/ownActions
 ScriptsDir=${ShellDir}/jd_scripts
-Scripts2Dir=${ShellDir}/sngxprov2p
-Scripts3Dir=${ShellDir}/MyActions
 ScriptsCombined=${ShellDir}/scripts
 [ ! -d ${ScriptsCombined} ] && mkdir -p ${ScriptsCombined}
 DockerDir=${ScriptsCombined}/docker
 [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
 ListCronSh=${DockerDir}/crontab_list.sh
-ListCronScripts=${ScriptsDir}/docker/crontab_list.sh
-ListCronScripts2=${Scripts2Dir}/docker/crontab_list.sh
-ListCronScripts3=${OwnActionsDir}/docker/crontab_list.sh
 ConfigDir=${ShellDir}/config
 FileRunAll=${ShellDir}/run_all.sh
 FileConf=${ConfigDir}/config.sh
@@ -38,7 +32,6 @@ ContentDropTask=${ShellDir}/drop_task
 SendCount=${ShellDir}/send_count
 isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
 OwnActionsURL=https://gitee.com/getready/my_actions.git
-Scripts3URL=https://hub.fastgit.org/wuzhi04/MyActions
 
 ## 更新crontab，gitee服务器同一时间限制5个链接，因此每个人更新代码必须错开时间，每次执行git_pull随机生成。
 ## 每天次数随机，更新时间随机，更新秒数随机，至少6次，至多12次，大部分为8-10次，符合正态分布。
@@ -72,71 +65,24 @@ function Git_PullShell() {
     git pull
 }
 
-## 克隆OwnActions
-function Git_CloneOwnActionsScripts {
-    echo -e "克隆${OwnActionsURL} scripts分支脚本\n"
-    git clone -b scripts ${OwnActionsURL} ${OwnActionsDir}
-    ExitStatusScripts2=$?
-    echo
-}
-
-## 更新OwnActions
-function Git_PullOwnActionsScripts {
-    echo -e "更新${OwnActionsURL}脚本\n"
-    cd ${OwnActionsDir}
-    git pull
-    echo
-}
-
 ## 克隆scripts
 function Git_CloneScripts() {
     echo -e "克隆${OwnActionsURL} JDHelloWorld分支脚本\n"
-    git clone -b JDHelloWorld ${OwnActionsURL} ${ScriptsDir}
+    git clone -b j_scripts ${OwnActionsURL} ${ScriptsDir}
     ExitStatusScripts=$?
     echo
 }
 
 ## 更新scripts
 function Git_PullScripts() {
-    echo -e "更新${OwnActionsURL} JDHelloWorld分支脚本\n"
+    echo -e "更新${OwnActionsURL} j_scripts分支脚本\n"
     cd ${ScriptsDir}
     git fetch --all
     ExitStatusScripts=$?
-    git reset --hard origin/JDHelloWorld
+    git reset --hard origin/j_scripts
     echo
 }
 
-## 克隆scripts2
-function Git_CloneScripts2 {
-    echo -e "克隆${OwnActionsURL} sngxprov2p分支脚本\n"
-    git clone -b sngxprov2p ${OwnActionsURL} ${Scripts2Dir}
-    ExitStatusScripts2=$?
-    echo
-}
-
-## 更新scripts2
-function Git_PullScripts2 {
-    echo -e "更新${OwnActionsURL}脚本\n"
-    cd ${Scripts2Dir}
-    git pull
-    echo
-}
-
-## 克隆scripts3
-function Git_CloneScripts3 {
-    echo -e "克隆${Scripts3URL} scripts分支脚本\n"
-    git clone -b main ${Scripts3URL} ${Scripts3Dir}
-    ExitStatusScripts2=$?
-    echo
-}
-
-## 更新scripts3
-function Git_PullScripts3 {
-    echo -e "更新${Scripts3URL}脚本\n"
-    cd ${Scripts3Dir}
-    git pull
-    echo
-}
 
 ## 用户数量UserSum
 function Count_UserSum() {
@@ -177,19 +123,12 @@ function Change_ALL() {
 
 ## 合并脚本
 function Combined_Cron {
-    [ -d ${OwnActionsDir}/.git ] && Git_PullOwnActionsScripts || Git_CloneOwnActionsScripts
     [ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
-    [ -d ${Scripts2Dir}/.git ] && Git_PullScripts2 || Git_CloneScripts2
-    [ -d ${Scripts3Dir}/.git ] && Git_PullScripts3 || Git_CloneScripts3
     
     rm -rf `ls ${ScriptsCombined}/*.* | grep -v '\.json'`
-    cp -rf $(ls ${Scripts2Dir} | grep -v docker | sed "s:^:${Scripts2Dir}/:" | xargs) ${ScriptsCombined}
-    cp -rf $(ls ${Scripts3Dir} | grep -v docker | sed "s:^:${Scripts3Dir}/:" | xargs) ${ScriptsCombined}
     cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
-    cp -rf $(ls ${OwnActionsDir} | grep -v docker | sed "s:^:${OwnActionsDir}/:" | xargs) ${ScriptsCombined}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
-    # cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -E "/scripts/\S+_?\w+\.js" | sort -u >${ListCronSh}
-    cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} | tr -s [:space:] | grep -v '#' | sort -u >${ListCronSh}
+    cat ${ScriptsDir} | tr -s [:space:] | grep -v '#' | sort -u >${ListCronSh}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do
     #     croname=${jsname##*/}
     #     jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
@@ -428,7 +367,6 @@ function ExtraShell() {
             sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
             sed -i 's/ScriptsDir/ScriptsCombined/' ${FileDiy}
             sed -i -E '/^rm\s+-rf\s+\$\{ScriptsCombined\}.+\$\{ListCron\}/d' ${FileDiy}
-            # sed -i -E '/^\[\s+-f\s+\$\{ScriptsCombined\}/jd_try\.js\s+\]\s.+\nif.+\n.+\nfi?/d' ${FileDiy}
             sleep 2s
         else
             echo -e "\033[31m自定义 DIY 脚本同步失败！\033[0m"
@@ -519,7 +457,6 @@ if [[ ${ExitStatusScripts} -eq 0 ]]; then
     Output_ListJsDrop
     Del_Cron
     Add_Cron
-    cp -rf $(ls ${OwnActionsDir} | grep -v docker | sed "s:^:${OwnActionsDir}/:" | xargs) ${ScriptsCombined}
     Run_All
     echo -e "活动脚本更新完成......\n"
 else
