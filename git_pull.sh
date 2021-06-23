@@ -14,6 +14,7 @@ ScriptsCombined=${ShellDir}/scripts
 DockerDir=${ScriptsCombined}/docker
 [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
 ListCronSh=${DockerDir}/crontab_list.sh
+ListCronLxk=${ScriptsDir}/docker/crontab_list.sh
 ConfigDir=${ShellDir}/config
 FileRunAll=${ShellDir}/run_all.sh
 FileConf=${ConfigDir}/config.sh
@@ -83,7 +84,6 @@ function Git_PullScripts() {
     echo
 }
 
-
 ## 用户数量UserSum
 function Count_UserSum() {
     i=1
@@ -128,7 +128,7 @@ function Combined_Cron {
     rm -rf `ls ${ScriptsCombined}/*.* | grep -v '\.json'`
     cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
-    cat ${ScriptsDir} | tr -s [:space:] | grep -v '#' | sort -u >${ListCronSh}
+    cat ${ListCronLxk} | tr -s [:space:] | grep -v '#' | sort -u >${ListCronSh}
     # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do
     #     croname=${jsname##*/}
     #     jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
