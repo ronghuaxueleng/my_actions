@@ -77,7 +77,8 @@ if [ $? -eq 0 ]; then
     echo -e ''
     sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
     sed -i 's/ListCron/ListCronSh/' ${FileDiy}
-    sed -i -E '/^rm\s+-rf\s+\$\{ScriptsCombined\}.+\$\{ListCron\}/d' ${FileDiy}
+    sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/' ${FileDiy}
+    sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
     sleep 2s
     . ${FileDiy}
 fi
