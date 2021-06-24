@@ -143,6 +143,8 @@
 # 10 7 * * * node /scripts/jd_crazy_joy_bonus.js >> /scripts/logs/jd_crazy_joy_bonus.log 2>&1
 # jd_cash_exchange
 # 0,1,2 0 * * * node /scripts/jd_cash_exchange.js >> /scripts/logs/jd_cash_exchange.log 2>&1
+#京东待收货 
+8 8 12 * * * node /scripts/jddsh.js >> /scripts/logs/jddsh.log 2>&1
 #京东京喜工厂开团 
 0 6 * * * node /scripts/jd_necklace.js >> /scripts/logs/jd_necklace.log 2>&1
 #京东点点券史蒂夫修复版 
