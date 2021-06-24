@@ -13,7 +13,7 @@ jobs:
               cd $(dirname $0)
               pwd
           )}
-          ScriptsDir=jd_scripts
+          ScriptsDir=${ShellDir}/jd_scripts
           [ ! -d ${ScriptsDir} ] && mkdir -p ${ScriptsDir}
           DockerDir=${ScriptsDir}/docker
           [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
