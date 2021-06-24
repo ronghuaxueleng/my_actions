@@ -15,8 +15,8 @@ for row in $(echo "${json}" | jq -r '.list[] | @base64'); do
     target=$(_jq '.job|.target')
     if [[ $name =~ $pattern ]]; then
         jsname=${target##*/}
-        # wget $target -O sngxprov2p/$jsname
-        wget -q $(echo "${target}" | perl -pe "s|(?:https:\/\/ghproxy\.com/)?(https:\/\/raw\.githubusercontent\.com.+)|https:\/\/ghproxy\.com/\1|") -O sngxprov2p/$jsname
+        wget $target -O sngxprov2p/$jsname
+        # wget -q $(echo "${target}" | perl -pe "s|(?:https:\/\/ghproxy\.com/)?(https:\/\/raw\.githubusercontent\.com.+)|https:\/\/ghproxy\.com/\1|") -O sngxprov2p/$jsname
         if [ $? -eq 0 ]; then
             echo -e "下载 $jsname 完成...\n"
             crontab_list+="#$name \n"
@@ -29,7 +29,7 @@ $(echo -e "$crontab_list")
 EOF
 sed '/^$/d' sngxprov2p/docker/crontab_list.sh
 
-git clone https://ghproxy.com/https://github.com/JDHelloWorld/jd_scripts.git JDHelloWorld
+git clone https://github.com/JDHelloWorld/jd_scripts.git JDHelloWorld
 [ ! -d JDHelloWorld/docker ] && mkdir -p JDHelloWorld/docker
 json=$(cat JDHelloWorld/QuantumultX/gallery.json)
 crontab_list=""
@@ -47,7 +47,7 @@ $(echo -e "$crontab_list")
 EOF
 sed '/^$/d' JDHelloWorld/docker/crontab_list.sh
 
-git clone https://ghproxy.com/https://github.com/wuzhi04/MyActions.git MyActions
+git clone https://github.com/wuzhi04/MyActions.git MyActions
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
 ShellDir=${JD_DIR:-$(

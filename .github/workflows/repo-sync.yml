@@ -85,6 +85,7 @@ jobs:
           rm -rf !(.git | .githup)
           cd ../
           bash ./buildScripts.sh
+          ls -l
           cp -rf ./jd_scripts/* ./my_actions
           cd ./my_actions
           git add .
