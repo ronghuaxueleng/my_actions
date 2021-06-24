@@ -69,8 +69,6 @@ cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${Scri
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
 
-wget -q https://gitee.com/SuperManito/scripts/raw/master/crontab_list.sh -O ${ListCronScripts5}
-
 cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 FileDiy=diy.sh
