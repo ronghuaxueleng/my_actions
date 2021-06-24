@@ -1,0 +1,9 @@
+name: Ubuntu
+on: 
+  workflow_dispatch:
+jobs:
+  Ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - name: SSH connection to Actions
+      uses: p3terx/debugger-action@master
