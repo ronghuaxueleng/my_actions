@@ -1,13 +1,7 @@
 # File: .github/workflows/repo-sync.yml
 name: A🔄自动同步diy🔄A
 on:
-  schedule:
-    - cron: "0 */1 * * *"
   workflow_dispatch:
-  watch:
-    types: started
-  repository_dispatch:
-    types: repo-sync
 jobs:
   repo-sync:
     name: A创建脚本A
@@ -15,6 +9,10 @@ jobs:
     steps:
       - name: 开始同步
         run: |
+          ShellDir=${JD_DIR:-$(
+              cd $(dirname $0)
+              pwd
+          )}
           ScriptsDir=jd_scripts
           [ ! -d ${ScriptsDir} ] && mkdir -p ${ScriptsDir}
           DockerDir=${ScriptsDir}/docker
