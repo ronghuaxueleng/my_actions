@@ -1,0 +1,43 @@
+# File: .github/workflows/repo-sync.yml
+name: A🔄自动同步diy🔄A
+on:
+  schedule:
+    - cron: "0 */1 * * *"
+  workflow_dispatch:
+  watch:
+    types: started
+  repository_dispatch:
+    types: repo-sync
+jobs:
+  repo-sync:
+    name: A创建脚本A
+    runs-on: ubuntu-latest
+    steps:
+      - name: 开始同步
+        run: |
+          ScriptsDir=jd_scripts
+          [ ! -d ${ScriptsDir} ] && mkdir -p ${ScriptsDir}
+          DockerDir=${ScriptsDir}/docker
+          [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
+          ListCronSh=${DockerDir}/crontab_list.sh
+          ListCronScripts=MyActions/docker/crontab_list.sh
+          ListCronScripts2=sngxprov2p/docker/crontab_list.sh
+          ListCronScripts3=JDHelloWorld/docker/crontab_list.sh
+          ListCronScripts4=MyScript/docker/crontab_list.sh
+          FileDiy=diy.sh
+          EnableExtraShellProxyDownload="false"
+          ExtraShellProxyUrl="https://ghproxy.com/"
+          EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/diy.sh"
+          wget -q $EnableExtraShellURL -O ${FileDiy}
+
+          if [ $? -eq 0 ]; then
+              echo -e "自定义 DIY 脚本同步完成......"
+              echo -e ''
+              sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
+              sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
+              sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
+              sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
+              cat ${FileDiy}
+              sleep 2s
+              . ${FileDiy}
+          fi
