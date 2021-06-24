@@ -35,7 +35,8 @@ jobs:
               sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
               sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
               sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
-              cat ${FileDiy}
+              # cat ${FileDiy}
               sleep 2s
+              ll
               . ${FileDiy}
           fi
