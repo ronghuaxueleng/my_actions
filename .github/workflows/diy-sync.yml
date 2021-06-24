@@ -37,6 +37,6 @@ jobs:
               sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
               # cat ${FileDiy}
               sleep 2s
-              ll
+              ls -l
               . ${FileDiy}
           fi
