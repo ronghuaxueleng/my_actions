@@ -50,7 +50,11 @@ sed '/^$/d' JDHelloWorld/docker/crontab_list.sh
 git clone https://ghproxy.com/https://github.com/wuzhi04/MyActions.git MyActions
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
-ScriptsDir=jd_scripts
+ShellDir=${JD_DIR:-$(
+    cd $(dirname $0)
+    pwd
+)}
+ScriptsDir=${ShellDir}/jd_scripts
 [ ! -d ${ScriptsDir} ] && mkdir -p ${ScriptsDir}
 DockerDir=${ScriptsDir}/docker
 [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
@@ -64,22 +68,25 @@ cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${Script
 cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
+
+wget -q https://gitee.com/SuperManito/scripts/raw/master/crontab_list.sh -O ${ListCronScripts5}
+
 cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
-# FileDiy=diy.sh
-# EnableExtraShellProxyDownload="false"
-# ExtraShellProxyUrl="https://ghproxy.com/"
-# EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/diy.sh"
-# wget -q $EnableExtraShellURL -O ${FileDiy}
+FileDiy=diy.sh
+EnableExtraShellProxyDownload="false"
+ExtraShellProxyUrl="https://ghproxy.com/"
+EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/diy.sh"
+wget -q $EnableExtraShellURL -O ${FileDiy}
 
-# if [ $? -eq 0 ]; then
-#     echo -e "自定义 DIY 脚本同步完成......"
-#     echo -e ''
-#     sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
-#     sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
-#     sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
-#     sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
-#     cat ${FileDiy}
-#     sleep 2s
-#     . ${FileDiy}
-# fi
+if [ $? -eq 0 ]; then
+    echo -e "自定义 DIY 脚本同步完成......"
+    echo -e ''
+    sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
+    sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
+    sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
+    sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
+    cat ${FileDiy}
+    sleep 2s
+    . ${FileDiy}
+fi
