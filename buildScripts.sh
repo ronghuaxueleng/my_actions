@@ -76,8 +76,8 @@ if [ $? -eq 0 ]; then
     echo -e "自定义 DIY 脚本同步完成......"
     echo -e ''
     sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
-    sed -i 's/ListCron/ListCronSh/gh' ${FileDiy}
-    sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/gh' ${FileDiy}
+    sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
+    sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
     sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
     cat ${FileDiy}
     sleep 2s
