@@ -17,8 +17,11 @@ for row in $(echo "${json}" | jq -r '.list[] | @base64'); do
         jsname=${target##*/}
         # wget $target -O sngxprov2p/$jsname
         wget -q $(echo "${target}" | perl -pe "s|(?:https:\/\/ghproxy\.com/)?(https:\/\/raw\.githubusercontent\.com.+)|https:\/\/ghproxy\.com/\1|") -O sngxprov2p/$jsname
-        crontab_list+="#$name \n"
-        crontab_list+="$time node /scripts/$jsname >> /scripts/logs/${jsname%.*}.log 2>&1\n"
+        if [ $? -eq 0 ]; then
+            echo -e "下载 $jsname 完成...\n"
+            crontab_list+="#$name \n"
+            crontab_list+="$time node /scripts/$jsname >> /scripts/logs/${jsname%.*}.log 2>&1\n"
+        fi
     fi
 done
 cat > sngxprov2p/docker/crontab_list.sh <<EOF
@@ -64,12 +67,10 @@ cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsD
 cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 FileDiy=diy.sh
-ListCron=${ConfigDir}/crontab.list
 EnableExtraShellProxyDownload="false"
 ExtraShellProxyUrl="https://ghproxy.com/"
 EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/diy.sh"
 wget -q $EnableExtraShellURL -O ${FileDiy}
-. ${FileDiy}
 
 if [ $? -eq 0 ]; then
     echo -e "自定义 DIY 脚本同步完成......"
@@ -78,4 +79,5 @@ if [ $? -eq 0 ]; then
     sed -i 's/ListCron/ListCronSh/' ${FileDiy}
     sed -i -E '/^rm\s+-rf\s+\$\{ScriptsCombined\}.+\$\{ListCron\}/d' ${FileDiy}
     sleep 2s
+    . ${FileDiy}
 fi
