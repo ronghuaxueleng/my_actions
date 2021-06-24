@@ -66,20 +66,20 @@ cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
 cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
-FileDiy=diy.sh
-EnableExtraShellProxyDownload="false"
-ExtraShellProxyUrl="https://ghproxy.com/"
-EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/diy.sh"
-wget -q $EnableExtraShellURL -O ${FileDiy}
+# FileDiy=diy.sh
+# EnableExtraShellProxyDownload="false"
+# ExtraShellProxyUrl="https://ghproxy.com/"
+# EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/diy.sh"
+# wget -q $EnableExtraShellURL -O ${FileDiy}
 
-if [ $? -eq 0 ]; then
-    echo -e "自定义 DIY 脚本同步完成......"
-    echo -e ''
-    sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
-    sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
-    sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
-    sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
-    cat ${FileDiy}
-    sleep 2s
-    . ${FileDiy}
-fi
+# if [ $? -eq 0 ]; then
+#     echo -e "自定义 DIY 脚本同步完成......"
+#     echo -e ''
+#     sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
+#     sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
+#     sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
+#     sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
+#     cat ${FileDiy}
+#     sleep 2s
+#     . ${FileDiy}
+# fi
