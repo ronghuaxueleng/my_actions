@@ -41,6 +41,7 @@ $.notifyTime = $.getdata("cfd_notifyTime");
 $.result = [];
 $.shareCodes = [];
 let cookiesArr = [], cookie = '', token;
+let shareCodesStr = '', UserIdStr = '';
 
 const randomCount = $.isNode() ? 3 : 3;
 if ($.isNode()) {
@@ -61,11 +62,9 @@ $.appId = 10009;
   }
   $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
   await requestAlgo();
-  let res = {}, res2 = []
-  if (new Date().getHours() <= 3) res = [];
-  if (!res2) res2 = []
-  $.strMyShareIds = [...(res && res.shareId || []),...(res2 && res2.shareId || [])]
-  $.strGroupIds = [...(res && res.strGroupIds || []),...(res2 && res2.strGroupIds || [])]
+  let res = {}
+  $.strMyShareIds = [...(res && res.shareId || [])]
+  $.strGroupIds = [...(res && res.strGroupIds || [])]
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -117,6 +116,7 @@ $.appId = 10009;
     }
   }
   await showMsg();
+  console.log('/jx_cfd ' + shareCodesStr.substr(0, shareCodesStr.length - 1) + '@' + UserIdStr.substr(0, UserIdStr.length - 1));
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done());
@@ -224,7 +224,7 @@ function getAuthorShareCode(url) {
     }
     $.get(options, async (err, resp, data) => {
       try {
-        resolve([])
+        resolve(JSON.parse(data))
       } catch (e) {
         // $.logErr(e, resp)
       } finally {
@@ -261,6 +261,15 @@ function getUserInfo(showInvite = true) {
           if (showInvite && strMyShareId) {
             console.log(`财富岛好友互助码每次运行都变化,旧的可继续使用`);
             $.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${strMyShareId}\n\n`);
+            if (strMyShareId) {
+              shareCodesStr += strMyShareId + '&';
+              UserIdStr += $.UserName + '&';
+              await $.get({
+                url: 'http://51.15.187.136:8080/activeJdCfdCode?code=' + $.UserName
+              }, function (err, resp, data) {
+                console.log('互助码状态:' + resp.body);
+              })
+            }
           }
           $.info = {
             ...$.info,
@@ -1191,10 +1200,10 @@ function shareCodesFormat() {
       // const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
       $.newShareCodes = [...$.strMyShareIds];
     }
-    const readShareCodeRes = await readShareCode();
-    if (readShareCodeRes && readShareCodeRes.code === 200) {
-      $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
-    }
+    // const readShareCodeRes = await readShareCode();
+    // if (readShareCodeRes && readShareCodeRes.code === 200) {
+    //   $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
+    // }
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })
