@@ -367,22 +367,10 @@
 1 0 * * * node /scripts/jd_ppdz.js >> /scripts/logs/jd_ppdz.log 2>&1
 #京东沸腾之夜 
 0 15-19/1 * * * node /scripts/jd_party_night.js >> /scripts/logs/jd_party_night.log 2>&1
-#京东一次性入会领豆13 
-0 7 * * * node /scripts/member_13.js >> /scripts/logs/member_13.log 2>&1
-#京东一次性入会领豆12 
-0 7 * * * node /scripts/member_12.js >> /scripts/logs/member_12.log 2>&1
-#京东步数换京豆柠檬版 
-* 15 * * * node /scripts/jd_bs.js >> /scripts/logs/jd_bs.log 2>&1
-#京东一次性入会领豆11 
-0 7 * * * node /scripts/member_11.js >> /scripts/logs/member_11.log 2>&1
-#京东星推官获取互助隐藏姓名版 
-0 0 0 * * * node /scripts/jd_xtg_help.js >> /scripts/logs/jd_xtg_help.log 2>&1
 #京东家电星推官（圈x可能有不停止bug等更新） 
 40 9-18/3 * 5,6 * node /scripts/adolf_star.js >> /scripts/logs/adolf_star.log 2>&1
 #京东京喜阶梯红包 
 15 9 * 5,6 * node /scripts/adolf_jxhb.js >> /scripts/logs/adolf_jxhb.log 2>&1
-#京东一次性入会领豆10 
-0 7 * * * node /scripts/member_10.js >> /scripts/logs/member_10.log 2>&1
 #京东618大势新品赏 
 15 9,20 * 5,6 * node /scripts/adolf_newInteraction.js >> /scripts/logs/adolf_newInteraction.log 2>&1
 #京东超级盒子 
