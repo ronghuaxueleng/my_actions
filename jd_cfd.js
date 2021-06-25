@@ -41,6 +41,7 @@ $.notifyTime = $.getdata("cfd_notifyTime");
 $.result = [];
 $.shareCodes = [];
 let cookiesArr = [], cookie = '', token;
+let shareCodesStr = '', UserIdStr = '';
 
 const randomCount = $.isNode() ? 3 : 3;
 if ($.isNode()) {
@@ -115,6 +116,7 @@ $.appId = 10009;
     }
   }
   await showMsg();
+  console.log('/jx_cfd ' + shareCodesStr.substr(0, shareCodesStr.length - 1) + '@' + UserIdStr.substr(0, UserIdStr.length - 1));
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done());
@@ -259,6 +261,15 @@ function getUserInfo(showInvite = true) {
           if (showInvite && strMyShareId) {
             console.log(`财富岛好友互助码每次运行都变化,旧的可继续使用`);
             $.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${strMyShareId}\n\n`);
+            if (strMyShareId) {
+              shareCodesStr += strMyShareId + '&';
+              UserIdStr += $.UserName + '&';
+              await $.get({
+                url: 'http://51.15.187.136:8080/activeJdCfdCode?code=' + $.UserName
+              }, function (err, resp, data) {
+                console.log('互助码状态:' + resp.body);
+              })
+            }
           }
           $.info = {
             ...$.info,
