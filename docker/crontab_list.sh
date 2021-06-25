@@ -421,6 +421,8 @@
 0 7 * * * node /scripts/member_03.js >> /scripts/logs/member_03.log 2>&1
 #京喜财富岛提现并发修改版ztxtop 
 0 0 * * * node /scripts/jx_cfdtx.js >> /scripts/logs/jx_cfdtx.log 2>&1
+#京东半点京豆雨龙猪猪 
+30 * * * * node /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.log 2>&1
 #京东整点京豆雨 
 0 * * * * node /scripts/jd_super_redrain.js >> /scripts/logs/jd_super_redrain.log 2>&1
 #京东加购有礼 
@@ -471,6 +473,8 @@
 3 10 * * * node /scripts/jd_fanslove.js >> /scripts/logs/jd_fanslove.log 2>&1
 #京喜工厂商品列表详情 
 10 10 * * * node /scripts/jx_products_detail.js >> /scripts/logs/jx_products_detail.log 2>&1
+#京东赚京东开团 
+10 * * * * node /scripts/jd_zjd_tuan.js >> /scripts/logs/jd_zjd_tuan.log 2>&1
 #京东读书签到 
 0 10 0 * * * node /scripts/jddsSign.js >> /scripts/logs/jddsSign.log 2>&1
 #京东 
