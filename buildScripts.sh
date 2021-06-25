@@ -60,8 +60,8 @@ DockerDir=${ScriptsDir}/docker
 [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
 ListCronSh=${DockerDir}/crontab_list.sh
 ListCronScripts=MyActions/docker/crontab_list.sh
-ListCronScripts2=sngxprov2p/docker/crontab_list.sh
-ListCronScripts3=JDHelloWorld/docker/crontab_list.sh
+ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
+ListCronScripts3=sngxprov2p/docker/crontab_list.sh
 ListCronScripts4=MyScript/docker/crontab_list.sh
 
 cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
@@ -85,6 +85,6 @@ if [ $? -eq 0 ]; then
 fi
 
 cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
-cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
+cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
