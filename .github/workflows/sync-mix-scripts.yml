@@ -1,0 +1,55 @@
+# File: .github/workflows/repo-sync.yml
+name: 自动同步合并脚本
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+  watch:
+    types: started
+  repository_dispatch:
+    types: repo-sync
+jobs:
+  repo-sync:
+    name: 创建脚本
+    runs-on: ubuntu-latest
+    steps:
+      - name: 设置githup信息
+        env:
+          email: ${{ secrets.EMAIL }}
+          username: ${{ secrets.USERNAME }}
+        run: |
+          git config --global user.name "$username"
+          git config --global user.email "$email"
+      - name: 设置SSH私钥信息
+        env:
+          JD_SCRIPTS_REPO_URL: github.com
+          JD_SCRIPTS: jd_scripts
+          JD_SCRIPTS_HOST: jd_scripts_githup
+          JD_SCRIPTS_KEY: ${{ secrets.token_Private_Keys }}
+        run: |
+          mkdir -p ~/.ssh/ && chmod 700 ~/.ssh
+          echo "$JD_SCRIPTS_KEY" > ~/.ssh/$JD_SCRIPTS
+          chmod 600 ~/.ssh/$JD_SCRIPTS
+          echo -e "\n" >> ~/.ssh/config
+          echo -e "Host $JD_SCRIPTS_HOST" >> ~/.ssh/config
+          echo -e "\tHostname $JD_SCRIPTS_REPO_URL" >> ~/.ssh/config
+          echo -e "\tIdentityFile=~/.ssh/$JD_SCRIPTS" >> ~/.ssh/config
+          # echo -e "\n\nHost *\n StrictHostKeyChecking no\n" >> /etc/ssh/ssh_config
+          chmod 644 ~/.ssh/config
+          ssh-keyscan $JD_SCRIPTS_REPO_URL >> ~/.ssh/known_hosts
+      - name: 开始同步
+        run: |
+          shopt -s extglob
+          git clone git@jd_scripts_githup:ronghuaxueleng/my_actions.git
+          cp -f ./my_actions/buildScripts.sh ./
+          cd ./my_actions
+          git checkout j_scripts
+          rm -rf !(.git | .githup)
+          cd ../
+          bash ./buildScripts.sh
+          ls -l
+          cp -rf ./jd_scripts/* ./my_actions
+          cd ./my_actions
+          git add .
+          git commit --allow-empty -m "up"
+          git push

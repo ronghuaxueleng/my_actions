@@ -15,7 +15,7 @@ for row in $(echo "${json}" | jq -r '.list[] | @base64'); do
     target=$(_jq '.job|.target')
     if [[ $name =~ $pattern ]]; then
         jsname=${target##*/}
-        wget $target -O sngxprov2p/$jsname
+        wget -q $target -O sngxprov2p/$jsname
         # wget -q $(echo "${target}" | perl -pe "s|(?:https:\/\/ghproxy\.com/)?(https:\/\/raw\.githubusercontent\.com.+)|https:\/\/ghproxy\.com/\1|") -O sngxprov2p/$jsname
         if [ $? -eq 0 ]; then
             echo -e "下载 $jsname 完成...\n"
@@ -64,11 +64,6 @@ ListCronScripts2=sngxprov2p/docker/crontab_list.sh
 ListCronScripts3=JDHelloWorld/docker/crontab_list.sh
 ListCronScripts4=MyScript/docker/crontab_list.sh
 
-cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
-cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
-cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
-cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
-
 cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 FileDiy=diy.sh
@@ -84,7 +79,12 @@ if [ $? -eq 0 ]; then
     sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
     sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
     sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
-    cat ${FileDiy}
+    # cat ${FileDiy}
     sleep 2s
     . ${FileDiy}
 fi
+
+cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
+cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
+cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
+cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}

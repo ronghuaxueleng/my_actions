@@ -1,5 +1,5 @@
 # File: .github/workflows/repo-sync.yml
-name: A🔄自动同步🔄A
+name: 自动同步
 on:
   schedule:
     - cron: "0 */1 * * *"
@@ -10,18 +10,17 @@ on:
     types: repo-sync
 jobs:
   repo-sync:
-    name: A创建脚本A
+    name: 创建脚本
     runs-on: ubuntu-latest
-
     steps:
-      - name: Setup Git Infomation
+      - name: 设置githup信息
         env:
           email: ${{ secrets.EMAIL }}
           username: ${{ secrets.USERNAME }}
         run: |
           git config --global user.name "$username"
           git config --global user.email "$email"
-      - name: Setup SSH Private Key
+      - name: 设置SSH私钥信息
         env:
           JD_BASE_REPO_URL: gitee.com
           JD_BASE: jd_base
@@ -50,6 +49,7 @@ jobs:
           ssh-keyscan $JD_SCRIPTS_REPO_URL >> ~/.ssh/known_hosts
       - name: 开始同步
         run: |
+          shopt -s extglob
           git clone -b master git@jd_base_gitee:supermanito/jd_base.git JD-FreeFuck
           cd JD-FreeFuck
           rm -rf .git
@@ -73,7 +73,6 @@ jobs:
           cp -f ./my_actions/buildScripts.sh ./
           cd ./my_actions
           git checkout source
-          shopt -s extglob
           rm -rf !(.git | .githup)
           cd ../
           cp -rf ./JD-FreeFuck/* ./my_actions
@@ -81,17 +80,7 @@ jobs:
           git add .
           git commit --allow-empty -m "up"
           git push
-          git checkout j_scripts
-          rm -rf !(.git | .githup)
-          cd ../
-          bash ./buildScripts.sh
-          ls -l
-          cp -rf ./jd_scripts/* ./my_actions
-          cd ./my_actions
-          git add .
-          git commit --allow-empty -m "up"
-          git push
-      - name: "sync github -> gitee"
+      - name: 同步到gitee
         uses: Yikun/hub-mirror-action@master
         with:
           src: github/ronghuaxueleng
