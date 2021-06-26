@@ -1,0 +1,52 @@
+# File: .github/workflows/repo-sync.yml
+name: 同步我的脚本
+on:
+  workflow_dispatch:
+jobs:
+  repo-sync:
+    name: 创建脚本
+    runs-on: ubuntu-latest
+    steps:
+      - name: 设置githup信息
+        env:
+          email: ${{ secrets.EMAIL }}
+          username: ${{ secrets.USERNAME }}
+        run: |
+          git config --global user.name "$username"
+          git config --global user.email "$email"
+      - name: 设置SSH私钥信息
+        env:
+          JD_BASE_REPO_URL: gitee.com
+          JD_SCRIPTS_REPO_URL: github.com
+          JD_SCRIPTS: jd_scripts
+          JD_SCRIPTS_HOST: jd_scripts_githup
+          JD_SCRIPTS_KEY: ${{ secrets.token_Private_Keys }}
+        run: |
+          mkdir -p ~/.ssh/ && chmod 700 ~/.ssh
+          echo "$JD_SCRIPTS_KEY" > ~/.ssh/$JD_SCRIPTS
+          chmod 600 ~/.ssh/$JD_SCRIPTS
+          echo -e "\n" >> ~/.ssh/config
+          echo -e "Host $JD_SCRIPTS_HOST" >> ~/.ssh/config
+          echo -e "\tHostname $JD_SCRIPTS_REPO_URL" >> ~/.ssh/config
+          echo -e "\tIdentityFile=~/.ssh/$JD_SCRIPTS" >> ~/.ssh/config
+          # echo -e "\n\nHost *\n StrictHostKeyChecking no\n" >> /etc/ssh/ssh_config
+          chmod 644 ~/.ssh/config
+          ssh-keyscan $JD_SCRIPTS_REPO_URL >> ~/.ssh/known_hosts
+      - name: 开始同步
+        run: |
+          shopt -s extglob
+          git clone -b scripts git@jd_scripts_githup:ronghuaxueleng/my_actions.git scripts
+          git clone -b j_scripts git@jd_scripts_githup:ronghuaxueleng/my_actions.git jd_scripts
+          cp -rf ./scripts/* ./jd_scripts
+          cd ./jd_scripts
+          git add .
+          git commit --allow-empty -m "up"
+          git push
+      - name: 同步到gitee
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/ronghuaxueleng
+          dst: gitee/getready
+          static_list: "my_actions"
+          dst_key: ${{ secrets.GITEE_KEY }}
+          dst_token: ${{ secrets.GITEE_TOKEN }}
