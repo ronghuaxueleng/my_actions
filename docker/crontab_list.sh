@@ -640,4 +640,4 @@
 #获取助力码
 58 20-22 * * 6 node /scripts/jd_get_share_code_4_bot.js >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
 # 提交助力码
-0 21-23 * * 6 bash -x /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
+0,1,2,3,4,5,15,30 21-23 * * 6 bash -x /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
