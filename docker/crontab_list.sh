@@ -37,8 +37,6 @@
 1 0-23/1 * 6 * node /scripts/jd_flipcards.js >> /scripts/logs/jd_flipcards.log 2>&1
 #翻翻乐
 1 5,20 * 6 * node /scripts/jd_jxlhb.js >> /scripts/logs/jd_jxlhb.log 2>&1
-#京享值pk
-15 0,13,21 * * * node /scripts/jd_ddopk.js >> /scripts/logs/jd_ddopk.log 2>&1
 #京喜牧场
 20 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
 #东东电竞经理
@@ -638,6 +636,6 @@
 #生成京喜农场互助码
 59 23 * * * node /scripts/get_jxnc_token.js >> /scripts/logs/get_jxnc_token.log 2>&1
 #获取助力码
-58 20-22 * * 6 node /scripts/jd_get_share_code_4_bot.js >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
+58 20 * * 6 node /scripts/jd_get_share_code_4_bot.js >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
 # 提交助力码
-0,1,2,3,4,5,15,30 21-23 * * 6 bash -x /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
+0,1,2 21 * * 6 bash -x /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
