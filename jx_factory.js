@@ -137,6 +137,10 @@ function getUserInfo() {
   return new Promise(resolve => {
     $.get(taskUrl('userinfo/GetUserInfo'), async (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { ret, data: { factoryList = [], productionList = [], user = {} } = {}, msg } = JSON.parse(data);
         $.log(`\n获取用户信息：${msg}\n${$.showLog ? data : ''}`);
         if (!productionList || !productionList[0]) {
@@ -172,6 +176,10 @@ function getCommodityDetail() {
       taskUrl('diminfo/GetCommodityDetails', `commodityId=${$.info.productionInfo.commodityDimId}`),
       (err, resp, data) => {
         try {
+          if (data.startsWith('<')) {
+            resolve();
+            return;
+          }
           const { ret, data: { commodityList = [] } = {}, msg } = JSON.parse(data);
           $.log(`\n获取商品详情：${msg}\n${$.showLog ? data : ''}`);
           $.info.commodityInfo = commodityList[0];
@@ -195,7 +203,7 @@ function checkProductProcess() {
       if ($.isNode()) {
         notify.sendNotify($.name, `${userName}\n【提示】商品 ${$.info.commodityInfo.name} 已生产完成，请前往京喜工厂兑换并选择新商品！`, {}, '\n\n本脚本免费使用 By：https://github.com/whyour/qinglong')
       }
-      $.msg($.name, `${userName}\n【提示】商品 ${$.info.commodityInfo.name} 已生产完成，请前往京喜工厂兑换并选择新商品！`);
+      $.msg($.name, `${userName}`, `【提示】商品 ${$.info.commodityInfo.name} 已生产完成，请前往京喜工厂兑换并选择新商品！`);
       return true;
     }
   }
@@ -208,6 +216,10 @@ function getCurrentElectricity() {
       taskUrl('generator/QueryCurrentElectricityQuantity', `factoryid=${$.info.factoryInfo.factoryId}`),
       async (err, resp, data) => {
         try {
+          if (data.startsWith('<')) {
+            resolve();
+            return;
+          }
           const {
             ret,
             data: { currentElectricityQuantity, doubleElectricityFlag, maxElectricityQuantity } = {},
@@ -237,6 +249,10 @@ function collectElectricity(facId, master) {
       ),
       (err, resp, data) => {
         try {
+          if (data.startsWith('<')) {
+            resolve();
+            return;
+          }
           const { ret, data: { CollectElectricity, loginPinCollectElectricity } = {}, msg } = JSON.parse(data);
           $.log(`${master ? '偷取好友' : '收取'} ${CollectElectricity} 电力 ${msg} \n${$.showLog ? data : ''}`);
         } catch (e) {
@@ -253,6 +269,10 @@ function pickUserComponents(pin, isMe) {
   return new Promise(async resolve => {
     $.get(taskUrl('usermaterial/GetUserComponent', `pin=${pin}`), async (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { msg, data: { componentList = [] } = {} } = JSON.parse(data);
         $.log(`\n获取${isMe ? '自己' : '好友'}零件：${msg}\n${$.showLog ? data : ''}`);
         if (componentList.length > 0) {
@@ -281,6 +301,10 @@ function pickUpComponent(placeId, pin, isMe) {
   return new Promise(async resolve => {
     $.get(taskUrl('usermaterial/PickUpComponent', `pin=${pin}&placeId=${placeId}`), (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { msg, data: { increaseElectric } = {} } = JSON.parse(data);
         $.log(
           `\n拾取${isMe ? '自己' : '好友'}零件：${msg}，获得电力 ${increaseElectric || 0}\n${$.showLog ? data : ''}`,
@@ -303,6 +327,10 @@ function getTaskList() {
   return new Promise(async resolve => {
     $.get(taskListUrl('GetUserTaskStatusList', `_stk=_cfd_t%2CbizCode%2CdwEnv%2Cptag%2Csource%2CstrZone%2CtaskId`), async (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { ret, data: { userTaskStatusList = [] } = {}, msg } = JSON.parse(data);
         $.allTask = userTaskStatusList.filter(x => x.awardStatus !== 1);
         $.log(`\n获取任务列表 ${msg}，总共${$.allTask.length}个任务！`);
@@ -345,6 +373,10 @@ function awardTask({ taskId, taskName }) {
   return new Promise(resolve => {
     $.get(taskListUrl('Award', `taskId=${taskId}&_stk=_time%2CbizCode%2Csource%2CtaskId`), (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { msg, ret, data: { prizeInfo = '' } = {} } = JSON.parse(data);
         let str = '';
         if (msg.indexOf('活动太火爆了') !== -1) {
@@ -372,6 +404,10 @@ function doTask({ taskId, completedTimes, configTargetTimes, taskName }) {
     }
     $.get(taskListUrl('DoTask', `taskId=${taskId}`, '_time,bizCode,configExtra,source,taskId'), (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { msg, ret } = JSON.parse(data);
         $.log(
           `\n${taskName}[做任务]：${msg.indexOf('活动太火爆了') !== -1 ? '任务进行中或者未到任务时间' : msg}${
@@ -399,6 +435,10 @@ function investElectric() {
       taskUrl('userinfo/InvestElectric', `productionId=${$.info.productionInfo.productionId}`),
       (err, resp, data) => {
         try {
+          if (data.startsWith('<')) {
+            resolve();
+            return;
+          }
           const { msg, data: { investElectric } = {} } = JSON.parse(data);
           $.log(`\n投入电力: ${investElectric ? investElectric : ''} ${msg}\n${$.showLog ? data : ''}`);
           $.result.push(`【投入电力】：${investElectric}`);
@@ -416,6 +456,10 @@ function getHireRewardList() {
   return new Promise(async resolve => {
     $.get(taskUrl('friend/QueryHireReward'), async (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { ret, data: { hireReward = [] } = {}, msg } = JSON.parse(data);
         $.log(`\n获取打工奖励列表：${msg}\n${$.showLog ? data : ''}`);
         if (hireReward && hireReward.length > 0) {
@@ -437,6 +481,10 @@ function hireAward(body) {
   return new Promise(async resolve => {
     $.get(taskUrl('friend/HireAward', `${body}`, '_time,date,type,zone'), async (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { msg, data: { investElectric } = {} } = JSON.parse(data);
         $.log(`\n收取打工电力：${msg}\n${$.showLog ? data : ''}`);
       } catch (e) {
@@ -452,6 +500,10 @@ function getFriends() {
   return new Promise(async resolve => {
     $.get(taskUrl('friend/QueryFactoryManagerList'), async (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { msg, data: { list = [] } = {} } = JSON.parse(data);
         $.log(`\n获取工厂好友：${msg}\n${$.showLog ? data : ''}`);
         for (let i = 0; i < list.length; i++) {
@@ -471,6 +523,10 @@ function getFactoryIdByPin(pin) {
   return new Promise((resolve, reject) => {
     $.get(taskUrl('userinfo/GetUserInfoByPin', `pin=${pin}`), (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { msg, data: { factoryList = [] } = {} } = JSON.parse(data);
         $.log(`\n获取工厂信息：${msg}\n${$.showLog ? data : ''}`);
         if (factoryList && factoryList[0]) {
@@ -498,6 +554,10 @@ function submitInviteId(userName) {
       },
       (err, resp, _data) => {
         try {
+          if (_data.startsWith('<')) {
+            resolve();
+            return;
+          }
           const { data = {} } = JSON.parse(_data);
           $.log(`\n邀请码提交：${data.value}\n${$.showLog ? _data : ''}`);
           if (data.value) {
@@ -517,10 +577,18 @@ function createAssistUser() {
   return new Promise(resolve => {
     $.get({ url: 'https://api.ninesix.cc/api/jx-factory' }, (err, resp, _data) => {
       try {
+        if (_data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { data = {} } = JSON.parse(_data);
         $.log(`\n${data.value}\n${$.showLog ? _data : ''}`);
         $.get(taskAssistUrl('friend/AssistFriend', `sharepin=${data.value}`), async (err, resp, data) => {
           try {
+            if (data.startsWith('<')) {
+              resolve();
+              return;
+            }
             const { msg } = JSON.parse(data);
             $.log(`\n${msg}\n${$.showLog ? data : ''}`);
           } catch (e) {
@@ -539,8 +607,12 @@ function createAssistUser() {
 
 function getTuanId() {
   return new Promise(async resolve => {
-    $.get(taskUrl('tuan/QueryActiveConfig', `activeId=0_pzMedR7KhclCkMIgkTkg%3D%3D`, `_time,activeId,tuanId`), async (err, resp, data) => {
+    $.get(taskUrl('tuan/QueryActiveConfig', `activeId=bozIUUFcANuUdWpw3QdvPw%3D%3D`, `_time,activeId,tuanId`), async (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { msg, data: { userTuanInfo } = {} } = JSON.parse(data);
         $.log(`\n获取团id：${msg}\n${$.showLog ? data : ''}`);
         if (!userTuanInfo || !userTuanInfo.tuanId) {
@@ -565,8 +637,12 @@ function getTuanId() {
 
 function getTuanInfo(body) {
   return new Promise(async resolve => {
-    $.get(taskUrl('tuan/QueryTuan', `activeId=0_pzMedR7KhclCkMIgkTkg%3D%3D&${body}`, `_time,activeId,tuanId`), async (err, resp, data) => {
+    $.get(taskUrl('tuan/QueryTuan', `activeId=bozIUUFcANuUdWpw3QdvPw%3D%3D&${body}`, `_time,activeId,tuanId`), async (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { msg, data: { tuanInfo = [] } = {} } = JSON.parse(data);
         $.log(`\n获取开团信息：${msg}\n${$.showLog ? data : ''}`);
         if (tuanInfo && tuanInfo[0]) {
@@ -594,6 +670,10 @@ function submitTuanId(userName) {
       },
       (err, resp, _data) => {
         try {
+          if (_data.startsWith('<')) {
+            resolve();
+            return;
+          }
           const { data = {} } = JSON.parse(_data);
           $.log(`\n团码提交成功：${data.value}\n${$.showLog ? _data : ''}`);
           if (data.value) {
@@ -612,9 +692,13 @@ function submitTuanId(userName) {
 function createTuan() {
   return new Promise(async resolve => {
     $.get(
-      taskTuanUrl('tuan/CreateTuan', `activeId=0_pzMedR7KhclCkMIgkTkg%3D%3D&isOpenApp=1`, '_time,activeId,isOpenApp'),
+      taskTuanUrl('tuan/CreateTuan', `activeId=bozIUUFcANuUdWpw3QdvPw%3D%3D&isOpenApp=1`, '_time,activeId,isOpenApp'),
       async (err, resp, _data) => {
         try {
+          if (_data.startsWith('<')) {
+            resolve();
+            return;
+          }
           const { msg, data = {} } = JSON.parse(_data);
           $.log(`\n开团信息：${msg}\n${$.showLog ? _data : ''}`);
           if (data) {
@@ -633,12 +717,20 @@ function joinTuan() {
   return new Promise(async resolve => {
     $.get({ url: 'https://api.ninesix.cc/api/jx-factory-tuan' }, (err, resp, _data) => {
       try {
+        if (_data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { data = {} } = JSON.parse(_data);
         $.log(`\n${data.value}\n${$.showLog ? _data : ''}`);
         $.get(
-          taskTuanUrl('tuan/JoinTuan', `activeId=0_pzMedR7KhclCkMIgkTkg%3D%3D&tuanId=${data.value}`, '_time,activeId,tuanId'),
+          taskTuanUrl('tuan/JoinTuan', `activeId=bozIUUFcANuUdWpw3QdvPw%3D%3D&tuanId=${data.value}`, '_time,activeId,tuanId'),
           async (err, resp, data) => {
             try {
+              if (data.startsWith('<')) {
+                resolve();
+                return;
+              }
               const { msg } = JSON.parse(data);
               $.log(
                 `\n参团：${msg.indexOf('成功参团') !== -1 ? '您已参过此团或者参团失败' : msg}\n${
@@ -670,6 +762,10 @@ function awardTuan() {
       taskTuanUrl('tuan/Award', `activeId=cKw-LGBsjl0XLu9coQ0d4A%3D%3D&tuanId=${$.userTuanInfo.tuanId}`, '_time,activeId,tuanId'),
       async (err, resp, data) => {
         try {
+          if (data.startsWith('<')) {
+            resolve();
+            return;
+          }
           const { ret, msg, data: { electric = 0 } = {} } = JSON.parse(data);
           if (ret === 0) {
             $.log(`\n领取开团奖励：${msg}，获得电力 ${electric}\n${$.showLog ? data : ''}`);
@@ -906,6 +1002,10 @@ async function requestAlgo() {
   return new Promise(async resolve => {
     $.post(options, (err, resp, data) => {
       try {
+        if (data.startsWith('<')) {
+          resolve();
+          return;
+        }
         const { ret, msg, data: { result } = {} } = JSON.parse(data);
         $.token = result.tk;
         $.genKey = new Function(`return ${result.algo}`)();
