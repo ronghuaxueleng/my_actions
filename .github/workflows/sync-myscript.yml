@@ -37,6 +37,7 @@ jobs:
           shopt -s extglob
           git clone -b scripts git@jd_scripts_githup:ronghuaxueleng/my_actions.git scripts
           git clone -b j_scripts git@jd_scripts_githup:ronghuaxueleng/my_actions.git jd_scripts
+          cat jd_scripts/docker/crontab_list.sh >> scripts/docker/crontab_list.sh
           cp -rf ./scripts/* ./jd_scripts
           cd ./jd_scripts
           git add .
