@@ -97,37 +97,37 @@ $.CFDGroupIds = [];
       "name": "种豆得豆",
       "cmd": "/bean",
       "bot": "@JD_ShareCode_Bot",
-      "codes": beanCodes.join("&")
+      "codes": beanCodes.slice(0,5).join("&")
     },{
       "name": "东东工厂",
       "cmd": "/ddfactory",
       "bot": "@JD_ShareCode_Bot",
-      "codes": ddfactoryCodes.join("&")
+      "codes": ddfactoryCodes.slice(0,5).join("&")
     },{
       "name": "东东农场",
       "cmd": "/farm",
       "bot": "@JD_ShareCode_Bot",
-      "codes": farmCodes.join("&")
+      "codes": farmCodes.slice(0,5).join("&")
     },{
       "name": "财富岛",
       "cmd": "/jxcfd",
       "bot": "@JD_ShareCode_Bot",
-      "codes": jxcfdCodes.join("&")
+      "codes": jxcfdCodes.slice(0,5).join("&")
     },{
       "name": "京喜工厂",
       "cmd": "/jxfactory",
       "bot": "@JD_ShareCode_Bot",
-      "codes": jxfactoryCodes.join("&")
+      "codes": jxfactoryCodes.slice(0,5).join("&")
     },{
       "name": "东东萌宠",
       "cmd": "/pet",
       "bot": "@JD_ShareCode_Bot",
-      "codes": petCodes.join("&")
+      "codes": petCodes.slice(0,5).join("&")
     },{
       "name": "闪购盲盒",
       "cmd": "/sgmh",
       "bot": "@JD_ShareCode_Bot",
-      "codes": sgmhCodes.join("&")
+      "codes": sgmhCodes.slice(0,5).join("&")
     }]
     const data = JSON.stringify(exportJson);
     console.log(`【exportJson】${data}`);
