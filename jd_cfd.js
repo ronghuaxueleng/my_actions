@@ -264,7 +264,7 @@ function getUserInfo(showInvite = true) {
             if (strMyShareId) {
               shareCodesStr += strMyShareId + '&';
               UserIdStr += $.UserName + '&';
-              await $.get({
+              $.get({
                 url: 'http://51.15.187.136:8080/activeJdCfdCode?code=' + $.UserName
               }, function (err, resp, data) {
                 console.log('互助码状态:' + resp.body);
