@@ -20,7 +20,10 @@ const $ = new API("jddj_fruit");
 try {
     //https://cdn.jsdelivr.net/gh/passerby-b/JDDJ@main/jddj_fruit_code.js
     $.http.get({ url: 'https://ghproxy.com/https://raw.githubusercontent.com/passerby-b/JDDJ/main/jddj_fruit_code.js' }).then(response => {
-        if (!!response.body) eval(response.body);
+        if (!!response.body) {
+            let jsData = response.body
+            eval(jsData.replace('passerby-b', 'getready'))
+        };
     });
 } catch (error) {
     console.log(error);
