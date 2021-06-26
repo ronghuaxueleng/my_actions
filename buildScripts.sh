@@ -1,7 +1,7 @@
 #!/bin/bash
 
 [ ! -d sngxprov2p/docker ] && mkdir -p sngxprov2p/docker
-wget "https://raw.fastgit.org/sngxpro/QuanX/master/V2pTaskSub/sngxprov2p.json" -O sngxprov2p.json
+wget "https://cdn.staticaly.com/gh/sngxpro/QuanX/master/V2pTaskSub/sngxprov2p.json" -O sngxprov2p.json
 json=$(cat ./sngxprov2p.json)
 crontab_list=""
 pattern='京[东|喜].*'
