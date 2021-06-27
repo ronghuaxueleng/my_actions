@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
-source ~/.bashrc \
+
+# shellcheck disable=SC1090
+source ~/.bashrc
 
 ## 项目使用需知：
 function UseNotes() {
