@@ -32,7 +32,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && rm -rf /var/cache/apk/* \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
-    && echo 'alias ll="ls -l"' >> ~/.bashrc \
     && git clone -b ${JD_BASE_BRANCH} ${JD_BASE_URL} ${JD_DIR} \
     && yarn config set registry https://registry.npm.taobao.org \
     && cd ${JD_DIR}/docker \
@@ -61,5 +60,6 @@ RUN chmod 777 /clash
 RUN ln -sf /clash /usr/local/bin/clash
 ADD refresh.sh /root/.config/clash/
 RUN chmod 777 /root/.config/clash/refresh.sh
+ADD ./ll /bin/ll
 
 ENTRYPOINT docker-entrypoint.sh
