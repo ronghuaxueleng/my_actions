@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+source ~/.bashrc \
 
 ## 项目使用需知：
 function UseNotes() {

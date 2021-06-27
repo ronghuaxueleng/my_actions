@@ -31,7 +31,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && echo 'alias ll="ls -l"' >> ~/.bashrc \
-    && source ~/.bashrc \
     && git clone -b ${JD_BASE_BRANCH} ${JD_BASE_URL} ${JD_DIR} \
     && yarn config set registry https://registry.npm.taobao.org \
     && cd ${JD_DIR}/docker \
