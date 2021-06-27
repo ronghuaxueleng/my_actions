@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-# shellcheck disable=SC1090
-source ~/.bashrc
-
 ## 项目使用需知：
 function UseNotes() {
   echo -e "\033[32m=========================================== 容   器   启   动   成   功 ===========================================\033[0m"
