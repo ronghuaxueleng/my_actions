@@ -349,8 +349,6 @@
 13 1,22 * * * node /scripts/jd_gold_creator.js >> /scripts/logs/jd_gold_creator.log 2>&1
 #京东家电星推官隐藏姓名版 
 0 0 0 * * * node /scripts/jd_xtg.js >> /scripts/logs/jd_xtg.log 2>&1
-#京东动物联萌隐藏姓名版 
-13 0-23/2 * * * node /scripts/jd_zoo.js >> /scripts/logs/jd_zoo.log 2>&1
 #京东手机狂欢城隐藏姓名版 
 0 0-18/6 * * * node /scripts/jd_carnivalcity.js >> /scripts/logs/jd_carnivalcity.log 2>&1
 #京东跳跳乐瓜分京豆 
@@ -359,16 +357,12 @@
 13 1,22,23 * * * node /scripts/jd_daily_lottery.js >> /scripts/logs/jd_daily_lottery.log 2>&1
 #京东领金贴 
 10 0 * * * node /scripts/jd_jin_tie.js >> /scripts/logs/jd_jin_tie.log 2>&1
-#京东幸运大转盘隐藏姓名版 
-4 10 * * * node /scripts/jd_market_lottery.js >> /scripts/logs/jd_market_lottery.log 2>&1
 #京东健康社区隐藏姓名版 
 10 0-23/4 * * * node /scripts/jd_health.js >> /scripts/logs/jd_health.log 2>&1
 #京东健康社区收能量隐藏姓名版 
 5-45/20 * * * * node /scripts/jd_health_collect.js >> /scripts/logs/jd_health_collect.log 2>&1
 #京东女装盲盒 
 0 8 1-8/1,27,28 2,3 * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1
-#京东直播 
-10-20/5 12 * * * node /scripts/jd_live.js >> /scripts/logs/jd_live.log 2>&1
 #京东手机尚学季 
 0 0 0 * * * node /scripts/jd_xtg.js >> /scripts/logs/jd_xtg.log 2>&1
 #京东直播间红包雨9日临时恢复 
@@ -431,8 +425,6 @@
 0 2 * * * node /scripts/jd_price.js >> /scripts/logs/jd_price.log 2>&1
 #京东全民开红包 
 1 1 * * * node /scripts/jd_redPacket.js >> /scripts/logs/jd_redPacket.log 2>&1
-#京东闪购盲盒 
-20 8 * * * node /scripts/jd_sgmh.js >> /scripts/logs/jd_sgmh.log 2>&1
 #京东进店领豆 
 10 0 * * * node /scripts/jd_shop.js >> /scripts/logs/jd_shop.log 2>&1
 #京东东东小窝 
@@ -499,8 +491,6 @@
 1 0-23/4 * * * node /scripts/z_city_cash.js >> /scripts/logs/z_city_cash.log 2>&1
 #京东一次性入会领豆9 
 0 8 * * * node /scripts/member_09.js >> /scripts/logs/member_09.log 2>&1
-#京东手机狂欢城新一期 
-2 0-18/6 * 5 * node /scripts/z_carnivalcity.js >> /scripts/logs/z_carnivalcity.log 2>&1
 #京东注销会员链接生成墨鱼版 
 0 8 * * * node /scripts/jd_cardId_export.js >> /scripts/logs/jd_cardId_export.log 2>&1
 #京东注销会员修复版 
@@ -551,8 +541,6 @@
 11 0 * * 1 node /scripts/jd_deleteCoupon.js >> /scripts/logs/jd_deleteCoupon.log 2>&1
 #京东京喜财富岛 
 0 * * * * node /scripts/jx_cfd.js >> /scripts/logs/jx_cfd.log 2>&1
-#京东粉丝互动 
-3 10 * * * node /scripts/jd_fanslove.js >> /scripts/logs/jd_fanslove.log 2>&1
 #京喜工厂商品列表详情 
 10 10 * * * node /scripts/jx_products_detail.js >> /scripts/logs/jx_products_detail.log 2>&1
 #京东赚京东开团 
