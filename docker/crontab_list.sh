@@ -489,16 +489,8 @@
 0 7 * * * node /scripts/member_11.js >> /scripts/logs/member_11.log 2>&1
 #京东星推官获取互助隐藏姓名版 
 0 0 0 * * * node /scripts/jd_xtg_help.js >> /scripts/logs/jd_xtg_help.log 2>&1
-#京东家电星推官（圈x可能有不停止bug等更新） 
-40 9-18/3 * 5,6 * node /scripts/adolf_star.js >> /scripts/logs/adolf_star.log 2>&1
-#京东京喜阶梯红包 
-15 9 * 5,6 * node /scripts/adolf_jxhb.js >> /scripts/logs/adolf_jxhb.log 2>&1
 #京东一次性入会领豆10 
 0 7 * * * node /scripts/member_10.js >> /scripts/logs/member_10.log 2>&1
-#京东618大势新品赏 
-15 9,20 * 5,6 * node /scripts/adolf_newInteraction.js >> /scripts/logs/adolf_newInteraction.log 2>&1
-#京东超级盒子 
-15 9,20 * 5,6 * node /scripts/adolf_superbox.js >> /scripts/logs/adolf_superbox.log 2>&1
 #京东抽盲盒一次性领豆 
 0 9 * * * node /scripts/jay_freshgoods.js >> /scripts/logs/jay_freshgoods.log 2>&1
 #京东领现金兑换10元红包 
@@ -537,28 +529,6 @@
 30 * * * * node /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.log 2>&1
 #京东整点京豆雨 
 0 * * * * node /scripts/jd_super_redrain.js >> /scripts/logs/jd_super_redrain.log 2>&1
-#京东加购有礼 
-15 12 * * * node /scripts/monk_shop_add_to_car.js >> /scripts/logs/monk_shop_add_to_car.log 2>&1
-#京东粉丝互动 
-3 10 * * * node /scripts/z_fanslove.js >> /scripts/logs/z_fanslove.log 2>&1
-#京东健康社区藏经阁版 
-25 10-22/3 * * * node /scripts/z_health_community.js >> /scripts/logs/z_health_community.log 2>&1
-#京东健康社区-收能量 
-25 * * * * node /scripts/z_health_energy.js >> /scripts/logs/z_health_energy.log 2>&1
-#京东京东超市-大转盘 
-3 10 * * * node /scripts/z_marketLottery.js >> /scripts/logs/z_marketLottery.log 2>&1
-#京东母婴-跳一跳 
-5 8,14,20 11-17 5 * node /scripts/z_mother_jump.js >> /scripts/logs/z_mother_jump.log 2>&1
-#京东摇一摇 
-3 20 * * * node /scripts/z_shake.js >> /scripts/logs/z_shake.log 2>&1
-#京东超级无线组队分奖品 
-25 3 * * 2 node /scripts/z_shop_captain.js >> /scripts/logs/z_shop_captain.log 2>&1
-#京东有机牧场 
-0 0,1-22/2 1-31 4-7 * node /scripts/monk_pasture.js >> /scripts/logs/monk_pasture.log 2>&1
-#京东关注有礼 
-15 15 * * * node /scripts/monk_shop_follow_sku.js >> /scripts/logs/monk_shop_follow_sku.log 2>&1
-#京东店铺大转盘 
-3 0,10,23 * * * node /scripts/monk_shop_lottery.js >> /scripts/logs/monk_shop_lottery.log 2>&1
 #京东到家鲜豆庄园领水滴 
 0-25/5 0 * * * node /scripts/jddj_getPoints.js >> /scripts/logs/jddj_getPoints.log 2>&1
 #京东到家鲜豆庄园 
@@ -586,7 +556,7 @@
 #京喜工厂商品列表详情 
 10 10 * * * node /scripts/jx_products_detail.js >> /scripts/logs/jx_products_detail.log 2>&1
 #京东赚京东开团 
-7 * * * * bash jd | python3 /jd/scripts/jd_zjd.py
+7 * * * * export zlzh=[''] && python3 /jd/scripts/jd_zjd.py
 #京东读书签到 
 0 10 0 * * * node /scripts/jddsSign.js >> /scripts/logs/jddsSign.log 2>&1
 #京东 
