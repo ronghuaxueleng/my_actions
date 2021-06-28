@@ -335,6 +335,8 @@
 0 0 * * * node /scripts/jd_qqtmy.js >> /scripts/logs/jd_qqtmy.log 2>&1
 #京东柠檬我是大老板农场 
 5 6-18/6 * * * node /scripts/jd_wsdlb.js >> /scripts/logs/jd_wsdlb.log 2>&1
+#京东省钱大赢家之翻翻乐隐藏姓名版 
+20 * * * * node /scripts/jd_big_winner.js >> /scripts/logs/jd_big_winner.log 2>&1
 #京东新潮品牌狂欢隐藏姓名版 
 4 10 * * * node /scripts/jd_mcxhd.js >> /scripts/logs/jd_mcxhd.log 2>&1
 #京东京喜领88元红包 
@@ -347,6 +349,8 @@
 13 1,22 * * * node /scripts/jd_gold_creator.js >> /scripts/logs/jd_gold_creator.log 2>&1
 #京东家电星推官隐藏姓名版 
 0 0 0 * * * node /scripts/jd_xtg.js >> /scripts/logs/jd_xtg.log 2>&1
+#京东动物联萌隐藏姓名版 
+13 0-23/2 * * * node /scripts/jd_zoo.js >> /scripts/logs/jd_zoo.log 2>&1
 #京东手机狂欢城隐藏姓名版 
 0 0-18/6 * * * node /scripts/jd_carnivalcity.js >> /scripts/logs/jd_carnivalcity.log 2>&1
 #京东跳跳乐瓜分京豆 
@@ -437,6 +441,10 @@
 8 0-23/3 * * * node /scripts/jd_speed.js >> /scripts/logs/jd_speed.log 2>&1
 #京东极速版 
 0 7 * * * node /scripts/jd_speed_sign.js >> /scripts/logs/jd_speed_sign.log 2>&1
+#京东东东超市 
+11 * * * * node /scripts/jd_superMarket.js >> /scripts/logs/jd_superMarket.log 2>&1
+#取关京东店铺商品 
+55 23 * * * node /scripts/jd_unsubscribe.js >> /scripts/logs/jd_unsubscribe.log 2>&1
 #京东柠檬京喜工厂抢茅台（需填变量） 
 58,59,0 18,19 * * * node /scripts/jd_jxgc.js >> /scripts/logs/jd_jxgc.log 2>&1
 #京东柠檬推一推（需填变量） 
@@ -477,12 +485,18 @@
 0 7 * * * node /scripts/member_12.js >> /scripts/logs/member_12.log 2>&1
 #京东步数换京豆柠檬版 
 * 15 * * * node /scripts/jd_bs.js >> /scripts/logs/jd_bs.log 2>&1
+#京东一次性入会领豆11 
+0 7 * * * node /scripts/member_11.js >> /scripts/logs/member_11.log 2>&1
 #京东星推官获取互助隐藏姓名版 
 0 0 0 * * * node /scripts/jd_xtg_help.js >> /scripts/logs/jd_xtg_help.log 2>&1
+#京东一次性入会领豆10 
+0 7 * * * node /scripts/member_10.js >> /scripts/logs/member_10.log 2>&1
 #京东抽盲盒一次性领豆 
 0 9 * * * node /scripts/jay_freshgoods.js >> /scripts/logs/jay_freshgoods.log 2>&1
 #京东领现金兑换10元红包 
 0,1,2 0 * * * node /scripts/jd_cash_exchange.js >> /scripts/logs/jd_cash_exchange.log 2>&1
+#京东城城分现金藏经阁版 
+1 0-23/4 * * * node /scripts/z_city_cash.js >> /scripts/logs/z_city_cash.log 2>&1
 #京东一次性入会领豆9 
 0 8 * * * node /scripts/member_09.js >> /scripts/logs/member_09.log 2>&1
 #京东手机狂欢城新一期 
@@ -497,6 +511,8 @@
 28 9 18-26 5 * node /scripts/adolf_urge.js >> /scripts/logs/adolf_urge.log 2>&1
 #京东金榜创造营 
 0 8 21-31 5-12 * node /scripts/jd_jbczy.js >> /scripts/logs/jd_jbczy.log 2>&1
+#京东赢一加新品手机 
+25 9 * 5,6 * node /scripts/adolf_oneplus.js >> /scripts/logs/adolf_oneplus.log 2>&1
 #京东京享值PK 
 15 8,13,18 17-31 5 * node /scripts/adolf_pk.js >> /scripts/logs/adolf_pk.log 2>&1
 #京东金融领豆（不共用京东ck另抓） 
