@@ -343,6 +343,8 @@
 0 1,21 * * * node /scripts/jd_star_shop.js >> /scripts/logs/jd_star_shop.log 2>&1
 #京东5G超级盲盒 
 0 0,1-23/3 * * * node /scripts/jd_mohe.js >> /scripts/logs/jd_mohe.log 2>&1
+#京东金榜创造营隐藏姓名版 
+13 1,22 * * * node /scripts/jd_gold_creator.js >> /scripts/logs/jd_gold_creator.log 2>&1
 #京东家电星推官隐藏姓名版 
 0 0 0 * * * node /scripts/jd_xtg.js >> /scripts/logs/jd_xtg.log 2>&1
 #京东手机狂欢城隐藏姓名版 
@@ -353,12 +355,16 @@
 13 1,22,23 * * * node /scripts/jd_daily_lottery.js >> /scripts/logs/jd_daily_lottery.log 2>&1
 #京东领金贴 
 10 0 * * * node /scripts/jd_jin_tie.js >> /scripts/logs/jd_jin_tie.log 2>&1
+#京东幸运大转盘隐藏姓名版 
+4 10 * * * node /scripts/jd_market_lottery.js >> /scripts/logs/jd_market_lottery.log 2>&1
 #京东健康社区隐藏姓名版 
 10 0-23/4 * * * node /scripts/jd_health.js >> /scripts/logs/jd_health.log 2>&1
 #京东健康社区收能量隐藏姓名版 
 5-45/20 * * * * node /scripts/jd_health_collect.js >> /scripts/logs/jd_health_collect.log 2>&1
 #京东女装盲盒 
 0 8 1-8/1,27,28 2,3 * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1
+#京东直播 
+10-20/5 12 * * * node /scripts/jd_live.js >> /scripts/logs/jd_live.log 2>&1
 #京东手机尚学季 
 0 0 0 * * * node /scripts/jd_xtg.js >> /scripts/logs/jd_xtg.log 2>&1
 #京东直播间红包雨9日临时恢复 
@@ -375,6 +381,8 @@
 10 7 * * * node /scripts/jd_car.js >> /scripts/logs/jd_car.log 2>&1
 #京东汽车兑换 
 0 0 * * * node /scripts/jd_car_exchange.js >> /scripts/logs/jd_car_exchange.log 2>&1
+#京东签到领现金 
+2 0-23/4 * * * node /scripts/jd_cash.js >> /scripts/logs/jd_cash.log 2>&1
 #京东摇京豆 
 5 0 * * * node /scripts/jd_club_lottery.js >> /scripts/logs/jd_club_lottery.log 2>&1
 #京东crazyJoy任务 
@@ -383,6 +391,8 @@
 10 12 * * * node /scripts/jd_crazy_joy_bonus.js >> /scripts/logs/jd_crazy_joy_bonus.log 2>&1
 #京东天天提鹅 
 10 * * * * node /scripts/jd_daily_egg.js >> /scripts/logs/jd_daily_egg.log 2>&1
+#京东京喜工厂 
+10 * * * * node /scripts/jd_dreamFactory.js >> /scripts/logs/jd_dreamFactory.log 2>&1
 #京东东东农场 
 5 6-18/6 * * * node /scripts/jd_fruit.js >> /scripts/logs/jd_fruit.log 2>&1
 #京东获取互助码 
@@ -393,6 +403,8 @@
 10 0 * * * node /scripts/jd_jdzz.js >> /scripts/logs/jd_jdzz.log 2>&1
 #京东宠汪汪 
 15 0-23/2 * * * node /scripts/jd_joy.js >> /scripts/logs/jd_joy.log 2>&1
+#京东宠汪汪喂食 
+15 0-23/1 * * * node /scripts/jd_joy_feedPets.js >> /scripts/logs/jd_joy_feedPets.log 2>&1
 #京东宠汪汪积分兑换奖品 
 0 0-16/8 * * * node /scripts/jd_joy_reward.js >> /scripts/logs/jd_joy_reward.log 2>&1
 #京东宠汪汪邀请助力与赛跑助力 
@@ -409,6 +421,8 @@
 15 6-18/6 * * * node /scripts/jd_pet.js >> /scripts/logs/jd_pet.log 2>&1
 #京东金融养猪猪 
 12 * * * * node /scripts/jd_pigPet.js >> /scripts/logs/jd_pigPet.log 2>&1
+#京东种豆得豆 
+1 7-21/2 * * * node /scripts/jd_plantBean.js >> /scripts/logs/jd_plantBean.log 2>&1
 #京东保价 
 0 2 * * * node /scripts/jd_price.js >> /scripts/logs/jd_price.log 2>&1
 #京东全民开红包 
@@ -417,6 +431,8 @@
 10 0 * * * node /scripts/jd_shop.js >> /scripts/logs/jd_shop.log 2>&1
 #京东东东小窝 
 16 22 * * * node /scripts/jd_small_home.js >> /scripts/logs/jd_small_home.log 2>&1
+#京东天天加速 
+8 0-23/3 * * * node /scripts/jd_speed.js >> /scripts/logs/jd_speed.log 2>&1
 #京东极速版 
 0 7 * * * node /scripts/jd_speed_sign.js >> /scripts/logs/jd_speed_sign.log 2>&1
 #京东东东超市 
@@ -469,6 +485,8 @@
 0 9 * * * node /scripts/jay_freshgoods.js >> /scripts/logs/jay_freshgoods.log 2>&1
 #京东领现金兑换10元红包 
 0,1,2 0 * * * node /scripts/jd_cash_exchange.js >> /scripts/logs/jd_cash_exchange.log 2>&1
+#京东城城分现金藏经阁版 
+1 0-23/4 * * * node /scripts/z_city_cash.js >> /scripts/logs/z_city_cash.log 2>&1
 #京东一次性入会领豆9 
 0 8 * * * node /scripts/member_09.js >> /scripts/logs/member_09.log 2>&1
 #京东注销会员链接生成墨鱼版 
@@ -479,6 +497,8 @@
 28 9 18-26 5 * node /scripts/adolf_urge.js >> /scripts/logs/adolf_urge.log 2>&1
 #京东金榜创造营 
 0 8 21-31 5-12 * node /scripts/jd_jbczy.js >> /scripts/logs/jd_jbczy.log 2>&1
+#京东赢一加新品手机 
+25 9 * 5,6 * node /scripts/adolf_oneplus.js >> /scripts/logs/adolf_oneplus.log 2>&1
 #京东京享值PK 
 15 8,13,18 17-31 5 * node /scripts/adolf_pk.js >> /scripts/logs/adolf_pk.log 2>&1
 #京东金融领豆（不共用京东ck另抓） 
@@ -515,6 +535,8 @@
 11 0 * * 1 node /scripts/jd_deleteCoupon.js >> /scripts/logs/jd_deleteCoupon.log 2>&1
 #京东京喜财富岛 
 0 * * * * node /scripts/jx_cfd.js >> /scripts/logs/jx_cfd.log 2>&1
+#京东粉丝互动 
+3 10 * * * node /scripts/jd_fanslove.js >> /scripts/logs/jd_fanslove.log 2>&1
 #京喜工厂商品列表详情 
 10 10 * * * node /scripts/jx_products_detail.js >> /scripts/logs/jx_products_detail.log 2>&1
 #京东赚京东开团 
