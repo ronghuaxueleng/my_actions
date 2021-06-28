@@ -1,33 +1,33 @@
 #!/bin/bash
 
-[ ! -d sngxprov2p/docker ] && mkdir -p sngxprov2p/docker
-wget "https://cdn.staticaly.com/gh/sngxpro/QuanX/master/V2pTaskSub/sngxprov2p.json" -O sngxprov2p.json
-json=$(cat ./sngxprov2p.json)
-crontab_list=""
-pattern='京[东|喜].*'
-for row in $(echo "${json}" | jq -r '.list[] | @base64'); do
-    _jq() {
-        echo ${row} | base64 --decode | jq -r ${1}
-    }
+# [ ! -d sngxprov2p/docker ] && mkdir -p sngxprov2p/docker
+# wget "https://cdn.staticaly.com/gh/sngxpro/QuanX/master/V2pTaskSub/sngxprov2p.json" -O sngxprov2p.json
+# json=$(cat ./sngxprov2p.json)
+# crontab_list=""
+# pattern='京[东|喜].*'
+# for row in $(echo "${json}" | jq -r '.list[] | @base64'); do
+#     _jq() {
+#         echo ${row} | base64 --decode | jq -r ${1}
+#     }
 
-    name=$(_jq '.name')
-    time=$(_jq '.time')
-    target=$(_jq '.job|.target')
-    if [[ $name =~ $pattern ]]; then
-        jsname=${target##*/}
-        wget -q $target -O sngxprov2p/$jsname
-        # wget -q $(echo "${target}" | perl -pe "s|(?:https:\/\/ghproxy\.com/)?(https:\/\/raw\.githubusercontent\.com.+)|https:\/\/ghproxy\.com/\1|") -O sngxprov2p/$jsname
-        if [ $? -eq 0 ]; then
-            echo -e "下载 $jsname 完成...\n"
-            crontab_list+="#$name \n"
-            crontab_list+="$time node /scripts/$jsname >> /scripts/logs/${jsname%.*}.log 2>&1\n"
-        fi
-    fi
-done
-cat > sngxprov2p/docker/crontab_list.sh <<EOF
-$(echo -e "$crontab_list")
-EOF
-sed '/^$/d' sngxprov2p/docker/crontab_list.sh
+#     name=$(_jq '.name')
+#     time=$(_jq '.time')
+#     target=$(_jq '.job|.target')
+#     if [[ $name =~ $pattern ]]; then
+#         jsname=${target##*/}
+#         wget -q $target -O sngxprov2p/$jsname
+#         # wget -q $(echo "${target}" | perl -pe "s|(?:https:\/\/ghproxy\.com/)?(https:\/\/raw\.githubusercontent\.com.+)|https:\/\/ghproxy\.com/\1|") -O sngxprov2p/$jsname
+#         if [ $? -eq 0 ]; then
+#             echo -e "下载 $jsname 完成...\n"
+#             crontab_list+="#$name \n"
+#             crontab_list+="$time node /scripts/$jsname >> /scripts/logs/${jsname%.*}.log 2>&1\n"
+#         fi
+#     fi
+# done
+# cat > sngxprov2p/docker/crontab_list.sh <<EOF
+# $(echo -e "$crontab_list")
+# EOF
+# sed '/^$/d' sngxprov2p/docker/crontab_list.sh
 
 git clone https://github.com/JDHelloWorld/jd_scripts.git JDHelloWorld
 [ ! -d JDHelloWorld/docker ] && mkdir -p JDHelloWorld/docker
@@ -61,10 +61,12 @@ DockerDir=${ScriptsDir}/docker
 ListCronSh=${DockerDir}/crontab_list.sh
 ListCronScripts=MyActions/docker/crontab_list.sh
 ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
-ListCronScripts3=sngxprov2p/docker/crontab_list.sh
+# ListCronScripts3=sngxprov2p/docker/crontab_list.sh
 ListCronScripts4=MyScript/docker/crontab_list.sh
 
-cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
+# cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
+
+cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 FileDiy=diy.sh
 EnableExtraShellProxyDownload="false"
@@ -86,5 +88,5 @@ fi
 
 cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
-cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
+# cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
