@@ -15,7 +15,7 @@ import threading
 import time
 import datetime
 import requests
-from env import *
+from jd_env import *
 
 
 def main(cookie, validate):
