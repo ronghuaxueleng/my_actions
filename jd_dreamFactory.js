@@ -595,6 +595,12 @@ function userInfo() {
                 console.log(`当前电力：${data.user.electric}`)
                 console.log(`当前等级：${data.user.currentLevel}`)
                 console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.user.encryptPin}`);
+                const submitCodeRes = await submitCode(data.user.encryptPin);
+                if (submitCodeRes && submitCodeRes.code === 200) {
+                  console.log(`🏭京喜工厂-互助码提交成功！🏭`);
+                }else if (submitCodeRes.code === 300) {
+                  console.log(`🏭京喜工厂-互助码已提交！🏭`);
+                }
                 console.log(`已投入电力：${production.investedElectric}`);
                 console.log(`所需电力：${production.needElectric}`);
                 console.log(`生产进度：${((production.investedElectric / production.needElectric) * 100).toFixed(2)}%`);
@@ -1327,6 +1333,30 @@ function readShareCode() {
     resolve()
   })
 }
+//提交互助码
+function submitCode() {
+  return new Promise(async resolve => {
+  $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${myInviteCode}&type=jxfactory`, timeout: 10000}, (err, resp, data) => {
+    try {
+      if (err) {
+        console.log(`${JSON.stringify(err)}`)
+        console.log(`${$.name} API请求失败，请检查网路重试`)
+      } else {
+        if (data) {
+          //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+          data = JSON.parse(data);
+        }
+      }
+    } catch (e) {
+      $.logErr(e, resp)
+    } finally {
+      resolve(data);
+    }
+  })
+  await $.wait(15000);
+  resolve()
+})
+}
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
@@ -1339,7 +1369,7 @@ function shareCodesFormat() {
       const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
       $.newShareCodes = inviteCodes[tempIndex].split('@');
     }
-    await readShareCode();
+    // await readShareCode();
     // if (readShareCodeRes && readShareCodeRes.code === 200) {
     //   $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
     // }
