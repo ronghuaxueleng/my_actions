@@ -46,6 +46,7 @@ let tuanActiveId = ``, hasSend = false;
 const jxOpenUrl = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://wqsd.jd.com/pingou/dream_factory/index.html%22%20%7D`;
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
 const inviteCodes = [''];
+let myInviteCode;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 $.tuanIds = [];
 $.appId = 10001;
@@ -595,6 +596,7 @@ function userInfo() {
                 console.log(`当前电力：${data.user.electric}`)
                 console.log(`当前等级：${data.user.currentLevel}`)
                 console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.user.encryptPin}`);
+                myInviteCode = data.user.encryptPin;
                 const submitCodeRes = await submitCode(data.user.encryptPin);
                 if (submitCodeRes && submitCodeRes.code === 200) {
                   console.log(`🏭京喜工厂-互助码提交成功！🏭`);
