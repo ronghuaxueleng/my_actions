@@ -129,7 +129,7 @@ async function cfd() {
     const submitCodeRes = await submitCode();
     if (submitCodeRes && submitCodeRes.code === 200) {
       console.log(`🗻财富岛-互助码提交成功！🗻`);
-    }else if (submitCodeRes.code === 300) {
+    }else if (submitCodeRes && submitCodeRes.code === 300) {
       console.log(`🗻财富岛-互助码已提交！🗻`);
     }
 

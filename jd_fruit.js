@@ -91,7 +91,7 @@ async function jdFruit() {
       const submitCodeRes = await submitCode();
       if (submitCodeRes && submitCodeRes.code === 200) {
          console.log(`🐔东东农场-互助码提交成功！🐔`);
-      }else if (submitCodeRes.code === 300) {
+      }else if (submitCodeRes && submitCodeRes.code === 300) {
          console.log(`🐔东东农场-互助码已提交！🐔`);
       }
       console.log(`\n【已成功兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`);
