@@ -40,9 +40,9 @@
 #pk
 33 10 * * * node /scripts/jd_ddopk.js >> /scripts/logs/jd_ddopk.log 2>&1
 #全民抢京豆
-1,10,20 0 * * * node /scripts/jd_qjd.js >> /scripts/logs/jd_qjd.log 2>&1
+0 9 * * * export qjd_zlzh=['',''] && python3 /jd/scripts/jd_qjd.py | tee /jd/log/jd_qjd/$(date "+%Y-%m-%d-%H-%M-%S").log
 #QQ星
-20 6,12,18 * * * node /scripts/jd_qqxing.js >> /scripts/logs/jd_qqxing.log 2>&1
+1 0-23/2 * * * bash jd jd_qqxing
 #众筹许愿池
 20 12 * * * node /scripts/jd_wishingPool.js >> /scripts/logs/jd_wishingPool.log 2>&1
 #汪汪乐园
