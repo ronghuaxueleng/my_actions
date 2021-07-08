@@ -54,10 +54,11 @@ jobs:
           cd JD-FreeFuck
           rm -rf .git
           rm -rf jd.sh
-          rm -rf docker/*
           rm -rf .github
           rm -rf .gitignore
           rm -rf git_pull.sh
+          sed -i 's/useradmin/admin/' jd.sh
+          sed -i 's/supermanito/admin/' jd.sh
           cd ../
           git clone git@jd_scripts_githup:ronghuaxueleng/my_actions.git
           cp -f ./my_actions/jd.sh ./JD-FreeFuck
