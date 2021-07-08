@@ -53,7 +53,6 @@ jobs:
           git clone -b master git@jd_base_gitee:supermanito/jd_base.git JD-FreeFuck
           cd JD-FreeFuck
           rm -rf .git
-          rm -rf jd.sh
           rm -rf .github
           rm -rf .gitignore
           rm -rf git_pull.sh
