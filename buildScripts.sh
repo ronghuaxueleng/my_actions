@@ -1,7 +1,7 @@
 #!/bin/bash
 
 [ ! -d sngxprov2p/docker ] && mkdir -p sngxprov2p/docker
-wget "https://raw.githubusercontent.com/Youthsongs/QuanX/master/V2pTaskSub/sngxprov2p.json" -O sngxprov2p.json
+wget "https://raw.githubusercontent.com/Oreomeow/QuanX/master/V2pTaskSub/sngxprov2p.json" -O sngxprov2p.json
 json=$(cat ./sngxprov2p.json)
 crontab_list=""
 pattern='京[东|喜].*'
@@ -61,12 +61,12 @@ DockerDir=${ScriptsDir}/docker
 ListCronSh=${DockerDir}/crontab_list.sh
 ListCronScripts=MyActions/docker/crontab_list.sh
 ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
-# ListCronScripts3=sngxprov2p/docker/crontab_list.sh
+ListCronScripts3=sngxprov2p/docker/crontab_list.sh
 ListCronScripts4=MyScript/docker/crontab_list.sh
 
-# cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
+cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
-cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
+# cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 FileDiy=diy.sh
 EnableExtraShellProxyDownload="false"
@@ -77,7 +77,7 @@ wget -q $EnableExtraShellURL -O ${FileDiy}
 if [ $? -eq 0 ]; then
     echo -e "自定义 DIY 脚本同步完成......"
     echo -e ''
-    sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
+    # sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
     sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
     sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
     sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
@@ -88,5 +88,5 @@ fi
 
 cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
-# cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
+cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
