@@ -358,6 +358,8 @@
 10 * * * * node /scripts/jd_dreamFactory.js >> /scripts/logs/jd_dreamFactory.log 2>&1
 #京东东东农场 
 5 6-18/6 * * * node /scripts/jd_fruit.js >> /scripts/logs/jd_fruit.log 2>&1
+#京东获取互助码 
+20 13 * * 6 node /scripts/jd_get_share_code.js >> /scripts/logs/jd_get_share_code.log 2>&1
 #京东东东工厂 
 10 * * * * node /scripts/jd_jdfactory.js >> /scripts/logs/jd_jdfactory.log 2>&1
 #京东赚赚 
@@ -485,6 +487,8 @@
 #京东赚京东开团 
 #京东读书签到 
 0 10 0 * * * node /scripts/jddsSign.js >> /scripts/logs/jddsSign.log 2>&1
+#京东 
+0 9 * * * node /scripts/JD_DailyBonus.js >> /scripts/logs/JD_DailyBonus.log 2>&1
 #京东成长分 
 0 0 * * * node /scripts/jdczf.js >> /scripts/logs/jdczf.log 2>&1
 #京东到家 
