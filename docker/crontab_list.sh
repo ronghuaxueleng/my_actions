@@ -280,6 +280,7 @@
 #京东众筹许愿池柠檬版 
 0 8,12 * * * node /scripts/jd_wish.js >> /scripts/logs/jd_wish.log 2>&1
 #京东汪汪乐园柠檬版 
+0 */1 * * * node /scripts/jd_joy-park.js >> /scripts/logs/jd_joy-park.log 2>&1
 #京东京享值PK史蒂夫版 
 15 0,6,13,19,21 * * node /scripts/jxzpk.js >> /scripts/logs/jxzpk.log 2>&1
 #京东京享值PK史蒂夫版 
@@ -487,6 +488,7 @@
 #京喜工厂商品列表详情 
 10 10 * * * node /scripts/jx_products_detail.js >> /scripts/logs/jx_products_detail.log 2>&1
 #京东赚京东开团 
+10 * * * * node /scripts/jd_zjd_tuan.js >> /scripts/logs/jd_zjd_tuan.log 2>&1
 #京东读书签到 
 0 10 0 * * * node /scripts/jddsSign.js >> /scripts/logs/jddsSign.log 2>&1
 #京东 
