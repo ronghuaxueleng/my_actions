@@ -269,8 +269,8 @@ function Reset_Pwd() {
   echo -e "控制面板重置成功，用户名：admin，密码：admin\n"
 }
 
-## 确定脚本
-function Find_File() {
+## 确认脚本
+function Find_Script() {
     FileNameTmp1=$(echo $1 | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
     FileNameTmp2=$(echo $1 | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
     SeekDir="${ScriptsDir} ${ScriptsDir}/backUp ${ScriptsDir}/tools ${ConfigDir}"
