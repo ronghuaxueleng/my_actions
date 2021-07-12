@@ -78,23 +78,25 @@ let UserName: string, index: number, isLogin: boolean, nickName: string
       res = await api('user/GetBuildInfo', '_cfd_t,bizCode,dwEnv,dwType,ptag,source,strBuildIndex,strZone', {strBuildIndex: b})
       console.log(`${b}升级需要:`, res.ddwNextLvlCostCoin)
       await wait(1000)
-      if (res.dwCanLvlUp === 1) {
-        res = await api('user/BuildLvlUp', '_cfd_t,bizCode,ddwCostCoin,dwEnv,ptag,source,strBuildIndex,strZone', {ddwCostCoin: res.ddwNextLvlCostCoin, strBuildIndex: b})
-        if (res.iRet === 0) {
-          console.log(`升级成功`)
-          await wait(2000)
-        }
-      }
+      // if (res.dwCanLvlUp === 1) {
+      //   res = await api('user/BuildLvlUp', '_cfd_t,bizCode,ddwCostCoin,dwEnv,ptag,source,strBuildIndex,strZone', {ddwCostCoin: res.ddwNextLvlCostCoin, strBuildIndex: b})
+      // if (res.iRet === 0) {
+      //   console.log(`升级成功`)
+      //   await wait(2000)
+      // }
+      // }
       res = await api('user/CollectCoin', '_cfd_t,bizCode,dwEnv,dwType,ptag,source,strBuildIndex,strZone', {strBuildIndex: b, dwType: '1'})
       console.log(`${b}收金币:`, res.ddwCoin)
       await wait(1000)
     }
+    break
+
   }
 })()
 
 function speedUp(stk: string, params: Params = {}) {
   return new Promise(async resolve => {
-    let url = `https://m.jingxi.com/jxbfd/user/SpeedUp?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&strBuildIndex=food&_ste=1&_=${Date.now()}&sceneval=2&_stk=${encodeURIComponent(stk)}`
+    let url = `https://m.jingxi.com/jxbfd/user/SpeedUp?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&strBuildIndex=${['food', 'shop', 'sea', 'fun'][Math.floor(Math.random() * 4)]}&_ste=1&_=${Date.now()}&sceneval=2&_stk=${encodeURIComponent(stk)}`
     if (Object.keys(params).length !== 0) {
       let key: (keyof Params)
       for (key in params) {
