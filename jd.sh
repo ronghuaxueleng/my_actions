@@ -338,11 +338,11 @@ function Run_Normal() {
         LogFile="${LogDir}/${FileName}/${LogTime}.log"
         [ ! -d ${LogDir}/${FileName} ] && mkdir -p ${LogDir}/${FileName}
         cd ${WhichDir}
-        if [ ${FileFormat} == "js" ]; then
+        if [ "${p##*.}" == "js" ] || [ ${FileFormat} == "js" ]; then
             node ${FileName}.js | tee ${LogFile}
-        elif [ ${FileFormat} == "py" ]; then
+        elif [ "${p##*.}" == "py" ] || [ ${FileFormat} == "py" ]; then
             python3 ${FileName}.py | tee ${LogFile}
-        elif [ ${FileFormat} == "ts" ]; then
+        elif [ "${p##*.}" == "ts" ] || [ ${FileFormat} == "ts" ]; then
             ts-node ${FileName}.ts | tee ${LogFile}
         fi
     else
