@@ -271,8 +271,8 @@ function Reset_Pwd() {
 
 ## 确认脚本
 function Find_Script() {
-    FileNameTmp1=$(echo $1 | perl -pe "{s|\.js|.js|; s|\.py|.py|; s|\.ts|.ts|}")
-    FileNameTmp2=$(echo $1 | perl -pe "{s|jd_||; s|\.js|.js|; s|\.py|.py|; s|\.ts|.ts|; s|^|jd_|}")
+    FileNameTmp1=$(echo $1 | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
+    FileNameTmp2=$(echo $1 | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
     SeekDir="${ScriptsDir} ${ScriptsDir}/backUp ${ScriptsDir}/tools ${ConfigDir}"
     FileName=""
     WhichDir=""
