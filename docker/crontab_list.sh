@@ -20,3 +20,5 @@
 58 20 * * 6 node /scripts/jd_get_share_code_4_bot.js >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
 # 提交助力码
 0,1,2 21 * * 6 bash -x /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
+# 新版财富岛
+5 8,13,19 * * * node /scripts/jd_cfd.ts >> /scripts/logs/jd_cfd.log 2>&1
