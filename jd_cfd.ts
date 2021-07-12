@@ -2,8 +2,8 @@
  * 京喜财富岛
  * 包含雇佣导游，建议每小时1次
  *
- * 此版本暂定默认不帮助HelloWorld，帮助助力池
- * export CFD_HELP_HW = false   // 帮助HelloWorld
+ * 此版本暂定默认帮助HelloWorld，帮助助力池
+ * export CFD_HELP_HW = true    // 帮助HelloWorld
  * export CFD_HELP_POOL = true  // 帮助助力池
  *
  * 使用jd_env_copy.js同步js环境变量到ts
@@ -20,7 +20,7 @@ const CryptoJS = require('crypto-js')
 dotenv.config()
 let appId: number = 10028, fingerprint: string | number, token: string, enCryptMethodJD: any;
 let cookie: string = '', cookiesArr: Array<string> = [], res: any = '', shareCodes: string[] = [];
-let CFD_HELP_HW: boolean | string = process.env.CFD_HELP_HW ? process.env.CFD_HELP_HW : false;
+let CFD_HELP_HW: boolean | string = process.env.CFD_HELP_HW ? process.env.CFD_HELP_HW : true;
 console.log('帮助HelloWorld:', CFD_HELP_HW)
 let CFD_HELP_POOL: boolean | string = process.env.CFD_HELP_POOL ? process.env.CFD_HELP_POOL : true;
 console.log('帮助助力池:', CFD_HELP_POOL)
@@ -69,12 +69,17 @@ let UserName: string, index: number, isLogin: boolean, nickName: string
 
     // 导游
     res = await api('user/EmployTourGuideInfo', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')
-    for (let e of res.TourGuideList) {
-      if (e.strBuildIndex !== 'food' && e.ddwRemainTm === 0) {
-        let employ: any = await api('user/EmployTourGuide', '_cfd_t,bizCode,ddwConsumeCoin,dwEnv,dwIsFree,ptag,source,strBuildIndex,strZone',
-          {ddwConsumeCoin: e.ddwCostCoin, dwIsFree: 0, strBuildIndex: e.strBuildIndex})
-        console.log(employ)
-        await wait(3000)
+
+    if (!res.TourGuideList) {
+      console.log('手动雇佣4个试用导游')
+    } else {
+      for (let e of res.TourGuideList) {
+        if (e.strBuildIndex !== 'food' && e.ddwRemainTm === 0) {
+          let employ: any = await api('user/EmployTourGuide', '_cfd_t,bizCode,ddwConsumeCoin,dwEnv,dwIsFree,ptag,source,strBuildIndex,strZone',
+            {ddwConsumeCoin: e.ddwCostCoin, dwIsFree: 0, strBuildIndex: e.strBuildIndex})
+          console.log(employ)
+          await wait(3000)
+        }
       }
     }
 
@@ -115,15 +120,25 @@ let UserName: string, index: number, isLogin: boolean, nickName: string
       await wait(1000)
     }
   }
+
   // 获取随机助力码
+  if (CFD_HELP_HW) {
+    shareCodes = [
+      ...shareCodes,
+      ...[
+        '845605C0CDB46E027B53DBFD505C152CE2FDBBFB74ABBD8CB9FD0FE0ACC43FF8',
+        '84A1A690E9AA8B7267F347E319954401BF810183738AA300E8FCFDEE97F12036',
+        'C533B4DCDAA0EA415CEBC49F13851C2556F2BE27E8D4026713C7D5229A5F0C55',
+      ]
+    ]
+  }
   if (CFD_HELP_POOL) {
     let {data} = await axios.get('https://api.sharecode.ga/api/jxcfd/20')
     console.log('获取到20个随机助力码:', data.data)
     shareCodes = [...shareCodes, ...data.data]
-  }else{
+  } else {
     console.log('你的设置是不帮助助力池！')
   }
-
   for (let i = 0; i < cookiesArr.length; i++) {
     for (let j = 0; j < shareCodes.length; j++) {
       cookie = cookiesArr[i]
