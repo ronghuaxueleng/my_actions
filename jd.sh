@@ -277,7 +277,6 @@ function Find_Script() {
     FileName=""
     WhichDir=""
     FileFormat="${1##*.}"
-    [ "${p##*.}" == "ts" ]
     for dir in ${SeekDir}; do
         if [ -f ${dir}/${FileNameTmp1}.js ]; then
             FileName=${FileNameTmp1}
