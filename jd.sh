@@ -271,41 +271,54 @@ function Reset_Pwd() {
 
 ## 确认脚本
 function Find_Script() {
-    FileNameTmp1=$(echo $1 | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
-    FileNameTmp2=$(echo $1 | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
+    FileNameTmp1=$(echo $1 | perl -pe "{s|\.js|.js|; s|\.py|.py|; s|\.ts|.ts|}")
+    FileNameTmp2=$(echo $1 | perl -pe "{s|jd_||; s|\.js|.js|; s|\.py|.py|; s|\.ts|.ts|; s|^|jd_|}")
     SeekDir="${ScriptsDir} ${ScriptsDir}/backUp ${ScriptsDir}/tools ${ConfigDir}"
     FileName=""
     WhichDir=""
-
+    FileFormat="${1##*.}"
+    [ "${p##*.}" == "ts" ]
     for dir in ${SeekDir}; do
         if [ -f ${dir}/${FileNameTmp1}.js ]; then
             FileName=${FileNameTmp1}
-            FileFormat="js"
+            if [ -z "${FileFormat}"  ]; then
+                FileFormat="js"
+            fi
             WhichDir=${dir}
             break
         elif [ -f ${dir}/${FileNameTmp1}.py ]; then
             FileName=${FileNameTmp1}
-            FileFormat="py"
+            if [ -z "${FileFormat}"  ]; then
+                FileFormat="py"
+            fi
             WhichDir=${dir}
             break
         elif [ -f ${dir}/${FileNameTmp1}.ts ]; then
             FileName=${FileNameTmp1}
-            FileFormat="ts"
+            if [ -z "${FileFormat}"  ]; then
+                FileFormat="ts"
+            fi
             WhichDir=${dir}
             break
         elif [ -f ${dir}/${FileNameTmp2}.js ]; then
             FileName=${FileNameTmp2}
-            FileFormat="js"
+            if [ -z "${FileFormat}"  ]; then
+                FileFormat="js"
+            fi
             WhichDir=${dir}
             break
         elif [ -f ${dir}/${FileNameTmp2}.py ]; then
             FileName=${FileNameTmp2}
-            FileFormat="py"
+            if [ -z "${FileFormat}"  ]; then
+                FileFormat="py"
+            fi
             WhichDir=${dir}
             break
         elif [ -f ${dir}/${FileNameTmp2}.ts ]; then
             FileName=${FileNameTmp2}
-            FileFormat="ts"
+            if [ -z "${FileFormat}"  ]; then
+                FileFormat="ts"
+            fi
             WhichDir=${dir}
             break
         fi
@@ -338,11 +351,11 @@ function Run_Normal() {
         LogFile="${LogDir}/${FileName}/${LogTime}.log"
         [ ! -d ${LogDir}/${FileName} ] && mkdir -p ${LogDir}/${FileName}
         cd ${WhichDir}
-        if [ "${p##*.}" == "js" ] || [ ${FileFormat} == "js" ]; then
+        if [ ${FileFormat} == "js" ]; then
             node ${FileName}.js | tee ${LogFile}
-        elif [ "${p##*.}" == "py" ] || [ ${FileFormat} == "py" ]; then
+        elif [ ${FileFormat} == "py" ]; then
             python3 ${FileName}.py | tee ${LogFile}
-        elif [ "${p##*.}" == "ts" ] || [ ${FileFormat} == "ts" ]; then
+        elif [ ${FileFormat} == "ts" ]; then
             ts-node ${FileName}.ts | tee ${LogFile}
         fi
     else
