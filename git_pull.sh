@@ -155,7 +155,7 @@ function Diff_Cron() {
             grep "${ShellDir}/" ${ListCron} | grep -E " \S+_?\w+" | grep -v "#" | sort -u >${ListTask}
         fi
 
-        cat ${ListCronSh} | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)(?:.+)?node\s+(?:/scripts/)?(\S+_?\w+\.(?:js|ts)).+|\1bash ${ShellJd} \2|" | sort -u >${ListJs}
+        cat ${ListCronSh} | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)(?:.+)?node\s+(?:/scripts/)?(\S+_?\w+\.[js|ts]).+|\1bash ${ShellJd} \2|" | sort -u >${ListJs}
         if [ "${EnableExtraShell}" == "true" ]; then
             grep "my_scripts_list" ${FileDiy} | grep -v '#' | sort -u >>${ListJs}
             grep "my_scripts_list" ${FileDiy} | grep -v '#' | sort -u >>${ListTask}
@@ -333,7 +333,7 @@ function Add_Cron() {
             if [[ "$result" != "" ]]; then
                 echo "${Cron}" | sort -u >>${ListCron}
             else
-                cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)(?:.+)?node\s+(?:/scripts/)?(\S+_?\w+\.(?:js|ts)).+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
+                cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)(?:.+)?node\s+(?:/scripts/)?(\S+_?\w+\.[js|ts]).+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
             fi
         done
 
