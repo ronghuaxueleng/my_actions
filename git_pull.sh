@@ -50,6 +50,7 @@ function Update_Cron() {
         for ((i = 1; i < ${#RanHourArray[*]}; i++)); do
             RanHour="${RanHour},${RanHourArray[i]}"
         done
+	perl -i -pe "s|.+(bash.+git_pull.+log.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCron}
         sort -u ${ListCron} >${ListCronUniq}
         mv -f ${ListCronUniq} ${ListCron}
         crontab ${ListCron}
@@ -234,6 +235,7 @@ function Npm_InstallSub() {
 function Npm_Install() {
     cd ${ScriptsCombined}
     if [[ "${PackageListOld}" != "$(cat package.json)" ]]; then
+        echo -e "安装环境所需的软件包 ...\n"
         echo -e "检测到package.json有变化，运行 npm install...\n"
         Npm_InstallSub
         if [ $? -ne 0 ]; then
@@ -360,8 +362,9 @@ function Add_Cron() {
 function ExtraShell() {
     ## 自动同步用户自定义的diy.sh
     if [[ "${EnableExtraShellUpdate}" == "true" ]]; then
-        wget -q $EnableExtraShellURL -O ${FileDiy}
+        wget -q --no-check-certificate $EnableExtraShellURL -O ${FileDiy}.new
         if [ $? -eq 0 ]; then
+	    mv -f "${FileDiy}.new" "${FileDiy}"
             echo -e "自定义 DIY 脚本同步完成......"
             echo -e ''
             sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
@@ -369,10 +372,10 @@ function ExtraShell() {
             sed -i -E '/^rm\s+-rf\s+\$\{ScriptsCombined\}.+\$\{ListCron\}/d' ${FileDiy}
             sleep 2s
         else
-            echo -e "\033[31m自定义 DIY 脚本同步失败！\033[0m"
-            echo -e ''
-            sleep 2s
+            echo -e "\033[31m[ERROR]\033[0m 自定义脚本同步失败，请检查原因或再次执行更新命令......\n"
+            sleep 3s
         fi
+        [ -f "${FileDiy}.new" ] && rm -rf "${FileDiy}.new"
     fi
 
     ## 调用用户自定义的diy.sh
