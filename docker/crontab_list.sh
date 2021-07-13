@@ -136,6 +136,8 @@
 22 0,12,18 * * * node /scripts/jd_lotteryMachine.js >> /scripts/logs/jd_lotteryMachine.log 2>&1
 # 宠汪汪
 15 */2 * * * node /scripts/jd_joy.js >> /scripts/logs/jd_joy.log 2>&1
+# 宠汪汪偷狗粮
+10 0-21/3 * * * node /scripts/jd_joy_steal.js >> /scripts/logs/jd_joy_steal.log 2>&1
 # 宠汪汪兑换
 0 0,8,12,16 * * * node /scripts/jd_joy_reward.js >> /scripts/logs/jd_joy_reward.log 2>&1
 # 京东摇一摇
@@ -445,10 +447,6 @@
 0,1,2 0 * * * node /scripts/jd_cash_exchange.js >> /scripts/logs/jd_cash_exchange.log 2>&1
 #京东一次性入会领豆9 
 0 8 * * * node /scripts/member_09.js >> /scripts/logs/member_09.log 2>&1
-#京东注销会员链接生成墨鱼版 
-0 8 * * * node /scripts/jd_cardId_export.js >> /scripts/logs/jd_cardId_export.log 2>&1
-#京东注销会员修复版 
-0 9 * * * node /scripts/jd_unbind.js >> /scripts/logs/jd_unbind.log 2>&1
 #京东一次性入会领豆8 
 0 7 * * * node /scripts/member_08.js >> /scripts/logs/member_08.log 2>&1
 #京东金榜创造营 
@@ -461,8 +459,6 @@
 0 7 * * * node /scripts/member_02.js >> /scripts/logs/member_02.log 2>&1
 #京东一次性入会领豆3 
 0 7 * * * node /scripts/member_03.js >> /scripts/logs/member_03.log 2>&1
-#京喜财富岛提现并发修改版ztxtop 
-0 0 * * * node /scripts/jx_cfdtx.js >> /scripts/logs/jx_cfdtx.log 2>&1
 #京东半点京豆雨龙猪猪 
 30 * * * * node /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.log 2>&1
 #京东整点京豆雨 
@@ -483,8 +479,6 @@
 0 9,12,18 * * * node /scripts/jx_nc.js >> /scripts/logs/jx_nc.log 2>&1
 #京东删除优惠券 
 11 0 * * 1 node /scripts/jd_deleteCoupon.js >> /scripts/logs/jd_deleteCoupon.log 2>&1
-#京东京喜财富岛 
-0 * * * * node /scripts/jx_cfd.js >> /scripts/logs/jx_cfd.log 2>&1
 #京喜工厂商品列表详情 
 10 10 * * * node /scripts/jx_products_detail.js >> /scripts/logs/jx_products_detail.log 2>&1
 #京东赚京东开团 

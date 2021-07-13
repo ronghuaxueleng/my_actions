@@ -1,8 +1,8 @@
 /*
-
+from：https://github.com/Wenmoux/scripts/wen/jd
 [task_local]
 #7月粉丝互动
-1 8 * * * https://raw.githubusercontent.com/Wenmoux/scripts/wen/jd/jd_wxFans.js, tag=粉丝互动, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+1 8 * * * jd_wxFans.js, tag=粉丝互动, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
 const $ = new Env('粉丝互动');
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -26,7 +26,7 @@ if ($.isNode()) {
 
 const JD_API_HOST = `https://api.m.jd.com/client.action`;
 message = ""
-$.shareuuid = "8cec00a4917e4af6ae49f8f4f9e7b58d"
+$.shareuuid = ""
 $.actid = "aae88e19901340a28b604f5cf5b61dd6"
 !(async () => {
         if (!cookiesArr[0]) {
