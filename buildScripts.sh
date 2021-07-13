@@ -47,6 +47,24 @@ $(echo -e "$crontab_list")
 EOF
 sed '/^$/d' JDHelloWorld/docker/crontab_list.sh
 
+git clone https://github.com/he1pu/JDHelp.git JDHelp
+[ ! -d JDHelp/docker ] && mkdir -p JDHelp/docker
+json=$(cat JDHelp/QuantumultX/gallery.json)
+crontab_list=""
+for row in $(echo "${json}" | jq -r '.task[] | @base64'); do
+    _jq() {
+        echo ${row} | base64 --decode | jq -r ${1}
+    }
+
+    config=$(_jq '.config')
+    # configs=(${config//,/ })
+    crontab_list+=$(echo "${config}" | perl -pe "s|(\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)https:\/\/raw\.githubusercontent\.com\/JDHelp\/jd_scripts\/main\/(\S+_?\w+)\.js(?:\s+)?,(?:\s+)?tag=(.+)(?:\s+)?,(?:\s+)?img-url=.+|\n# \3\n\1node /scripts/\2.js >> /scripts/logs/\2.log 2>&1|")
+done
+cat > JDHelp/docker/crontab_list.sh <<EOF
+$(echo -e "$crontab_list")
+EOF
+sed '/^$/d' JDHelp/docker/crontab_list.sh
+
 git clone https://github.com/wuzhi04/MyActions.git MyActions
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
@@ -63,8 +81,9 @@ ListCronScripts=MyActions/docker/crontab_list.sh
 ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
 ListCronScripts3=sngxprov2p/docker/crontab_list.sh
 ListCronScripts4=MyScript/docker/crontab_list.sh
+ListCronScripts5=JDHelp/docker/crontab_list.sh
 
-cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
+cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} ${ListCronScripts5} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 # cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
@@ -89,4 +108,5 @@ fi
 cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
 cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
+cp -rf $(ls JDHelp | grep -v docker | sed "s:^:JDHelp/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
