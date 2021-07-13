@@ -441,8 +441,6 @@
 0 0 0 * * * node /scripts/jd_xtg_help.js >> /scripts/logs/jd_xtg_help.log 2>&1
 #京东一次性入会领豆10 
 0 7 * * * node /scripts/member_10.js >> /scripts/logs/member_10.log 2>&1
-#京东抽盲盒一次性领豆 
-0 9 * * * node /scripts/jay_freshgoods.js >> /scripts/logs/jay_freshgoods.log 2>&1
 #京东领现金兑换10元红包 
 0,1,2 0 * * * node /scripts/jd_cash_exchange.js >> /scripts/logs/jd_cash_exchange.log 2>&1
 #京东一次性入会领豆9 
