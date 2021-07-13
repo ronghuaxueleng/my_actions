@@ -68,6 +68,9 @@ sed '/^$/d' JDHelp/docker/crontab_list.sh
 git clone https://github.com/wuzhi04/MyActions.git MyActions
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
+rm -rf JDHelp package.json
+rm -rf MyActions package.json
+
 ShellDir=${JD_DIR:-$(
     cd $(dirname $0)
     pwd
