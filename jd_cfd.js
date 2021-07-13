@@ -17,6 +17,8 @@ const CryptoJS = require('crypto-js')
 let appId = 10028, fingerprint, token, enCryptMethodJD;
 let cookie= '', cookiesArr= [], res = '', shareCodes = [];
 let myShareCode = '';
+let shareCodeDic = {};
+let currentIndex = 0;
 
 let UserName, index, isLogin, nickName;
 !(async () => {
@@ -30,8 +32,10 @@ let UserName, index, isLogin, nickName;
     isLogin = true;
     nickName = '';
     await TotalBean();
+    currentIndex = i;
     console.log(`\n开始【京东账号${index}】${nickName || UserName}\n`);
     
+    await readShareCode();
     await makeShareCodes();
 
     // 任务1
@@ -66,7 +70,6 @@ let UserName, index, isLogin, nickName;
         console.log('账号尚未完成新手指引，跳过账号')
         continue
     }
-    await readShareCode();
     await submitCode(myShareCode);
     for (let e of res.TourGuideList) {
       if (e.strBuildIndex !== 'food' && e.ddwRemainTm === 0) {
@@ -118,9 +121,9 @@ let UserName, index, isLogin, nickName;
     
   // }
   for (let i = 0; i < cookiesArr.length; i++) {
-      for (let j = 0; j < shareCodes.length; j++) {
+      for (let j = 0; j < shareCodeDic[`${i}`].length; j++) {
         cookie = cookiesArr[i]
-        res = await api('story/helpbystage', '_cfd_t,bizCode,dwEnv,ptag,source,strShareId,strZone', {strShareId: shareCodes[j]})
+        res = await api('story/helpbystage', '_cfd_t,bizCode,dwEnv,ptag,source,strShareId,strZone', {strShareId: shareCodeDic[`${i}`][j]})
         console.log(res)
         await wait(1000)
         if (Number(res.iRet) === 2235) {
@@ -239,7 +242,6 @@ function submitCode(myInviteCode) {
   })
 }
 function readShareCode() {
-  console.log(`开始`)
   return new Promise(async resolve => {
     $.get({
       url: `http://www.helpu.cf/jdcodes/getcode.php?type=jxcfd&num=10`,
@@ -253,8 +255,8 @@ function readShareCode() {
           if (data) {
             data = JSON.parse(data);
             console.log(`随机取10个码放到您固定的互助码后面(不影响已有固定互助)`);
-            shareCodes = shareCodes.concat(data.data);
-            console.log(`${shareCodes}`);
+            shareCodeDic[`${currentIndex}`] = data.data;
+            console.log(`${data.data}`);
           }
         }
       } catch (e) {
