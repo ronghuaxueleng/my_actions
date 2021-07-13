@@ -53,3 +53,11 @@ jobs:
           git add .
           git commit --allow-empty -m "up"
           git push
+      - name: 同步到gitee
+          uses: Yikun/hub-mirror-action@master
+          with:
+            src: github/ronghuaxueleng
+            dst: gitee/getready
+            static_list: "my_actions"
+            dst_key: ${{ secrets.GITEE_KEY }}
+            dst_token: ${{ secrets.GITEE_TOKEN }}
