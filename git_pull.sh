@@ -456,8 +456,8 @@ Title
 ## 赋权
 chmod 777 ${ShellDir}/*
 ## 克隆或更新js脚本
+Combined_Cron
 [ -f ${ScriptsCombined}/package.json ] && PackageListOld=$(cat ${ScriptsCombined}/package.json)
-[ -d ${ScriptsCombined}/.git ] && Git_PullScripts || Git_CloneScripts
 Notice
 ## 执行各函数
 if [[ ${ExitStatusScripts} -eq 0 ]]; then
