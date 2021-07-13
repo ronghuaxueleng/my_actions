@@ -1,8 +1,7 @@
 /*
 
-https://wbbny.m.jd.com/babelDiy/Zeus/2rtpffK8wqNyPBH6wyUDuBKoAbCt/index.html
-
-cron 12 0,6-23/2 * * * https://raw.githubusercontent.com/smiek2221/scripts/master/jd_summer_movement.js
+入口：京东首页右下角
+cron 12 0,6-23/2 * * * from： https://github.com/smiek2221/scripts
 
 */
 
@@ -43,9 +42,7 @@ $.inviteList = [];
 $.secretpInfo = {};
 $.ShInviteList = [];
 $.innerShInviteList = [
-  'H8mphLbwLgz3e4GeFdc0g9GS9KyvaS3S',
-  'H8mphLbwLn_LHtvAULB0thOUapqKwhU',
-  'H8mphLbwLnPnJ8L9XqdUv7O1wfsqrXQ'
+  'HcmphLbwLg73eYHLF9Nm0uFhusphNoZddN2PHfKc_E6RIoyUqNqwAlJo4SEnJ4AClAzIyCACXbo3XL7I0wxIsQ'
 ];
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {

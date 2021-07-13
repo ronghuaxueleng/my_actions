@@ -1,8 +1,7 @@
 /*
 
-https://wbbny.m.jd.com/babelDiy/Zeus/2rtpffK8wqNyPBH6wyUDuBKoAbCt/index.html
-
-cron 14/41 7-14 * * * https://raw.githubusercontent.com/smiek2221/scripts/master/jd_summer_movement_help.js
+入口：京东首页右下角
+cron 12 7-14 * * * from： https://github.com/smiek2221/scripts
 
 */
 
@@ -29,8 +28,7 @@ let cookiesArr = [];
 $.cookie = '';
 $.secretpInfo = {};
 $.ShInviteList = [];
-$.innerShInviteList = [
-];
+$.innerShInviteList = [];
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -82,16 +80,7 @@ const UA = $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT :
   }
   // 助力
   let res = [], res2 = [];
-  $.innerShInviteList = await getAuthorShareCode('https://raw.githubusercontent.com/smiek2221/updateTeam/master/shareCodes/summer_movement_one.json');
-  res2 = await getAuthorShareCode('https://raw.githubusercontent.com/smiek2221/updateTeam/master/shareCodes/summer_movement.json');
-  if(!$.innerShInviteList[0]){
-    $.innerShInviteList = await getAuthorShareCode('https://ghproxy.com/https://raw.githubusercontent.com/smiek2221/updateTeam/master/shareCodes/summer_movement.json');
-  }
-  if(!res2[0]){
-    res2 = await getAuthorShareCode('https://ghproxy.com/https://raw.githubusercontent.com/smiek2221/updateTeam/master/shareCodes/summer_movement.json');
-  }
-  $.ShInviteLists = []
-  $.ShInviteLists = []
+  $.ShInviteLists = ['H8mphLbwLg73eYHLF9Nm0sLE1r7kmq7N'];
   if (ShHelpAuthorFlag) {
     $.innerShInviteLists = getRandomArrayElements([...res, ...res2], [...res, ...res2].length);
     $.ShInviteLists.push(...$.ShInviteList,...$.innerShInviteList,...$.innerShInviteLists);
@@ -145,7 +134,26 @@ async function movement() {
     $.shopSign = ``;
     $.userInfo = ''
     $.hundred = false
-    if (new Date().getUTCHours() + 8 >= 8) {
+    await takePostRequest('olympicgames_home');
+    if($.homeData.result) $.userInfo = $.homeData.result.userActBaseInfo
+    if($.homeData.result.guardIcon) {
+      console.log(`已经开启百元守卫战`)
+      $.hundred = true
+    }else if($.userInfo){
+      if($.homeData.result.popWindows) {
+        let res = $.homeData.result.popWindows
+        if(res.type == 'continued_sign_pop'){
+          console.log(`签到获得: ${JSON.stringify($.homeData.result.popWindows.data || '')}`)
+        }else if(res.type == 'limited_time_hundred_pop'){
+          console.log(`开启百元守卫战: ${JSON.stringify($.homeData.result.popWindows || '')}`)
+          $.hundred = true
+        }else{
+          console.log(`弹窗信息: ${JSON.stringify($.homeData.result.popWindows)}`)
+        }
+      } 
+    }
+    
+    if ($.hundred) {
       console.log('\n百元守卫战')
       if(Number(summer_movement_ShHelpFlag) === 1 || Number(summer_movement_ShHelpFlag) === 2){
         $.Shend = false
