@@ -358,10 +358,19 @@ function Add_Cron() {
     fi
 }
 
+## 用户数量UserSum
+function Count_UserSum() {
+    for ((i = 1; i <= 1000; i++)); do
+        Tmp=Cookie$i
+        CookieTmp=${!Tmp}
+        [[ ${CookieTmp} ]] && UserSum=$i || break
+    done
+}
+
 ## 自定义脚本功能
 function ExtraShell() {
     ## 自动同步用户自定义的diy.sh
-    if [[ "${EnableExtraShellUpdate}" == "true" ]]; then
+    if [[ ${EnableExtraShellUpdate} == true ]]; then
         wget -q --no-check-certificate $EnableExtraShellURL -O ${FileDiy}.new
         if [ $? -eq 0 ]; then
 	    mv -f "${FileDiy}.new" "${FileDiy}"
@@ -379,7 +388,7 @@ function ExtraShell() {
     fi
 
     ## 调用用户自定义的diy.sh
-    if [[ "${EnableExtraShell}" == "true" ]]; then
+    if [[ ${EnableExtraShell} == true ]]; then
         if [ -f ${FileDiy} ]; then
             . ${FileDiy}
         else
@@ -397,76 +406,78 @@ function Run_All() {
 
     ## 调整执行顺序
     sed -i "1i\jd_bean_change" ${FileRunAll} ## 置顶京豆变动通知
-    echo "jd_crazy_joy_coin" >>${FileRunAll} ## 末尾加入挂机脚本
+    # echo "jd_crazy_joy_coin" >>${FileRunAll} ## 末尾加入挂机脚本
 
     ## 去除不适合的活动脚本
-    ## 例：sed -i '/xxx/d' ${FileRunAll}
     sed -i '/jd_delCoupon/d' ${FileRunAll} ## 不执行 "京东家庭号" 活动
     sed -i '/jd_family/d' ${FileRunAll}    ## 不执行 "删除优惠券" 活动
     ## 第三方脚本
     sed -i '/jd_try/d' ${FileRunAll}
     sed -i '/jx_cfdtx/d' ${FileRunAll}
 
-    ## 自定义添加脚本
-    ## echo "bash ${ShellDir}/jd.sh xxx now" >>${FileRunAll}
-
     sed -i "s/^/bash ${ShellJd} &/g" ${FileRunAll}
-    sed -i 's/$/&.js now/g' ${FileRunAll}
+    sed -i 's/$/& now/g' ${FileRunAll}
     sed -i '1i\#!/bin/env bash' ${FileRunAll}
     sed -i '/^\s*$/d' ${FileRunAll}
 }
 
-## 在日志中记录时间与路径
-echo -e ''
-echo -e "+----------------- 开 始 执 行 更 新 脚 本 -----------------+"
-echo -e ''
-echo -e "   活动脚本目录：${ScriptsCombined}"
-echo -e ''
-echo -e "   当前系统时间：$(date "+%Y-%m-%d %H:%M")"
-echo -e ''
-echo -e "+-----------------------------------------------------------+"
+function Title() {
+    echo -e "\n+----------------- 开 始 执 行 更 新 脚 本 -----------------+"
+    echo -e ''
+    echo -e "   脚本根目录：${ScriptsCombined}"
+    echo -e ''
+    echo -e "   Scripts 仓库目录：${ScriptsCombined}"
+    echo -e ''
+    echo -e "   当前系统时间：$(date "+%Y-%m-%d %H:%M")"
+    echo -e ''
+    echo -e "+-----------------------------------------------------------+"
+}
 
+function Notice() {
+    echo -e "\n+----------------------- 郑 重 提 醒 -----------------------+"
+    echo -e ""
+    echo -e "  本项目目前闭源并且仅面向内部开放，脚本免费使用仅供于学习！"
+    echo -e ""
+    echo -e "  圈内资源禁止以任何形式发布到咸鱼等国内平台，否则后果自负！"
+    echo -e ""
+    echo -e "  我们始终致力于打击使用本项目进行违法贩卖行为的个人或组织！"
+    echo -e ""
+    echo -e "  我们不会放纵某些行为，不保证不采取非常手段，请勿挑战底线！"
+    echo -e ""
+    echo -e "+-----------------------------------------------------------+\n"
+}
+
+## 在日志中记录时间与路径
+Title
 ## 更新crontab
 [[ $(date "+%-H") -le 2 ]] && Update_Cron
-
-## 更新Shell源码
+## 更新源码
 [ -d ${ShellDir}/.git ] && Git_PullShell
-
-Combined_Cron
-
+## 赋权
+chmod 777 ${ShellDir}/*
 ## 克隆或更新js脚本
 [ -f ${ScriptsCombined}/package.json ] && PackageListOld=$(cat ${ScriptsCombined}/package.json)
-echo -e "+----------------------- 郑 重 提 醒 -----------------------+"
-echo -e ""
-echo -e "  本项目目前闭源并且仅面向内部开放，脚本免费使用仅供于学习！"
-echo -e ""
-echo -e "  圈内资源禁止以任何形式发布到咸鱼等国内平台，否则后果自负！"
-echo -e ""
-echo -e "  我们始终致力于打击使用本项目进行违法贩卖行为的个人或组织！"
-echo -e ""
-echo -e "  我们不会放纵某些行为，不保证不采取非常手段，请勿挑战底线！"
-echo -e ""
-echo -e "+-----------------------------------------------------------+"
-echo -e ''
-
+[ -d ${ScriptsCombined}/.git ] && Git_PullScripts || Git_CloneScripts
+# [ -f ${ScriptsDir}/sendNotify.js ] && sed -i '/desp += author;/a\  if (text.includes("FreeFuck") || desp.includes("FreeFuck")) return ;' ${ScriptsDir}/sendNotify.js
+[ ${ExitStatusCronLxk} -ne 0 ] && echo -e "\n\033[33m[WARN]\033[0m Scripts仓库脚本定时任务清单拉取失败，已启用备份"
+Notice
 ## 执行各函数
 if [[ ${ExitStatusScripts} -eq 0 ]]; then
     Change_ALL
     [ -d ${ScriptsCombined}/node_modules ] && Notify_Version
-    ExtraShell
     Diff_Cron
     Npm_Install
     Output_ListJsAdd
     Output_ListJsDrop
     Del_Cron
     Add_Cron
-    Run_All
-    echo -e "活动脚本更新完成......\n"
-else
-    echo -e "\033[31m活动脚本更新失败，请检查原因或再次运行 git_pull.sh ......\033[0m"
-    Change_ALL
     ExtraShell
+    Run_All
+    echo -e "\033[32m[Done]\033[0m 活动脚本更新完成\n"
+else
+    Change_ALL
+    echo -e "\033[31m[ERROR]\033[0m Scripts仓库脚本更新失败，请检查原因或再次执行更新命令......\n"
+    ExtraShell
+    Run_All
 fi
-
-## 赋权
 chmod 777 ${ShellDir}/*
