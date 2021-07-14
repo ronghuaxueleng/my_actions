@@ -34,7 +34,7 @@ fi
 
 echo -e "\n========================1. 更新源代码========================\n"
 [ ! -d ${JD_DIR}/log ] && mkdir -p ${JD_DIR}/log
-crond
+crond >/dev/null 2>&1
 bash git_pull
 bash git_pull >/dev/null 2>&1
 echo
