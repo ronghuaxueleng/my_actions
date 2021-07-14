@@ -32,6 +32,10 @@ jobs:
           # echo -e "\n\nHost *\n StrictHostKeyChecking no\n" >> /etc/ssh/ssh_config
           chmod 644 ~/.ssh/config
           ssh-keyscan $JD_SCRIPTS_REPO_URL >> ~/.ssh/known_hosts
+      - name: 使用Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
       - name: 开始同步
         run: |
           shopt -s extglob
@@ -40,6 +44,7 @@ jobs:
           cat scripts/docker/crontab_list.sh >> jd_scripts/docker/crontab_list.sh
           cp -rf ./scripts/* ./jd_scripts
           cd ./jd_scripts
+          npm install
           git add .
           git commit --allow-empty -m "up"
           git push
