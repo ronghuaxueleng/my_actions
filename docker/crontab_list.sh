@@ -20,9 +20,5 @@
 58 20 * * 6 node /scripts/jd_get_share_code_4_bot.js >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
 # 提交助力码
 0,1,2 21 * * 6 bash -x /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
-# 新版财富岛
-# 10 * * * * node /scripts/jd_cfd.ts >> /scripts/logs/jd_cfd.log 2>&1
 # 财富岛热气球
-10 * * * * node /scripts/jd_cfd_loop.js >> /scripts/logs/jd_cfd_loop.log 2>&1
-# 京喜牧场
-# 20 0-23/3 * * * node /scripts/jd_jxmc.ts >> /scripts/logs/jd_jxmc.log 2>&1
+0 * * * * node /scripts/jd_cfd_loop.js >> /scripts/logs/jd_cfd_loop.log 2>&1
