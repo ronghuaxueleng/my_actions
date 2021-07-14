@@ -36,23 +36,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+/**
+ *
+ * Running time limit:
+ * s >= 58 or s <= 30  => exchange()
+ * s > 30 and s < 58  =>  wait...
+ *
+ */
 var axios_1 = require("axios");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
+var fs = require("fs");
 var $ = {};
-var cookie = '', cookiesArr = [], res = '';
-var joyId = [], workJoyInfoList = [];
-var joyId1;
+var cookie = '', cookiesArr = [], validate = '';
+var target = process.env.JD_JOY_REWARD_NAME ? parseInt(process.env.JD_JOY_REWARD_NAME) : 500;
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var i, taskVos, tasks, _i, tasks_1, t, arr, _a, arr_1, name_1, times, apTaskDetail, taskResult, awardRes, i_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0: return [4 /*yield*/, requireConfig()];
+    var validate_arr, i, tasks, h, config, _i, config_1, bean;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                validate_arr = fs.readFileSync('./validate.txt', 'utf-8');
+                if (validate_arr.indexOf('\n')) {
+                    validate_arr = validate_arr.split('\n');
+                    validate_arr.pop();
+                }
+                return [4 /*yield*/, requireConfig()];
             case 1:
-                _b.sent();
+                _a.sent();
                 i = 0;
-                _b.label = 2;
+                _a.label = 2;
             case 2:
-                if (!(i < cookiesArr.length)) return [3 /*break*/, 22];
+                if (!(i < cookiesArr.length)) return [3 /*break*/, 9];
                 cookie = cookiesArr[i];
                 $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 $.index = i + 1;
@@ -60,109 +73,60 @@ var joyId1;
                 $.nickName = '';
                 return [4 /*yield*/, TotalBean()];
             case 3:
-                _b.sent();
+                _a.sent();
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7" + $.index + "\u3011" + ($.nickName || $.UserName) + "\n");
-                return [4 /*yield*/, api('apTaskList', { "linkId": "LsQNxL7iWDlXUs6cFl-AAg" })];
+                if (i < validate_arr.length)
+                    validate = validate_arr[i];
+                else {
+                    console.log('预存验证码不够用，退出！');
+                    return [3 /*break*/, 9];
+                }
+                return [4 /*yield*/, init()];
             case 4:
-                taskVos = _b.sent();
-                tasks = taskVos.data;
-                _i = 0, tasks_1 = tasks;
-                _b.label = 5;
+                tasks = _a.sent();
+                h = new Date().getHours();
+                config = void 0;
+                if (h >= 0 && h < 8)
+                    config = tasks.data['beanConfigs0'];
+                if (h >= 8 && h < 16)
+                    config = tasks.data['beanConfigs8'];
+                if (h >= 16 && h < 24)
+                    config = tasks.data['beanConfigs16'];
+                _i = 0, config_1 = config;
+                _a.label = 5;
             case 5:
-                if (!(_i < tasks_1.length)) return [3 /*break*/, 21];
-                t = tasks_1[_i];
-                if (!(t.taskTitle === '汪汪乐园签到')) return [3 /*break*/, 10];
-                if (!(t.taskDoTimes === 0)) return [3 /*break*/, 9];
-                return [4 /*yield*/, api('apDoTask', { "taskType": t.taskType, "taskId": t.id, "linkId": "LsQNxL7iWDlXUs6cFl-AAg" })];
+                if (!(_i < config_1.length)) return [3 /*break*/, 8];
+                bean = config_1[_i];
+                console.log(bean.id, bean.giftName, bean.leftStock);
+                if (!(bean.giftValue === target)) return [3 /*break*/, 7];
+                return [4 /*yield*/, exchange(bean.id)];
             case 6:
-                res = _b.sent();
-                console.log('签到:', res);
-                return [4 /*yield*/, wait(1000)];
+                _a.sent();
+                _a.label = 7;
             case 7:
-                _b.sent();
-                return [4 /*yield*/, api('apTaskDrawAward', { "taskType": t.taskType, "taskId": t.id, "linkId": "LsQNxL7iWDlXUs6cFl-AAg" })];
-            case 8:
-                _b.sent();
-                _b.label = 9;
-            case 9: return [3 /*break*/, 20];
-            case 10:
-                if (!(t.taskTitle === '汪汪乐园浏览会场' || t.taskTitle === '汪汪乐园浏览商品')) return [3 /*break*/, 20];
-                arr = ['汪汪乐园浏览会场', '汪汪乐园浏览商品'];
-                _a = 0, arr_1 = arr;
-                _b.label = 11;
-            case 11:
-                if (!(_a < arr_1.length)) return [3 /*break*/, 20];
-                name_1 = arr_1[_a];
-                if (t.taskDoTimes + 1 === t.taskLimitTimes || t.taskDoTimes === t.taskLimitTimes)
-                    return [3 /*break*/, 19];
-                times = name_1 === '汪汪乐园浏览会场' ? 5 : 10;
-                return [4 /*yield*/, api('apTaskDetail', { "taskType": t.taskType, "taskId": t.id, "channel": 4, "linkId": "LsQNxL7iWDlXUs6cFl-AAg" })];
-            case 12:
-                res = _b.sent();
-                apTaskDetail = void 0, taskResult = void 0, awardRes = void 0;
-                console.log(res.data);
-                i_1 = 0;
-                _b.label = 13;
-            case 13:
-                if (!(i_1 < times)) return [3 /*break*/, 19];
-                try {
-                    apTaskDetail = res.data.taskItemList[i_1];
-                }
-                catch (e) {
-                    return [3 /*break*/, 19];
-                }
-                console.log('apTaskDetail:', apTaskDetail);
-                return [4 /*yield*/, api('apDoTask', { "taskType": t.taskType, "taskId": t.id, "channel": 4, "linkId": "LsQNxL7iWDlXUs6cFl-AAg", "itemId": encodeURIComponent(apTaskDetail.itemId) })];
-            case 14:
-                taskResult = _b.sent();
-                console.log('doTask: ', JSON.stringify(taskResult));
-                if (taskResult.errMsg === '任务已完成')
-                    return [3 /*break*/, 19];
-                console.log('等待中...');
-                return [4 /*yield*/, wait(10000)];
-            case 15:
-                _b.sent();
-                return [4 /*yield*/, api('apTaskDrawAward', { "taskType": t.taskType, "taskId": t.id, "linkId": "LsQNxL7iWDlXUs6cFl-AAg" })];
-            case 16:
-                awardRes = _b.sent();
-                if (awardRes.success && awardRes.code === 0)
-                    console.log(awardRes.data[0].awardGivenNumber);
-                else
-                    console.log('领取奖励出错:', JSON.stringify(awardRes));
-                return [4 /*yield*/, wait(1000)];
-            case 17:
-                _b.sent();
-                _b.label = 18;
-            case 18:
-                i_1++;
-                return [3 /*break*/, 13];
-            case 19:
-                _a++;
-                return [3 /*break*/, 11];
-            case 20:
                 _i++;
                 return [3 /*break*/, 5];
-            case 21:
+            case 8:
                 i++;
                 return [3 /*break*/, 2];
-            case 22: return [2 /*return*/];
+            case 9: return [2 /*return*/];
         }
     });
 }); })();
-function api(fn, body) {
+function init() {
     var _this = this;
     return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
         var data;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, axios_1["default"].post("https://api.m.jd.com/", "functionId=" + fn + "&body=" + JSON.stringify(body) + "&_t=" + Date.now() + "&appid=activities_platform", {
+                case 0: return [4 /*yield*/, axios_1["default"].get("https://jdjoy.jd.com/common/gift/getBeanConfigs?reqSource=h5&invokeKey=NRp8OPxZMFXmGkaE&validate=" + validate, {
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'User-Agent': TS_USER_AGENTS_1["default"],
-                            'Host': 'api.m.jd.com',
-                            'Referer': 'https://joypark.jd.com/',
-                            'Origin': 'https://joypark.jd.com',
-                            'Cookie': cookie
+                            'Host': 'jdjoy.jd.com',
+                            'content-type': 'application/json',
+                            'origin': 'https://h5.m.jd.com',
+                            "User-Agent": TS_USER_AGENTS_1["default"],
+                            'referer': 'https://jdjoy.jd.com/',
+                            'cookie': cookie
                         }
                     })];
                 case 1:
@@ -173,24 +137,38 @@ function api(fn, body) {
         });
     }); });
 }
-function joyList() {
+function exchange(beanId) {
     var _this = this;
+    console.log('exchange()');
     return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-        var data;
+        var s, data;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, axios_1["default"].get("https://api.m.jd.com/?functionId=joyList&body={%22linkId%22:%22LsQNxL7iWDlXUs6cFl-AAg%22}&_t=" + Date.now() + "&appid=activities_platform", {
+                case 0:
+                    if (!1) return [3 /*break*/, 4];
+                    s = new Date().getSeconds();
+                    if (!(s >= 58 || s <= 30)) return [3 /*break*/, 1];
+                    return [3 /*break*/, 4];
+                case 1: return [4 /*yield*/, wait(500)];
+                case 2:
+                    _a.sent();
+                    _a.label = 3;
+                case 3: return [3 /*break*/, 0];
+                case 4: return [4 /*yield*/, axios_1["default"].post("https://jdjoy.jd.com/common/gift/new/exchange?reqSource=h5&invokeKey=NRp8OPxZMFXmGkaE&validate=" + validate, JSON.stringify({ "buyParam": { "orderSource": 'pet', "saleInfoId": beanId }, "deviceInfo": {} }), {
                         headers: {
-                            'host': 'api.m.jd.com',
-                            'User-agent': TS_USER_AGENTS_1["default"],
-                            'cookie': cookie,
-                            'origin': 'https://joypark.jd.com',
-                            'referer': 'https://joypark.jd.com'
+                            "Host": "jdjoy.jd.com",
+                            "Accept-Language": "zh-cn",
+                            "Content-Type": "application/json",
+                            "Origin": "https://jdjoy.jd.com",
+                            "User-Agent": TS_USER_AGENTS_1["default"],
+                            "Referer": "https://jdjoy.jd.com/pet/index",
+                            "Cookie": cookie
                         }
                     })];
-                case 1:
+                case 5:
                     data = (_a.sent()).data;
-                    resolve(data);
+                    console.log(data);
+                    resolve();
                     return [2 /*return*/];
             }
         });
