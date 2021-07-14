@@ -47,6 +47,18 @@ $(echo -e "$crontab_list")
 EOF
 sed '/^$/d' JDHelloWorld/docker/crontab_list.sh
 
+cd JDHelloWorld
+
+npm install
+npm install -g npm npm-install-peers
+npm install -g ts-node typescript --unsafe-perm=true --allow-root
+npm install -g ts-node typescript @types/node date-fns axios require tslib fs
+npm install --save-dev @types/node
+ls *.ts | xargs tsc
+rm -rf node_modules
+rm -rf package-lock.json
+cd ..
+
 git clone https://github.com/he1pu/JDHelp.git JDHelp
 [ ! -d JDHelp/docker ] && mkdir -p JDHelp/docker
 json=$(cat JDHelp/QuantumultX/gallery.json)
