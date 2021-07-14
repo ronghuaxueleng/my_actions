@@ -104,7 +104,7 @@ $.appId = 10028;
     }
 
     if (!$.canHelp) continue
-    await readShareCode();
+    // await readShareCode();
     //console.log(codePool)
     if (codePool && codePool.length) {
       console.log(`\n****助力池互助****\n`);
