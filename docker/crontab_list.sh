@@ -282,12 +282,6 @@
 0 8,12 * * * node /scripts/jd_wish.js >> /scripts/logs/jd_wish.log 2>&1
 #京东汪汪乐园柠檬版 
 0 */1 * * * node /scripts/jd_joy-park.js >> /scripts/logs/jd_joy-park.log 2>&1
-#京东京享值PK史蒂夫版 
-15 0,6,13,19,21 * * node /scripts/jxzpk.js >> /scripts/logs/jxzpk.log 2>&1
-#京东京享值PK史蒂夫版 
-15 0,6,13,19,21 * * node /scripts/jxzpk.js >> /scripts/logs/jxzpk.log 2>&1
-#京东京享值PK史蒂夫版 
-15 0,6,13,19,21 * * node /scripts/jxzpk.js >> /scripts/logs/jxzpk.log 2>&1
 #京东京享值PK柠檬版 
 0 10,11 * * * node /scripts/jd_pk.js >> /scripts/logs/jd_pk.log 2>&1
 #京东点点券photonmang修复版 
