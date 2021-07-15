@@ -16,7 +16,7 @@ nav {
     margin: 0;
     perspective: 2000px;
     flex-wrap: wrap;
-    height: 75px;
+    height: 73px;
 }
 
 nav .menu-item {
@@ -32,7 +32,7 @@ nav .menu-item {
     perspective: 200px;
     letter-spacing: 0.5px;
     /* 底部距离 */
-    min-height: 5em;
+    min-height: 4.97em;
 }
 
 nav .menu-text,
