@@ -16,6 +16,8 @@
 ##############长期活动##############
 # 签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
+# 东东超市兑换奖品
+0,30 0 * * * node /scripts/jd_blueCoin.js >> /scripts/logs/jd_blueCoin.log 2>&1
 # 摇京豆
 6 0,23 * * * node /scripts/jd_club_lottery.js >> /scripts/logs/jd_club_lottery.log 2>&1
 # 东东农场
@@ -58,7 +60,6 @@
 23 1,12,22 * * * node /scripts/jd_bean_home.js >> /scripts/logs/jd_bean_home.log 2>&1
 # 微信小程序京东赚赚
 6 0-5/1,11 * * * node /scripts/jd_jdzz.js >> /scripts/logs/jd_jdzz.log 2>&1
-
 # 京东汽车旅程赛点兑换金豆
 0 0 * * * node /scripts/jd_car_exchange.js >> /scripts/logs/jd_car_exchange.log 2>&1
 # 导到所有互助码
@@ -99,8 +100,6 @@
 25 0,12,22 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
 # 东东电竞经理
 0 0-23/2 * * * node /scripts/jd_EsportsManager.js >> /scripts/logs/jd_EsportsManager.log 2>&1
-# 点点券二代目
-10 0,20 * * * node /scripts/jd_necklace_new.js >> /scripts/logs/jd_necklace_new.log 2>&1
 # 众筹许愿池(活动时间：2021-7-1至2021-7-31)
 10 10,15 * 7 * node /scripts/jd_wishingPool.js >> /scripts/logs/jd_wishingPool.log 2>&1
 # 汪汪乐园
@@ -117,7 +116,5 @@
 0 0-16/8 * * * node /scripts/jd_joy_reward_new.js >> /scripts/logs/jd_joy_reward_new.log 2>&1
 # 宠汪汪积分兑换京豆
 0 0-16/8 * * * node /scripts/jd_reward.js >> /scripts/logs/jd_reward.log 2>&1
-# 宠汪汪强制为别人助力
-0 0-16/8 * * * node /scripts/jd_joy_help.js >> /scripts/logs/jd_joy_help.log 2>&1
 # 预存验证
 58 7,15,23 * * * node /scripts/jd_validate_Worker.js >> /scripts/logs/jd_validate_Worker.log 2>&1
