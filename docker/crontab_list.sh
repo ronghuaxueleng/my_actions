@@ -22,3 +22,5 @@
 0,1,2 21 * * 6 bash -x /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
 # 财富岛热气球
 0 * * * * node /scripts/jd_cfd_loop.js >> /scripts/logs/jd_cfd_loop.log 2>&1
+# 生成验证码文件
+0 * * * * node /scripts/jd_validate_Worker.js >> /scripts/logs/jd_validate_Worker.log 2>&1
