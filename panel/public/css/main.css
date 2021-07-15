@@ -118,7 +118,7 @@ h4 {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, .8);
+    background: transparent;
     text-align: center;
     transition: all 0.3s;
 }
@@ -397,7 +397,7 @@ h4 {
 
 /* 白色按钮 */
 .multi-button {
-    padding: 4px 6px;
+    padding: 1px 6px;
     border-radius: 50px;
     background: #fff;
     border: 0.5px solid rgba(146, 152, 176, 0.4);
@@ -408,7 +408,7 @@ h4 {
 .multi-button button {
     border: 0 solid transparent;
     background: transparent;
-    padding: 4px 20px;
+    padding: 1.5px 20px;
     margin: 0 -2px;
     color: #273043;
     font-size: 17px;
@@ -622,22 +622,55 @@ h4 {
     }
 }
 
-/* chrome 滚动条 */
-::-webkit-scrollbar-track-piece {
-    width: 10px;
-    background-color: rgba(140, 130, 130, .3);
-}
-
+::-webkit-scrollbar,
 ::-webkit-scrollbar {
-    width: 10px;
     height: 10px;
+    width: 10px;
 }
 
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner {
+    background: rgba(197, 197, 197, 0.3);
+}
+
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner {
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner {
+    background: rgba(197, 197, 197, 0.3);
+}
+
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner {
+    cursor: auto;
+}
+
+::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb {
-    border-radius: 8px;
-    background: rgba(177, 163, 163, .5);
+    background-color: rgba(235, 235, 235, 0.5);
 }
 
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(177, 163, 163, .8);
+    border-radius: 10px;
+    border: solid 2px transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-track {
+    background: rgba(197, 197, 197, 0.3);
 }
