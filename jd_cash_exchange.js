@@ -122,7 +122,7 @@ function exchange_redpocket() {
 function msgShow() {
   return new Promise((resolve) => {
     $.msg($.name, "", `【京东账号${$.index}】${$.nickname}\n${$.message}`);
-    await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `${$.message}`);
+    notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `${$.message}`);
     resolve();
   });
 }
