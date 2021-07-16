@@ -24,3 +24,7 @@
 0 * * * * node /scripts/jd_cfd_loop.js >> /scripts/logs/jd_cfd_loop.log 2>&1
 # 生成验证码文件
 0 * * * * node /scripts/jd_validate_Worker.js >> /scripts/logs/jd_validate_Worker.log 2>&1
+# 酷跑零食街
+18 7,12,20 * * * node /scripts/jd_foodRunning.ts >> /scripts/logs/jd_foodRunning.log 2>&1
+# 宠汪汪二代目
+15 */2 * * * node /scripts/jd_joy_new.js >> /scripts/logs/jd_joy_new.log 2>&1
