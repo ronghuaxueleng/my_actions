@@ -115,8 +115,6 @@
 ##############宠汪汪##############
 # 宠汪汪
 45 */2,23 * * * node /scripts/jd_joy_new.js >> /scripts/logs/jd_joy_new.log 2>&1
-# 宠汪汪积分兑换京豆（有js、python两个版本，已下架）
-0 0-16/8 * * * node /scripts/jd_joy_reward_new.js >> /scripts/logs/jd_joy_reward_new.log 2>&1
 # 宠汪汪积分兑换京豆
 0 0-16/8 * * * node /scripts/jd_reward.js >> /scripts/logs/jd_reward.log 2>&1
 # 预存验证
