@@ -1,5 +1,5 @@
 # 《使用与更新》教程
-- __修订日期：2021 年 7 月 10 日__
+- __修订日期：2021 年 7 月 18 日__
 
 ## 一、基础使用教程
 >附：[Docker 容器基础使用教程](https://www.runoob.com/docker/docker-container-usage.html)
@@ -31,7 +31,7 @@
 ### 3. 执行特定活动脚本：
     docker exec -it jd bash jd xxx      # 如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数
     docker exec -it jd bash jd xxx now  # 依次执行，无论是否设置了随机延迟，均立即运行，前台会输出日志，同时记录在日志文件中
-> _注意：具体查看活动脚本列表可通过命令 `docker exec -it jd bash jd` 查看， `xxx` 为脚本名。_
+> _注意：具体查看活动脚本列表可通过命令 `docker exec -it jd bash jd` 查看，`xxx` 为脚本名。_
 
 
 ### 4. 执行所有活动脚本：
@@ -77,7 +77,7 @@
 
 ### 3. 拉取远程仓库的脚本并执行：
     docker exec -it jd bash jd <url> raw
-> _注意：url为位于远程仓库的脚本地址，在末尾加上可选参数 -p 可通过代理进行下载。_
+> _注意：url为位于远程仓库的脚本地址，在末尾加上可选参数 -p 可通过代理进行下载，代理默认固定为 [GitHub Proxy](https://ghproxy.com) 主站。_
 
 
 ### 4. 使用 Diy 自定义脚本扩展活动脚本数量：
@@ -92,24 +92,44 @@
       docker exec -it jd sed -i 's/EnableExtraShell=""/EnableExtraShell="true"/g' config/config.sh   ## 赋值变量
 
 
-### 5. 启动/重启后台运行挂机活动脚本程序（目前不建议使用）：
+### 5. 启动/重启后台运行挂机活动脚本程序：
     docker exec -it jd bash jd hangup
-> _注意：当有新的账号添加后必须重启此程序，否则此程序将继续执行之前配置文件中的账号。_
+> _注意：当有新的账号添加后须重启此程序，否则此程序将继续执行之前配置文件中的账号。_
 
 
-### 6. 停止后台运行挂机活动脚本程序：
-    docker exec -it jd pm2 stop jd_crazy_joy_coin
+### 6. 查看后台挂机活动脚本的运行日志：
+    docker exec -it jd pm2 logs
+> _注意：Ctrl+C 退出，如遇脚本报错可尝试重启后台挂机程序。_
 
 
-### 7. 导入并使用第三方活动脚本：
+### 7. 停止后台运行挂机活动脚本程序：
+    docker exec -it jd pm2 stop jd_cfd_loop
+
+
+### 8. 导入并使用第三方活动脚本：
     1. 将脚本放置在该项目容器内 scripts 子目录下，也可放在外部的主机挂载目录（默认为/opt/jd/scripts）
     2. 然后通过命令 docker exec -it jd bash jd xxx now 运行
 > _注意：导入的第三方活动脚本不会随项目本身活动脚本的更新而删除。_
 
 
-### 8. 删除活动脚本运行日志：
-    docker exec -it jd bash rm_log.sh 
+### 9. 删除活动脚本运行日志：
+    docker exec -it jd bash rm_log.sh
 > _注意：默认删除 `7天` 以上的日志文件，可以通过配置文件中的相关变量更改默认时间值。_
+
+
+### 10. 安装/修复脚本依赖：
+- 进入容器内脚本目录：
+
+      docker exec -it jd bash && cd /jd/scripts
+- JavaScript | TypeScript 类脚本安装/修复方法：
+
+      bash /jd/docker/install_env.sh    ## 容器初始化时统一执行的安装脚本
+      npm install                       ## npm通用安装依赖命令
+- Python 类脚本安装/修复方法：
+
+      pip3 install requests             ## pip通用安装模块命令
+
+> _注意：当新脚本报错提示 `need module xxx` 类似字样说明缺少脚本所需的依赖包，目前新的镜像已在启动容器初始化时安装大部分环境所需的软件包和依赖模块。_
 
 ***
 
@@ -157,7 +177,7 @@
     ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 > _注意：引号等所有符号需使用英文格式。_
 
-### 4. 提交您的互助码到公共库（Telegram Bot）：
+### 4. 提交您的互助码到公共助力池（Telegram Bot）：
 > Telegram Bot：\
 > [@JD_ShareCode_Bot](https://t.me/JD_ShareCode_Bot)
 
@@ -172,7 +192,7 @@
     cd panel
     pm2 start ecosystem.config.js
     exit
-> _注意：在某些环境下当系统重启导致控制面板无法访问提示拒绝连接时可用此命令恢复使用。_
+> _注意：在某些环境下当系统重启导致控制面板没有在容器启动时自启可用此命令手动启动。_
 
 
 ### 2. 手动关闭控制面板：
@@ -189,7 +209,7 @@
 
 ### 5. 重新安装控制面板：
     docker exec -it jd bash
-    cd panel
+    bash git_pull && cd panel
     npm install -g pm2
     pm2 start ecosystem.config.js
     exit
@@ -206,6 +226,9 @@
 
 ### 8. 查看控制面板和网页终端的启动状态
     docker exec -it jd pm2 list
+> _注意：1.这是查看控制面板进程状态的通用方法！_\
+> _ㅤㅤㅤ2. 如果 `server` 进程的 `status` 值为 `online` 说明控制面板服务启动正常，如果你仍无法访问请检查自身环境网络连通性问题，例如防火墙、端口、容器映射端口、IP地址等。_\
+> _ㅤㅤㅤ3. 如果 `server` 进程的 `status` 值为 `error` 或者 `server` 不存在说明容器初始化失败，请通过容器初始化时输出的日志分析原因，多半是因为网络问题。_
 
 ***
 
