@@ -111,6 +111,10 @@
 1 0-23/2 * * * node /scripts/jd_qq_pasture.js >> /scripts/logs/jd_qq_pasture.log 2>&1
 # 京喜财富岛
 40 * * * * node /scripts/jd_cfd.js >> /scripts/logs/jd_cfd.log 2>&1
+# 零食街
+10 11 * * * node /scripts/jd_foodRunning.js >> /scripts/logs/jd_foodRunning.log 2>&1
+# 早起福利
+30 6 * * * node /scripts/jd_getUp.js >> /scripts/logs/jd_getUp.log 2>&1
 
 ##############宠汪汪##############
 # 宠汪汪
