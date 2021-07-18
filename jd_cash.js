@@ -399,7 +399,7 @@ function submitCode() {
           if (data) {
 
             //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
-
+            console.log(data)
             data = JSON.parse(data);
 
           }
