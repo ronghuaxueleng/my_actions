@@ -175,11 +175,11 @@ function ScriptsList() {
     ))
     ListPythonScripts=($(
         cd ${ScriptsDir}
-        ls *.py | grep -Eiv "getCookie.py|jdEnv|Notify"
+        ls *.py | grep -Eiv "jdEnv|Notify"
     ))
     ListTypeScriptScripts=($(
         cd ${ScriptsDir}
-        ls *.ts | grep -Eiv "ts_test|AGENTS|validate"
+        ls *.ts | grep -Eiv "api_test|ts_test|AGENTS|validate"
     ))
     ListOtherScripts=($(
         cd ${ScriptsDir}
@@ -193,14 +193,14 @@ function ScriptsList() {
     for ((i = 0; i < ${#ListScripts[*]}; i++)); do
         grep -Eq "^[const $ = ].*Env" ${ListScripts[i]}
         if [ $? -eq 0 ]; then
-            Name=$(grep -E "^[const $ = ].*Env" ${ListScripts[i]} | awk -F "'|\"" '{print $2}' | head -n 1)
+            Name=$(grep -E "^[const $ = ].*Env"  ${ListScripts[i]} | awk -F "\(" '{print $2}' | awk -F "\)" '{print $1}' | sed 's:^.\(.*\).$:\1:' | head -1)
         else
             Name=$(grep -w "script-path" ${ListScripts[i]} | sed "s/\W//g" | sed "s/[0-9a-zA-Z_]//g" | head -n 1)
         fi
         echo -e "$(($i + 1)).${Name}：${ListScripts[i]}"
     done
 
-    echo -e "\nTypeScript 脚本（随缘使用）："
+    echo -e "\nTypeScript 脚本：\n脚本随缘使用，可使用tsc命令转换成js格式执行\n转换命令示例: tsc scripts/jd_foodRunning.ts"
     for ((i = 0; i < ${#ListTypeScriptScripts[*]}; i++)); do
         if [ ${ListTypeScriptScripts[i]} = "jd_joy_park.ts" ]; then
             Name="汪汪乐园"
@@ -212,6 +212,18 @@ function ScriptsList() {
             Name="宠汪汪兑换二代目"
         elif [ ${ListTypeScriptScripts[i]} = "jd_wishingPool.ts" ]; then
             Name="众筹许愿池"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd.ts" ]; then
+            Name="京喜财富岛"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd_loop.ts" ]; then
+            Name="京喜财富岛热气球挂机"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd_stock.ts" ]; then
+            Name="京喜财富岛库存监控"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_speed_redEnvelope.ts" ]; then
+            Name="极速版-发财大赢家"
+        elif [ ${ListTypeScriptScripts[i]} = "getCookie.ts" ]; then
+            Name="获取账号"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_getUp.ts" ]; then
+            Name="早起福利"
         else
             Name=""
         fi
@@ -227,7 +239,7 @@ function ScriptsList() {
     for ((i = 0; i < ${#ListOtherScripts[*]}; i++)); do
         grep -Eq "^[const $ = ].*Env" ${ListOtherScripts[i]}
         if [ $? -eq 0 ]; then
-            Name=$(grep -E "^[const $ = ].*Env" ${ListOtherScripts[i]} | awk -F "'|\"" '{print $2}' | head -n 1)
+            Name=$(grep -E "^[const $ = ].*Env" ${ListOtherScripts[i]} | awk -F "\(" '{print $2}' | awk -F "\)" '{print $1}' | sed 's:^.\(.*\).$:\1:' | head -1)
         else
             Name=$(grep -w "script-path" ${ListOtherScripts[i]} | sed "s/\W//g" | sed "s/[0-9a-zA-Z_]//g" | head -n 1)
         fi
@@ -238,25 +250,27 @@ function ScriptsList() {
 
 ## nohup
 function Run_Nohup() {
-    if [[ $(ps -ef | grep "${js}" | grep -v "grep") != "" ]]; then
-        ps -ef | grep "${js}" | grep -v "grep" | awk '{print $2}' | xargs kill -9
+    if [[ $(ps -ef | grep "${scripts}" | grep -v "grep") != "" ]]; then
+        ps -ef | grep "${scripts}" | grep -v "grep" | awk '{print $2}' | xargs kill -9
     fi
-    [ ! -d ${LogDir}/${js} ] && mkdir -p ${LogDir}/${js}
+    [ ! -d ${LogDir}/${scripts} ] && mkdir -p ${LogDir}/${scripts}
     LogTime=$(date "+%Y-%m-%d-%H-%M-%S")
-    LogFile="${LogDir}/${js}/${LogTime}.log"
-    nohup node ${js}.js >${LogFile} &
+    LogFile="${LogDir}/${scripts}/${LogTime}.log"
+    nohup ts-node ${scripts}.ts >${LogFile} &
 }
 
 ## 运行挂机脚本
 function Run_HangUp() {
-    HangUpJs="jd_crazy_joy_coin"
+    HangUpScripts="jd_cfd_loop"
     cd ${ScriptsDir}
-    for js in ${HangUpJs}; do
-        Import_Conf ${js} && Count_UserSum && Combin_All && Trans_JD_BEAN_SIGN_NOTIFY && Trans_UN_SUBSCRIBES
+    for scripts in ${HangUpScripts}; do
+        Import_Conf ${scripts}
+        Set_Env
+        Combin_All
         if type pm2 >/dev/null 2>&1; then
-            pm2 stop ${js}.js 2>/dev/null
+            pm2 stop ${scripts}.ts 2>/dev/null
             pm2 flush
-            pm2 start -a ${js}.js --watch "${ScriptsDir}/${js}.js" --name="${js}"
+            pm2 start -a ${scripts}.ts --interpreter /usr/bin/ts-node --watch "${ScriptsDir}/${scripts}.ts" --name="${scripts}"
         else
             Run_Nohup >/dev/null 2>&1
         fi
@@ -449,7 +463,7 @@ Run_RawScript() {
         if [ $Raw_Functions = "-p" ]; then
             DownloadJudgment="https://ghproxy.com/"
         else
-            echo -e "\n\033[31m[ERROR]\033[0m 命令错误，请重新输入...\n"
+            echo -e "\n\033[31m[ERROR]\033[0m 命令错误，请重新输入！\n"
             Help
             exit
         fi
@@ -507,7 +521,7 @@ case $# in
         Run_RawScript $1
         ;;
     *)
-        echo -e "\n\033[31m[ERROR]\033[0m 命令错误，请重新输入...\n"
+        echo -e "\n\033[31m[ERROR]\033[0m 命令错误，请重新输入！\n"
         Help
         ;;
     esac
@@ -516,12 +530,12 @@ case $# in
     if [[ $2 == raw ]]; then
         Run_RawScript $1 $2 $3
     else
-        echo -e "\n\033[31m[ERROR]\033[0m 输入命令过多...\n"
+        echo -e "\n\033[31m[ERROR]\033[0m 输入命令过多！\n"
         Help
     fi
     ;;
 *)
-    echo -e "\n\033[31m[ERROR]\033[0m 输入命令过多...\n"
+    echo -e "\n\033[31m[ERROR]\033[0m 输入命令过多！\n"
     Help
     ;;
 esac
