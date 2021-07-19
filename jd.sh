@@ -179,7 +179,7 @@ function ScriptsList() {
     ))
     ListTypeScriptScripts=($(
         cd ${ScriptsDir}
-        ls *.ts | grep -Eiv "api_test|ts_test|AGENTS|validate"
+        ls *.ts | grep -Eiv "api_test|ts_test|AGENTS|validate|jdJxToken"
     ))
     ListOtherScripts=($(
         cd ${ScriptsDir}
@@ -193,7 +193,7 @@ function ScriptsList() {
     for ((i = 0; i < ${#ListScripts[*]}; i++)); do
         grep -Eq "^[const $ = ].*Env" ${ListScripts[i]}
         if [ $? -eq 0 ]; then
-            Name=$(grep -E "^[const $ = ].*Env"  ${ListScripts[i]} | awk -F "\(" '{print $2}' | awk -F "\)" '{print $1}' | sed 's:^.\(.*\).$:\1:' | head -1)
+            Name=$(grep -E "^[const $ = ].*Env" ${ListScripts[i]} | awk -F "\(" '{print $2}' | awk -F "\)" '{print $1}' | sed 's:^.\(.*\).$:\1:' | head -1)
         else
             Name=$(grep -w "script-path" ${ListScripts[i]} | sed "s/\W//g" | sed "s/[0-9a-zA-Z_]//g" | head -n 1)
         fi
@@ -222,8 +222,12 @@ function ScriptsList() {
             Name="极速版-发财大赢家"
         elif [ ${ListTypeScriptScripts[i]} = "getCookie.ts" ]; then
             Name="获取账号"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_foodRunning.ts" ]; then
+            Name="零食街"
         elif [ ${ListTypeScriptScripts[i]} = "jd_getUp.ts" ]; then
             Name="早起福利"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd_cashOut.ts" ]; then
+            Name="京喜财富岛提现"
         else
             Name=""
         fi
