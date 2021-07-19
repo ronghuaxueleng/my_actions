@@ -712,9 +712,10 @@ async function queryRubbishInfo() {
             for (let key of Object.keys(data.Data.StoryInfo.StoryList)) {
               let vo = data.Data.StoryInfo.StoryList[key]
               if (vo.Rubbish) {
-                console.log(`获取到垃圾信息`)
               await $.wait(2000)
               let rubbishOperRes = await rubbishOper('1')
+              if (Object.keys(rubbishOperRes.Data.ThrowRubbish.Game).length) {
+                console.log(`获取垃圾信息成功：本次需要垃圾分类`)
               for (let key of Object.keys(rubbishOperRes.Data.ThrowRubbish.Game.RubbishList)) {
                 let vo = rubbishOperRes.Data.ThrowRubbish.Game.RubbishList[key]
                 await $.wait(2000)
@@ -724,8 +725,15 @@ async function queryRubbishInfo() {
                 let AllRubbish = rubbishOperTwoRes.Data.RubbishGame.AllRubbish
                 console.log(`倒垃圾成功：获得${AllRubbish.ddwCoin}金币 ${AllRubbish.ddwMoney}财富\n`)
               } else {
-                console.log(`倒垃圾失败：${rubbishOperTwoRes.sErrMsg}
-                \n`)
+                console.log(`倒垃圾失败：${rubbishOperTwoRes.sErrMsg}\n`)
+                  }
+                } else {
+                  console.log(`获取垃圾信息成功：本次不需要垃圾分类`)
+                  if (rubbishOperRes.iRet === 0 || rubbishOperRes.sErrMsg === "success") {
+                    console.log(`倒垃圾成功：获得${rubbishOperRes.Data.ThrowRubbish.ddwCoin}金币\n`)
+                  } else {
+                    console.log(`倒垃圾失败：${rubbishOperRes.sErrMsg}\n`)
+                  }
               }
             } else {
               console.log(`当前暂无垃圾\n`)
