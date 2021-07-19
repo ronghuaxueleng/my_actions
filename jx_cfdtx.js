@@ -1,19 +1,3 @@
-/**
-*
-  Name:财富岛提现
-  Address: 京喜App ====>>>> 全民赚大钱
-  Author：MoPoQAQ
-  Update: 2021/2/2 13:00
-
-  Thanks: 
-    💢疯疯💢
-    银河大佬：https://github.com/zbt494
-  获取Token方式：
-  打开【❗️京喜农场❗️】，手动任意完成<工厂任务>、<签到任务>、<金牌厂长任务>一项，提示获取cookie成功即可，然后退出跑任务脚本
-
-*
-**/
-
 const $ = new Env("京喜财富岛提现");
 const JD_API_HOST = "https://m.jingxi.com/";
 const notify = $.isNode() ? require("./sendNotify.js") : "";
@@ -28,6 +12,7 @@ if (!getCookies()) return;
 if (!getTokens()) return;
 
 let doneResults = [];
+let money = 10 * 100;
 
 for (let i = 0; i < $.cookieArr.length; i++) {
   !(async (index) => {
@@ -64,8 +49,10 @@ function cashOut(currentCookie, currentToken, userName, result, logs) {
   return new Promise(async (resolve) => {
     $.get(
       taskUrl(
-        `consume/CashOut`,
-        `ddwMoney=100&dwIsCreateToken=0&ddwMinPaperMoney=150000&strPgtimestamp=${currentToken["timestamp"]}&strPhoneID=${currentToken["phoneid"]}&strPgUUNum=${currentToken["farm_jstoken"]}`,
+        `user/CashOut`,
+        `_cfd_t,bizCode,ddwMoney,ddwPaperMoney,dwEnv,ptag,source,strPgUUNum,strPgtimestamp,strPhoneID,strZone`,
+        currentCookie,
+        `ddwMoney=${money}&ddwPaperMoney=${money * 10}&strPgUUNum=${currentToken.strPgUUNum}&strPgtimestamp=${currentToken.strPgtimestamp}&strPhoneID=${currentToken.strPhoneID}`,
         currentCookie
       ),
       async (err, resp, data) => {
@@ -105,9 +92,11 @@ function getTotal(currentCookie, result, logs) {
   });
 }
 
-function taskUrl(function_path, body, currentCookie) {
+function taskUrl(function_path, stk, body, currentCookie) {
+  let url = `${JD_API_HOST}jxcfd/${function_path}?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&_ste=1&_=${Date.now()}&sceneval=2&_stk=${encodeURIComponent(stk)}&${body}`;
+  url += '&h5st=' + decrypt(stk, url)
   return {
-    url: `${JD_API_HOST}jxcfd/${function_path}?strZone=jxcfd&bizCode=jxcfd&source=jxcfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&${body}&_stk=_cfd_t%2CbizCode%2CddwMinPaperMoney%2CddwMoney%2CdwEnv%2CdwIsCreateToken%2Cptag%2Csource%2CstrPgUUNum%2CstrPgtimestamp%2CstrPhoneID%2CstrZone&_ste=1&_=${Date.now()}&sceneval=2&g_login_type=1&g_ty=ls`,
+    url: url,
     headers: {
       Cookie: currentCookie,
       Accept: "*/*",
