@@ -353,6 +353,8 @@
 0 0 * * * node /scripts/jdmn.js >> /scripts/logs/jdmn.log 2>&1
 #京东柠檬我是大老板农场 
 5 6-18/6 * * * node /scripts/jd_wsdlb.js >> /scripts/logs/jd_wsdlb.log 2>&1
+#京东新潮品牌狂欢wenmoux 
+1 0-23/1 * 6 * node /scripts/jd_618redpacket.js >> /scripts/logs/jd_618redpacket.log 2>&1
 #京东新潮品牌狂欢隐藏姓名版 
 4 10 * * * node /scripts/jd_mcxhd.js >> /scripts/logs/jd_mcxhd.log 2>&1
 #京东明星小店 
