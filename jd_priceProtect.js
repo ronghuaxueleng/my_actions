@@ -59,6 +59,7 @@ let args = {
             for (let page = 1; $.hasNext; page++) {
                 await getApplyData(page)
             }
+            return
 
             console.log(`🗑 删除不符合订单`)
             let taskList = []
