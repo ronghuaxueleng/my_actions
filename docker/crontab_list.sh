@@ -12,6 +12,8 @@
 0 1,18 * * * node /scripts/jd_factory_component.js >> /scripts/logs/jd_factory_component.log 2>&1
 #财富岛提现
 0 0,12 * * * node /scripts/jx_cfdtx.js >> /scripts/logs/jx_cfdtx.log 2>&1
+0 0,12 * * * node /scripts/jd_cfdtx.js >> /scripts/logs/jd_cfdtx.log 2>&1
+0 0,12 * * * node /scripts/jd_cfd_cashOut.js >> /scripts/logs/jd_cfd_cashOut.log 2>&1
 #生成财富岛提现token
 59 23 * * * node /scripts/get_jx_token.js >> /scripts/logs/get_jx_token.log 2>&1
 #生成京喜农场互助码
