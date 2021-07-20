@@ -20,7 +20,6 @@ if (!getCookies()) return;
 if (!getTokens()) return;
 
 let doneResults = [];
-let money = 10 * 100;
 
 let appId = 10028, fingerprint = '', token = '', enCryptMethodJD = '';
 requestAlgo();
@@ -37,8 +36,9 @@ for (let i = 0; i < $.cookieArr.length; i++) {
       );
       userName = `【京东账号${index + 1}】${userName}`;
       let logs = [`\n开始 ${userName}`];
-
-      await cashOut(currentCookie, currentToken, userName, result, logs);
+      await cashOutQuali(currentCookie, currentToken, userName, result, logs).then(function() {
+        userCashOutState(currentCookie, currentToken, userName, result, logs);
+      });
       await $.wait(500);
       await getTotal(currentCookie, result, logs);
       let results = doneResults["results"] || [];
@@ -56,14 +56,92 @@ for (let i = 0; i < $.cookieArr.length; i++) {
     .finally(() => $.done());
 }
 
-function cashOut(currentCookie, currentToken, userName, result, logs) {
+function cashOutQuali(currentCookie, currentToken, userName, result, logs) {
+  return new Promise((resolve) => {
+    $.get(taskUrl(
+      `user/CashOutQuali`, 
+      currentCookie,
+      `strPgUUNum=${currentToken['strPgUUNum']}&strPgtimestamp=${currentToken['strPgtimestamp']}&strPhoneID=${currentToken['strPhoneID']}`
+      ), (err, resp, data) => {
+      try {
+        if (err) {
+          $.log(`${JSON.stringify(err)}`)
+          $.log(`${userName} CashOutQuali API请求失败，请检查网路重试`)
+          logs.push(`${JSON.stringify(err)}`);
+          logs.push(`${userName} CashOutQuali API请求失败，请检查网路重试`);
+          result.push(`【${userName}CashOutQuali API请求失败，请检查网路重试`)
+        } else {
+          data = JSON.parse(data);
+          if (data.iRet === 0) {
+            $.log(`【${userName}】 获取提现资格成功\n`)
+            result.push(`【${userName}】 获取提现资格成功`)
+          } else {
+            $.log(`【${userName}】获取提现资格失败：${data.sErrMsg}\n`)
+            result.push(`【${userName}】获取提现资格失败：${data.sErrMsg}`)
+          }
+        }
+      } catch (e) {
+        $.log(`【${userName}】获取提现资格失败：${data.sErrMsg}\n`)
+        result.push(`【${userName}】获取提现资格失败：${data.sErrMsg}`)
+        $.logErr(e, resp);
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+
+async function userCashOutState(currentCookie, currentToken, userName, result, logs) {
+  return new Promise(async (resolve) => {
+    $.get(taskUrl(`user/UserCashOutState`, currentCookie), async (err, resp, data) => {
+      try {
+        if (err) {
+          $.log(`${JSON.stringify(err)}`)
+          $.log(`${userName} UserCashOutState API请求失败，请检查网路重试`)
+          logs.push(`${JSON.stringify(err)}`);
+          logs.push(`${userName} UserCashOutState API请求失败，请检查网路重试`);
+          result.push(`【${userName}】UserCashOutState API请求失败，请检查网路重试`)
+        } else {
+          data = JSON.parse(data);
+          if (data.dwTodayIsCashOut !== 1) {
+            if (data.ddwUsrTodayGetRich >= data.ddwTodayTargetUnLockRich) {
+              for (let key of Object.keys(data.UsrCurrCashList).reverse()) {
+                let vo = data.UsrCurrCashList[key]
+                if (vo.dwDefault === 1) {
+                  let cashOutRes = await cashOut(vo.ddwMoney, vo.ddwPaperMoney, currentCookie, currentToken, userName, result, logs)
+                  if (cashOutRes.iRet === 0) {
+                    let money = vo.ddwMoney / 100;
+                    $.log(`提现成功获得：${money}元`)
+                    result.push(`提现成功获得：${money}元`)
+                  } else {
+                    await userCashOutState(currentCookie, currentToken, userName, result, logs)
+                  }
+                }
+              }
+            }
+          } else {
+            $.log(`今天已经提现过了~`)
+            result.push(`今天已经提现过了~`)
+          }
+        }
+      } catch (e) {
+        $.log(`【${userName}】获取提现资格失败：${data.sErrMsg}\n`)
+        result.push(`【${userName}】获取提现资格失败：${data.sErrMsg}`)
+        $.logErr(e, resp);
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+
+function cashOut(ddwMoney, ddwPaperMoney, currentCookie, currentToken, userName, result, logs) {
   return new Promise(async (resolve) => {
     $.get(
       taskUrl(
         `user/CashOut`,
-        `_cfd_t,bizCode,ddwMoney,ddwPaperMoney,dwEnv,ptag,source,strPgUUNum,strPgtimestamp,strPhoneID,strZone`,
-        `ddwMoney=${money}&ddwPaperMoney=${money * 10}&strPgUUNum=${currentToken.strPgUUNum}&strPgtimestamp=${currentToken.strPgtimestamp}&strPhoneID=${currentToken.strPhoneID}`,
-        currentCookie
+        currentCookie,
+        `ddwMoney=${ddwMoney}&ddwPaperMoney=${ddwPaperMoney}&strPgUUNum=${currentToken['strPgUUNum']}&strPgtimestamp=${currentToken['strPgtimestamp']}&strPhoneID=${currentToken['strPhoneID']}`
       ),
       async (err, resp, data) => {
         try {
@@ -106,23 +184,22 @@ function getTotal(currentCookie, result, logs) {
   });
 }
 
-function taskUrl(function_path, stk, body, currentCookie) {
-  let url = `${JD_API_HOST}jxbfd/${function_path}?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&_ste=1&_=${Date.now()}&sceneval=2&_stk=${encodeURIComponent(stk)}&${body}`;
-  url += '&h5st=' + decrypt(stk, url)
+function taskUrl(function_path, currentCookie, body = '') {
+  let url = `${JD_API_HOST}jxbfd/${function_path}?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=138631.26.55&${body}&_stk=_cfd_t%2CbizCode%2CddwTaskId%2CdwEnv%2Cptag%2Csource%2CstrShareId%2CstrZone&_ste=1`;
+  url += `&h5st=${decrypt('', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&g_ty=ls`;
   return {
-    url: url,
+    url,
     headers: {
       Cookie: currentCookie,
       Accept: "*/*",
       Connection: "keep-alive",
-      Referer:
-        "https://st.jingxi.com/fortune_island/cash.html?jxsid=16115391812299482601&_f_i_jxapp=1",
+      Referer:"https://st.jingxi.com/fortune_island/cash.html?jxsid=16115391812299482601&_f_i_jxapp=1",
       "Accept-Encoding": "gzip, deflate, br",
       Host: "m.jingxi.com",
-      "User-Agent":
-        "jdpingou;iPhone;4.1.4;14.3;9f08e3faf2c0b4e72900552400dfad2e7b2273ba;network/wifi;model/iPhone11,6;appBuild/100415;ADID/00000000-0000-0000-0000-000000000000;supportApplePay/1;hasUPPay/0;pushNoticeIsOpen/0;hasOCPay/0;supportBestPay/0;session/428;pap/JA2019_3111789;brand/apple;supportJDSHWK/1;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+      "User-Agent":`jdpingou;iPhone;3.15.2;14.2.1;ea00763447803eb0f32045dcba629c248ea53bb3;network/wifi;model/iPhone13,2;appBuild/100365;ADID/00000000-0000-0000-0000-000000000000;supportApplePay/1;hasUPPay/0;pushNoticeIsOpen/0;hasOCPay/0;supportBestPay/0;session/${Math.random * 98 + 1};pap/JA2015_311210;brand/apple;supportJDSHWK/1;Mozilla/5.0 (iPhone; CPU iPhone OS 14_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`,
       "Accept-Language": "zh-cn",
     },
+    timeout: 10000
   };
 }
 
@@ -241,26 +318,26 @@ async function requestAlgo() {
     $.post(options, (err, resp, data) => {
       try {
         if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`request_algo 签名参数API请求失败，请检查网路重试`)
+          $.log(`${JSON.stringify(err)}`)
+          $.log(`request_algo 签名参数API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            // console.log(data);
+            // $.log(data);
             data = JSON.parse(data);
             if (data['status'] === 200) {
               $.token = data.data.result.tk;
               let enCryptMethodJDString = data.data.result.algo;
               if (enCryptMethodJDString) enCryptMethodJD = new Function(`return ${enCryptMethodJDString}`)();
-              console.log(`获取签名参数成功！`)
-              console.log(`fp: ${fingerprint}`)
-              console.log(`token: ${token}`)
-              console.log(`enCryptMethodJD: ${enCryptMethodJDString}`)
+              $.log(`获取签名参数成功！`)
+              $.log(`fp: ${fingerprint}`)
+              $.log(`token: ${token}`)
+              $.log(`enCryptMethodJD: ${enCryptMethodJDString}`)
             } else {
-              console.log(`fp: ${fingerprint}`)
-              console.log('request_algo 签名参数API请求失败:')
+              $.log(`fp: ${fingerprint}`)
+              $.log('request_algo 签名参数API请求失败:')
             }
           } else {
-            console.log(`京东服务器返回空数据`)
+            $.log(`京东服务器返回空数据`)
           }
         }
       } catch (e) {
@@ -272,7 +349,7 @@ async function requestAlgo() {
   })
 }
 
-function decrypt(stk, url) {
+function decrypt(stk = '', url = '') {
   Date.prototype.Format = function (fmt) {
     var e,
         n = this, d = fmt, l = {
