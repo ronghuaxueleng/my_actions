@@ -36,9 +36,8 @@ for (let i = 0; i < $.cookieArr.length; i++) {
       );
       userName = `【京东账号${index + 1}】${userName}`;
       let logs = [`\n开始 ${userName}`];
-      await cashOutQuali(currentCookie, currentToken, userName, result, logs).then(function() {
-        userCashOutState(currentCookie, currentToken, userName, result, logs);
-      });
+      await cashOutQuali(currentCookie, currentToken, userName, result, logs);
+      await cashOut(1, 10000, currentCookie, currentToken, userName, result, logs)
       await $.wait(500);
       await getTotal(currentCookie, result, logs);
       let results = doneResults["results"] || [];
@@ -78,50 +77,6 @@ function cashOutQuali(currentCookie, currentToken, userName, result, logs) {
           } else {
             $.log(`【${userName}】获取提现资格失败：${data.sErrMsg}\n`)
             result.push(`【${userName}】获取提现资格失败：${data.sErrMsg}`)
-          }
-        }
-      } catch (e) {
-        $.log(`【${userName}】获取提现资格失败：${data.sErrMsg}\n`)
-        result.push(`【${userName}】获取提现资格失败：${data.sErrMsg}`)
-        $.logErr(e, resp);
-      } finally {
-        resolve();
-      }
-    })
-  })
-}
-
-async function userCashOutState(currentCookie, currentToken, userName, result, logs) {
-  return new Promise(async (resolve) => {
-    $.get(taskUrl(`user/UserCashOutState`, currentCookie), async (err, resp, data) => {
-      try {
-        if (err) {
-          $.log(`${JSON.stringify(err)}`)
-          $.log(`${userName} UserCashOutState API请求失败，请检查网路重试`)
-          logs.push(`${JSON.stringify(err)}`);
-          logs.push(`${userName} UserCashOutState API请求失败，请检查网路重试`);
-          result.push(`【${userName}】UserCashOutState API请求失败，请检查网路重试`)
-        } else {
-          data = JSON.parse(data);
-          if (data.dwTodayIsCashOut !== 1) {
-            if (data.ddwUsrTodayGetRich >= data.ddwTodayTargetUnLockRich) {
-              for (let key of Object.keys(data.UsrCurrCashList).reverse()) {
-                let vo = data.UsrCurrCashList[key]
-                if (vo.dwDefault === 1) {
-                  let cashOutRes = await cashOut(vo.ddwMoney, vo.ddwPaperMoney, currentCookie, currentToken, userName, result, logs)
-                  if (cashOutRes.iRet === 0) {
-                    let money = vo.ddwMoney / 100;
-                    $.log(`提现成功获得：${money}元`)
-                    result.push(`提现成功获得：${money}元`)
-                  } else {
-                    await userCashOutState(currentCookie, currentToken, userName, result, logs)
-                  }
-                }
-              }
-            }
-          } else {
-            $.log(`今天已经提现过了~`)
-            result.push(`今天已经提现过了~`)
           }
         }
       } catch (e) {
