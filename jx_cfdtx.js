@@ -90,7 +90,7 @@ function cashOutQuali(currentCookie, currentToken, userName, result, logs) {
   })
 }
 
-function cashOut(currentCookie, currentToken, userName, result, logs, ddwMoney=1000, ddwPaperMoney=10000) {
+function cashOut(currentCookie, currentToken, userName, result, logs, ddwMoney=100, ddwPaperMoney=1000) {
   return new Promise(async (resolve) => {
     $.get(
       taskUrl(
