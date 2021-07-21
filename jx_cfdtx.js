@@ -37,7 +37,7 @@ for (let i = 0; i < $.cookieArr.length; i++) {
       userName = `【京东账号${index + 1}】${userName}`;
       let logs = [`\n开始 ${userName}`];
       await cashOutQuali(currentCookie, currentToken, userName, result, logs);
-      await cashOut(1, 10000, currentCookie, currentToken, userName, result, logs)
+      await cashOut(currentCookie, currentToken, userName, result, logs)
       await $.wait(500);
       await getTotal(currentCookie, result, logs);
       let results = doneResults["results"] || [];
@@ -90,7 +90,7 @@ function cashOutQuali(currentCookie, currentToken, userName, result, logs) {
   })
 }
 
-function cashOut(ddwMoney, ddwPaperMoney, currentCookie, currentToken, userName, result, logs) {
+function cashOut(currentCookie, currentToken, userName, result, logs, ddwMoney=1000, ddwPaperMoney=10000) {
   return new Promise(async (resolve) => {
     $.get(
       taskUrl(
