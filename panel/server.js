@@ -226,7 +226,7 @@ function bakConfFile(file) {
         '-' +
         date.getMonth() +
         '-' +
-        date.getDay() +
+        date.getDate() +
         '-' +
         date.getHours() +
         '-' +
