@@ -117,6 +117,8 @@
 30 6 * * * node /scripts/jd_getUp.js >> /scripts/logs/jd_getUp.log 2>&1
 # 伊利养牛记
 0 12 * * * node /scripts/jd_yili_cow.js >> /scripts/logs/jd_yili_cow.log 2>&1
+# 领京豆
+21 9,15 * * * node /scripts/jd_bean_box.js >> /scripts/logs/jd_bean_box.log 2>&1
 
 ##############宠汪汪##############
 # 宠汪汪
