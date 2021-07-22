@@ -37,7 +37,7 @@ for (let i = 0; i < $.cookieArr.length; i++) {
       userName = `【京东账号${index + 1}】${userName}`;
       let logs = [`\n开始 ${userName}`];
       await cashOutQuali(currentCookie, currentToken, userName, result, logs);
-      await cashOut(currentCookie, currentToken, userName, result, logs)
+      await cashOut(currentCookie, currentToken, userName, result, logs, 10, 100)
       await $.wait(500);
       await getTotal(currentCookie, result, logs);
       let results = doneResults["results"] || [];
@@ -146,13 +146,15 @@ function taskUrl(function_path, currentCookie, body = '') {
     url,
     headers: {
       Cookie: currentCookie,
-      Accept: "*/*",
-      Connection: "keep-alive",
-      Referer:"https://st.jingxi.com/fortune_island/cash.html?jxsid=16115391812299482601&_f_i_jxapp=1",
-      "Accept-Encoding": "gzip, deflate, br",
-      Host: "m.jingxi.com",
-      "User-Agent":`jdpingou;iPhone;3.15.2;14.2.1;ea00763447803eb0f32045dcba629c248ea53bb3;network/wifi;model/iPhone13,2;appBuild/100365;ADID/00000000-0000-0000-0000-000000000000;supportApplePay/1;hasUPPay/0;pushNoticeIsOpen/0;hasOCPay/0;supportBestPay/0;session/${Math.random * 98 + 1};pap/JA2015_311210;brand/apple;supportJDSHWK/1;Mozilla/5.0 (iPhone; CPU iPhone OS 14_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`,
-      "Accept-Language": "zh-cn",
+      'accept': '*/*',
+      'x-requested-with': 'com.jd.pingou',
+      'sec-fetch-site': 'same-site',
+      'sec-fetch-mode': 'no-cors',
+      'sec-fetch-dest': 'script',
+      'referer': 'https://st.jingxi.com/fortune_island/index2.html?ptag=7155.9.47&sceneval=2',
+      'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+      'Host': 'm.jingxi.com',
+      'user-agent': 'jdpingou;android;4.12.0;10;a7fa7eb271a2f65a;network/wifi;model/BMH-AN20;appBuild/17415;partner/jingdong;;session/463;aid/a7fa7eb271a2f65a;oaid/00000000-0000-0000-0000-000000000000;pap/JA2019_3111789;brand/HUAWEI;eu/1673661673562623;fv/7313162366635316;Mozilla/5.0 (Linux; Android 10; BMH-AN20 Build/HUAWEIBMH-AN20; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36',
     },
     timeout: 10000
   };
