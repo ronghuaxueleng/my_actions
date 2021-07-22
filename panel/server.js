@@ -224,7 +224,7 @@ function bakConfFile(file) {
         '_' +
         date.getFullYear() +
         '-' +
-        date.getMonth() +
+        (date.getMonth() + 1) +
         '-' +
         date.getDate() +
         '-' +
