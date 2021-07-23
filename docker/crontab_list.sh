@@ -481,8 +481,6 @@
 5,35 * * 6 * node /scripts/jd_ffl.js >> /scripts/logs/jd_ffl.log 2>&1
 #京东城城分现金互助执意版 
 5 0 * * * node /scripts/zy_ccfxj.js >> /scripts/logs/zy_ccfxj.log 2>&1
-#京东618手机竞猜 
-1 0 * * * node /scripts/zy_618jc.js >> /scripts/logs/zy_618jc.log 2>&1
 #京东新潮品牌狂欢执意版 
 0 10 * * * node /scripts/zy_xckh.js >> /scripts/logs/zy_xckh.log 2>&1
 #京东618主会场红包雨 
@@ -555,10 +553,6 @@
 1 0 * * * node /scripts/jddj.js >> /scripts/logs/jddj.log 2>&1
 #京东到家 
 30 10 8 * * * node /scripts/jddj.js >> /scripts/logs/jddj.log 2>&1
-#京东排行榜 
-11 0 * * * node /scripts/jd_rankingList.js >> /scripts/logs/jd_rankingList.log 2>&1
-#京东抽奖机 
-11 1 * * * node /scripts/jd_lotteryMachine.js >> /scripts/logs/jd_lotteryMachine.log 2>&1
 #京喜工厂助力+参团 
 10 * * * * node /scripts/jx_factory.js >> /scripts/logs/jx_factory.log 2>&1
 #京东赚赚 
