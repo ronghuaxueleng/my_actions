@@ -10,6 +10,17 @@
   font-family: 'Operator Mono', 'Source Code Pro', Menlo, Monaco, Consolas, Courier New, monospace;
 }
 
+@media screen and (max-width: 640px) {
+
+  .cm-s-panda-syntax {
+    background: #292A2B;
+    color: #E6E6E6;
+    font-size: 11px;
+    font-family: 'Operator Mono', 'Source Code Pro', Menlo, Monaco, Consolas, Courier New, monospace;
+  }
+
+}
+
 .cm-s-panda-syntax .CodeMirror-cursor {
   border-color: #ffffff;
 }
