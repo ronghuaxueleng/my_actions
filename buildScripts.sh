@@ -13,7 +13,7 @@ for row in $(echo "${json}" | jq -r '.list[] | @base64'); do
     name=$(_jq '.name')
     time=$(_jq '.time')
     target=$(_jq '.job|.target')
-    if [[ $name =~ $pattern ]] && [[ $name != '京东京喜财富岛' ]] && [[ $name != '京喜财富岛提现并发修改版ztxtop' ]] && [[ $name != '京东注销会员链接生成墨鱼版' ]] && [[ $name != '京东注销会员修复版' ]] && [[ $name != '京东领现金兑换10元红包' ]]; && [[ $name != '京东白条' ]]; then
+    if [[ $name =~ $pattern ]] && [[ $name != '京东京喜财富岛' ]] && [[ $name != '京喜财富岛提现并发修改版ztxtop' ]] && [[ $name != '京东注销会员链接生成墨鱼版' ]] && [[ $name != '京东注销会员修复版' ]] && [[ $name != '京东领现金兑换10元红包' ]] && [[ $name != '京东白条' ]] && [[ $name != '京东手机狂欢城隐藏姓名版' ]] && [[ $name != '京东手机狂欢城新一期' ]]; then
         jsname=${target##*/}
         wget -q $target -O sngxprov2p/$jsname
         # wget -q $(echo "${target}" | perl -pe "s|(?:https:\/\/ghproxy\.com/)?(https:\/\/raw\.githubusercontent\.com.+)|https:\/\/ghproxy\.com/\1|") -O sngxprov2p/$jsname
