@@ -557,6 +557,8 @@
 0 0 * * * node /scripts/jdczf.js >> /scripts/logs/jdczf.log 2>&1
 #京东到家 
 1 0 * * * node /scripts/jddj.js >> /scripts/logs/jddj.log 2>&1
+#京东白条 
+0 9 * * * node /scripts/JD_BaiTiao.js >> /scripts/logs/JD_BaiTiao.log 2>&1
 #京东到家 
 30 10 8 * * * node /scripts/jddj.js >> /scripts/logs/jddj.log 2>&1
 #京东排行榜 
