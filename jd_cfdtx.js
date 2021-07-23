@@ -37,7 +37,7 @@ for (let i = 0; i < $.cookieArr.length; i++) {
       userName = `【京东账号${index + 1}】${userName}`;
       let logs = [`\n开始 ${userName}`];
       await cashOutQuali(currentCookie, currentToken, userName, result, logs);
-      await cashOut(currentCookie, currentToken, userName, result, logs, 10, 100)
+      await cashOut(currentCookie, currentToken, userName, result, logs)
       await $.wait(500);
       await getTotal(currentCookie, result, logs);
       let results = doneResults["results"] || [];

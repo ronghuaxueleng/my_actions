@@ -47,8 +47,6 @@
 30 2,20 * * * node /scripts/jd_joy_park.js >> /scripts/logs/jd_joy_park.log 2>&1
 #新签到
 10 0,18 * * * node /scripts/jd_NewSign.js >> /scripts/logs/jd_NewSign.log 2>&1
-#早起福利
-30 6 * * * node /scripts/jd_goodMorning.js >> /scripts/logs/jd_goodMorning.log 2>&1
 #送豆得豆
 30 0,12 * * * node /scripts/jd_sendBeans.js >> /scripts/logs/jd_sendBeans.log 2>&1
 # 翻翻乐(7.15-8.15)
@@ -61,6 +59,10 @@
 0-59/30 * * * * node /scripts/jd_moneyTree_help.js >> /scripts/logs/jd_moneyTree_help.log 2>&1
 # MMdou
 21 9 * * * node /scripts/jd_MMdou.js >> /scripts/logs/jd_MMdou.log 2>&1
+# jd_summer_movement
+12 0,6-23/2 * * *node /scripts/jd_summer_movement.js >> /scripts/logs/jd_summer_movement.log 2>&1
+# jd_summer_movement_help
+14/41 7-14 * * * node /scripts/jd_summer_movement_help.js >> /scripts/logs/jd_summer_movement_help.log 2>&1
 ##############长期活动##############
 # 签到
 0 0,18 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
@@ -555,8 +557,6 @@
 0 0 * * * node /scripts/jdczf.js >> /scripts/logs/jdczf.log 2>&1
 #京东到家 
 1 0 * * * node /scripts/jddj.js >> /scripts/logs/jddj.log 2>&1
-#京东白条 
-0 9 * * * node /scripts/JD_BaiTiao.js >> /scripts/logs/JD_BaiTiao.log 2>&1
 #京东到家 
 30 10 8 * * * node /scripts/jddj.js >> /scripts/logs/jddj.log 2>&1
 #京东排行榜 
