@@ -85,9 +85,9 @@
                     }, function (data) {
                         if (data.err == 0) {
                             if (!!navigator.userAgent.match(/AppleWebKit.*Mobile.*/)) {
-                                window.location.href = "./mobile/home"; //手机
+                                window.location.href = "./mobile/home.html"; //手机
                             } else {
-                                window.location.href = "./home"; //电脑
+                                window.location.href = "./home.html"; //电脑
                             }
                         } else {
                             Swal.fire({

@@ -190,7 +190,7 @@
             </nav>
             <header>
                 <div class="new">
-                    <h1 style="margin-left: 0.5em;">脚本执行</h1>
+                    <h1 style="margin-left: 0.5em;">快速执行</h1>
                     <div class="multi-button">
                         <button id="wrap">
                             <i class="fa fa-exchange"></i>
@@ -219,35 +219,36 @@
                     </div>
                 </div>
                 <br>
-                <form action="runCmd" method="POST">
-                    <div class="cmd-section" style="margin-left: 0.5em;">
-                        <input id="jdScript" class="run-cmd-form" name="jdScript" type="text" placeholder="请输入脚本名称"
-                            required>
-                    </div>
-                </form>
-                <button id="runCmd" class="btn btn-primary btn-ghost btn-shine" type="submit"
-                    style="height:30px; width: 60px; font-size: 13px;" title="bash jd.sh <xxx> now">执行</button>
-                <div style="margin-left: 10px;">
-                    <button id="jd_bean_change" class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                        title="京豆变动通知">京豆变动通知</button><button id="jd_unsubscribe"
-                        class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                        title="jd_unsubscribe.js">取关店铺和商品</button><button id="jd_price"
-                        class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                        title="jd_price.js">京东保价</button><button id="jd_fruit"
-                        class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                        title="jd_fruit.js">东东农场</button><button id="jd_pet"
-                        class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                        title="jd_pet.js">东东萌宠</button><button id="jd_jdfactory"
-                        class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                        title="jd_jdfactory.js">东东工厂</button><button id="jd_dreamFactory"
-                        class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                        title="jd_dreamFactory.js">京喜工厂</button><button id="jd_jxnc"
-                        class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                        title="jd_jxnc.js">京喜农场</button><button id="jd_cfd"
-                        class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                        title="jd_cfd.js">京喜财富岛</button>
-                </div>
+                <div style="margin-bottom: 6px;">
+                    <form action="runCmd" method="POST">
+                        <input id="jdScript" class="coco-input" style="margin-left: 0.5em;" name="jdScript" type="text"
+                            placeholder="请输入脚本名称" required>
+                    </form>
+                    <button id="runCmd" class="btn btn-primary btn-ghost btn-shine" type="submit"
+                        style="height:30px; width: 60px; font-size: 13px; border-radius: 6px;"
+                        title="bash jd.sh <xxx> now">执行</button>
 
+                    <div style="margin-left: 10px;">
+                        <button id="jd_bean_change" class="cmd-btn btn btn-primary btn-ghost btn-shine"
+                            style="height:30px;" title="京豆变动通知">京豆变动通知</button><button id="jd_unsubscribe"
+                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="jd_unsubscribe.js">取关店铺和商品</button><button id="jd_price"
+                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="jd_price.js">京东保价</button><button id="jd_fruit"
+                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="jd_fruit.js">东东农场</button><button id="jd_pet"
+                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="jd_pet.js">东东萌宠</button><button id="jd_jdfactory"
+                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="jd_jdfactory.js">东东工厂</button><button id="jd_dreamFactory"
+                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="jd_dreamFactory.js">京喜工厂</button><button id="jd_jxnc"
+                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="jd_jxnc.js">京喜农场</button><button id="jd_cfd"
+                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="jd_cfd.js">京喜财富岛</button>
+                    </div>
+                </div>
             </header>
             <div class="wrapper">
                 <textarea id="code" name="code" readonly="readonly"></textarea>
@@ -314,6 +315,7 @@
 
                     if (timer) {
                         Swal.fire({
+                            title: 'Oops...',
                             text: '请等待上一条任务执行完毕！',
                             icon: 'error'
                         });
@@ -336,6 +338,7 @@
             $('.cmd-btn').click(function () {
                 if (timer) {
                     Swal.fire({
+                        title: 'Oops...',
                         text: '请等待上一条任务执行完毕！',
                         icon: 'error'
                     });
@@ -370,6 +373,7 @@
                 const jdScript = $('#jdScript').val();
                 if (!jdScript) {
                     Swal.fire({
+                        title: 'Oops...',
                         text: '请先补充命令！',
                         icon: 'error'
                     });
@@ -378,6 +382,7 @@
 
                 if (timer) {
                     Swal.fire({
+                        title: 'Oops...',
                         text: '请等待上一条任务执行完毕！',
                         icon: 'error'
                     });

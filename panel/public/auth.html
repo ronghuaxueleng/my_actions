@@ -15,6 +15,10 @@
 
 <body>
     <main>
+        <div id="particles-js" style="display: flex;align-items: center;justify-content: center">
+            <canvas class="particles-js-canvas-el" style="width: 100%; height: 100%;" width="472" height="625"></canvas>
+        </div>
+        <script src="./js/particles.js"></script>
         <div class="form">
             <div class="form__cover">
                 <div class="form__loader">
@@ -42,6 +46,8 @@
                             <span class="styled-input__placeholder-text">Password</span>
                         </div>
                         <div class="styled-input__circle"></div>
+                        <button id="toggle-password" type="button" class="d-none"
+                            aria-label="Show password as plain text. Warning: this will display your password on the screen."></button>
                     </div>
                     <button id="login" class="styled-button">
                         <span class="styled-button__real-text-holder">
@@ -57,7 +63,7 @@
                             </span>
                         </span>
                     </button>
-                    <div style="font-size: 2px; color:rgb(182, 180, 180);">
+                    <div style="font-size: 2px; color:rgb(201, 201, 201);">
                         <p>使用项目一刻，肩负作者荣辱</p>
                     </div>
                 </form>
@@ -78,7 +84,11 @@
                         password: $password
                     }, function (data) {
                         if (data.err == 0) {
-                            window.location.href = "./home";
+                            if (!!navigator.userAgent.match(/AppleWebKit.*Mobile.*/)) {
+                                window.location.href = "./mobile/home.html"; //手机
+                            } else {
+                                window.location.href = "./home.html"; //电脑
+                            }
                         } else {
                             Swal.fire({
                                 text: data.msg,

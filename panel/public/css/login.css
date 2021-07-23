@@ -170,6 +170,7 @@ body.document-loaded .form__cover:before {
   transform: scale(2);
   opacity: 0;
 }
+
 h1 {
   font-size: 25px;
   margin: 0 0 15px 0;
@@ -194,7 +195,7 @@ h1 {
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 0.1em;
-  background: #2e7fe9;
+  background: #3085f3;
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
   overflow: hidden;
@@ -229,7 +230,7 @@ h1 {
 }
 
 .styled-button__moving-block {
-  color: #e4e4e4;
+  color: #492e72;
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
   position: absolute;
@@ -357,7 +358,6 @@ h1 {
   -webkit-perspective: 500px;
   perspective: 500px;
   display: inline-block;
- 
 }
 
 .styled-input__placeholder-text .letter {
@@ -366,7 +366,8 @@ h1 {
   position: relative;
   -webkit-animation: letterAnimOut 0.25s ease forwards;
   animation: letterAnimOut 0.25s ease forwards;
-  text-shadow: 0 0 5px;
+  text-shadow: 0 2 4px;
+  background-color: transparent;
 }
 
 .styled-input__placeholder-text .letter.active {
@@ -492,25 +493,27 @@ h1 {
     -webkit-transform: translate(-30px, -40px);
     transform: translate(-30px, -40px);
     opacity: 0;
+    color: #ff2c2c;
   }
 
   45% {
     -webkit-transform: translate(0, 10px);
     transform: translate(0, 10px);
     opacity: 0;
+    color: #ff2c2c;
   }
 
   55% {
     -webkit-transform: translate(0, 10px);
     transform: translate(0, 10px);
     opacity: 0;
-    color: #ff5dbe
+    color: #ffb95d;
   }
 
   56% {
     -webkit-transform: translate(0, 10px);
     transform: translate(0, 10px);
-    color: #ff5dbe
+    color: #ffb95d;
   }
 
   100% {
@@ -530,25 +533,27 @@ h1 {
     -webkit-transform: translate(-30px, -40px);
     transform: translate(-30px, -40px);
     opacity: 0;
+    color: #ff2c2c;
   }
 
   45% {
     -webkit-transform: translate(0, 10px);
     transform: translate(0, 10px);
     opacity: 0;
+    color: #ff2c2c;
   }
 
   55% {
     -webkit-transform: translate(0, 10px);
     transform: translate(0, 10px);
     opacity: 0;
-    color: #ff5dbe
+    color: #ffb95d;
   }
 
   56% {
     -webkit-transform: translate(0, 10px);
     transform: translate(0, 10px);
-    color: #ff5dbe
+    color: #ffb95d;
   }
 
   100% {
@@ -627,4 +632,109 @@ h1 {
     stroke-dasharray: 125, 200;
     opacity: 1;
   }
+}
+
+/* particles */
+#particles-js {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/*# show/hide password button */
+button#toggle-password {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  z-index: 9;
+  width: 28px;
+  height: 30px;
+  background: 0;
+  border: 0;
+}
+
+button#toggle-password:active,
+button#toggle-password:focus,
+button#toggle-password:hover {
+  cursor: pointer;
+}
+
+button#toggle-password:focus {
+  outline: none !important;
+}
+
+.input-password {
+  padding-right: calc(1.5em + .75rem);
+  background-repeat: no-repeat;
+  background-position: right calc(.375em + .1875rem) center;
+  background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+}
+
+.input-password[type="password"]:valid {
+  background-image: url("data:image/svg+xml,%3Csvg width='1em' height='1em' viewBox='0 0 16 16' fill='currentColor' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z'/%3E%3Cpath d='M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299l.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z'/%3E%3Cpath d='M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709z'/%3E%3Cpath fill-rule='evenodd' d='M13.646 14.354l-12-12 .708-.708 12 12-.708.708z'/%3E%3C/svg%3E") !important;
+}
+
+.input-password[type="text"]:valid {
+  background-image: url("data:image/svg+xml,%3Csvg width='1em' height='1em' viewBox='0 0 16 16' fill='currentColor' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' d='M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z'/%3E%3Cpath fill-rule='evenodd' d='M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z'/%3E%3C/svg%3E") !important;
+}
+
+
+/* password strength-checking bar */
+.progress-bar_wrap {
+  width: 100%;
+  height: 4px;
+  background: #F6F6FA;
+  display: inline-block;
+  vertical-align: middle;
+  overflow: hidden;
+  border-radius: 5px;
+  margin-left: 1%;
+}
+
+.progress-bar_item {
+  display: inline-block;
+  height: 100%;
+  width: 33.33%;
+  float: left;
+  visibility: hidden;
+  -webkit-transition: background-color .2s, visisility .1s;
+  transition: background-color .2s, visisility .1s;
+  z-index: 1;
+}
+
+.active {
+  visibility: visible;
+}
+
+.progress-bar_item {
+  display: inline-block;
+  height: 100%;
+  width: 32.5%;
+  border-radius: 5px;
+  float: left;
+  -webkit-transition: background-color .2s, visisility .1s;
+  transition: background-color .2s, visisility .1s;
+}
+
+.progress-bar_item-1 {}
+.progress-bar_item-2 {}
+.progress-bar_item-3 {}
+
+.progress-bar_item-1.active {
+  background-color: #FF4B47;
+}
+
+.progress-bar_item-2.active {
+  background-color: #F9AE35;
+}
+
+.progress-bar_item-3.active {
+  background-color: #2DAF7D;
 }

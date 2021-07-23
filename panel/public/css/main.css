@@ -41,7 +41,6 @@ h4 {
     left: 0px;
     position: absolute;
     background-image: linear-gradient(30deg, #ef008f, #6ec3f4, #7038ff, #ffba27);
-    z-index: -5;
 }
 
 .container p {
@@ -293,37 +292,67 @@ h4 {
     stroke-width: 1px;
 }
 
-/* 手动执行脚本页面 */
-.run-cmd-form {
-    margin-top: 6px;
-    margin-bottom: 6px;
-}
-
-.cmd-section {
-    border-color: #1e90ff;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px #1e90ff;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px #1e90ff;
-}
-
-.cmd-section input {
-    color: white;
+/* 输入框 */
+.coco-input {
+    margin: 0;
     width: 150px;
-    height: 20px;
-    background: #222922;
-    transition: all 0.50s ease-in-out;
-    -webkit-transition: all 0.30s ease-in-out;
-    -moz-transition: all 0.30s ease-in-out;
-    border: #222922 1px solid;
-    border-radius: 3px;
-    outline: none;
+    height: 22px;
+    border-radius: 6px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    color: #333;
+    background-color: #f3f3f4;
+    outline: 0;
+    border: 1px solid transparent;
+    font-size: 14px;
+    box-shadow: 0 0 0 0 rgba(53, 120, 229, .1);
+    transition: all .16s ease-out;
+    line-height: 20px
 }
 
-.cmd-section input:focus {
-    box-shadow: 0 0 10px #1e90ff;
-    -webkit-box-shadow: 0 0 10px #1e90ff;
-    -moz-box-shadow: 0 0 10px #1e90ff;
+.coco-input::-webkit-input-placeholder {
+    line-height: 24px;
+    color: #a2a2a3
 }
 
+.coco-input::-moz-placeholder {
+    line-height: 24px;
+    color: #a2a2a3
+}
+
+.coco-input:-ms-input-placeholder,
+.coco-input::-ms-input-placeholder {
+    line-height: 24px;
+    color: #a2a2a3
+}
+
+.coco-input::placeholder {
+    line-height: 24px;
+    color: #a2a2a3
+}
+
+.coco-input:hover {
+    transition: all .1s ease-out;
+    background-color: #fff;
+    box-shadow: 0 0 0 2px rgba(255, 88, 66, 0.25);
+    border-color: rgba(252, 106, 106, 0.5)
+}
+
+.coco-input:focus {
+    background-color: #fff;
+    box-shadow: 0 0 0 2px rgba(31, 153, 31, .25);
+    border-color: rgba(31, 153, 31, 0.5)
+}
+
+.coco-input:active {
+    transition: all .08s ease-out;
+    background-color: #fff;
+    border-color: #cbcbcc;
+    box-shadow: 0 0 0 0 rgba(66, 133, 255, .125)
+}
+
+/* 按钮 */
 .btn {
     --hue: 190;
     position: fixed;
@@ -393,6 +422,15 @@ h4 {
 .btn-shine:active {
     color: black;
     box-shadow: 0 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 移动端导航栏菜单按钮按钮 */
+.mobile-nav-button {
+    margin: 0;
+    padding-left: 0.5em;
+    font-size: 1.5em;
+    position: relative;
+    margin-top: -0.3em;
 }
 
 /* 白色按钮 */
@@ -504,7 +542,7 @@ h4 {
     }
 }
 
-/* Checkbox */
+/* 勾选动画 */
 .cbx {
     -webkit-user-select: none;
     user-select: none;
@@ -520,7 +558,7 @@ h4 {
 }
 
 .cbx:hover {
-    background: rgba(125, 100, 247, 0.06);
+    background: rgba(219, 219, 219, 0.3);
 }
 
 .cbx span {
@@ -563,12 +601,12 @@ h4 {
 }
 
 .cbx:hover span:first-child {
-    border-color: #7d64f7;
+    border-color: #009e90;
 }
 
 .inp-cbx:checked+.cbx span:first-child {
-    background: #7d64f7;
-    border-color: #7d64f7;
+    background: #009e90;
+    border-color: #009e90;
     animation: wave 0.4s ease;
 }
 
@@ -585,8 +623,9 @@ h4 {
 }
 
 @media screen and (max-width: 640px) {
+
     .cbx {
-        width: 100%;
+        width: 90%;
         margin-bottom: 4px;
         display: inline-block;
     }
@@ -616,6 +655,7 @@ h4 {
     }
 }
 
+/* 滚动条 */
 ::-webkit-scrollbar,
 ::-webkit-scrollbar {
     height: 10px;

@@ -207,14 +207,24 @@
                                 </div>
                                 <div class="styled-input__circle"></div>
                             </div>
-                            <div class="styled-input">
+                            <div class="styled-input" style="margin-bottom: -15px;">
                                 <input id="password" type="password" class="styled-input__input" required>
                                 <div class="styled-input__placeholder">
                                     <span class="styled-input__placeholder-text">Password</span>
                                 </div>
+                                <button id="toggle-password" type="button" class="d-none"
+                                    aria-label="Show password as plain text. Warning: this will display your password on the screen."></button>
                                 <div class="styled-input__circle"></div>
                             </div>
-                            <button id="changeBtn" class="styled-button">
+
+                            <div class="progress-bar_wrap">
+                                <div class="progress-bar_item progress-bar_item-1"></div>
+                                <div class="progress-bar_item progress-bar_item-2"></div>
+                                <div class="progress-bar_item progress-bar_item-3"></div>
+                            </div>
+
+                            <button id="changeBtn" class="styled-button"
+                                style="margin-top: 15px; margin-bottom: -25px;">
                                 <span class="styled-button__real-text-holder">
                                     <span class="styled-button__real-text">Confirm</span>
                                     <span class="styled-button__moving-block face">
@@ -232,6 +242,36 @@
                     </div>
                     <script type="text/javascript" src="./js/login.js"></script>
                     <script>
+                        $(document).ready(function () {
+
+                            const changeText = function (el, text, color) {
+                                el.text(text).css('color', color);
+                            };
+
+                            $('#password').keyup(function () {
+                                let len = this.value.length;
+
+                                if (len > 0 && len <= 4) {
+                                    $('.progress-bar_item-1').addClass('active');
+                                    $('.progress-bar_item-2').removeClass('active');
+                                    $('.progress-bar_item-3').removeClass('active');
+                                    $('.active').css('background-color', '#FF4B47');
+                                    changeText(pbText, 'Too weak');
+                                } else if (len > 4 && len <= 8) {
+                                    $('.progress-bar_item-2').addClass('active');
+                                    $('.progress-bar_item-3').removeClass('active');
+                                    $('.active').css('background-color', '#F9AE35');
+                                    changeText(pbText, 'Could be stronger');
+                                } else {
+                                    $('.progress-bar_item').each(function () {
+                                        $(this).addClass('active');
+                                    });
+                                    $('.active').css('background-color', '#2DAF7D');
+                                    changeText(pbText, 'Strong password');
+                                }
+                            });
+                        });
+
                         $.ajaxSetup({
                             cache: false
                         });

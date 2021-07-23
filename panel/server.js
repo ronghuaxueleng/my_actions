@@ -44,7 +44,7 @@ var loginFaild = '请先登录!';
 var configString = 'config sample crontab diy';
 
 var s_token, cookies, guid, lsid, lstoken, okl_token, token, userCookie = ''
-    
+
 function praseSetCookies(response) {
     s_token = response.body.s_token
     guid = response.headers['set-cookie'][0]
@@ -82,12 +82,12 @@ function getCookie(response) {
 async function step1() {
     try {
         s_token,
-        cookies,
-        guid,
-        lsid,
-        lstoken,
-        okl_token,
-        token = ''
+            cookies,
+            guid,
+            lsid,
+            lstoken,
+            okl_token,
+            token = ''
         let timeStamp = (new Date()).getTime()
         let url = 'https://plogin.m.jd.com/cgi-bin/mm/new_login_entrance?lang=chs&appid=300&returnurl=https://wq.jd.com/passport/LoginRedirect?state=' + timeStamp + '&returnurl=https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action&source=wq_passport'
         const response = await got(url, {
@@ -104,8 +104,7 @@ async function step1() {
         });
 
         praseSetCookies(response)
-    }
-    catch (error) {
+    } catch (error) {
         cookies = '';
         console.log(error.response.body);
     }
@@ -312,6 +311,13 @@ function getLastModifyFilePath(dir) {
     return filePath;
 }
 
+function getPath(request, page) {
+    if (!!request.headers["user-agent"].match(/AppleWebKit.*Mobile.*/)) {
+        return path.join(__dirname + '/public/mobile/' + page)
+    }
+    return path.join(__dirname + '/public/' + page)
+}
+
 var app = express();
 // gzip压缩
 app.use(compression({
@@ -358,7 +364,7 @@ app.use(
         },
         onProxyReq(proxyReq, req, res) {
             if (!req.session.loggedin) {
-              res.redirect('/');
+                res.redirect('/');
             }
         },
     })
@@ -371,7 +377,7 @@ app.get('/', function (request, response) {
     if (request.session.loggedin) {
         response.redirect('./home');
     } else {
-        response.sendFile(path.join(__dirname + '/public/auth.html'));
+        response.sendFile(getPath(request , 'auth.html'));
     }
 });
 
@@ -380,7 +386,7 @@ app.get('/', function (request, response) {
  */
 app.get('/changepwd', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(path.join(__dirname + '/public/pwd.html'));
+        response.sendFile(getPath(request , 'pwd.html'));
     } else {
         response.redirect('/');
     }
@@ -391,7 +397,7 @@ app.get('/changepwd', function (request, response) {
  */
 app.get('/terminal', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(path.join(__dirname + '/public/terminal.html'));
+        response.sendFile(getPath(request , 'terminal.html'));
     } else {
         response.redirect('/');
     }
@@ -507,7 +513,7 @@ app.get('/api/config/:key', function (request, response) {
  */
 app.get('/home', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(path.join(__dirname + '/public/home.html'));
+        response.sendFile(getPath(request , 'home.html'));
     } else {
         response.redirect('/');
     }
@@ -518,7 +524,7 @@ app.get('/home', function (request, response) {
  */
 app.get('/diff', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(path.join(__dirname + '/public/diff.html'));
+        response.sendFile(getPath(request , 'diff.html'));
     } else {
         response.redirect('/');
     }
@@ -530,7 +536,7 @@ app.get('/diff', function (request, response) {
  */
 app.get('/crontab', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(path.join(__dirname + '/public/crontab.html'));
+        response.sendFile(getPath(request , 'crontab.html'));
     } else {
         response.redirect('/');
     }
@@ -541,7 +547,7 @@ app.get('/crontab', function (request, response) {
  */
 app.get('/diy', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(path.join(__dirname + '/public/diy.html'));
+        response.sendFile(getPath(request , 'diy.html'));
     } else {
         response.redirect('/');
     }
@@ -553,7 +559,7 @@ app.get('/diy', function (request, response) {
  */
 app.get('/run', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(path.join(__dirname + '/public/run.html'));
+        response.sendFile(getPath(request , 'run.html'));
     } else {
         response.redirect('/');
     }
@@ -737,7 +743,7 @@ app.post('/api/save', function (request, response) {
  */
 app.get('/log', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(path.join(__dirname + '/public/tasklog.html'));
+        response.sendFile(getPath(request , 'tasklog.html'));
     } else {
         response.redirect('/');
     }
@@ -804,7 +810,7 @@ app.get('/api/logs/:dir/:file', function (request, response) {
  */
 app.get('/viewScripts', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(path.join(__dirname + '/public/viewScripts.html'));
+        response.sendFile(getPath(request , 'viewScripts.html'));
     } else {
         response.redirect('/');
     }
@@ -893,7 +899,9 @@ app.post('/updateCookie', function (request, response) {
         let lastIndex = 0;
         let maxCookieCount = 0;
         let CK_AUTO_ADD = false
-        if (content.match(/CK_AUTO_ADD=".+?"/)){CK_AUTO_ADD = content.match(/CK_AUTO_ADD=".+?"/)[0].split('"')[1]}
+        if (content.match(/CK_AUTO_ADD=".+?"/)) {
+            CK_AUTO_ADD = content.match(/CK_AUTO_ADD=".+?"/)[0].split('"')[1]
+        }
         for (var i = 0; i < lines.length; i++) {
             var line = lines[i];
             if (line.startsWith('Cookie')) {
@@ -913,17 +921,17 @@ app.post('/updateCookie', function (request, response) {
                     );
                     lines[i] = newLine;
                     updateFlag = true;
-	                var lineNext = lines[i+1];
-	                if (
-	                    lineNext.match(/上次更新：/)
-		                ) {
-		                    const bz = lineNext.split('备注：')[1];
-		                	const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', bz ? bz : userMsg].join('');
-                    		lines[i+1] = newLine;
-	                	} else {
-		                	const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', userMsg].join('');
-			            	lines.splice(lastIndex + 1, 0, newLine);
-			        }
+                    var lineNext = lines[i + 1];
+                    if (
+                        lineNext.match(/上次更新：/)
+                    ) {
+                        const bz = lineNext.split('备注：')[1];
+                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', bz ? bz : userMsg].join('');
+                        lines[i + 1] = newLine;
+                    } else {
+                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', userMsg].join('');
+                        lines.splice(lastIndex + 1, 0, newLine);
+                    }
                 }
             }
         }
@@ -949,7 +957,7 @@ app.post('/updateCookie', function (request, response) {
             err: 0,
             msg: updateFlag ?
                 `[更新成功]\n当前用户量:(${maxCookieCount})` : CK_AUTO_ADD === 'true' ? `[新的Cookie]\n当前用户量:(${CookieCount})` : `服务器配置不自动添加Cookie\n如需启用请添加export CK_AUTO_ADD="true"`,
-                //`[更新成功]\n本服用户量:(${maxCookieCount})` : `非本服用户\n本服用户量:(${CookieCount})`,
+            //`[更新成功]\n本服用户量:(${maxCookieCount})` : `非本服用户\n本服用户量:(${CookieCount})`,
         });
     } else {
         response.send({
