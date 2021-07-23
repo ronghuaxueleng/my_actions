@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>对比工具 · 京东薅羊毛控制面板</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/codemirror.min.js"></script>
+    <script type="text/javascript" src="../js/shell.js"></script>
+    <script type="text/javascript" src="../js/diff_match_patch.js"></script>
+    <script type="text/javascript" src="../js/merge.js"></script>
+    <script type="text/javascript" src="../js/sublime.js"></script>
+    <script type="text/javascript" src="../js/sweetalert2.js"></script>
+    <script type="text/javascript" src="../js/prefixfree.min.js"></script>
+    <script type="text/javascript" src="../js/mmenu-light.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/mmenu-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/codemirror.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/merge.css">
+    <link rel="stylesheet" type="text/css" href="../css/twilight.css">
+    <link rel="stylesheet" type="text/css" href="../css/panda-syntax.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="icon" type="image/x-icon" href="https://www.jd.com/favicon.ico" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="diffs">
+            <nav id="menu">
+                <ul>
+                    <span><a href="./home"><i class="fa fa-pencil-square-o"> 配置文件</i></a></span>
+                    <span><a href="./diff"><i class="fa fa-columns"> 对比工具</i></a></span>
+                    <span><a href="./crontab"><i class="fa fa-clock-o"> 定时任务</i></a></span>
+                    <span><a href="./diy"><i class="fa fa-send-o"> 自定义脚本</i></a></span>
+                    <span><a href="./run"><i class="fa fa-play-circle"> 快速执行</i></a></span>
+                    <span><a href="./terminal"><i class="fa fa-terminal"> 终端</i></a></span>
+                    <span><a href="../cause/index.html"><i class="fa fa-info-circle">
+                                使用教程</i></a></span>
+                    <span><a href="./log"><i class="fa fa-history"> 查询日志</i></a></span>
+                    <span><a href="./viewScripts"><i class="fa fa-file-code-o"> 查阅脚本</i></a></span>
+                    <span><a href="https://github.com/JDHelloWorld/jd_scripts"><i class="fa fa-github">
+                                浏览仓库</i></a></span>
+                    <span><a href="https://github.com/SuperManito/LinuxMirrors"><i class="fa fa-github">
+                                支持作者</i></a></span>
+                    <span><a href="./changepwd"><i class="fa fa-lock"> 修改密码</i></a></span>
+                    <span><a href="./loguot"><i class="fa fa-sign-out"> 退出</i></a></span>
+                </ul>
+            </nav>
+            <div class="new">
+                <header>
+                    <div class="mobile-nav-button">
+                        <a href="#menu" style="color:white; text-decoration:none;"><span> <i
+                                    class="fa fa-th-list"></i></span></a>
+                    </div>
+                    <h1 style="margin-left: 0.5em;">对比编辑工具</h1>
+                    <div class="multi-button">
+                        <button id="save">
+                            <i class="fa fa-save"></i>
+                            <div class="animate-normal">保存</div>
+                        </button>
+                        <button id="wrap">
+                            <i class="fa fa-exchange"></i>
+                            <div class="animate-normal">切换换行</div>
+                        </button>
+                        <button id="prev">
+                            <i class="fa fa-chevron-circle-up"></i>
+                            <div class="animate-normal">上一个差异</div>
+                        </button>
+                        <button id="next">
+                            <i class="fa fa-chevron-circle-down"></i>
+                            <div class="animate-normal">下一个差异</div>
+                        </button>
+                    </div>
+                </header>
+            </div>
+            <div class="compare-wrapper">
+                <div id="compare">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--菜单-->
+    <script>
+        const menu = new MmenuLight(document.querySelector('#menu'), {
+            theme: 'dark',
+            // selected: 'Selected'
+        });
+        menu.enable('all'); // '(max-width: 980px)'
+        menu.offcanvas({
+            // position: 'left',// [| 'right']
+            // move: true,// [| false]
+            // blockPage: true,// [| false | 'modal']
+        });
+
+        //	Open the menu.
+        document.querySelector('a[href="#menu"]')
+            .addEventListener('click', (evnt) => {
+                menu.open();
+
+                //	Don't forget to "preventDefault" and to "stopPropagation".
+                evnt.preventDefault();
+                evnt.stopPropagation();
+            });
+    </script>
+
+    <script>
+        $.ajaxSetup({
+            cache: false
+        });
+
+        var editor, origLeft, origRight;
+
+        function initUI() {
+            editor = CodeMirror.MergeView(document.getElementById('compare'), {
+                value: origLeft,
+                origLeft: null,
+                orig: origRight,
+                lineNumbers: true,
+                lineWrapping: false,
+                mode: 'shell',
+                theme: 'panda-syntax',
+                keyMap: 'sublime',
+                lineNumbers: true,
+                highlightDifferences: true,
+                connect: null,
+                collapseIdentical: false
+            });
+        }
+
+        Promise.all([$.get('../api/config/config'), $.get('../api/config/sample')])
+            .then((resArr) => {
+                origLeft = resArr[0];
+                origRight = resArr[1];
+
+                initUI();
+            });
+
+        $('#prev').click(function () {
+            editor.editor().execCommand('goPrevDiff');
+        });
+
+        $('#next').click(function () {
+            editor.editor().execCommand('goNextDiff');
+        });
+
+        $('#wrap').click(function () {
+            var lineWrapping = editor.editor().getOption('lineWrapping');
+            editor.editor().setOption('lineWrapping', !lineWrapping);
+            editor.rightOriginal().setOption('lineWrapping', !lineWrapping);
+        });
+
+        $('#save').click(function () {
+            var confContent = editor.editor().getValue();
+            $.post('../api/save', {
+                content: confContent,
+                name: "config.sh"
+            }, function (data) {
+                let icon = (data.err == 0) ? "success" : "error"
+                Swal.fire({
+                    title: data.title,
+                    text: data.msg,
+                    icon: icon
+                }).then((result) => {
+                    window.location.reload(true);
+                })
+            });
+        });
+    </script>
+</body>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>首页 · 京东薅羊毛控制面板</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/codemirror.min.js"></script>
+    <script type="text/javascript" src="../js/comment.js"></script>
+    <script type="text/javascript" src="../js/shell.js"></script>
+    <script type="text/javascript" src="../js/sublime.js"></script>
+    <script type="text/javascript" src="../js/sweetalert2.js"></script>
+    <script type="text/javascript" src="../js/qrcode.min.js"></script>
+    <script type="text/javascript" src="../js/prefixfree.min.js"></script>
+    <script type="text/javascript" src="../js/mmenu-light.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/mmenu-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/codemirror.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/twilight.css">
+    <link rel="stylesheet" type="text/css" href="../css/panda-syntax.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="icon" type="image/x-icon" href="https://www.jd.com/favicon.ico" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="diffs">
+            <nav id="menu">
+                <ul>
+                    <span><a href="./home"><i class="fa fa-pencil-square-o"> 配置文件</i></a></span>
+                    <span><a href="./diff"><i class="fa fa-columns"> 对比工具</i></a></span>
+                    <span><a href="./crontab"><i class="fa fa-clock-o"> 定时任务</i></a></span>
+                    <span><a href="./diy"><i class="fa fa-send-o"> 自定义脚本</i></a></span>
+                    <span><a href="./run"><i class="fa fa-play-circle"> 快速执行</i></a></span>
+                    <span><a href="./terminal"><i class="fa fa-terminal"> 终端</i></a></span>
+                    <span><a href="../cause/index.html"><i class="fa fa-info-circle">
+                                使用教程</i></a></span>
+                    <span><a href="./log"><i class="fa fa-history"> 查询日志</i></a></span>
+                    <span><a href="./viewScripts"><i class="fa fa-file-code-o"> 查阅脚本</i></a></span>
+                    <span><a href="https://github.com/JDHelloWorld/jd_scripts"><i class="fa fa-github">
+                                浏览仓库</i></a></span>
+                    <span><a href="https://github.com/SuperManito/LinuxMirrors"><i class="fa fa-github">
+                                支持作者</i></a></span>
+                    <span><a href="./changepwd"><i class="fa fa-lock"> 修改密码</i></a></span>
+                    <span><a href="./loguot"><i class="fa fa-sign-out"> 退出</i></a></span>
+                </ul>
+            </nav>
+            <div class="new">
+                <header>
+                    <div class="mobile-nav-button">
+                        <a href="#menu" style="color:white; text-decoration:none;"><span> <i
+                                    class="fa fa-th-list"></i></span></a>
+                    </div>
+                    <h1 style="margin-left: 0.5em;">配置文件</h1>
+                    <div class="multi-button">
+                        <button id="save">
+                            <i class="fa fa-save"></i>
+                            <div class="animate-normal">保存</div>
+                        </button>
+                        <button id="wrap">
+                            <i class="fa fa-exchange"></i>
+                            <div class="animate-normal">切换换行</div>
+                        </button>
+                        <button id="cookietools">
+                            <i class="fa fa-qrcode"></i>
+                            <div class="animate-normal">获取账号</div>
+                        </button>
+                    </div>
+                    <input class="inp-cbx" id="autoReplace" type="checkbox" style="display: none;" checked="checked">
+                    <label class="cbx" for="autoReplace">
+                        <span>
+                            <svg width="12px" height="10px">
+                                <use xlink:href="#check"></use>
+                            </svg>
+                        </span>
+                        <span>扫码后自动替换</span>
+                    </label>
+                    <svg class="inline-svg">
+                        <symbol id="check" viewBox="0 0 12 10">
+                            <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                        </symbol>
+                    </svg>
+                </header>
+            </div>
+            <div class="wrapper">
+                <textarea id="code" name="code"></textarea>
+            </div>
+        </div>
+    </div>
+    <div id="qrcontainer" class="hidden">
+        <div class="qframe">
+            <div id="refresh_qrcode" class="hidden">
+                <div>
+                    <h3>二维码已失效</h3>
+                    <div class="refresh">刷新</div>
+                </div>
+            </div>
+            <div id="qrcode"></div>
+            <div class="info">请使用手机京东APP扫码</div>
+            <div class="qframe-close" title="关闭">✖</div>
+        </div>
+    </div>
+    <!--菜单-->
+    <script>
+        const menu = new MmenuLight(document.querySelector('#menu'), {
+            theme: 'dark',
+            // selected: 'Selected'
+        });
+        menu.enable('all'); // '(max-width: 980px)'
+        menu.offcanvas({
+            // position: 'left',// [| 'right']
+            // move: true,// [| false]
+            // blockPage: true,// [| false | 'modal']
+        });
+
+        //	Open the menu.
+        document.querySelector('a[href="#menu"]')
+            .addEventListener('click', (evnt) => {
+                menu.open();
+
+                //	Don't forget to "preventDefault" and to "stopPropagation".
+                evnt.preventDefault();
+                evnt.stopPropagation();
+            });
+    </script>
+
+    <script>
+        $.ajaxSetup({
+            cache: false
+        });
+
+        var qrcode, userCookie;
+        $(document).ready(function () {
+            var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                lineNumbers: true,
+                lineWrapping: false,
+                styleActiveLine: true,
+                matchBrackets: true,
+                mode: 'shell',
+                theme: 'panda-syntax',
+                keyMap: 'sublime'
+            });
+            $.get('../api/config/config', function (data) {
+                editor.setValue(data);
+            });
+
+            // 勾选记忆
+            if (sessionStorage.getItem('autoReplaceCookie') === 'false') {
+                $('#autoReplace').prop('checked', false);
+            }
+            $('#autoReplace').on('change', function () {
+                sessionStorage.setItem('autoReplaceCookie', $(this).prop('checked'));
+            });
+
+            qrcode = new QRCode(document.getElementById("qrcode"), {
+                text: "sample",
+                correctLevel: QRCode.CorrectLevel.L
+            });
+
+
+            function copyToClip(content, message) {
+                var aux = document.createElement("input");
+                aux.setAttribute("value", content);
+                document.body.appendChild(aux);
+                aux.select();
+                document.execCommand("copy");
+                document.body.removeChild(aux);
+            }
+
+            function autoReplace(cookie) {
+                var value = editor.getValue();
+                var ptPin = /pt_pin=[\S]+;/.exec(cookie)[0];
+                var cookieReg = new RegExp(`pt_key=[\\S]+;${ptPin}`);
+                if (cookieReg.test(value)) {
+                    var newValue = value.replace(cookieReg, cookie);
+                    editor.setValue(newValue);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+
+            function checkLogin() {
+                var timeId = setInterval(() => {
+                    $.get('../cookie', function (data) {
+                        if (data.err == 0) {
+                            clearInterval(timeId);
+                            $("#qrcontainer").addClass("hidden");
+                            $("#refresh_qrcode").addClass("hidden");
+                            userCookie = data.cookie
+                            var isAutoReplace = $('#autoReplace').prop('checked');
+                            if (isAutoReplace) {
+                                if (autoReplace(userCookie)) {
+                                    Swal.fire({
+                                        title: "cookie已获取(2s后自动替换)",
+                                        html: '<div class="cookieCon" style="font-size:12px;">' +
+                                            userCookie + '</div>',
+                                        icon: "success",
+                                        showConfirmButton: false,
+                                    });
+
+                                    setTimeout(() => {
+                                        $('#save').trigger('click');
+                                    }, 2000);
+                                } else {
+                                    Swal.fire({
+                                        title: "cookie已获取",
+                                        html: '<div class="cookieCon" style="font-size:16px;font-weight: bold;">自动替换失败，请复制Cookie后手动更新。</div>' +
+                                            '<div class="cookieCon" style="font-size:12px;">' +
+                                            userCookie + '</div>',
+                                        icon: "success",
+                                        confirmButtonText: "复制Cookie",
+                                    }).then((result) => {
+                                        copyToClip(userCookie);
+                                    });
+                                }
+                            } else {
+                                Swal.fire({
+                                    title: "cookie已获取",
+                                    html: '<div class="cookieCon" style="font-size:12px;">' +
+                                        userCookie + '</div>',
+                                    icon: "success",
+                                    confirmButtonText: "复制Cookie",
+                                }).then((result) => {
+                                    copyToClip(userCookie);
+                                });
+                            }
+
+                        } else if (data.err == 21) {
+                            clearInterval(timeId);
+                            $("#refresh_qrcode").removeClass("hidden");
+                        }
+                    })
+                }, 3000)
+
+            }
+
+            function get_code() {
+                $.get('../qrcode', function (data) {
+                    if (data.err == 0) {
+                        $("#qrcontainer").removeClass("hidden")
+                        $("#refresh_qrcode").addClass("hidden")
+                        qrcode.clear();
+                        qrcode.makeCode(data.qrcode);
+                        checkLogin();
+                    } else {
+                        Swal.fire({
+                            text: data.msg,
+                            icon: "error"
+                        })
+                    }
+                });
+            }
+
+            $('.refresh').click(get_code);
+
+            $('#cookietools').click(get_code);
+
+            $('.qframe-close').click(function () {
+                $("#qrcontainer").addClass("hidden");
+                $("#refresh_qrcode").addClass("hidden");
+            });
+
+            $('#save').click(function () {
+                var confContent = editor.getValue();
+                $.post('../api/save', {
+                    content: confContent,
+                    name: "config.sh"
+                }, function (data) {
+                    let icon = (data.err == 0) ? "success" : "error"
+                    Swal.fire({
+                        title: data.title,
+                        text: data.msg,
+                        icon: icon
+                    }).then((result) => {
+                        window.location.reload(true);
+                    })
+                });
+            });
+
+            $('#wrap').click(function () {
+                var lineWrapping = editor.getOption('lineWrapping');
+                editor.setOption('lineWrapping', !lineWrapping);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

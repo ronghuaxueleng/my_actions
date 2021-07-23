@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 ,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <title>修改密码 · 京东薅羊毛控制面板</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/sweetalert2.js"></script>
+    <script type="text/javascript" src="../js/prefixfree.min.js"></script>
+    <script type="text/javascript" src="../js/mmenu-light.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/mmenu-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../css/login.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="icon" type="image/x-icon" href="https://www.jd.com/favicon.ico" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="diffs">
+            <nav id="menu">
+                <ul>
+                    <span><a href="./home"><i class="fa fa-pencil-square-o"> 配置文件</i></a></span>
+                    <span><a href="./diff"><i class="fa fa-columns"> 对比工具</i></a></span>
+                    <span><a href="./crontab"><i class="fa fa-clock-o"> 定时任务</i></a></span>
+                    <span><a href="./diy"><i class="fa fa-send-o"> 自定义脚本</i></a></span>
+                    <span><a href="./run"><i class="fa fa-play-circle"> 快速执行</i></a></span>
+                    <span><a href="./terminal"><i class="fa fa-terminal"> 终端</i></a></span>
+                    <span><a href="../cause/index.html"><i class="fa fa-info-circle">
+                                使用教程</i></a></span>
+                    <span><a href="./log"><i class="fa fa-history"> 查询日志</i></a></span>
+                    <span><a href="./viewScripts"><i class="fa fa-file-code-o"> 查阅脚本</i></a></span>
+                    <span><a href="https://github.com/JDHelloWorld/jd_scripts"><i class="fa fa-github">
+                                浏览仓库</i></a></span>
+                    <span><a href="https://github.com/SuperManito/LinuxMirrors"><i class="fa fa-github">
+                                支持作者</i></a></span>
+                    <span><a href="./changepwd"><i class="fa fa-lock"> 修改密码</i></a></span>
+                    <span><a href="./loguot"><i class="fa fa-sign-out"> 退出</i></a></span>
+                </ul>
+            </nav>
+
+            <header>
+                <div class="new mobile-nav-button" style="position: relative; z-index: 1;">
+                    <a href="#menu" style="color:white; text-decoration:none;"><span> <i
+                                class="fa fa-th-list"></i></span></a>
+                </div>
+            </header>
+
+            <main>
+                <div class="form">
+                    <div class="form__cover">
+                        <div class="form__loader">
+                            <div class="spinner active">
+                                <svg class="spinner__circular" viewBox="25 25 50 50">
+                                    <circle class="spinner__path" cx="50" cy="50" r="20" fill="none" stroke-width="4"
+                                        stroke-miterlimit="10"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form__content">
+                        <h1>请输入新的用户名和密码</h1>
+                        <form action="changepass" method="POST">
+                            <div class="styled-input">
+                                <input id="username" type="username" class="styled-input__input" required>
+                                <div class="styled-input__placeholder">
+                                    <span class="styled-input__placeholder-text">Username</span>
+                                </div>
+                                <div class="styled-input__circle"></div>
+                            </div>
+                            <div class="styled-input" style="margin-bottom: -15px;">
+                                <input id="password" type="password" class="styled-input__input" required>
+                                <div class="styled-input__placeholder">
+                                    <span class="styled-input__placeholder-text">Password</span>
+                                </div>
+                                <button id="toggle-password" type="button" class="d-none"
+                                    aria-label="Show password as plain text. Warning: this will display your password on the screen."></button>
+                                <div class="styled-input__circle"></div>
+                            </div>
+
+                            <div class="progress-bar_wrap">
+                                <div class="progress-bar_item progress-bar_item-1"></div>
+                                <div class="progress-bar_item progress-bar_item-2"></div>
+                                <div class="progress-bar_item progress-bar_item-3"></div>
+                            </div>
+
+                            <button id="changeBtn" class="styled-button"
+                                style="margin-top: 15px; margin-bottom: -25px;">
+                                <span class="styled-button__real-text-holder">
+                                    <span class="styled-button__real-text">Confirm</span>
+                                    <span class="styled-button__moving-block face">
+                                        <span class="styled-button__text-holder">
+                                            <span class="styled-button__text">Confirm</span>
+                                        </span>
+                                    </span><span class="styled-button__moving-block back">
+                                        <span class="styled-button__text-holder">
+                                            <span class="styled-button__text">Confirm</span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                    <!--菜单-->
+                    <script>
+                        const menu = new MmenuLight(document.querySelector('#menu'), {
+                            theme: 'dark',
+                            // selected: 'Selected'
+                        });
+                        menu.enable('all'); // '(max-width: 980px)'
+                        menu.offcanvas({
+                            // position: 'left',// [| 'right']
+                            // move: true,// [| false]
+                            // blockPage: true,// [| false | 'modal']
+                        });
+
+                        //	Open the menu.
+                        document.querySelector('a[href="#menu"]')
+                            .addEventListener('click', (evnt) => {
+                                menu.open();
+
+                                //	Don't forget to "preventDefault" and to "stopPropagation".
+                                evnt.preventDefault();
+                                evnt.stopPropagation();
+                            });
+                    </script>
+                    <script type="text/javascript" src="../js/login.js"></script>
+                    <script>
+                        $(document).ready(function () {
+
+                            const changeText = function (el, text, color) {
+                                el.text(text).css('color', color);
+                            };
+
+                            $('#password').keyup(function () {
+                                let len = this.value.length;
+
+                                if (len > 0 && len <= 4) {
+                                    $('.progress-bar_item-1').addClass('active');
+                                    $('.progress-bar_item-2').removeClass('active');
+                                    $('.progress-bar_item-3').removeClass('active');
+                                    $('.active').css('background-color', '#FF4B47');
+                                    changeText(pbText, 'Too weak');
+                                } else if (len > 4 && len <= 8) {
+                                    $('.progress-bar_item-2').addClass('active');
+                                    $('.progress-bar_item-3').removeClass('active');
+                                    $('.active').css('background-color', '#F9AE35');
+                                    changeText(pbText, 'Could be stronger');
+                                } else {
+                                    $('.progress-bar_item').each(function () {
+                                        $(this).addClass('active');
+                                    });
+                                    $('.active').css('background-color', '#2DAF7D');
+                                    changeText(pbText, 'Strong password');
+                                }
+                            });
+                        });
+
+                        $.ajaxSetup({
+                            cache: false
+                        });
+
+                        $("#changeBtn").click(function () {
+                            $user = $("#username").val();
+                            $password = $("#password").val();
+                            if (!$user || !$password) return;
+
+                            $.post('../changepass', {
+                                username: $user,
+                                password: $password
+                            }, function (data) {
+                                let icon = (data.err == 0) ? "success" : "error"
+                                Swal.fire({
+                                    text: data.msg,
+                                    icon: icon
+                                })
+                            });
+                            return false;
+                        });
+                    </script>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

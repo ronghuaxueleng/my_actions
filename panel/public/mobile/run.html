@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>快速执行 · 京东薅羊毛控制面板</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/codemirror.min.js"></script>
+    <script type="text/javascript" src="../js/shell.js"></script>
+    <script type="text/javascript" src="../js/sweetalert2.js"></script>
+    <script type="text/javascript" src="../js/prefixfree.min.js"></script>
+    <script type="text/javascript" src="../js/mmenu-light.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/mmenu-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/codemirror.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/twilight.css">
+    <link rel="stylesheet" type="text/css" href="../css/panda-syntax.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="icon" type="image/x-icon" href="https://www.jd.com/favicon.ico" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="diffs">
+            <nav id="menu">
+                <ul>
+                    <span><a href="./home"><i class="fa fa-pencil-square-o"> 配置文件</i></a></span>
+                    <span><a href="./diff"><i class="fa fa-columns"> 对比工具</i></a></span>
+                    <span><a href="./crontab"><i class="fa fa-clock-o"> 定时任务</i></a></span>
+                    <span><a href="./diy"><i class="fa fa-send-o"> 自定义脚本</i></a></span>
+                    <span><a href="./run"><i class="fa fa-play-circle"> 快速执行</i></a></span>
+                    <span><a href="./terminal"><i class="fa fa-terminal"> 终端</i></a></span>
+                    <span><a href="../cause/index.html"><i class="fa fa-info-circle">
+                                使用教程</i></a></span>
+                    <span><a href="./log"><i class="fa fa-history"> 查询日志</i></a></span>
+                    <span><a href="./viewScripts"><i class="fa fa-file-code-o"> 查阅脚本</i></a></span>
+                    <span><a href="https://github.com/JDHelloWorld/jd_scripts"><i class="fa fa-github">
+                                浏览仓库</i></a></span>
+                    <span><a href="https://github.com/SuperManito/LinuxMirrors"><i class="fa fa-github">
+                                支持作者</i></a></span>
+                    <span><a href="./changepwd"><i class="fa fa-lock"> 修改密码</i></a></span>
+                    <span><a href="./loguot"><i class="fa fa-sign-out"> 退出</i></a></span>
+                </ul>
+            </nav>
+            <header>
+                <div class="new">
+                    <div class="mobile-nav-button">
+                        <a href="#menu" style="color:white; text-decoration:none;"><span> <i
+                                    class="fa fa-th-list"></i></span></a>
+                    </div>
+                    <h1 style="margin-left: 0.5em;">快速执行</h1>
+                    <div class="multi-button">
+                        <button id="wrap">
+                            <i class="fa fa-exchange"></i>
+                            <div class="animate-normal">切换换行</div>
+                        </button>
+                        <button id="move-bottom">
+                            <i class="fa fa-arrow-circle-o-down"></i>
+                            <div class="animate-normal">跳转底部</div>
+                        </button>
+                    </div>
+                    <div>
+                        <button id="list" class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="列出脚本">列出脚本</button><button id="git_pull" class="btn btn-primary btn-ghost btn-shine"
+                            style="height:30px;" title="git_pull">更新脚本文件</button><button id="jd_get_share_code"
+                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="获取互助码">获取互助码</button><button id="export_sharecodes"
+                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="export_sharecodes">导出互助码</button><button id="rm_log"
+                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="rm_log">删除日志</button><button id="ps" class="btn btn-primary btn-ghost btn-shine"
+                            style="height:30px;" title="ps">查看进程</button><button id="hangup"
+                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="hangup">启动/重启后台挂机</button><button id="cfd_loop"
+                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="pm2 stop jd_cfd_loop">停止后台挂机</button>
+                    </div>
+                </div>
+                <br>
+                <form action="runCmd" method="POST">
+                    <input id="jdScript" class="coco-input" style="margin-left: 0.5em;" name="jdScript" type="text"
+                        placeholder="请输入脚本名称" required>
+                </form>
+                <button id="runCmd" class="btn btn-primary btn-ghost btn-shine" type="submit"
+                    style="height:30px; width: 60px; font-size: 13px;" title="bash jd <xxx> now">执行</button>
+            </header>
+            <div class="wrapper">
+                <textarea id="code" name="code" readonly="readonly"></textarea>
+            </div>
+
+        </div>
+    </div>
+    <!--菜单-->
+    <script>
+        const menu = new MmenuLight(document.querySelector('#menu'), {
+            theme: 'dark',
+            // selected: 'Selected'
+        });
+        menu.enable('all'); // '(max-width: 980px)'
+        menu.offcanvas({
+            // position: 'left',// [| 'right']
+            // move: true,// [| false]
+            // blockPage: true,// [| false | 'modal']
+        });
+
+        //	Open the menu.
+        document.querySelector('a[href="#menu"]')
+            .addEventListener('click', (evnt) => {
+                menu.open();
+
+                //	Don't forget to "preventDefault" and to "stopPropagation".
+                evnt.preventDefault();
+                evnt.stopPropagation();
+            });
+    </script>
+
+    <script>
+        $.ajaxSetup({
+            cache: false
+        });
+
+        $(document).ready(function () {
+            var timer = 0;
+            var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                lineNumbers: true,
+                lineWrapping: false,
+                styleActiveLine: true,
+                matchBrackets: true,
+                readOnly: true,
+                mode: 'text',
+                theme: 'panda-syntax'
+            });
+
+            $('#git_pull, #export_sharecodes, #hangup, #ps, #rm_log, #cfd_loop')
+                .click(function () {
+                    let confirmTxt, cmd;
+                    switch (this.id) {
+                        case 'git_pull':
+                            confirmTxt = '确认更新脚本文件？';
+                            cmd = `bash ${this.id}.sh 2>&1 | tee -a log/jup.log`;
+                            break;
+                        case 'export_sharecodes':
+                            confirmTxt = '确认导出互助码？';
+                            cmd = `bash ${this.id}.sh`;
+                            break;
+                        case 'ps':
+                            confirmTxt = '确认查看进程？';
+                            cmd = `${this.id}`;
+                            break;
+                        case 'ttyd':
+                            confirmTxt = '确认启动/重启网页终端？';
+                            cmd = `pm2 restart ${this.id}`;
+                            break;
+                        case 'rm_log':
+                            confirmTxt = '确认删除日志？';
+                            cmd = `bash ${this.id}.sh`;
+                            break;
+                        case 'hangup':
+                            confirmTxt = '确认启动/重启挂机程序？';
+                            cmd = `bash jd ${this.id}`;
+                            break;
+                        case 'cfd_loop':
+                            confirmTxt = '确认停止后台挂机程序？';
+                            cmd = `pm2 stop jd_${this.id}`;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (!confirm(confirmTxt)) {
+                        return;
+                    }
+
+                    if (timer) {
+                        Swal.fire({
+                            text: '请等待上一条任务执行完毕！',
+                            icon: 'error'
+                        });
+                        return;
+                    }
+                    editor.setValue('');
+
+                    $.post('../runCmd', {
+                        cmd
+                    }, function (data) {
+                        editor.setValue(data.msg);
+
+                        clearInterval(timer);
+                        timer = 0;
+                    });
+
+                    timer = 1;
+                });
+
+            $('.cmd-btn').click(function () {
+                if (timer) {
+                    Swal.fire({
+                        text: '请等待上一条任务执行完毕！',
+                        icon: 'error'
+                    });
+                    return;
+                }
+                editor.setValue('');
+
+                const jsName = this.id === 'list' ? '' : this.id;
+                const cmd = jsName ? `bash jd ${jsName} now` : 'bash jd list';
+                $.post('../runCmd', {
+                    cmd: cmd
+                }, function (data) {
+                    editor.setValue(data.msg);
+
+                    if (jsName) {
+                        //将光标和滚动条设置到文本区最下方
+                        editor.execCommand('goDocEnd');
+                    }
+
+                    clearInterval(timer);
+                    timer = 0;
+                });
+
+                timer = 1;
+                // 1s后开始查日志
+                setTimeout(() => {
+                    jsName && getLogInterval(jsName);
+                }, 1000);
+            });
+
+            $('#runCmd').click(function () {
+                const jdScript = $('#jdScript').val();
+                if (!jdScript) {
+                    Swal.fire({
+                        text: '请先补充命令！',
+                        icon: 'error'
+                    });
+                    return;
+                }
+
+                if (timer) {
+                    Swal.fire({
+                        text: '请等待上一条任务执行完毕！',
+                        icon: 'error'
+                    });
+                    return;
+                }
+                editor.setValue('');
+
+                const jsName = this.id === 'list' ? '' : this.id;
+                const cmd = `bash jd ${jdScript} now`;
+                $.post('../runCmd', {
+                    cmd: cmd,
+                    delay: 1000
+                }, function (data) {
+                    editor.setValue(data.msg);
+
+                    //将光标和滚动条设置到文本区最下方
+                    editor.execCommand('goDocEnd');
+
+                    clearInterval(timer);
+                    timer = 0;
+                });
+
+                timer = 1;
+                // 1s后开始查日志
+                setTimeout(() => {
+                    getLogInterval(jdScript);
+                }, 1000);
+
+                return false;
+            });
+
+            function getLogInterval(jsName) {
+                timer && clearInterval(timer);
+
+                // 先执行一次
+                getLog(jsName);
+                timer = setInterval(() => {
+                    getLog(jsName);
+                }, 1500);
+            }
+
+            function getLog(jsName) {
+                $.get(`../runLog/${jsName}`, function (data) {
+                    if (data !== 'no logs') {
+                        editor.setValue(data);
+                    }
+                    //将光标和滚动条设置到文本区最下方
+                    editor.execCommand('goDocEnd');
+                });
+            }
+
+            $('#wrap').click(function () {
+                var lineWrapping = editor.getOption('lineWrapping');
+                editor.setOption('lineWrapping', !lineWrapping);
+            });
+
+            $('#move-bottom').click(function () {
+                editor.execCommand('goDocEnd');
+            })
+
+            $('#list').trigger('click');
+        });
+    </script>
+</body>
+
+</html>

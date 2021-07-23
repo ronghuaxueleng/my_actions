@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>查阅脚本 · 京东薅羊毛控制面板</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/metismenu/dist/metisMenu.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elektron/dist/elektron.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/onoffcanvas/dist/onoffcanvas.min.css">
+    <script type="text/javascript" src="../js/prefixfree.min.js"></script>
+    <script type="text/javascript" src="../js/mmenu-light.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/mmenu-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/codemirror.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/twilight.css">
+    <link rel="stylesheet" type="text/css" href="../css/panda-syntax.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="icon" type="image/x-icon" href="https://www.jd.com/favicon.ico" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="elk-app">
+            <div class="elk-wrap diffs">
+                <div class="elk-header">
+                    <nav id="menu">
+                        <ul>
+                            <span><a href="./home"><i class="fa fa-pencil-square-o"> 配置文件</i></a></span>
+                            <span><a href="./diff"><i class="fa fa-columns"> 对比工具</i></a></span>
+                            <span><a href="./crontab"><i class="fa fa-clock-o"> 定时任务</i></a></span>
+                            <span><a href="./diy"><i class="fa fa-send-o"> 自定义脚本</i></a></span>
+                            <span><a href="./run"><i class="fa fa-play-circle"> 快速执行</i></a></span>
+                            <span><a href="./terminal"><i class="fa fa-terminal"> 终端</i></a></span>
+                            <span><a href="../cause/index.html"><i class="fa fa-info-circle">
+                                        使用教程</i></a></span>
+                            <span><a href="./log"><i class="fa fa-history"> 查询日志</i></a></span>
+                            <span><a href="./viewScripts"><i class="fa fa-file-code-o"> 查阅脚本</i></a></span>
+                            <span><a href="https://github.com/JDHelloWorld/jd_scripts"><i class="fa fa-github">
+                                        浏览仓库</i></a></span>
+                            <span><a href="https://github.com/SuperManito/LinuxMirrors"><i class="fa fa-github">
+                                        支持作者</i></a></span>
+                            <span><a href="./changepwd"><i class="fa fa-lock"> 修改密码</i></a></span>
+                            <span><a href="./loguot"><i class="fa fa-sign-out"> 退出</i></a></span>
+                        </ul>
+                    </nav>
+                    <div class="new">
+                        <header>
+                            <div class="mobile-nav-button">
+                                <a href="#menu" style="color:white; text-decoration:none;"><span> <i
+                                            class="fa fa-th-list"></i></span></a>
+                            </div>
+                            <a style="margin-left: 0.5em;" id="toggleIcon" class="onoffcanvas-toggler is-animated"
+                                href="#elk-side" data-toggle="onoffcanvas"></a>
+                            <h1> 脚本文件</h1>
+                            <div class="multi-button">
+                                <button id="wrap">
+                                    <i class="fa fa-exchange"></i>
+                                    <div class="animate-normal">切换换行</div>
+                                </button>
+                            </div>
+                        </header>
+                    </div>
+                </div>
+                <div class="elk-container">
+                    <aside class="elk-side bg-light left-list" id="elk-side">
+                        <div class="elk-side-content ">
+                            <div class="elk-side-nav">
+                                <ul class="nav flex-column" id="menu1">
+                                </ul>
+                            </div>
+                        </div>
+                    </aside>
+                    <div class="elk-main">
+                        <div class="wrapper">
+                            <textarea id="code" name="code">  你还没有选择脚本文件！</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--菜单-->
+    <script>
+        const menu = new MmenuLight(document.querySelector('#menu'), {
+            theme: 'dark',
+            // selected: 'Selected'
+        });
+        menu.enable('all'); // '(max-width: 980px)'
+        menu.offcanvas({
+            // position: 'left',// [| 'right']
+            // move: true,// [| false]
+            // blockPage: true,// [| false | 'modal']
+        });
+
+        //	Open the menu.
+        document.querySelector('a[href="#menu"]')
+            .addEventListener('click', (evnt) => {
+                menu.open();
+
+                //	Don't forget to "preventDefault" and to "stopPropagation".
+                evnt.preventDefault();
+                evnt.stopPropagation();
+            });
+    </script>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/onoffcanvas"></script>
+    <script src="https://cdn.jsdelivr.net/npm/elektron"></script>
+    <script src="https://cdn.jsdelivr.net/npm/metismenu"></script>
+    <script src="../js/codemirror.min.js"></script>
+    <script src="../js/javascript.js"></script>
+    <script>
+        $.ajaxSetup({
+            cache: false
+        });
+
+        var qrcode, userCookie;
+        $(document).ready(function () {
+            var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                lineNumbers: true,
+                lineWrapping: false,
+                styleActiveLine: true,
+                matchBrackets: true,
+                readOnly: true,
+                mode: 'javascript',
+                theme: 'panda-syntax'
+            });
+
+            $.get('../api/scripts', function (data) {
+                var dirs = data.dirs;
+                var navHtml = "";
+                for (let index in dirs) {
+                    var dirName = dirs[index].dirName;
+                    // 文件在scripts/目录时
+                    if (dirName === '@') {
+                        var row = `<li class="nav-item">`;
+                        for (let filesKey in dirs[index].files) {
+                            var fileName = dirs[index].files[filesKey];
+                            row +=
+                                `<a class="nav-link" href="javascript:viewScript('${dirName}', '${fileName}');">${fileName}</a>`
+                        }
+                        row += `</li>`;
+                    } else {
+                        var row = `<li class="nav-item">
+                                <a class="nav-link text-dark has-arrow" href="#">${dirName}</a>
+                                <ul class="nav flex-column pl-1">
+                                    <li class="nav-item">`;
+                        for (let filesKey in dirs[index].files) {
+                            var fileName = dirs[index].files[filesKey];
+                            row +=
+                                `<a class="nav-link" href="javascript:viewScript('${dirName}', '${fileName}');">${fileName}</a>`
+                        }
+                        row += `</li>
+                                    </ul>
+                                </li>`;
+                    }
+
+                    navHtml += row;
+                }
+                $('#menu1').html(navHtml);
+                $('#menu1').metisMenu();
+            });
+
+            window.viewScript = function viewScript(dir, file) {
+                if (window.innerWidth < 993) {
+                    dispatch(document.getElementById('toggleIcon'), 'click');
+                }
+
+                $.get(`../api/scripts/${dir}/${file}`, function (data) {
+                    editor.setValue(data);
+                });
+            }
+
+            $('#wrap').click(function () {
+                var lineWrapping = editor.getOption('lineWrapping');
+                editor.setOption('lineWrapping', !lineWrapping);
+            });
+
+
+            //自动触发事件
+            function dispatch(ele, type) {
+                try {
+                    if (ele.dispatchEvent) { //标准浏览器
+
+                        var evt = document.createEvent('Event');
+                        evt.initEvent(type, true, true);
+                        ele.dispatchEvent(evt);
+                    } else {
+                        ele.fireEvent('on' + type);
+                    }
+                } catch (e) {};
+
+            }
+        });
+    </script>
+
+</body>
+
+</html>
