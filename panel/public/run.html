@@ -206,11 +206,11 @@
                             title="列出脚本">列出脚本</button><button id="git_pull" class="btn btn-primary btn-ghost btn-shine"
                             style="height:30px;" title="git_pull">更新脚本文件</button><button id="jd_get_share_code"
                             class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="获取互助码">获取互助码</button><button id="export_sharecodes"
+                            title="获取互助码">获取互助码</button><button id="exsc"
                             class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="export_sharecodes">导出互助码</button><button id="rm_log"
+                            title="exsc">导出互助码</button><button id="rmlog"
                             class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="rm_log">删除日志</button><button id="ps" class="btn btn-primary btn-ghost btn-shine"
+                            title="rmlog">删除日志</button><button id="ps" class="btn btn-primary btn-ghost btn-shine"
                             style="height:30px;" title="ps">查看进程</button><button id="hangup"
                             class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
                             title="hangup">启动/重启后台挂机</button><button id="cfd_loop"
@@ -273,7 +273,7 @@
                 theme: 'panda-syntax'
             });
 
-            $('#git_pull, #export_sharecodes, #hangup, #ps, #rm_log, #cfd_loop')
+            $('#git_pull, #exsc, #hangup, #ps, #rmlog, #cfd_loop')
                 .click(function () {
                     let confirmTxt, cmd;
                     switch (this.id) {
@@ -281,9 +281,9 @@
                             confirmTxt = '确认更新脚本文件？';
                             cmd = `bash ${this.id}.sh 2>&1 | tee -a log/jup.log`;
                             break;
-                        case 'export_sharecodes':
+                        case 'exsc':
                             confirmTxt = '确认导出互助码？';
-                            cmd = `bash ${this.id}.sh`;
+                            cmd = `bash jd.sh ${this.id}`;
                             break;
                         case 'ps':
                             confirmTxt = '确认查看进程？';
@@ -293,9 +293,9 @@
                             confirmTxt = '确认启动/重启网页终端？';
                             cmd = `pm2 restart ${this.id}`;
                             break;
-                        case 'rm_log':
+                        case 'rmlog':
                             confirmTxt = '确认删除日志？';
-                            cmd = `bash ${this.id}.sh`;
+                            cmd = `bash jd.sh ${this.id};`
                             break;
                         case 'hangup':
                             confirmTxt = '确认启动/重启挂机程序？';

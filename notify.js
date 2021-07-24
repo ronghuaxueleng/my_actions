@@ -18,21 +18,21 @@ async function update() {
     if (fs.existsSync('new_task')) {
       const newTaskContent = await fs.readFileSync('./new_task', 'utf8');
       if (newTaskContent) {
-        await notify.sendNotify('新增薅羊毛任务通知', newTaskContent, params = {}, author = '\n本通知 By：https://hub.docker.com/r/supermanito/helloworld');
+        await notify.sendNotify('新增定时任务通知', newTaskContent, params = { url: 'https://hub.docker.com/r/supermanito/helloworld' }, author = '\n本通知 By：helloworld for Dockerhub');
       }
     }
 
     if (fs.existsSync('drop_task')) {
       const dropTaskContent = await fs.readFileSync('./drop_task', 'utf8');
       if (dropTaskContent) {
-        await notify.sendNotify('删除失效任务通知', dropTaskContent, params = {}, author = '\n本通知 By：https://hub.docker.com/r/supermanito/helloworld');
+        await notify.sendNotify('删除失效定时任务通知', dropTaskContent, params = { url: 'https://hub.docker.com/r/supermanito/helloworld' }, author = '\n本通知 By：helloworld for Dockerhub');
       }
     }
 
     if (fs.existsSync('version')) {
       const versionContent = await fs.readFileSync('./version', 'utf8');
       if (versionContent) {
-        await notify.sendNotify('配置文件更新通知', versionContent, params = {}, author = '\n本通知 By：https://hub.docker.com/r/supermanito/helloworld');
+        await notify.sendNotify('配置文件更新通知', versionContent, params = { url: 'https://hub.docker.com/r/supermanito/helloworld' }, author = '\n本通知 By：helloworld for Dockerhub');
       }
     }
   } catch (err) {
