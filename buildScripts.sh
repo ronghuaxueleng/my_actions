@@ -114,6 +114,7 @@ if [ $? -eq 0 ]; then
     sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
     sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
     sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
+    sed -i '/exit 1/d' ${FileDiy}
     # cat ${FileDiy}
     sleep 2s
     . ${FileDiy}
