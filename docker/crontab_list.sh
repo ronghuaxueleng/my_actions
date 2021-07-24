@@ -40,7 +40,7 @@
 #pk
 33 10 * * * node /scripts/jd_ddopk.js >> /scripts/logs/jd_ddopk.log 2>&1
 #QQ星
-20 6,12,18 * * * node /scripts/jd_qqxing.js >> /scripts/logs/jd_qqxing.log 2>&1
+1 0-23/2 * * * bash jd jd_qqxing
 #众筹许愿池
 20 12 * * * node /scripts/jd_wishingPool.js >> /scripts/logs/jd_wishingPool.log 2>&1
 #汪汪乐园
@@ -308,7 +308,7 @@
 #京东柠檬cookie失效检测 
 0 10 * * * node /scripts/jd_ckcheck.js >> /scripts/logs/jd_ckcheck.log 2>&1
 #京东星系牧场 
-30 7 * * * node /scripts/jd_qqxing.js >> /scripts/logs/jd_qqxing.log 2>&1
+1 0-23/2 * * * bash jd jd_qqxing
 #京东618开卡活动11 
 5 0 * * * node /scripts/zooOpencard11.js >> /scripts/logs/zooOpencard11.log 2>&1
 #京东东东电竞经理 
@@ -481,6 +481,8 @@
 5,35 * * 6 * node /scripts/jd_ffl.js >> /scripts/logs/jd_ffl.log 2>&1
 #京东城城分现金互助执意版 
 5 0 * * * node /scripts/zy_ccfxj.js >> /scripts/logs/zy_ccfxj.log 2>&1
+#京东618手机竞猜 
+1 0 * * * node /scripts/zy_618jc.js >> /scripts/logs/zy_618jc.log 2>&1
 #京东新潮品牌狂欢执意版 
 0 10 * * * node /scripts/zy_xckh.js >> /scripts/logs/zy_xckh.log 2>&1
 #京东618主会场红包雨 
