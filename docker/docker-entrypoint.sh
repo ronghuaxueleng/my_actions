@@ -45,8 +45,8 @@ if [ ${Arch} = "armv7l" ]; then
   echo -e "你的机器处理器架构为 ARMv7 ，无法安装环境软件包/n可能无法运行 Python 和 TypeScript 脚本，建议更换运行环境"
 elif [ $Arch = "armv6l" ]; then
   echo -e "你的机器处理器架构为 ARMv6 ，无法安装环境软件包/n可能无法运行 Python 和 TypeScript 脚本，建议更换运行环境"
-else
-  bash /jd/docker/install_env.sh
+# else
+#   bash /jd/docker/install_env.sh
 fi
 
 echo
