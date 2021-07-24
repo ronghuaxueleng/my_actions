@@ -177,14 +177,14 @@ function Diff_Cron() {
 ## 发送删除失效定时任务的消息
 function Notify_DropTask() {
     cd ${ShellDir}
-    node update.js
+    node notify.js
     [ -f ${ContentDropTask} ] && rm -f ${ContentDropTask}
 }
 
 ## 发送新的定时任务消息
 function Notify_NewTask() {
     cd ${ShellDir}
-    node update.js
+    node notify.js
     [ -f ${ContentNewTask} ] && rm -f ${ContentNewTask}
 }
 
@@ -207,7 +207,7 @@ function Notify_Version() {
             echo -e "日期: ${UpdateDate}\n版本: ${VerConf} -> ${VerConfSample}\n内容: ${UpdateContent}\n\n" | tee ${ContentVersion}
             echo -e "如需更新请手动操作，仅更新当天通知一次!" >>${ContentVersion}
             cd ${ShellDir}
-            node update.js
+            node notify.js
             if [ $? -eq 0 ]; then
                 echo "${VerConfSample}" >${SendCount}
                 [ -f ${ContentVersion} ] && rm -f ${ContentVersion}

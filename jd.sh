@@ -161,95 +161,9 @@ function Help() {
     echo -e "7. bash ${HelpJd} hangup       # 启动或重启后台挂机程序，目前不建议使用"
     echo -e "8. bash ${HelpJd} resetpwd     # 重置控制面板的用户名和密码"
     echo -e "9. source runall        # 执行所有活动脚本，非常耗时，Ctrl+Z 跳过执行当前脚本，Ctrl+C 退出执行"
-
     echo -e "\n支持运行 \"js、py、ts\" 三种类型的脚本，如果脚本同名则优先执行的是 \"js\" 脚本。"
     echo -e "针对用法 2~5 中的 \"xxx\" 为脚本名，可以不输入文件后缀格式，另外如果前缀是 \"jd_\" 的话前缀也可以省略。"
     echo -e "在最新版本镜像启动的容器中，bash ${HelpJd} 命令可以由 jtask 或 jd 代替，并且预装了 Python、TypeScript 环境。\n"
-}
-
-## 活动列表
-function ScriptsList() {
-    ListScripts=($(
-        cd ${ScriptsDir}
-        ls *.js | grep -E "j[drx]_" | grep -Eiv "jd_update.js|validate|api_test|env_copy"
-    ))
-    ListPythonScripts=($(
-        cd ${ScriptsDir}
-        ls *.py | grep -Eiv "jdEnv|Notify"
-    ))
-    ListTypeScriptScripts=($(
-        cd ${ScriptsDir}
-        ls *.ts | grep -Eiv "api_test|ts_test|AGENTS|validate|jdJxToken"
-    ))
-    ListOtherScripts=($(
-        cd ${ScriptsDir}
-        ls *.js | grep -Eiv "j[drx]_|$(git ls-files)|ShareCodes|AGENTS|index.js|validate|JDJR|MovementFaker|tencentscf|Notify|Cookie|Tokens|app.|main."
-    ))
-    cd ${ScriptsDir}
-    echo -e "\n################################## 当前有以下活动脚本可以运行 ##################################"
-    echo -e "\n注：所有以 jd、jr、jx 开头的js脚本会被识别成 Scripts 仓库的脚本，本地导入的脚本不会随更新而自动删除"
-
-    echo -e "\nScripts 仓库的js脚本："
-    for ((i = 0; i < ${#ListScripts[*]}; i++)); do
-        grep -Eq "^[const $ = ].*Env" ${ListScripts[i]}
-        if [ $? -eq 0 ]; then
-            Name=$(grep -E "^[const $ = ].*Env" ${ListScripts[i]} | awk -F "\(" '{print $2}' | awk -F "\)" '{print $1}' | sed 's:^.\(.*\).$:\1:' | head -1)
-        else
-            Name=$(grep -w "script-path" ${ListScripts[i]} | sed "s/\W//g" | sed "s/[0-9a-zA-Z_]//g" | head -n 1)
-        fi
-        echo -e "$(($i + 1)).${Name}：${ListScripts[i]}"
-    done
-
-    echo -e "\nTypeScript 脚本：\n脚本随缘使用，可使用tsc命令转换成js格式执行\n转换命令示例: tsc scripts/jd_foodRunning.ts"
-    for ((i = 0; i < ${#ListTypeScriptScripts[*]}; i++)); do
-        if [ ${ListTypeScriptScripts[i]} = "jd_joy_park.ts" ]; then
-            Name="汪汪乐园"
-        elif [ ${ListTypeScriptScripts[i]} = "jd_jxmc.ts" ]; then
-            Name="京喜牧场"
-        elif [ ${ListTypeScriptScripts[i]} = "jd_qq_pasture.ts" ]; then
-            Name="星系牧场"
-        elif [ ${ListTypeScriptScripts[i]} = "jd_reward.ts" ]; then
-            Name="宠汪汪兑换二代目"
-        elif [ ${ListTypeScriptScripts[i]} = "jd_wishingPool.ts" ]; then
-            Name="众筹许愿池"
-        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd.ts" ]; then
-            Name="京喜财富岛"
-        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd_loop.ts" ]; then
-            Name="京喜财富岛热气球挂机"
-        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd_stock.ts" ]; then
-            Name="京喜财富岛库存监控"
-        elif [ ${ListTypeScriptScripts[i]} = "jd_speed_redEnvelope.ts" ]; then
-            Name="极速版-发财大赢家"
-        elif [ ${ListTypeScriptScripts[i]} = "getCookie.ts" ]; then
-            Name="获取账号"
-        elif [ ${ListTypeScriptScripts[i]} = "jd_foodRunning.ts" ]; then
-            Name="零食街"
-        elif [ ${ListTypeScriptScripts[i]} = "jd_getUp.ts" ]; then
-            Name="早起福利"
-        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd_cashOut.ts" ]; then
-            Name="京喜财富岛提现"
-        else
-            Name=""
-        fi
-        echo -e "$(($i + 1)).${Name}：${ListTypeScriptScripts[i]}"
-    done
-
-    echo -e "\nPython 脚本："
-    for ((i = 0; i < ${#ListPythonScripts[*]}; i++)); do
-        echo -e "$(($i + 1)).${ListPythonScripts[i]}"
-    done
-
-    echo -e "\n第三方脚本："
-    for ((i = 0; i < ${#ListOtherScripts[*]}; i++)); do
-        grep -Eq "^[const $ = ].*Env" ${ListOtherScripts[i]}
-        if [ $? -eq 0 ]; then
-            Name=$(grep -E "^[const $ = ].*Env" ${ListOtherScripts[i]} | awk -F "\(" '{print $2}' | awk -F "\)" '{print $1}' | sed 's:^.\(.*\).$:\1:' | head -1)
-        else
-            Name=$(grep -w "script-path" ${ListOtherScripts[i]} | sed "s/\W//g" | sed "s/[0-9a-zA-Z_]//g" | head -n 1)
-        fi
-        echo -e "$(($i + 1)).${Name}：${ListOtherScripts[i]}"
-    done
-    echo ''
 }
 
 ## nohup
@@ -486,6 +400,106 @@ Run_RawScript() {
         [ -f "${ScriptsDir}/${FileName}.new" ] && rm -rf "${ScriptsDir}/${FileName}.new"
         echo -e "\n\033[31m[ERROR]\033[0m 下载 ${FileName} 失败，请检查 URL 地址是否正确或网络连通性问题...\n"
     fi
+}
+
+## 活动列表
+function ScriptsList() {
+    ListScripts=($(
+        cd ${ScriptsDir}
+        ls *.js | grep -E "j[drx]_" | grep -Eiv "jd_update.js|validate|api_test|env_copy|Token"
+    ))
+    ListPythonScripts=($(
+        cd ${ScriptsDir}
+        ls *.py | grep -Eiv "jdEnv|Notify"
+    ))
+    ListTypeScriptScripts=($(
+        cd ${ScriptsDir}
+        ls *.ts | grep -Eiv "api_test|ts_test|AGENTS|validate|jdJxToken"
+    ))
+    ListOtherScripts=($(
+        cd ${ScriptsDir}
+        ls *.js | grep -Eiv "j[drx]_|$(git ls-files)|ShareCodes|AGENTS|index.js|validate|JDJR|MovementFaker|tencentscf|Notify|Cookie|Tokens|app.|main."
+    ))
+    cd ${ScriptsDir}
+    echo -e "\n################################## 当前有以下活动脚本可以运行 ##################################"
+    echo -e "注：所有以 jd、jr、jx 开头的js脚本会被识别成 Scripts 仓库的脚本，本地导入的脚本不会随更新而自动删除"
+
+    echo -e "\nScripts 仓库的js脚本："
+    for ((i = 0; i < ${#ListScripts[*]}; i++)); do
+        grep -Eq "^[const $ = ].*Env" ${ListScripts[i]}
+        if [ $? -eq 0 ]; then
+            Name=$(grep -E "^[const $ = ].*Env" ${ListScripts[i]} | awk -F "\(" '{print $2}' | awk -F "\)" '{print $1}' | sed 's:^.\(.*\).$:\1:' | head -1)
+        else
+            Name=$(grep -w "script-path" ${ListScripts[i]} | sed "s/\W//g" | sed "s/[0-9a-zA-Z_]//g" | head -n 1)
+        fi
+        echo -e "$(($i + 1)).${Name}：${ListScripts[i]}"
+    done
+
+    echo -e "\nTypeScript 脚本：\n\e[3m脚本随缘使用，可使用tsc命令转换成js格式执行\e[0m\n\e[3m转换命令示例: tsc scripts/jd_foodRunning.ts\e[0m"
+    for ((i = 0; i < ${#ListTypeScriptScripts[*]}; i++)); do
+        if [ ${ListTypeScriptScripts[i]} = "jd_joy_park.ts" ]; then
+            Name="汪汪乐园"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_jxmc.ts" ]; then
+            Name="京喜牧场"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_qq_pasture.ts" ]; then
+            Name="星系牧场"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_joy_reward.ts" ]; then
+            Name="宠汪汪兑换二代目"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_wishingPool.ts" ]; then
+            Name="众筹许愿池"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd.ts" ]; then
+            Name="京喜财富岛"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd_loop.ts" ]; then
+            Name="京喜财富岛热气球挂机"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd_stock.ts" ]; then
+            Name="京喜财富岛库存监控"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_speed_redEnvelope.ts" ]; then
+            Name="极速版-发财大赢家"
+        elif [ ${ListTypeScriptScripts[i]} = "getCookie.ts" ]; then
+            Name="获取账号"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_foodRunning.ts" ]; then
+            Name="零食街"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_getUp.ts" ]; then
+            Name="早起福利"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_cfd_cashOut.ts" ]; then
+            Name="京喜财富岛提现"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_yili_cow.ts" ]; then
+            Name="伊利养牛记"
+        elif [ ${ListTypeScriptScripts[i]} = "jd_bean_box.ts" ]; then
+            Name="领京豆"
+        else
+            Name=""
+        fi
+        echo -e "$(($i + 1)).${Name}：${ListTypeScriptScripts[i]}"
+    done
+
+    echo -e "\nPython 脚本："
+    for ((i = 0; i < ${#ListPythonScripts[*]}; i++)); do
+        if [ ${ListPythonScripts[i]} = "jd_qjd.py" ]; then
+            Name="抢京豆："
+        elif [ ${ListPythonScripts[i]} = "jd_zjd.py" ]; then
+            Name="赚京豆："
+        elif [ ${ListPythonScripts[i]} = "jd_cashHelp.py" ]; then
+            Name="签到领现金："
+        elif [ ${ListPythonScripts[i]} = "jd_jxgc_tuan.py" ]; then
+            Name="京喜工厂开团："
+        else
+            Name=""           
+        fi
+        echo -e "$(($i + 1)).${Name}${ListPythonScripts[i]}"
+    done
+
+    echo -e "\n第三方脚本："
+    for ((i = 0; i < ${#ListOtherScripts[*]}; i++)); do
+        grep -Eq "^[const $ = ].*Env" ${ListOtherScripts[i]}
+        if [ $? -eq 0 ]; then
+            Name=$(grep -E "^[const $ = ].*Env" ${ListOtherScripts[i]} | awk -F "\(" '{print $2}' | awk -F "\)" '{print $1}' | sed 's:^.\(.*\).$:\1:' | head -1)
+        else
+            Name=$(grep -w "script-path" ${ListOtherScripts[i]} | sed "s/\W//g" | sed "s/[0-9a-zA-Z_]//g" | head -n 1)
+        fi
+        echo -e "$(($i + 1)).${Name}：${ListOtherScripts[i]}"
+    done
+    echo ''
 }
 
 ## 命令检测
