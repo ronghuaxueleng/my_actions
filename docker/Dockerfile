@@ -35,13 +35,11 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && cd ${JD_DIR}/docker \
     && pip3 install -r requirements.txt \
     && cd ${JD_DIR}/panel \
-    && npm install \
     && npm install -g pm2 \
-    && cd ${JD_DIR}/panel \
-    && npm install \
     && npm install -g npm npm-install-peers \
     && npm install -g ts-node typescript --unsafe-perm=true --allow-root \
     && npm install -g ts-node typescript @types/node date-fns axios require tslib fs crypto-js ts-md5 dotenv \
+    && npm install \
     && npm install --save-dev @types/node \
     && touch ${JD_DIR}/run_all.sh \
     && ln -sf ${JD_DIR}/run_all.sh /usr/local/bin/run_all \
