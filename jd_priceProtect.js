@@ -93,7 +93,7 @@ function requireConfig() {
             if (process.env.JD_TOKENS) tokens = process.env.JD_TOKENS
         }
         else {
-            tokens = $.getdata('jd_tokens') || tokens
+            tokens = $.getdata('jd_token') || tokens
         }
         $.tokenList = tokens.split('@')
         resolve()
