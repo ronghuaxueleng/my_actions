@@ -60,21 +60,6 @@
                             <div class="animate-normal">跳转底部</div>
                         </button>
                     </div>
-                    <div>
-                        <button id="list" class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="列出脚本">列出脚本</button><button id="git_pull" class="btn btn-primary btn-ghost btn-shine"
-                            style="height:30px;" title="git_pull">更新脚本文件</button><button id="jd_get_share_code"
-                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="获取互助码">获取互助码</button><button id="exsc" class="btn btn-primary btn-ghost btn-shine"
-                            style="height:30px;" title="exsc">导出互助码</button><button id="rmlog"
-                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="rmlog">删除日志</button><button id="ps" class="btn btn-primary btn-ghost btn-shine"
-                            style="height:30px;" title="ps">查看进程</button><button id="hangup"
-                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="hangup">启动/重启后台挂机</button><button id="cfd_loop"
-                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="pm2 stop jd_cfd_loop">停止后台挂机</button>
-                    </div>
                 </div>
                 <br>
                 <form action="runCmd" method="POST">
@@ -82,7 +67,13 @@
                         placeholder="请输入脚本名称" required>
                 </form>
                 <button id="runCmd" class="btn btn-primary btn-ghost btn-shine" type="submit"
-                    style="height:30px; width: 60px; font-size: 13px;" title="bash jd <xxx> now">执行</button>
+                    style="height:30px; width: 60px; font-size: 13px; border-radius: 6px;"
+                    title="bash jd <xxx> now">执行</button>
+                <div>
+                    <button id="list" class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                        title="列出脚本">列出脚本</button><button id="git_pull" class="btn btn-primary btn-ghost btn-shine"
+                        style="height:30px;" title="git_pull">更新脚本文件</button>
+                </div>
             </header>
             <div class="wrapper">
                 <textarea id="code" name="code" readonly="readonly"></textarea>
@@ -145,7 +136,7 @@
                             break;
                         case 'ps':
                             confirmTxt = '确认查看进程？';
-                            cmd = `${this.id}`;
+                            cmd = `${this.id} -ef | egrep -v "bash|tee|crond|ssh|ps|pm2"`;
                             break;
                         case 'ttyd':
                             confirmTxt = '确认启动/重启网页终端？';
