@@ -621,15 +621,24 @@ app.post('/runCmd', function (request, response) {
 app.get('/runLog/:jsName', function (request, response) {
     if (request.session.loggedin) {
         const jsName = request.params.jsName;
-        let shareCodeFile = getLastModifyFilePath(
-            path.join(rootPath, `log/${jsName}/`)
-        );
-        if (jsName === 'rm_log') {
-            shareCodeFile = path.join(rootPath, `log/${jsName}.log`);
+        let logFile;
+        if (jsName === 'git_pull' || jsName === 'exsc' || jsName === 'ttyd' || jsName === 'rmlog' || jsName === 'hangup'|| jsName === 'cfd_loop'|| jsName === 'exsc') {
+            logFile = path.join(rootPath, `log/${jsName}.log`);
+        }else {
+            let pathUrl = `log/${jsName}/`;
+            if(!fs.existsSync(path.join(rootPath, pathUrl))){
+                pathUrl = `log/jd_${jsName}/`;
+            }
+            logFile = getLastModifyFilePath(
+                path.join(rootPath, pathUrl)
+            );
         }
 
-        if (shareCodeFile) {
-            const content = getFileContentByName(shareCodeFile);
+
+
+
+        if (logFile) {
+            const content = getFileContentByName(logFile);
             response.setHeader('Content-Type', 'text/plain');
             response.send(content);
         } else {
