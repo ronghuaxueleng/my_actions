@@ -81,30 +81,7 @@
             </div>
         </div>
     </div>
-    <!--菜单-->
-    <script>
-        const menu = new MmenuLight(document.querySelector('#menu'), {
-            theme: 'dark',
-            // selected: 'Selected'
-        });
-        menu.enable('all'); // '(max-width: 980px)'
-        menu.offcanvas({
-            // position: 'left',// [| 'right']
-            // move: true,// [| false]
-            // blockPage: true,// [| false | 'modal']
-        });
-
-        //	Open the menu.
-        document.querySelector('a[href="#menu"]')
-            .addEventListener('click', (evnt) => {
-                menu.open();
-
-                //	Don't forget to "preventDefault" and to "stopPropagation".
-                evnt.preventDefault();
-                evnt.stopPropagation();
-            });
-    </script>
-
+    <script type="text/javascript" src="../js/mobile-nav.js"></script>
     <script src="../js/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs"></script>
     <script src="https://cdn.jsdelivr.net/npm/onoffcanvas"></script>

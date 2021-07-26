@@ -62,8 +62,7 @@
                             <i class="fa fa-exchange"></i>
                             <div class="animate-normal">切换换行</div>
                         </button>
-                        <button
-                            href="https://www.runoob.com/w3cnote/linux-crontab-tasks.html">
+                        <button href="https://www.runoob.com/w3cnote/linux-crontab-tasks.html">
                             <i class="fa fa-info-circle"></i>
                             <div class="animate-normal">帮助文档</div>
                         </button>
@@ -75,30 +74,7 @@
             </div>
         </div>
     </div>
-    <!--菜单-->
-    <script>
-        const menu = new MmenuLight(document.querySelector('#menu'), {
-            theme: 'dark',
-            // selected: 'Selected'
-        });
-        menu.enable('all'); // '(max-width: 980px)'
-        menu.offcanvas({
-            // position: 'left',// [| 'right']
-            // move: true,// [| false]
-            // blockPage: true,// [| false | 'modal']
-        });
-
-        //	Open the menu.
-        document.querySelector('a[href="#menu"]')
-            .addEventListener('click', (evnt) => {
-                menu.open();
-
-                //	Don't forget to "preventDefault" and to "stopPropagation".
-                evnt.preventDefault();
-                evnt.stopPropagation();
-            });
-    </script>
-
+    <script type="text/javascript" src="../js/mobile-nav.js"></script>
     <script>
         $.ajaxSetup({
             cache: false

@@ -65,7 +65,7 @@ $(document).ready(function () {
                     break;
                 case 'exsc':
                     confirmTxt = '确认导出互助码？';
-                    cmd = `bash jd.sh ${this.id} 2>&1 | tee log/exsc.log`;
+                    cmd = `bash jd ${this.id} 2>&1 | tee log/exsc.log`;
                     break;
                 case 'ps':
                     confirmTxt = '确认查看进程？';
@@ -78,11 +78,11 @@ $(document).ready(function () {
                     break;
                 case 'rmlog':
                     confirmTxt = '确认删除日志？';
-                    cmd = `bash jd.sh ${this.id} 2>&1 | tee log/rmlog.log;`
+                    cmd = `bash jd ${this.id} 2>&1 | tee log/rmlog.log;`
                     break;
                 case 'hangup':
                     confirmTxt = '确认启动/重启挂机程序？';
-                    cmd = `bash jd.sh ${this.id} 2>&1 | tee log/hangup.log`;
+                    cmd = `bash jd ${this.id} 2>&1 | tee log/hangup.log`;
                     break;
                 case 'cfd_loop':
                     confirmTxt = '确认停止后台挂机程序？';
@@ -111,7 +111,7 @@ $(document).ready(function () {
         editor.setValue('');
 
         const jsName = this.id === 'list' ? '' : this.id;
-        const cmd = jsName ? `bash jd.sh ${jsName} now` : 'bash jd.sh list';
+        const cmd = jsName ? `bash jd ${jsName} now` : 'bash jd list';
         runCmd(jsName, cmd, this.id !== 'list');
     });
 
@@ -136,7 +136,7 @@ $(document).ready(function () {
         }
         editor.setValue('');
 
-        const cmd = `bash jd.sh ${jdScript} now`;
+        const cmd = `bash jd ${jdScript} now`;
         runCmd(jdScript, cmd, this.id !== 'list');
 
         return false;
