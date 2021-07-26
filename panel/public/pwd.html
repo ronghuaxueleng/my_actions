@@ -244,30 +244,30 @@
                     <script>
                         $(document).ready(function () {
 
-                            const changeText = function (el, text, color) {
-                                el.text(text).css('color', color);
-                            };
+                            // const changeText = function (el, text, color) {
+                            //     el.text(text).css('color', color);
+                            // };
 
                             $('#password').keyup(function () {
                                 let len = this.value.length;
 
                                 if (len > 0 && len <= 4) {
-                                    $('.progress-bar_item-1').addClass('active');
-                                    $('.progress-bar_item-2').removeClass('active');
-                                    $('.progress-bar_item-3').removeClass('active');
-                                    $('.active').css('background-color', '#FF4B47');
-                                    changeText(pbText, 'Too weak');
+                                    $('.progress-bar_item-1').addClass('progress-bar_active');
+                                    $('.progress-bar_item-2').removeClass('progress-bar_active');
+                                    $('.progress-bar_item-3').removeClass('progress-bar_active');
+                                    $('.progress-bar_active').css('background-color', '#FF4B47');
+                                    //changeText(pbText, 'Too weak');
                                 } else if (len > 4 && len <= 8) {
-                                    $('.progress-bar_item-2').addClass('active');
-                                    $('.progress-bar_item-3').removeClass('active');
-                                    $('.active').css('background-color', '#F9AE35');
-                                    changeText(pbText, 'Could be stronger');
+                                    $('.progress-bar_item-2').addClass('progress-bar_active');
+                                    $('.progress-bar_item-3').removeClass('progress-bar_active');
+                                    $('.progress-bar_active').css('background-color', '#F9AE35');
+                                    //changeText(pbText, 'Could be stronger');
                                 } else {
                                     $('.progress-bar_item').each(function () {
-                                        $(this).addClass('active');
+                                        $(this).addClass('progress-bar_active');
                                     });
-                                    $('.active').css('background-color', '#2DAF7D');
-                                    changeText(pbText, 'Strong password');
+                                    $('.progress-bar_active').css('background-color', '#2DAF7D');
+                                    //changeText(pbText, 'Strong password');
                                 }
                             });
                         });
