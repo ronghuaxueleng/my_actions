@@ -709,7 +709,7 @@ button#toggle-password:focus {
   z-index: 1;
 }
 
-.active {
+.progress-bar_active {
   visibility: visible;
 }
 
@@ -727,14 +727,14 @@ button#toggle-password:focus {
 .progress-bar_item-2 {}
 .progress-bar_item-3 {}
 
-.progress-bar_item-1.active {
+.progress-bar_item-1.progress-bar_active {
   background-color: #FF4B47;
 }
 
-.progress-bar_item-2.active {
+.progress-bar_item-2.progress-bar_active {
   background-color: #F9AE35;
 }
 
-.progress-bar_item-3.active {
+.progress-bar_item-3.progress-bar_active {
   background-color: #2DAF7D;
 }
