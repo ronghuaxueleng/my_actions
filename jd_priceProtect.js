@@ -69,6 +69,17 @@ $.HyperParam = {
     }).finally(() => $.done())
 
 function requireConfig() {
+    function jsonParse(str) {
+        if (typeof str == "string") {
+            try {
+                return JSON.parse(str);
+            } catch (e) {
+                console.log(e);
+                $.msg($.name, '', '请勿随意在BoxJs输入框修改内容\n建议通过脚本去获取cookie')
+                return [];
+            }
+        }
+    }
     return new Promise(resolve => {
         console.log('开始获取配置文件\n')
         $.notify = $.isNode() ? require('./sendNotify') : { sendNotify: async () => { } }
@@ -89,7 +100,7 @@ function requireConfig() {
         }
         console.log(`共${$.cookiesArr.length}个X东账号\n`)
 
-        if ($.isNode) {
+        if ($.isNode()) {
             if (process.env.JD_TOKENS) tokens = process.env.JD_TOKENS
         }
         else {
