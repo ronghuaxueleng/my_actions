@@ -2,6 +2,8 @@
 28,43 5-23 * * * bash git_pull >> /jd/log/git_pull.log 2>&1
 # 删除 RmLogDaysAgo 指定天数以前的旧日志，本行为不记录日志
 57 13 * * * bash rm_log >/dev/null 2>&1
+# 开卡
+0 9,18 * * * sh /jd/OpenCard/run.sh
 # 导出所有互助码清单，日志在log/export_sharecodes下
 48 5 * * * bash export_sharecodes
 # 京豆变更通知
