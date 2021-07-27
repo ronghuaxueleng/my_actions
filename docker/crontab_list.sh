@@ -332,8 +332,6 @@
 8 8 * 6 * node /scripts/zooJx88hongbao.js >> /scripts/logs/zooJx88hongbao.log 2>&1
 #京东合肥旗舰店开业动物园版 
 0 6 * * * node /scripts/zooSupershophf.js >> /scripts/logs/zooSupershophf.log 2>&1
-#京东GNC组队瓜分京豆 
-0 8 * * * node /scripts/zooJointeam01.js >> /scripts/logs/zooJointeam01.log 2>&1
 #京东618限时盲盒动物园版 
 10 10 1-18 6 * node /scripts/zooLimitbox.js >> /scripts/logs/zooLimitbox.log 2>&1
 #京东618开卡活动5 
@@ -420,8 +418,6 @@
 10 * * * * node /scripts/jd_jdfactory.js >> /scripts/logs/jd_jdfactory.log 2>&1
 #京东赚赚 
 10 0 * * * node /scripts/jd_jdzz.js >> /scripts/logs/jd_jdzz.log 2>&1
-#京东宠汪汪 
-15 0-23/2 * * * node /scripts/jd_joy.js >> /scripts/logs/jd_joy.log 2>&1
 #京东宠汪汪喂食 
 15 0-23/1 * * * node /scripts/jd_joy_feedPets.js >> /scripts/logs/jd_joy_feedPets.log 2>&1
 #京东宠汪汪积分兑换奖品 
@@ -480,8 +476,6 @@
 5,35 * * 6 * node /scripts/jd_ffl.js >> /scripts/logs/jd_ffl.log 2>&1
 #京东城城分现金互助执意版 
 5 0 * * * node /scripts/zy_ccfxj.js >> /scripts/logs/zy_ccfxj.log 2>&1
-#京东618手机竞猜 
-1 0 * * * node /scripts/zy_618jc.js >> /scripts/logs/zy_618jc.log 2>&1
 #京东新潮品牌狂欢执意版 
 0 10 * * * node /scripts/zy_xckh.js >> /scripts/logs/zy_xckh.log 2>&1
 #京东618主会场红包雨 
@@ -546,8 +540,6 @@
 10 * * * * node /scripts/jd_zjd_tuan.js >> /scripts/logs/jd_zjd_tuan.log 2>&1
 #京东读书签到 
 0 10 0 * * * node /scripts/jddsSign.js >> /scripts/logs/jddsSign.log 2>&1
-#京东 
-0 9 * * * node /scripts/JD_DailyBonus.js >> /scripts/logs/JD_DailyBonus.log 2>&1
 #京东成长分 
 0 0 * * * node /scripts/jdczf.js >> /scripts/logs/jdczf.log 2>&1
 #京东到家 
