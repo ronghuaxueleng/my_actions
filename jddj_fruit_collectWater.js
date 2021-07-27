@@ -101,12 +101,8 @@ async function userinfo() {
             $.http.get(option).then(response => {
                 let data = JSON.parse(response.body);
                 if (data.code == 0) {
-                    try {
-                        nickname = data.result.userInfo.userBaseInfo.nickName;
-                        console.log("●●●" + nickname + "●●●");
-                    } catch (error) {
-                        console.log("●●●昵称获取失败●●●");
-                    }
+                    nickname = data.result.userInfo.userBaseInfo.nickName;
+                    console.log("●●●" + nickname + "●●●");
                 }
             })
             resolve();
