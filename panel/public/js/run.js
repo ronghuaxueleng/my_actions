@@ -1,8 +1,5 @@
-let BASE_PATH = location.href.indexOf("/mobile") > -1 ? ".." : ".";
 
-$.ajaxSetup({
-    cache: false
-});
+
 
 $(document).ready(function () {
     var timer = 0;
@@ -15,13 +12,6 @@ $(document).ready(function () {
         mode: 'text',
         theme: 'panda-syntax'
     });
-
-    function getPath(request, page) {
-        if (!!request.headers["user-agent"].match(/AppleWebKit.*Mobile.*/)) {
-            return path.join(__dirname + '/public/mobile/' + page)
-        }
-        return path.join(__dirname + '/public/' + page)
-    }
 
     /**
      * 执行cmd
@@ -40,7 +30,7 @@ $(document).ready(function () {
         }
         editor.setValue('');
 
-        $.post(BASE_PATH + "/runCmd", {
+        $.post(BASE_API_PATH + "/runCmd", {
             cmd: cmd
         }, function (data) {
             editor.setValue(data.msg);
@@ -162,7 +152,7 @@ $(document).ready(function () {
     }
 
     function getLog(jsName) {
-        $.get(`./runLog/${jsName}`, function (data) {
+        $.get(BASE_API_PATH + `/runLog/${jsName}`, function (data) {
             if (data !== 'no logs') {
                 editor.setValue(data);
             }

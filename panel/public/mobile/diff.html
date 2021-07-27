@@ -80,68 +80,7 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="../js/common.js"></script>
     <script type="text/javascript" src="../js/mobile-nav.js"></script>
-    <script>
-        $.ajaxSetup({
-            cache: false
-        });
-
-        var editor, origLeft, origRight;
-
-        function initUI() {
-            editor = CodeMirror.MergeView(document.getElementById('compare'), {
-                value: origLeft,
-                origLeft: null,
-                orig: origRight,
-                lineNumbers: true,
-                lineWrapping: false,
-                mode: 'shell',
-                theme: 'panda-syntax',
-                keyMap: 'sublime',
-                lineNumbers: true,
-                highlightDifferences: true,
-                connect: null,
-                collapseIdentical: false
-            });
-        }
-
-        Promise.all([$.get('../api/config/config'), $.get('../api/config/sample')])
-            .then((resArr) => {
-                origLeft = resArr[0];
-                origRight = resArr[1];
-
-                initUI();
-            });
-
-        $('#prev').click(function () {
-            editor.editor().execCommand('goPrevDiff');
-        });
-
-        $('#next').click(function () {
-            editor.editor().execCommand('goNextDiff');
-        });
-
-        $('#wrap').click(function () {
-            var lineWrapping = editor.editor().getOption('lineWrapping');
-            editor.editor().setOption('lineWrapping', !lineWrapping);
-            editor.rightOriginal().setOption('lineWrapping', !lineWrapping);
-        });
-
-        $('#save').click(function () {
-            var confContent = editor.editor().getValue();
-            $.post('../api/save', {
-                content: confContent,
-                name: "config.sh"
-            }, function (data) {
-                let icon = (data.err == 0) ? "success" : "error"
-                Swal.fire({
-                    title: data.title,
-                    text: data.msg,
-                    icon: icon
-                }).then((result) => {
-                    window.location.reload(true);
-                })
-            });
-        });
-    </script>
+    <script type="text/javascript" src="../js/diff.js"></script>
 </body>

@@ -74,48 +74,8 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="../js/common.js"></script>
     <script type="text/javascript" src="../js/mobile-nav.js"></script>
-    <script>
-        $.ajaxSetup({
-            cache: false
-        });
-
-        $(document).ready(function () {
-            var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-                lineNumbers: true,
-                lineWrapping: true,
-                styleActiveLine: true,
-                matchBrackets: true,
-                mode: 'shell',
-                theme: 'panda-syntax',
-                keyMap: 'sublime'
-            });
-            $.get('../api/config/crontab', function (data) {
-                editor.setValue(data);
-            });
-
-            $('#save').click(function () {
-                var confContent = editor.getValue();
-                $.post('../api/save', {
-                    content: confContent,
-                    name: "crontab.list"
-                }, function (data) {
-                    let icon = (data.err == 0) ? "success" : "error"
-                    Swal.fire({
-                        title: data.title,
-                        html: data.msg + '<br>定时任务已同步更新',
-                        icon: icon
-                    }).then((result) => {
-                        window.location.reload(true);
-                    })
-                });
-            });
-
-            $('#wrap').click(function () {
-                var lineWrapping = editor.getOption('lineWrapping');
-                editor.setOption('lineWrapping', !lineWrapping);
-            });
-        });
-    </script>
+    <script type="text/javascript" src="../js/crontab.js"></script>
 
 </body>

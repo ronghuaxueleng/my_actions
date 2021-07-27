@@ -68,37 +68,8 @@
                     </div>
                 </form>
             </div>
+            <script type="text/javascript" src="./js/common.js"></script>
             <script type="text/javascript" src="./js/login.js"></script>
-            <script>
-                $.ajaxSetup({
-                    cache: false
-                });
-
-                $("#login").click(function () {
-                    $user = $("#username").val();
-                    $password = $("#password").val();
-                    if (!$user || !$password) return;
-
-                    $.post('./auth', {
-                        username: $user,
-                        password: $password
-                    }, function (data) {
-                        if (data.err == 0) {
-                            if (!!navigator.userAgent.match(/AppleWebKit.*Mobile.*/)) {
-                                window.location.href = "./mobile/home.html"; //手机
-                            } else {
-                                window.location.href = "./home.html"; //电脑
-                            }
-                        } else {
-                            Swal.fire({
-                                text: data.msg,
-                                icon: 'error'
-                            })
-                        }
-                    });
-                    return false;
-                });
-            </script>
         </div>
     </main>
 

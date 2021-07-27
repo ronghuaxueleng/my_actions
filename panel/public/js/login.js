@@ -80,3 +80,30 @@ function togglePassword() {
         );
     }
 }
+$(document).ready(function () {
+    $("#login").click(function () {
+        let $user = $("#username").val();
+        let $password = $("#password").val();
+        if (!$user || !$password) return;
+
+        $.post(BASE_API_PATH + '/auth', {
+            username: $user,
+            password: $password
+        }, function (data) {
+            if (data.err === 0) {
+                if (!!navigator.userAgent.match(/AppleWebKit.*Mobile.*/)) {
+                    window.location.href = BASE_PATH + "mobile/home.html"; //手机
+                } else {
+                    window.location.href = BASE_PATH + "home.html"; //电脑
+                }
+            } else {
+                Swal.fire({
+                    text: data.msg,
+                    icon: 'error'
+                })
+            }
+        });
+        return false;
+    });
+})
+
