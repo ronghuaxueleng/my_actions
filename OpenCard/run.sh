@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. ./jd/config/config.sh
+. /jd/config/config.sh
 
 ## 用户数量UserSum
 function Count_UserSum() {
