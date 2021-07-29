@@ -1,8 +1,4 @@
-let BASE_PATH = location.href.indexOf("/mobile") > -1 ? ".." : ".";
 
-$.ajaxSetup({
-    cache: false
-});
 
 $(document).ready(function () {
     var timer = 0;
