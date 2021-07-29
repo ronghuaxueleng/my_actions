@@ -199,7 +199,18 @@ docker exec -it jd sed -i 's/EnableExtraShell=""/EnableExtraShell="true"/g' conf
 <p><em>注意：删除活动脚本与更新脚本的日志文件，默认删除 <code>7天</code> 以上的日志文件，可以通过配置文件中的相关变量更改默认时间值。</em></p>
 </blockquote>
 <h3>
-<a id="9-安装修复脚本依赖" class="anchor" href="#9-%E5%AE%89%E8%A3%85%E4%BF%AE%E5%A4%8D%E8%84%9A%E6%9C%AC%E4%BE%9D%E8%B5%96"></a>9. 安装/修复脚本依赖：</h3>
+<a id="9-查看正在运行的脚本" class="anchor" href="#9-%E6%9F%A5%E7%9C%8B%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E8%84%9A%E6%9C%AC"></a>9. 查看正在运行的脚本：</h3>
+<pre><code>docker exec -it jd bash jd ps
+</code></pre>
+<h3>
+<a id="10-终止正在运行的脚本" class="anchor" href="#10-%E7%BB%88%E6%AD%A2%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E8%84%9A%E6%9C%AC"></a>10. 终止正在运行的脚本：</h3>
+<pre><code>docker exec -it jd bash jd &lt;xxx&gt; pkill
+</code></pre>
+<blockquote>
+<p><em>注意：根据脚本名称搜索对应的进程并立即杀死，当脚本报错死循环时可使用此功能。</em></p>
+</blockquote>
+<h3>
+<a id="11-安装修复脚本依赖" class="anchor" href="#11-%E5%AE%89%E8%A3%85%E4%BF%AE%E5%A4%8D%E8%84%9A%E6%9C%AC%E4%BE%9D%E8%B5%96"></a>11. 安装/修复脚本依赖：</h3>
 <ul>
 <li>
 <p>进入容器内脚本目录：</p>
@@ -220,7 +231,7 @@ npm install                       ## npm通用安装依赖命令
 </li>
 </ul>
 <blockquote>
-<p><em>注意：当新脚本报错提示 <code>need module xxx</code> 类似字样说明缺少脚本所需的依赖包，目前新的镜像已在启动容器初始化时安装大部分环境所需的软件包和依赖模块。</em></p>
+<p><em>注意：当新脚本报错提示 <code>need module xxx</code> 类似字样说明缺少脚本所需的依赖包，看见 <code>module</code> 字样应立即联想到安装模块上，目前新的镜像已在启动容器初始化时安装大部分环境所需的软件包和依赖模块。</em></p>
 </blockquote>
 <hr>
 <p>ㅤ</p>

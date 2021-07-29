@@ -1,5 +1,3 @@
-
-
 $(document).ready(function () {
     var timer = 0;
     var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -74,7 +72,7 @@ $(document).ready(function () {
                     break;
                 case 'ps':
                     confirmTxt = '确认查看进程？';
-                    cmd = `${this.id} -ef | egrep -Ev "bash|tee|sleep|server.js|vim|crond|ssh|ps|pm2|\[*\]"`;
+                    cmd = `bash jd ${this.id} 2>&1`;
                     refreshLog = false;
                     break;
                 case 'rmlog':
