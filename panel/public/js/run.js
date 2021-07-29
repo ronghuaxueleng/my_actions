@@ -1,5 +1,8 @@
+let BASE_PATH = location.href.indexOf("/mobile") > -1 ? ".." : ".";
 
-
+$.ajaxSetup({
+    cache: false
+});
 
 $(document).ready(function () {
     var timer = 0;
@@ -12,6 +15,13 @@ $(document).ready(function () {
         mode: 'text',
         theme: 'panda-syntax'
     });
+
+    function getPath(request, page) {
+        if (!!request.headers["user-agent"].match(/AppleWebKit.*Mobile.*/)) {
+            return path.join(__dirname + '/public/mobile/' + page)
+        }
+        return path.join(__dirname + '/public/' + page)
+    }
 
     /**
      * 执行cmd
@@ -54,7 +64,7 @@ $(document).ready(function () {
 
     }
 
-    $('#git_pull, #exsc, #hangup, #ps, #rmlog, #cfd_loop')
+    $('#git_pull, #exsc, #ps, #rmlog, #hangup, #hangdown')
         .click(function () {
             let confirmTxt, cmd, refreshLog = true;
             switch (this.id) {
@@ -68,24 +78,23 @@ $(document).ready(function () {
                     break;
                 case 'ps':
                     confirmTxt = '确认查看进程？';
-                    cmd = `${this.id} -ef | egrep -v "bash|tee|crond|ssh|ps|pm2"`;
+                    cmd = `${this.id} -ef | egrep -Ev "bash|tee|sleep|server.js|vim|crond|ssh|ps|pm2|\[*\]"`;
                     refreshLog = false;
-                    break;
-                case 'ttyd':
-                    confirmTxt = '确认启动/重启网页终端？';
-                    cmd = `pm2 restart ${this.id} 2>&1 | tee log/ttyd.log`;
                     break;
                 case 'rmlog':
                     confirmTxt = '确认删除日志？';
-                    cmd = `bash jd ${this.id} 2>&1 | tee log/rmlog.log;`
+                    cmd = `bash jd ${this.id} 2>&1;`
+                    refreshLog = false;
                     break;
                 case 'hangup':
                     confirmTxt = '确认启动/重启挂机程序？';
-                    cmd = `bash jd ${this.id} 2>&1 | tee log/hangup.log`;
+                    cmd = `bash jd hang up 2>&1`;
+                    refreshLog = false;
                     break;
-                case 'cfd_loop':
+                case 'hangdown':
                     confirmTxt = '确认停止后台挂机程序？';
-                    cmd = `pm2 stop jd_${this.id} 2>&1 | tee log/cfd_loop.log`;
+                    cmd = `bash jd hang down 2>&1`;
+                    refreshLog = false;
                     break;
                 default:
                     break;
