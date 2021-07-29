@@ -286,7 +286,6 @@
 #京东汪汪乐园柠檬版 
 0 */1 * * * node /scripts/jd_joy-park.js >> /scripts/logs/jd_joy-park.log 2>&1
 #京东京享值PK柠檬版 
-0 10,11 * * * node /scripts/jd_pk.js >> /scripts/logs/jd_pk.log 2>&1
 #京东口袋书店 
 1 8,12,18 * * * node /scripts/chinnkarahoi_jd_bookshop.js >> /scripts/logs/chinnkarahoi_jd_bookshop.log 2>&1
 #京东清凉一夏开卡活动12 
