@@ -283,6 +283,8 @@
 0 0-23/2 * * * node /scripts/jd_EsportsManager.js >> /scripts/logs/jd_EsportsManager.log 2>&1
 #京东众筹许愿池柠檬版 
 0 8,12 * * * node /scripts/jd_wish.js >> /scripts/logs/jd_wish.log 2>&1
+#京东汪汪乐园柠檬版 
+0 */1 * * * node /scripts/jd_joy-park.js >> /scripts/logs/jd_joy-park.log 2>&1
 #京东口袋书店 
 1 8,12,18 * * * node /scripts/chinnkarahoi_jd_bookshop.js >> /scripts/logs/chinnkarahoi_jd_bookshop.log 2>&1
 #京东清凉一夏开卡活动12 
@@ -461,8 +463,6 @@
 0 0 * * * node /scripts/jd_tyt.js >> /scripts/logs/jd_tyt.log 2>&1
 #京东京喜牧场刷金币 
 0 10 * * * * node /scripts/jx_mc_coin.js >> /scripts/logs/jx_mc_coin.log 2>&1
-#京东柠檬极速版砍价（需填变量） 
-0 0 * * * node /scripts/jd_kanjia.js >> /scripts/logs/jd_kanjia.log 2>&1
 #京东京喜牧场隐藏姓名版 
 20 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
 #京东柠檬邀请有礼 
