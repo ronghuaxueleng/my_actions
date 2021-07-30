@@ -60,4 +60,4 @@ JD_COOKIE=$(Count_UserSum && Combin_Sub Cookie)
 # sed -i -E 's/(JD_COOKIE\s?=\s?").+(")/\1$JD_COOKIE\2/g' OpenCardConfig.ini
 
 perl -i -pe "s|(JD_COOKIE\s?=\s?').*(')|\1${JD_COOKIE}\2|" OpenCardConfig.ini
-/usr/bin/python3 jd_OpenCard.py
+/usr/bin/python3 /jd/OpenCard/jd_OpenCard.py
