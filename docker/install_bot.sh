@@ -21,7 +21,7 @@ fi
 ## 拉取组件
 if [ -d ${RepoPath}/.git ]; then
     cd ${RepoPath}
-    echo -e "\n${WAITING} 开始更新仓库\n"
+    echo -e "${WAITING} 开始更新仓库\n"
     git remote set-url origin ${BotRepositoryURL} >/dev/null
     git reset --hard origin/main >/dev/null
     git fetch --all
@@ -29,7 +29,7 @@ if [ -d ${RepoPath}/.git ]; then
     git reset --hard origin/main
     git pull
 else
-    echo -e "\n${WAITING} 开始克隆仓库\n"
+    echo -e "${WAITING} 开始克隆仓库\n"
     rm -rf ${RepoPath}
     git clone -b main ${BotRepositoryURL} ${RepoPath}
     ExitStatusBot=$?
@@ -43,7 +43,7 @@ else
 fi
 
 ## 安装模块
-echo -e "\n${WAITING} 正在安装模块\n"
+echo -e "${WAITING} 正在安装模块\n"
 cp -rf ${RepoPath}/jbot ${ShellDir}
 cd ${ShellDir}/jbot
 pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
