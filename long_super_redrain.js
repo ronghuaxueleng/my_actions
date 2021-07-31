@@ -1,5 +1,5 @@
 /*
-整点京豆雨，每天8*16豆
+整点京豆雨
 
 boxjs订阅地址: https://raw.githubusercontent.com/longzhuzhu/nianyu/main/qx/longzhuzhu.boxjs.json
 
