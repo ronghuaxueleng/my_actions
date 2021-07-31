@@ -311,6 +311,8 @@
 5 0 * * * node /scripts/zooOpencard10.js >> /scripts/logs/zooOpencard10.log 2>&1
 #京东618开卡活动9 
 5 0 * * * node /scripts/zooOpencard09.js >> /scripts/logs/zooOpencard09.log 2>&1
+#京东柠檬砍价3 
+30 */1 * * * node /scripts/jd_kanjia3.js >> /scripts/logs/jd_kanjia3.log 2>&1
 #京东618开卡活动8 
 15 9 1-18 6 node /scripts/zooOpencard08.js >> /scripts/logs/zooOpencard08.log 2>&1
 #京东618开卡活动7 
