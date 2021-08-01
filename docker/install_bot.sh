@@ -11,12 +11,11 @@ WAITING='\033[33m[*]\033[0m'
 
 ## 安装依赖
 echo -e "\n${WAITING} 开始安装依赖\n"
-apk --no-cache add -f zlib-dev gcc jpeg-dev python3-dev python2 musl-dev freetype-dev py3-pip
+apk --no-cache add -f zlib-dev gcc jpeg-dev python3-dev musl-dev freetype-dev py3-pip
 if [ $? -eq 0 ]; then
     echo -e "\n${SUCCESS} 依赖安装完成\n"
 else
     echo -e "\n${ERROR} 依赖安装失败，请检查原因后重试\n"
-    exit
 fi
 
 ## 拉取组件
@@ -38,9 +37,9 @@ fi
 
 if [[ ${ExitStatusBot} -eq 0 ]]; then
     echo -e "\n${SUCCESS} 仓库更新成功\n"
+    sed -i "s/script: \"python\"/script: \"python3\"/g" ${RepoPath}/jbot/ecosystem.config.js
 else
     echo -e "\n${ERROR} 仓库更新失败，请检查原因后重试\n"
-    exit
 fi
 
 ## 安装模块
