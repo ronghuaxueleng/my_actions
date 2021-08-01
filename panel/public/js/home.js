@@ -148,7 +148,7 @@ $(document).ready(function () {
             let icon = (data.err === 0) ? "success" : "error"
             Swal.fire({
                 title: data.title,
-                text: data.msg,
+                html: data.msg,
                 icon: icon
             }).then((result) => {
                 window.location.reload(true);

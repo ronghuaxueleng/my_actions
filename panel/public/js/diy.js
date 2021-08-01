@@ -14,15 +14,14 @@ $(document).ready(function () {
 
     $('#save').click(function () {
         var confContent = editor.getValue();
-        let timeStamp = (new Date()).getTime()
-        $.post(BASE_API_PATH + '/api/save?t=' + timeStamp, {
+        $.post(BASE_API_PATH + '/api/save', {
             content: confContent,
             name: "diy.sh"
         }, function (data) {
             let icon = (data.err === 0) ? "success" : "error"
             Swal.fire({
                 title: data.title,
-                text: data.msg,
+                html: data.msg,
                 icon: icon
             }).then((result) => {
                 window.location.reload(true);
