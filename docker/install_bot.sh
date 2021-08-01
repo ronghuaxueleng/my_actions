@@ -2,6 +2,7 @@
 
 ShellDir=/jd
 LogDir=${ShellDir}/log
+ConfigDir=${ShellDir}/config
 RepoPath="${ShellDir}/docker/dockerbot"
 BotRepositoryURL="https://ghproxy.com/https://github.com/SuMaiKaDe/bot.git"
 SUCCESS='\033[32m[Done]\033[0m'
@@ -40,6 +41,10 @@ if [[ ${ExitStatusBot} -eq 0 ]]; then
     sed -i "s/script: \"python\"/script: \"python3\"/g" ${RepoPath}/jbot/ecosystem.config.js
 else
     echo -e "\n${ERROR} 仓库更新失败，请检查原因后重试\n"
+fi
+
+if [ ! -s ${ConfigDir}/bot.json ]; then
+    cp -fv ${ShellDir}/sample/bot.json ${ConfigDir}/bot.json
 fi
 
 ## 安装模块
