@@ -31,6 +31,8 @@ var crontabFile = path.join(rootPath, 'config/crontab.list');
 var confBakDir = path.join(rootPath, 'config/bak/');
 // auth.json 文件目录
 var authConfigFile = path.join(rootPath, 'config/auth.json');
+// bot.json 文件所在目录
+var botFile = path.join(rootPath, 'config/bot.json');
 // diy.sh 文件目录
 var diyFile = path.join(rootPath, 'config/diy.sh');
 // 日志目录
@@ -41,7 +43,7 @@ var ScriptsPath = path.join(rootPath, 'scripts/');
 var authError = '错误的用户名密码，请重试';
 var loginFaild = '请先登录!';
 
-var configString = 'config sample crontab diy';
+var configString = 'config sample crontab diy bot';
 
 var s_token, cookies, guid, lsid, lstoken, okl_token, token, userCookie = ''
 
@@ -82,12 +84,12 @@ function getCookie(response) {
 async function step1() {
     try {
         s_token,
-            cookies,
-            guid,
-            lsid,
-            lstoken,
-            okl_token,
-            token = ''
+        cookies,
+        guid,
+        lsid,
+        lstoken,
+        okl_token,
+        token = ''
         let timeStamp = (new Date()).getTime()
         let url = 'https://plogin.m.jd.com/cgi-bin/mm/new_login_entrance?lang=chs&appid=300&returnurl=https://wq.jd.com/passport/LoginRedirect?state=' + timeStamp + '&returnurl=https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action&source=wq_passport'
         const response = await got(url, {
@@ -104,7 +106,8 @@ async function step1() {
         });
 
         praseSetCookies(response)
-    } catch (error) {
+    }
+    catch (error) {
         cookies = '';
         console.log(error.response.body);
     }
@@ -246,6 +249,10 @@ function bakConfFile(file) {
             oldConfContent = getFileContentByName(diyFile);
             fs.writeFileSync(bakConfFile, oldConfContent);
             break;
+        case 'bot.json':
+            oldConfContent = getFileContentByName(botFile);
+            fs.writeFileSync(bakConfFile, oldConfContent);
+            break;
         default:
             break;
     }
@@ -267,6 +274,9 @@ function saveNewConf(file, content) {
             break;
         case 'diy.sh':
             fs.writeFileSync(diyFile, content);
+            break;
+        case 'bot.json':
+            fs.writeFileSync(botFile, content);
             break;
         default:
             break;
@@ -326,15 +336,15 @@ app.use(compression({
 }));
 
 //设置跨域访问
-app.all("*",function(req,res,next){
+app.all("*", function (req, res, next) {
     //设置允许跨域的域名，*代表允许任意域名跨域
-    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control-Allow-Origin", "*");
     //允许的header类型
-    res.header("Access-Control-Allow-Headers","content-type");
+    res.header("Access-Control-Allow-Headers", "content-type");
     //跨域允许的请求方式
-    res.header("Access-Control-Allow-Methods","DELETE,PUT,POST,GET,OPTIONS");
+    res.header("Access-Control-Allow-Methods", "DELETE,PUT,POST,GET,OPTIONS");
     if (req.method.toLowerCase() === 'options')
-        res.send(200);  //让options尝试请求快速结束
+        res.send(200); //让options尝试请求快速结束
     else
         next();
 })
@@ -391,7 +401,7 @@ app.get('/', function (request, response) {
     if (request.session.loggedin) {
         response.redirect('./home');
     } else {
-        response.sendFile(getPath(request , 'auth.html'));
+        response.sendFile(getPath(request, 'auth.html'));
     }
 });
 
@@ -400,7 +410,7 @@ app.get('/', function (request, response) {
  */
 app.get('/changepwd', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(getPath(request , 'pwd.html'));
+        response.sendFile(getPath(request, 'pwd.html'));
     } else {
         response.redirect('/');
     }
@@ -411,7 +421,7 @@ app.get('/changepwd', function (request, response) {
  */
 app.get('/terminal', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(getPath(request , 'terminal.html'));
+        response.sendFile(getPath(request, 'terminal.html'));
     } else {
         response.redirect('/');
     }
@@ -509,6 +519,9 @@ app.get('/api/config/:key', function (request, response) {
                 case 'diy':
                     content = getFileContentByName(diyFile);
                     break;
+                case 'bot':
+                    content = getFileContentByName(botFile);
+                    break;
                 default:
                     break;
             }
@@ -527,7 +540,7 @@ app.get('/api/config/:key', function (request, response) {
  */
 app.get('/home', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(getPath(request , 'home.html'));
+        response.sendFile(getPath(request, 'home.html'));
     } else {
         response.redirect('/');
     }
@@ -538,11 +551,10 @@ app.get('/home', function (request, response) {
  */
 app.get('/diff', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(getPath(request , 'diff.html'));
+        response.sendFile(getPath(request, 'diff.html'));
     } else {
         response.redirect('/');
     }
-
 });
 
 /**
@@ -550,7 +562,7 @@ app.get('/diff', function (request, response) {
  */
 app.get('/crontab', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(getPath(request , 'crontab.html'));
+        response.sendFile(getPath(request, 'crontab.html'));
     } else {
         response.redirect('/');
     }
@@ -561,11 +573,21 @@ app.get('/crontab', function (request, response) {
  */
 app.get('/diy', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(getPath(request , 'diy.html'));
+        response.sendFile(getPath(request, 'diy.html'));
     } else {
         response.redirect('/');
     }
+});
 
+/**
+ * Bot 页面
+ */
+app.get('/bot', function (request, response) {
+    if (request.session.loggedin) {
+        response.sendFile(getPath(request, 'bot.html'));
+    } else {
+        response.redirect('/');
+    }
 });
 
 /**
@@ -573,7 +595,7 @@ app.get('/diy', function (request, response) {
  */
 app.get('/run', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(getPath(request , 'run.html'));
+        response.sendFile(getPath(request, 'run.html'));
     } else {
         response.redirect('/');
     }
@@ -636,11 +658,11 @@ app.get('/runLog/:jsName', function (request, response) {
     if (request.session.loggedin) {
         const jsName = request.params.jsName;
         let logFile;
-        if (jsName === 'git_pull' || jsName === 'exsc' || jsName === 'ttyd' || jsName === 'rmlog' || jsName === 'hangup'|| jsName === 'cfd_loop'|| jsName === 'exsc') {
+        if (jsName === 'git_pull' || jsName === 'exsc' || jsName === 'ttyd' || jsName === 'rmlog' || jsName === 'hangup' || jsName === 'cfd_loop' || jsName === 'exsc') {
             logFile = path.join(rootPath, `log/${jsName}.log`);
-        }else {
+        } else {
             let pathUrl = `log/${jsName}/`;
-            if(!fs.existsSync(path.join(rootPath, pathUrl))){
+            if (!fs.existsSync(path.join(rootPath, pathUrl))) {
                 pathUrl = `log/jd_${jsName}/`;
             }
             logFile = getLastModifyFilePath(
@@ -766,7 +788,7 @@ app.post('/api/save', function (request, response) {
  */
 app.get('/log', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(getPath(request , 'tasklog.html'));
+        response.sendFile(getPath(request, 'tasklog.html'));
     } else {
         response.redirect('/');
     }
@@ -833,7 +855,7 @@ app.get('/api/logs/:dir/:file', function (request, response) {
  */
 app.get('/viewScripts', function (request, response) {
     if (request.session.loggedin) {
-        response.sendFile(getPath(request , 'viewScripts.html'));
+        response.sendFile(getPath(request, 'viewScripts.html'));
     } else {
         response.redirect('/');
     }
