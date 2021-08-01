@@ -19,6 +19,7 @@ var {
 const {
     createProxyMiddleware
 } = require('http-proxy-middleware');
+const random = require('string-random');
 
 var rootPath = path.resolve(__dirname, '..')
 // config.sh 文件所在目录
@@ -35,6 +36,8 @@ var authConfigFile = path.join(rootPath, 'config/auth.json');
 var botFile = path.join(rootPath, 'config/bot.json');
 // diy.sh 文件目录
 var diyFile = path.join(rootPath, 'config/diy.sh');
+// bot.json 文件所在目录
+var botFile = path.join(rootPath, 'config/bot.json');
 // 日志目录
 var logPath = path.join(rootPath, 'log/');
 // 脚本目录
@@ -474,6 +477,10 @@ app.get('/cookie', function (request, response) {
                 const cookie = await checkLogin();
                 if (cookie.body.errcode == 0) {
                     let ucookie = getCookie(cookie);
+                    let autoReplace = request.query.autoReplace && request.query.autoReplace === 'true';
+                    if(autoReplace){
+                        updateCookie(ucookie);
+                    }
                     response.send({
                         err: 0,
                         cookie: ucookie
@@ -509,6 +516,9 @@ app.get('/api/config/:key', function (request, response) {
             switch (request.params.key) {
                 case 'config':
                     content = getFileContentByName(confFile);
+                    break;
+                case 'bot':
+                    content = getFileContentByName(botFile);
                     break;
                 case 'sample':
                     content = getFileContentByName(sampleFile);
@@ -566,6 +576,18 @@ app.get('/crontab', function (request, response) {
     } else {
         response.redirect('/');
     }
+});
+
+/**
+ * bot配置 页面
+ */
+app.get('/bot', function (request, response) {
+    if (request.session.loggedin) {
+        response.sendFile(getPath(request , 'bot.html'));
+    } else {
+        response.redirect('/');
+    }
+
 });
 
 /**
@@ -726,6 +748,7 @@ app.post('/changepass', function (request, response) {
         let config = {
             user: username,
             password: password,
+            cookieApiToken: random(32)
         };
         if (username && password) {
             fs.writeFile(authConfigFile, JSON.stringify(config), function (err) {
@@ -930,13 +953,8 @@ app.get('/api/scripts/:dir/:file', function (request, response) {
     }
 });
 
-/**
- * 更新已经存在的人的cookie & 自动添加新用户
- * */
-app.post('/updateCookie', function (request, response) {
-    if (request.body.cookie) {
-        const cookie = request.body.cookie;
-        const userMsg = request.body.userMsg; //备注
+function updateCookie (cookie,response){
+    if (cookie) {
         const content = getFileContentByName(confFile);
         const lines = content.split('\n');
         const pt_pin = cookie.match(/pt_pin=.+?;/)[0];
@@ -960,21 +978,17 @@ app.post('/updateCookie', function (request, response) {
                     line.match(/pt_pin=.+?;/)[0] == pt_pin
                 ) {
                     const head = line.split('=')[0];
-                    //const newLine = [head, '=', '"', cookie, '"', '  ##', userMsg].join
-                    const newLine = [head, '=', '"', cookie, '"'].join(
-                        ''
-                    );
+                    const newLine = [head, '=', '"', cookie, '"'].join('');
                     lines[i] = newLine;
                     updateFlag = true;
                     var lineNext = lines[i + 1];
                     if (
                         lineNext.match(/上次更新：/)
                     ) {
-                        const bz = lineNext.split('备注：')[1];
-                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', bz ? bz : userMsg].join('');
+                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString()].join('');
                         lines[i + 1] = newLine;
                     } else {
-                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', userMsg].join('');
+                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString()].join('');
                         lines.splice(lastIndex + 1, 0, newLine);
                     }
                 }
@@ -989,27 +1003,48 @@ app.post('/updateCookie', function (request, response) {
                 '"',
                 cookie,
                 '"',
-                //'  #',
-                //userMsg,
             ].join('');
             //提交备注
             lines.splice(lastIndex + 1, 0, newLine);
-            newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', userMsg].join('');
+            newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString()].join('');
             lines.splice(lastIndex + 2, 0, newLine);
         }
         saveNewConf('config.sh', lines.join('\n'));
-        response.send({
-            err: 0,
-            msg: updateFlag ?
-                `[更新成功]\n当前用户量:(${maxCookieCount})` : CK_AUTO_ADD === 'true' ? `[新的Cookie]\n当前用户量:(${CookieCount})` : `服务器配置不自动添加Cookie\n如需启用请添加export CK_AUTO_ADD="true"`,
-            //`[更新成功]\n本服用户量:(${maxCookieCount})` : `非本服用户\n本服用户量:(${CookieCount})`,
-        });
+        if(response){
+            response.send({
+                err: 0,
+                msg: updateFlag ?
+                    `[更新成功]\n当前用户量:(${maxCookieCount})` : CK_AUTO_ADD === 'true' ? `[新的Cookie]\n当前用户量:(${CookieCount})` : `服务器配置不自动添加Cookie\n如需启用请添加export CK_AUTO_ADD="true"`,
+                //`[更新成功]\n本服用户量:(${maxCookieCount})` : `非本服用户\n本服用户量:(${CookieCount})`,
+            });
+        }
     } else {
-        response.send({
-            msg: '参数错误',
-            err: -1
-        });
+        if(response){
+            response.send({
+                msg: '参数错误',
+                err: -1
+            });
+        }
     }
+}
+
+/**
+ * 更新已经存在的人的cookie & 自动添加新用户
+ * */
+app.post('/updateCookie', function (request, response) {
+    fs.readFile(authConfigFile, 'utf8', function (err, data) {
+        if (err) console.log(err);
+        let con = JSON.parse(data);
+        let token = request.headers["api-token"]
+        if(token && token !== '' && token === con.cookieApiToken){
+            updateCookie(request.body.cookie,response);
+        }else{
+            response.send({
+                msg: '非法调用',
+                err: -1
+            });
+        }
+    })
 });
 
 checkConfigFile();

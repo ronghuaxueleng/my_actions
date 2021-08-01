@@ -9,9 +9,15 @@ $(document).ready(function () {
         theme: 'panda-syntax',
         keyMap: 'sublime'
     });
-    $.get(BASE_API_PATH + '/api/config/config', function (data) {
-        editor.setValue(data);
-    });
+
+    function loadConfig(callback) {
+        $.get(BASE_API_PATH + '/api/config/config', function (data) {
+            editor.setValue(data);
+            callback && callback();
+        });
+    }
+
+    loadConfig();
 
     // 勾选记忆
     if (sessionStorage.getItem('autoReplaceCookie') === 'false') {
@@ -51,32 +57,44 @@ $(document).ready(function () {
 
 
     function checkLogin() {
+        var isAutoReplace = $('#autoReplace').prop('checked');
         var timeId = setInterval(() => {
-            $.get(BASE_API_PATH + '/cookie', function (data) {
+            $.get(BASE_API_PATH + '/cookie', {autoReplace: isAutoReplace}, function (data) {
                 if (data.err === 0) {
                     clearInterval(timeId);
                     $("#qrcontainer").addClass("hidden");
                     $("#refresh_qrcode").addClass("hidden");
                     userCookie = data.cookie
-                    var isAutoReplace = $('#autoReplace').prop('checked');
-                    if (isAutoReplace) {
-                        if (autoReplace(userCookie)) {
-                            Swal.fire({
-                                title: "cookie已获取(2s后自动替换)",
-                                html: '<div class="cookieCon" style="font-size:12px;">' +
-                                    userCookie + '</div>',
-                                icon: "success",
-                                showConfirmButton: false,
-                            });
+                    loadConfig(() => {
+                        if (isAutoReplace) {
+                            if (autoReplace(userCookie)) {
+                                Swal.fire({
+                                    title: "cookie已获取(2s后自动替换)",
+                                    html: '<div class="cookieCon" style="font-size:12px;">' +
+                                        userCookie + '</div>',
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                });
 
-                            setTimeout(() => {
-                                $('#save').trigger('click');
-                            }, 2000);
+                                setTimeout(() => {
+                                    $('#save').trigger('click');
+                                }, 2000);
+                            } else {
+                                Swal.fire({
+                                    title: "cookie已获取",
+                                    html: '<div class="cookieCon" style="font-size:16px;font-weight: bold;">自动替换失败，请复制Cookie后手动更新。</div>' +
+                                        '<div class="cookieCon" style="font-size:12px;">' +
+                                        userCookie + '</div>',
+                                    icon: "success",
+                                    confirmButtonText: "复制Cookie",
+                                }).then((result) => {
+                                    copyToClip(userCookie);
+                                });
+                            }
                         } else {
                             Swal.fire({
                                 title: "cookie已获取",
-                                html: '<div class="cookieCon" style="font-size:16px;font-weight: bold;">自动替换失败，请复制Cookie后手动更新。</div>' +
-                                    '<div class="cookieCon" style="font-size:12px;">' +
+                                html: '<div class="cookieCon" style="font-size:12px;">' +
                                     userCookie + '</div>',
                                 icon: "success",
                                 confirmButtonText: "复制Cookie",
@@ -84,17 +102,7 @@ $(document).ready(function () {
                                 copyToClip(userCookie);
                             });
                         }
-                    } else {
-                        Swal.fire({
-                            title: "cookie已获取",
-                            html: '<div class="cookieCon" style="font-size:12px;">' +
-                                userCookie + '</div>',
-                            icon: "success",
-                            confirmButtonText: "复制Cookie",
-                        }).then((result) => {
-                            copyToClip(userCookie);
-                        });
-                    }
+                    })
 
                 } else if (data.err == 21) {
                     clearInterval(timeId);
