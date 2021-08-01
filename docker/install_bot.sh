@@ -10,7 +10,8 @@ ERROR='\033[31m[ERROR]\033[0m'
 WAITING='\033[33m[*]\033[0m'
 
 ## 安装依赖
-apk --no-cache add -f zlib-dev gcc jpeg-dev python3-dev musl-dev freetype-dev py3-pip
+echo -e "\n${WAITING} 开始安装依赖\n"
+apk --no-cache add -f zlib-dev gcc jpeg-dev python3-dev python2 musl-dev freetype-dev py3-pip
 if [ $? -eq 0 ]; then
     echo -e "\n${SUCCESS} 依赖安装完成\n"
 else
