@@ -10,26 +10,21 @@
 ## Tips:看清楚板块和其中的注释，不要乱写乱改
 
 ##############################  定  义  代  理  相  关  设  置  ##############################
-## 判定是否启用了下载代理，${DownloadJudgment}是一个判定变量，勿动
-if [[ ${EnableExtraShellProxyDownload} == true ]]; then
-  DownloadJudgment=${ExtraShellProxyUrl}
-else
-  ## 如果没有启用下载代理该变量赋值为空
-  DownloadJudgment=
-fi
+## 根据配置文件中的设置判定是否启用了下载代理，${ProxyJudge}是一个判定变量，建议不要移除，配置文件中如果没用启用该判定变量会赋值为空
+[[ ${EnableExtraShellProxyDownload} == true ]] && ProxyJudge=${ExtraShellProxyUrl} || ProxyJudge=""
 
 ##############################  作  者  昵  称  &  脚  本  地  址  &  脚  本  名  称  （必填）  ##############################
 
 author_list=""
 ## 添加更多作者昵称（必填）示例：author_list="testuser1 testuser2"  直接追加进双引号内，不要新定义变量，多个值用空格隔开
 
-scripts_base_url_1=${DownloadJudgment}
+scripts_base_url_1=${ProxyJudge}
 my_scripts_list_1=""
 
 # 将相应作者的脚本地址到以下变量 scripts_base_url 中，注意带上项目分支名称，如果脚本在文件夹中也要带上文件夹名，不要忘了最后面的斜杠，并且一定要使用 raw 地址，Gitee 地址需去除下载判定变量
 # 将相应作者的脚本填写到以下变量 my_scripts_list 中，多个值用空格隔开
 
-## 示例：scripts_base_url_2=${DownloadJudgment}https://raw.githubusercontent.com/testuser/testrepository/main/
+## 示例：scripts_base_url_2=${ProxyJudge}https://raw.githubusercontent.com/testuser/testrepository/main/
 ##       my_scripts_list_2="jd_test1.js jd_test2.js jd_test3.js"
 
 ##############################  随  机  函  数  ##############################
@@ -42,25 +37,49 @@ rand() {
 }
 cd ${ShellDir}
 index=1
+echo -e "\033[33m[*]\033[0m 执行自定义脚本🔔"
 for author in $author_list; do
-  echo -e "开始下载 $author 的活动脚本：\n"
+  echo -e "\n\033[33m[*]\033[0m 开始下载/更新 $author 的活动脚本:"
   # 下载my_scripts_list中的每个js文件，重命名增加前缀"作者昵称_"，增加后缀".new"
   eval scripts_list=\$my_scripts_list_${index}
   #echo $scripts_list
   eval url_list=\$scripts_base_url_${index}
   #echo $url_list
+
+  ## 判断脚本来源仓库
+  format_url=$(echo $url_list | awk -F '.com' '{print$NF}' | sed 's/.$//')
+  if [[ $(echo $url_list | egrep -o "github|gitee") == "github" ]]; then
+    repository_platform="https://github.com"
+    repository_branch=$(echo $format_url | awk -F '/' '{print$4}')
+    reformat_url=$(echo $format_url | sed "s|$repository_branch|tree/$repository_branch|g")
+    if [[ ${EnableExtraShellProxyDownload} == true ]]; then
+      DownloadJudgment="通过代理"
+    else
+      DownloadJudgment=""
+    fi
+  elif [[ $(echo $url_list | egrep -o "github|gitee") == "gitee" ]]; then
+    repository_platform="https://gitee.com"
+    reformat_url=$(echo $format_url | sed "s|/raw/|/tree/|g")
+    DownloadJudgment=""
+  fi
+  repository_url=$(echo "$repository_platform$reformat_url")
+  echo -e "\n\033[33m[*]\033[0m 开始${DownloadJudgment}更新 $author 的活动脚本:"
+  echo -e "$repository_url\n"
+
   for js in $scripts_list; do
     eval url=$url_list$js
     echo $url
     eval name=$js
-    echo $name
     wget -q --no-check-certificate $url -O scripts/$name.new
 
     # 如果上一步下载没问题，才去掉后缀".new"，如果上一步下载有问题，就保留之前正常下载的版本
     # 随机添加个cron到crontab.list
     if [ $? -eq 0 ]; then
       mv -f scripts/$name.new scripts/$name
-      echo -e "更新 $name 完成...\n"
+      echo -e "\033[32m[Done]\033[0m $name"
+
+      ## [[ $name == "jd_test.sh" ]] && continue ## 不导入某脚本的定时
+
       croname=$(echo "$name" | awk -F\. '{print $1}')
       script_date_standard=$(cat ${ScriptsDir}/$name | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
       if [[ ${script_date_standard} == "" ]]; then
@@ -77,22 +96,23 @@ for author in $author_list; do
       fi
     else
       [ -f scripts/$name.new ] && rm -f scripts/$name.new
-      echo -e "更新 $name 失败，使用上一次正常的版本...\n"
+      echo -e "\033[31m[ERROR]\033[0m $name 更新失败，使用上一次正常的版本\n"
     fi
   done
+  echo ''
   index=$(($index + 1))
 done
-
+echo -e "\033[32m[Done]\033[0m 结束🔔\n"
 ##############################  自  定  义  命  令  （选填）  ##############################
 
 ## 删除脚本
-DeletedScripts="" # 脚本名带后缀填入双引号内，多个用空格隔开
+DeletedScripts="" # 完整脚本名称填入双引号内，多个用空格隔开
 for del1 in ${DeletedScripts}; do
   [ -f ${ScriptsDir}/$del1 ] && rm -rf ${ScriptsDir}/$del1
 done
 
 ## 删除定时
-DeletedCronTask="" # 定时任务名（脚本名不带后缀）填入双引号内，多个用空格隔开
+DeletedCronTask="" # 定时任务名（完整脚本名称去掉后缀格式）填入双引号内，多个用空格隔开
 for del2 in ${DeletedCronTask}; do
   grep -q "$del2" ${ListCron} && sed -i "/$del2/d" ${ListCron}
 done
