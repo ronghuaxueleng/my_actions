@@ -348,44 +348,12 @@
 0 0 * * * node /scripts/jdmn.js >> /scripts/logs/jdmn.log 2>&1
 #京东柠檬我是大老板农场 
 5 6-18/6 * * * node /scripts/jd_wsdlb.js >> /scripts/logs/jd_wsdlb.log 2>&1
-#京东每日抽奖 
-13 1,22,23 * * * node /scripts/jd_daily_lottery.js >> /scripts/logs/jd_daily_lottery.log 2>&1
-#京东健康社区隐藏姓名版 
-10 0-23/4 * * * node /scripts/jd_health.js >> /scripts/logs/jd_health.log 2>&1
-#京东汽车 
-10 7 * * * node /scripts/jd_car.js >> /scripts/logs/jd_car.log 2>&1
-#京东汽车兑换 
-0 0 * * * node /scripts/jd_car_exchange.js >> /scripts/logs/jd_car_exchange.log 2>&1
-#京东crazyJoy任务 
-10 7 * * * node /scripts/jd_crazy_joy.js >> /scripts/logs/jd_crazy_joy.log 2>&1
-#京东东东农场 
-5 6-18/6 * * * node /scripts/jd_fruit.js >> /scripts/logs/jd_fruit.log 2>&1
-#京东获取互助码 
-20 13 * * 6 node /scripts/jd_get_share_code.js >> /scripts/logs/jd_get_share_code.log 2>&1
-#京东快递签到 
-10 0 * * * node /scripts/jd_kd.js >> /scripts/logs/jd_kd.log 2>&1
-#京东东东萌宠 
-15 6-18/6 * * * node /scripts/jd_pet.js >> /scripts/logs/jd_pet.log 2>&1
-#京东金融养猪猪 
-12 * * * * node /scripts/jd_pigPet.js >> /scripts/logs/jd_pigPet.log 2>&1
-#京东进店领豆 
-10 0 * * * node /scripts/jd_shop.js >> /scripts/logs/jd_shop.log 2>&1
-#京东东东小窝 
-16 22 * * * node /scripts/jd_small_home.js >> /scripts/logs/jd_small_home.log 2>&1
-#京东天天加速 
-8 0-23/3 * * * node /scripts/jd_speed.js >> /scripts/logs/jd_speed.log 2>&1
-#京东东东超市 
-11 * * * * node /scripts/jd_superMarket.js >> /scripts/logs/jd_superMarket.log 2>&1
-#取关京东店铺商品 
-55 23 * * * node /scripts/jd_unsubscribe.js >> /scripts/logs/jd_unsubscribe.log 2>&1
 #京东柠檬京喜工厂抢茅台（需填变量） 
 58,59,0 18,19 * * * node /scripts/jd_jxgc.js >> /scripts/logs/jd_jxgc.log 2>&1
 #京东柠檬推一推（需填变量） 
 0 0 * * * node /scripts/jd_tyt.js >> /scripts/logs/jd_tyt.log 2>&1
 #京东京喜牧场刷金币 
 0 10 * * * * node /scripts/jx_mc_coin.js >> /scripts/logs/jx_mc_coin.log 2>&1
-#京东京喜牧场隐藏姓名版 
-20 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
 #京东柠檬邀请有礼 
 0 0 * * * node /scripts/jd_yqyl.js >> /scripts/logs/jd_yqyl.log 2>&1
 #京东京喜牧场 
