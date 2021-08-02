@@ -348,8 +348,8 @@
 0 0 * * * node /scripts/jdmn.js >> /scripts/logs/jdmn.log 2>&1
 #京东柠檬我是大老板农场 
 5 6-18/6 * * * node /scripts/jd_wsdlb.js >> /scripts/logs/jd_wsdlb.log 2>&1
-#京东签到领现金 
-2 0-23/4 * * * node /scripts/jd_cash.js >> /scripts/logs/jd_cash.log 2>&1
+#京东crazyJoy任务 
+10 7 * * * node /scripts/jd_crazy_joy.js >> /scripts/logs/jd_crazy_joy.log 2>&1
 #京东柠檬京喜工厂抢茅台（需填变量） 
 58,59,0 18,19 * * * node /scripts/jd_jxgc.js >> /scripts/logs/jd_jxgc.log 2>&1
 #京东柠檬推一推（需填变量） 
