@@ -348,22 +348,16 @@
 0 0 * * * node /scripts/jdmn.js >> /scripts/logs/jdmn.log 2>&1
 #京东柠檬我是大老板农场 
 5 6-18/6 * * * node /scripts/jd_wsdlb.js >> /scripts/logs/jd_wsdlb.log 2>&1
-#京东女装盲盒 
-0 8 1-8/1,27,28 2,3 * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1
-#京东汽车 
-10 7 * * * node /scripts/jd_car.js >> /scripts/logs/jd_car.log 2>&1
-#京东汽车兑换 
-0 0 * * * node /scripts/jd_car_exchange.js >> /scripts/logs/jd_car_exchange.log 2>&1
-#京东crazyJoy任务 
-10 7 * * * node /scripts/jd_crazy_joy.js >> /scripts/logs/jd_crazy_joy.log 2>&1
-#京东宠汪汪偷好友积分与狗粮 
-10 0-21/3 * * * node /scripts/jd_joy_steal.js >> /scripts/logs/jd_joy_steal.log 2>&1
+#京东签到领现金 
+2 0-23/4 * * * node /scripts/jd_cash.js >> /scripts/logs/jd_cash.log 2>&1
 #京东柠檬京喜工厂抢茅台（需填变量） 
 58,59,0 18,19 * * * node /scripts/jd_jxgc.js >> /scripts/logs/jd_jxgc.log 2>&1
 #京东柠檬推一推（需填变量） 
 0 0 * * * node /scripts/jd_tyt.js >> /scripts/logs/jd_tyt.log 2>&1
 #京东京喜牧场刷金币 
 0 10 * * * * node /scripts/jx_mc_coin.js >> /scripts/logs/jx_mc_coin.log 2>&1
+#京东京喜牧场隐藏姓名版 
+20 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
 #京东柠檬邀请有礼 
 0 0 * * * node /scripts/jd_yqyl.js >> /scripts/logs/jd_yqyl.log 2>&1
 #京东京喜牧场 
