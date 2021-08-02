@@ -348,6 +348,10 @@
 0 0 * * * node /scripts/jdmn.js >> /scripts/logs/jdmn.log 2>&1
 #京东柠檬我是大老板农场 
 5 6-18/6 * * * node /scripts/jd_wsdlb.js >> /scripts/logs/jd_wsdlb.log 2>&1
+#京东新潮品牌狂欢隐藏姓名版 
+4 10 * * * node /scripts/jd_mcxhd.js >> /scripts/logs/jd_mcxhd.log 2>&1
+#京东东东农场 
+5 6-18/6 * * * node /scripts/jd_fruit.js >> /scripts/logs/jd_fruit.log 2>&1
 #京东柠檬京喜工厂抢茅台（需填变量） 
 58,59,0 18,19 * * * node /scripts/jd_jxgc.js >> /scripts/logs/jd_jxgc.log 2>&1
 #京东柠檬推一推（需填变量） 
