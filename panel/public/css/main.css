@@ -67,7 +67,7 @@ h4 {
 
 .diffs .new {
     margin-top: 0.3em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.3em;
 }
 
 .diffs header * {
@@ -430,7 +430,7 @@ h4 {
     padding-left: 0.5em;
     font-size: 1.5em;
     position: relative;
-    margin-top: -0.3em;
+    margin-top: -0.4em;
 }
 
 /* 白色按钮 */

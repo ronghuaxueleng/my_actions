@@ -32,12 +32,12 @@ var crontabFile = path.join(rootPath, 'config/crontab.list');
 var confBakDir = path.join(rootPath, 'config/bak/');
 // auth.json 文件目录
 var authConfigFile = path.join(rootPath, 'config/auth.json');
+// account.json 文件目录
+var accountFile = path.join(rootPath, 'config/account.json');
 // bot.json 文件所在目录
 var botFile = path.join(rootPath, 'config/bot.json');
 // diy.sh 文件目录
 var diyFile = path.join(rootPath, 'config/diy.sh');
-// bot.json 文件所在目录
-var botFile = path.join(rootPath, 'config/bot.json');
 // 日志目录
 var logPath = path.join(rootPath, 'log/');
 // 脚本目录
@@ -46,7 +46,7 @@ var ScriptsPath = path.join(rootPath, 'scripts/');
 var authError = '错误的用户名密码，请重试';
 var loginFaild = '请先登录!';
 
-var configString = 'config sample crontab diy bot';
+var configString = 'config sample crontab diy bot account';
 
 var s_token, cookies, guid, lsid, lstoken, okl_token, token, userCookie = ''
 
@@ -257,6 +257,10 @@ function bakConfFile(file) {
             oldConfContent = getFileContentByName(botFile);
             fs.writeFileSync(bakConfFile, oldConfContent);
             break;
+        case 'account.json':
+            oldConfContent = getFileContentByName(accountFile);
+            fs.writeFileSync(bakConfFile, oldConfContent);
+            break;
         default:
             break;
     }
@@ -281,6 +285,9 @@ function saveNewConf(file, content) {
             break;
         case 'bot.json':
             fs.writeFileSync(botFile, content);
+            break;
+        case 'account.json':
+            fs.writeFileSync(accountFile, content);
             break;
         default:
             break;
@@ -479,7 +486,7 @@ app.get('/cookie', function (request, response) {
                 if (cookie.body.errcode == 0) {
                     let ucookie = getCookie(cookie);
                     let autoReplace = request.query.autoReplace && request.query.autoReplace === 'true';
-                    if(autoReplace){
+                    if (autoReplace) {
                         updateCookie(ucookie);
                     }
                     response.send({
@@ -513,6 +520,7 @@ app.get('/cookie', function (request, response) {
 
 app.get('/api/config/:key', function (request, response) {
     if (request.session.loggedin) {
+        let content = "";
         if (configString.indexOf(request.params.key) > -1) {
             switch (request.params.key) {
                 case 'config':
@@ -530,8 +538,8 @@ app.get('/api/config/:key', function (request, response) {
                 case 'diy':
                     content = getFileContentByName(diyFile);
                     break;
-                case 'bot':
-                    content = getFileContentByName(botFile);
+                case 'account':
+                    content = getFileContentByName(accountFile);
                     break;
                 default:
                     break;
@@ -580,18 +588,6 @@ app.get('/crontab', function (request, response) {
 });
 
 /**
- * bot配置 页面
- */
-app.get('/bot', function (request, response) {
-    if (request.session.loggedin) {
-        response.sendFile(getPath(request , 'bot.html'));
-    } else {
-        response.redirect('/');
-    }
-
-});
-
-/**
  * 自定义脚本 页面
  */
 app.get('/diy', function (request, response) {
@@ -608,6 +604,17 @@ app.get('/diy', function (request, response) {
 app.get('/bot', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(getPath(request, 'bot.html'));
+    } else {
+        response.redirect('/');
+    }
+});
+
+/**
+ * 通知备注 页面
+ */
+app.get('/remarks', function (request, response) {
+    if (request.session.loggedin) {
+        response.sendFile(getPath(request, 'remarks.html'));
     } else {
         response.redirect('/');
     }
@@ -692,9 +699,6 @@ app.get('/runLog/:jsName', function (request, response) {
                 path.join(rootPath, pathUrl)
             );
         }
-
-
-
 
         if (logFile) {
             const content = getFileContentByName(logFile);
@@ -1038,9 +1042,9 @@ app.post('/updateCookie', function (request, response) {
         if (err) console.log(err);
         let con = JSON.parse(data);
         let token = request.headers["api-token"]
-        if(token && token !== '' && token === con.cookieApiToken){
-            updateCookie(request.body.cookie,request.body.userMsg,response);
-        }else{
+        if (token && token !== '' && token === con.cookieApiToken) {
+            updateCookie(request.body.cookie, request.body.userMsg, response);
+        } else {
             response.send({
                 msg: '非法调用',
                 err: -1

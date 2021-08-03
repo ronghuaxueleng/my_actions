@@ -13,7 +13,7 @@ nav {
     justify-content: space-evenly;
     position: relative;
     z-index: 999;
-    margin: 0;
+    margin: 0px auto;
     perspective: 2000px;
     flex-wrap: wrap;
     height: 73px;
@@ -86,7 +86,7 @@ nav .menu-item:hover~#sub-menu-container #sub-menu-holder {
 
 nav .menu-item:nth-of-type(1):hover~#sub-menu-container #sub-menu-holder {
     clip-path: inset(0 15em 0 0 round 10px);
-    left: calc(0%);
+    left: calc(-15.25em + -1em);
     height: 18.75em;
 }
 
@@ -101,10 +101,11 @@ nav .menu-item:nth-of-type(3):hover~#sub-menu-container #sub-menu-holder {
     left: calc(9.25em + 1px);
     height: 13.5em;
 }
+
 nav .menu-item:nth-of-type(4):hover~#sub-menu-container #sub-menu-holder {
     clip-path: inset(0 28.75em 0 0 round 10px);
     left: calc(18.5em + 1px);
-    height: 9.5em;
+    height: 13.5em;
 }
 
 
@@ -118,7 +119,7 @@ nav .menu-item:nth-of-type(4):hover~#sub-menu-container #sub-menu-holder {
     pointer-events: none;
     box-sizing: border-box;
     z-index: 999;
-
+    margin-left: -5em;
     clip-path: inset(0 10em 10em 15em);
     opacity: 0;
     font-weight: initial;
@@ -241,7 +242,7 @@ nav .menu-item:nth-of-type(4):hover~#sub-menu-container #sub-menu-holder {
 
 /* Base Icon Style */
 .icon-box.gb .icon i:before {
-    background: linear-gradient(45deg, #0c86ef, #0cef9b);
+    background: rgb(0, 166, 243);
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
     padding-left: 1px;
@@ -325,7 +326,8 @@ nav .menu-item:nth-of-type(3).highlight:hover~#sub-menu-container #sub-menu-hold
 .bottom-container {
     grid-area: 4 / -3 / 4 / 3;
     color: #3a5260;
-    font-weight: 500;
+    font-weight: 550;
+    padding: 2em 0em;
 }
 
 .top-container {
@@ -336,7 +338,7 @@ nav .menu-item:nth-of-type(3).highlight:hover~#sub-menu-container #sub-menu-hold
 .bottom-container a {
     float: right;
     background: linear-gradient(90deg, #8ea4b166, #a3b5bf6b);
-    padding: 0.5em 1em;
+    padding: 0.5em 1.7em;
     border-radius: 100px;
     position: absolute;
     color: #2c4655bf;

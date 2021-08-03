@@ -1,5 +1,5 @@
-# 《使用与更新》教程
-- __修订日期：2021 年 7 月 29 日__
+# 《使用教程》
+- __修订日期：2021 年 8 月 3 日__
 
 ### 容器的进入与退出：
 >附：[Docker 容器基础使用教程](https://www.runoob.com/docker/docker-container-usage.html)
@@ -19,7 +19,7 @@
 ㅤ
 ## 一、基础使用教程
 ### 1. 执行特定活动脚本：
-    docker exec -it jd bash jd <xxx>      # 如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数
+    docker exec -it jd bash jd <xxx>      # 延迟执行，如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数
     docker exec -it jd bash jd <xxx> now  # 依次执行，无论是否设置了随机延迟，均立即运行，前台会输出日志，同时记录在日志文件中
 > _注意：具体查看活动脚本列表可通过命令 `docker exec -it jd bash jd` 查看，`xxx` 为脚本名。_
 
@@ -34,15 +34,19 @@
 > 提示 `Could not resolve hostname gitee.com: Temporary failure in name resolution lost connection` 是由于无法解析到 `Gitee` 服务器，表明网络环境异常，自行解决处理。
 
 
-### 3. 查看帮助文档：
+### 3. 查看本地活动脚本清单：
+
+    docker exec -it jd bash jd list
+
+
+### 4. 查看帮助文档：
     docker exec -it jd cat README.md
-> _注意：此文档为《使用与更新》教程，即当前页面内容，跟随项目同步更新。_
+> _注意：此文档为《使用教程》，即当前页面内容，跟随项目同步更新。_
 
 
-### 4. 快捷命令：
+### 5. 快捷命令：
     jd | jtask      ==  bash jd
     git_pull | jup  ==  bash git_pull.sh
-    runall          ==  source run_all.sh
 
 ***
 
@@ -75,7 +79,7 @@
 
 - 执行一键脚本
 
-      source run_all.sh 或 . run_all.sh
+      source run_all.sh  或  . run_all.sh
 > _ㅤ注意：1. 此脚本的作用为执行所有活动脚本，共有高达几十个活动脚本，时间较长且与账号数量成正比。_\
 > _ㅤㅤㅤ ㅤ2. 除手动运行活动脚本外该项目还会通过定时的方式自动执行活动脚本，可通过日志查看运行记录。_\
 > _ㅤㅤㅤ ㅤ3. 执行此脚本后无需守在电脑旁，会自动在最后无限制运行挂机活动脚本，直到你手动停止运行为止。_
@@ -207,9 +211,9 @@
 ## 五、控制面板和网页终端教程
 ### 1. 开启/重启控制面板和网页终端：
     docker exec -it jd bash jd panel on
-> _ㅤ注意：1. 容器第一次启动时如果启用了该功能变量后会自动启动相关服务无需手动执行此命令。_\
-> _ㅤㅤㅤㅤ 2. 在某些环境下当系统重启导致控制面板没有在容器启动时自启可用此命令手动启动。_\
-> _ㅤㅤㅤㅤ 3. 当控制面板或网页终端服务进程异常时还可通过此命令尝试修复，如果仍然异常请检查容器是否初始化成功。_
+> _注意：1. 容器第一次启动时如果启用了该功能变量后会自动启动相关服务无需手动执行此命令。_\
+> _ㅤㅤㅤ2. 在某些环境下当系统重启导致控制面板没有在容器启动时自启可用此命令手动启动。_\
+> _ㅤㅤㅤ3. 当控制面板或网页终端服务进程异常时还可通过此命令尝试修复，如果仍然异常请检查容器是否初始化成功。_
 
 
 ### 2. 关闭控制面板和网页终端：
@@ -227,8 +231,32 @@
 ***
 
 ㅤ
-## 六、更新教程
-### 1. 更新配置文件：
+## 六、Telegram Bot 教程
+### 1. 配置 Bot：
+
+    https://crawling-nectarine-ef2.notion.site/Telegram-Bot-9709bbae7bf8488ab01f3b4867e29b44
+
+
+### 2. 启动/重启 Bot 服务：
+
+    docker exec -it jd bash jd jbot start
+
+
+### 3. 停止 Bot 服务：
+
+    docker exec -it jd bash jd jbot stop
+
+
+### 4. 查看 Bot 服务运行日志：
+
+    docker exec -it jd bash jd jbot log
+
+
+***
+
+ㅤ
+## 七、更新教程
+### 更新配置文件：
 - 备份当前配置文件
 
       docker exec -it jd mv config/config.sh config/bak/config.sh

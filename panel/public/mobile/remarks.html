@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>账号通知配置 · 控制面板移动端</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/codemirror.min.js"></script>
+    <script type="text/javascript" src="../js/comment.js"></script>
+    <script type="text/javascript" src="../js/shell.js"></script>
+    <script type="text/javascript" src="../js/sublime.js"></script>
+    <script type="text/javascript" src="../js/sweetalert2.js"></script>
+    <script type="text/javascript" src="../js/prefixfree.min.js"></script>
+    <script type="text/javascript" src="../js/mmenu-light.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/mmenu-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/codemirror.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/twilight.css">
+    <link rel="stylesheet" type="text/css" href="../css/panda-syntax.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="icon" type="image/x-icon" href="../icon/running_joy.gif" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="diffs">
+            <nav id="menu">
+                <ul>
+                    <span><a href="./home.html"><i class="fa fa-pencil-square-o"> 配置文件</i></a></span>
+                    <span><a href="./diff.html"><i class="fa fa-columns"> 对比工具</i></a></span>
+                    <span><a href="./crontab.html"><i class="fa fa-clock-o"> 定时任务</i></a></span>
+                    <span><a href="./bot.html"><i class="fa fa-telegram"> 机器人配置</i></a></span>
+                    <span><a href="./remarks.html"><i class="fa fa-user-circle"> 账号通知配置</i></a></span>
+                    <span><a href="./diy.html"><i class="fa fa-send-o"> 自定义脚本</i></a></span>
+                    <span><a href="./run.html"><i class="fa fa-play-circle"> 快速执行</i></a></span>
+                    <span><a href="./terminal.html"><i class="fa fa-terminal"> 终端</i></a></span>
+                    <span><a href="../cause/index.html"><i class="fa fa-info-circle"> 使用教程</i></a></span>
+                    <span><a href="./tasklog.html"><i class="fa fa-history"> 查询日志</i></a></span>
+                    <span><a href="./viewScripts.html"><i class="fa fa-file-code-o"> 查阅脚本</i></a></span>
+                    <span><a href="https://github.com/JDHelloWorld/jd_scripts"><i class="fa fa-github">
+                                浏览仓库</i></a></span>
+                    <span><a href="https://github.com/SuperManito/LinuxMirrors"><i class="fa fa-github">
+                                支持作者</i></a></span>
+                    <span><a href="./pwd.html"><i class="fa fa-lock"> 修改密码</i></a></span>
+                    <span><a href="../logout"><i class="fa fa-sign-out"> 退出</i></a></span>
+                </ul>
+            </nav>
+            <div class="new">
+                <header>
+                    <div class="mobile-nav-button">
+                        <a href="#menu" style="color:white; text-decoration:none;"><span> <i
+                                    class="fa fa-th-list"></i></span></a>
+                    </div>
+                    <h1 style="margin-left: 0.5em;">account.json</h1>
+                    <div class="multi-button">
+                        <button id="save">
+                            <i class="fa fa-save"></i>
+                            <div class="animate-normal">保存</div>
+                        </button>
+                        <button id="wrap">
+                            <i class="fa fa-exchange"></i>
+                            <div class="animate-normal">切换换行</div>
+                        </button>
+                    </div>
+                </header>
+                <h4>
+                    <font size="2">温馨提示：此功能为 JDHelloWorld/jd_scripts 仓库内置功能，其它仓库不可用，每次保存后需执行更新命令才能生效否则仍使用上一次保存的版本。
+                    </font>
+                </h4>
+            </div>
+            <div class="wrapper">
+                <textarea id="code" name="code"></textarea>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="../js/common.js"></script>
+    <script type="text/javascript" src="../js/mobile-nav.js"></script>
+    <script type="text/javascript" src="../js/remarks.js"></script>
+</body>

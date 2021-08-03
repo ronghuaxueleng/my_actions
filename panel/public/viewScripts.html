@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>查阅脚本 · 京东薅羊毛控制面板</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/metismenu/dist/metisMenu.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elektron/dist/elektron.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/onoffcanvas/dist/onoffcanvas.min.css">
+    <title>查阅脚本 · 控制面板</title>
+    <link rel="stylesheet" href="./css/metisMenu.min.css" />
+    <link rel="stylesheet" href="./css/elektron.min.css">
+    <link rel="stylesheet" href="./css/prism.css" />
+    <link rel="stylesheet" href="./css/onoffcanvas.min.css">
     <script type="text/javascript" src="./js/prefixfree.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./css/codemirror.min.css">
     <link rel="stylesheet" type="text/css" href="./css/twilight.css">
@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="./css/main.css">
     <link rel="stylesheet" type="text/css" href="./css/nav.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
-    <link rel="icon" type="image/x-icon" href="https://www.jd.com/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="./icon/running_joy.gif" />
 </head>
 
 <body>
@@ -30,7 +30,7 @@
                             <div class="menu-text">
                                 <a href="#"><i class="fa fa-home"></i> 编辑配置</a>
                             </div>
-                            <div class="sub-menu double" style="left: 0;">
+                            <div class="sub-menu double">
                                 <a href="./home">
                                     <div class="icon-box gb a">
                                         <div class="icon"><i class="fa fa-pencil-square-o"></i></div>
@@ -58,6 +58,15 @@
                                         </div>
                                     </div>
                                 </a>
+                                <a href="./bot">
+                                    <div class="icon-box gb">
+                                        <div class="icon"><i class="fa fa-telegram"></i></div>
+                                        <div class="text">
+                                            <div class="title">机器人配置 <i class="fa fa-arrow-right"></i></div>
+                                            <div class="sub-text">编辑 Telegram Bot 配置文件</div>
+                                        </div>
+                                    </div>
+                                </a>
                                 <a href="./diy">
                                     <div class="icon-box gb h">
                                         <div class="icon"><i class="fa fa-send-o"></i></div>
@@ -67,17 +76,17 @@
                                         </div>
                                     </div>
                                 </a>
-                                <a onclick="javascript:window.open('https://github.com/SuperManito/LinuxMirrors')">
-                                    <div class="icon-box">
-                                        <div class="icon"><i class="fa fa-github"></i></div>
+                                <a href="./remarks">
+                                    <div class="icon-box gb e">
+                                        <div class="icon"><i class="fa fa-user-circle"></i></div>
                                         <div class="text">
-                                            <div class="title">支持作者 <i class="fa fa-external-link"></i></div>
-                                            <div class="sub-text">Please star this repository</div>
+                                            <div class="title">账号通知配置 <i class="fa fa-arrow-right"></i></div>
+                                            <div class="sub-text">编辑账号推送通知备注配置文件</div>
                                         </div>
                                     </div>
                                 </a>
                                 <div class="bottom-container">
-                                    你知道我们有 <i class="fa fa-telegram"></i> Telegram 频道吗? <a
+                                    <i class="fa fa-comments"></i> 你知道我们有 Telegram 频道吗? <a
                                         href="https://t.me/joinchat/6clYebkqeZFjZWQ1">立即加入</a>
                                 </div>
                                 <div class="sub-menu-holder"></div>
@@ -94,7 +103,7 @@
                                         <div class="icon"><i class="fa fa-play-circle"></i></div>
                                         <div class="text">
                                             <div class="title">快速执行 <i class="fa fa-arrow-right"></i></div>
-                                            <div class="sub-text">执行特定活动脚本</div>
+                                            <div class="sub-text">一键执行部分命令和特定活动脚本</div>
                                         </div>
                                     </div>
                                 </a>
@@ -162,7 +171,7 @@
                             </div>
                             <div class="sub-menu">
                                 <a href="./changepwd">
-                                    <div class="icon-box">
+                                    <div class="icon-box gb k">
                                         <div class="icon"><i class="fa fa-lock"></i></div>
                                         <div class="text">
                                             <div class="title">&nbsp;修改密码 <i class="fa fa-arrow-right"></i></div>
@@ -170,11 +179,20 @@
                                         </div>
                                     </div>
                                 </a>
+                                <a onclick="javascript:window.open('https://github.com/SuperManito/LinuxMirrors')">
+                                    <div class="icon-box">
+                                        <div class="icon"><i class="fa fa-github"></i></div>
+                                        <div class="text">
+                                            <div class="title">支持作者 <i class="fa fa-external-link"></i></div>
+                                            <div class="sub-text">Please star this repository</div>
+                                        </div>
+                                    </div>
+                                </a>
                                 <a href="./logout">
                                     <div class="icon-box gb r">
                                         <div class="icon"><i class="fa fa-sign-out"></i></div>
                                         <div class="text">
-                                            <div class="title">退出登陆 <i class="fa fa-arrow-right"></i></div>
+                                            <div class="title">退出登陆 <i class="fa fa-close"></i></div>
                                             <div class="sub-text">Sign out</div>
                                         </div>
                                     </div>
@@ -224,10 +242,10 @@
     </div>
 
     <script src="./js/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/onoffcanvas"></script>
-    <script src="https://cdn.jsdelivr.net/npm/elektron"></script>
-    <script src="https://cdn.jsdelivr.net/npm/metismenu"></script>
+    <script src="./js/npm/prismjs.js"></script>
+    <script src="./js/npm/onoffcanvas.js"></script>
+    <script src="./js/npm/elektron.js"></script>
+    <script src="./js/npm/metismenu.js"></script>
     <script src="./js/codemirror.min.js"></script>
     <script src="./js/javascript.js"></script>
     <script src="./js/common.js"></script>
