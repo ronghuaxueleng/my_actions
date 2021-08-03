@@ -954,7 +954,7 @@ app.get('/api/scripts/:dir/:file', function (request, response) {
     }
 });
 
-function updateCookie (cookie,response){
+function updateCookie(cookie, userMsg = '无', response) {
     if (cookie) {
         const content = getFileContentByName(confFile);
         const lines = content.split('\n');
@@ -986,10 +986,11 @@ function updateCookie (cookie,response){
                     if (
                         lineNext.match(/上次更新：/)
                     ) {
-                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString()].join('');
+                        const bz = lineNext.split('备注：')[1];
+                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', bz ? bz : userMsg].join('');
                         lines[i + 1] = newLine;
                     } else {
-                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString()].join('');
+                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', userMsg].join('');
                         lines.splice(lastIndex + 1, 0, newLine);
                     }
                 }
@@ -1007,11 +1008,11 @@ function updateCookie (cookie,response){
             ].join('');
             //提交备注
             lines.splice(lastIndex + 1, 0, newLine);
-            newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString()].join('');
+            newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', userMsg].join('');
             lines.splice(lastIndex + 2, 0, newLine);
         }
         saveNewConf('config.sh', lines.join('\n'));
-        if(response){
+        if (response) {
             response.send({
                 err: 0,
                 msg: updateFlag ?
@@ -1020,7 +1021,7 @@ function updateCookie (cookie,response){
             });
         }
     } else {
-        if(response){
+        if (response) {
             response.send({
                 msg: '参数错误',
                 err: -1
@@ -1038,7 +1039,7 @@ app.post('/updateCookie', function (request, response) {
         let con = JSON.parse(data);
         let token = request.headers["api-token"]
         if(token && token !== '' && token === con.cookieApiToken){
-            updateCookie(request.body.cookie,response);
+            updateCookie(request.body.cookie,request.body.userMsg,response);
         }else{
             response.send({
                 msg: '非法调用',
