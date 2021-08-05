@@ -360,6 +360,8 @@
 0 0 * * * node /scripts/jd_yqyl.js >> /scripts/logs/jd_yqyl.log 2>&1
 #京东京喜牧场 
 0 * * * * node /scripts/jx_mc.js >> /scripts/logs/jx_mc.log 2>&1
+#京东京享值PK 
+15 0,6,13,19,21 * * * node /scripts/ddo_pk.js >> /scripts/logs/ddo_pk.log 2>&1
 #京东翻翻乐提现 
 5,35 * * 6 * node /scripts/jd_ffl.js >> /scripts/logs/jd_ffl.log 2>&1
 #京东城城分现金互助执意版 
