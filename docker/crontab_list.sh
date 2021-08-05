@@ -55,10 +55,12 @@
 5 0,18,22 * * * node /scripts/jd_olympic_opencard1.js >> /scripts/logs/jd_olympic_opencard1.log 2>&1
 #jd_olympic_opencard2
 20 0,18,22 * * * node /scripts/jd_olympic_opencard2.js >> /scripts/logs/jd_olympic_opencard2.log 2>&1
-#jd_olympic_opencard3
-30 0,9,18,22 * * * node /scripts/jd_olympic_opencard3.js >> /scripts/logs/jd_olympic_opencard3.log 2>&1
+#jd_opencard3
+30 0,9,18,22 * * * node /scripts/jd_opencard3.js >> /scripts/logs/jd_opencard3.log 2>&1
 #jd_opencard4
 10 0,9,18,22 * * * node /scripts/jd_opencard4.js >> /scripts/logs/jd_opencard4.log 2>&1
+#特物
+30 11,17 * * * node /scripts/jd_superBrand.js >> /scripts/logs/jd_superBrand.log 2>&1
 ##############长期活动##############
 # 签到
 0 0,18 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
@@ -364,6 +366,8 @@
 5,35 * * 6 * node /scripts/jd_ffl.js >> /scripts/logs/jd_ffl.log 2>&1
 #京东城城分现金互助执意版 
 5 0 * * * node /scripts/zy_ccfxj.js >> /scripts/logs/zy_ccfxj.log 2>&1
+#京东618手机竞猜 
+1 0 * * * node /scripts/zy_618jc.js >> /scripts/logs/zy_618jc.log 2>&1
 #京东新潮品牌狂欢执意版 
 0 10 * * * node /scripts/zy_xckh.js >> /scripts/logs/zy_xckh.log 2>&1
 #京东618主会场红包雨 
