@@ -364,8 +364,6 @@
 5,35 * * 6 * node /scripts/jd_ffl.js >> /scripts/logs/jd_ffl.log 2>&1
 #京东城城分现金互助执意版 
 5 0 * * * node /scripts/zy_ccfxj.js >> /scripts/logs/zy_ccfxj.log 2>&1
-#京东618手机竞猜 
-1 0 * * * node /scripts/zy_618jc.js >> /scripts/logs/zy_618jc.log 2>&1
 #京东新潮品牌狂欢执意版 
 0 10 * * * node /scripts/zy_xckh.js >> /scripts/logs/zy_xckh.log 2>&1
 #京东618主会场红包雨 
