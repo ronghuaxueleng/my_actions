@@ -1,8 +1,3 @@
-/*
-	Name:       Panda Syntax
-	Author:     Siamak Mokhtari (http://github.com/siamak/)
-	CodeMirror template by Siamak Mokhtari (https://github.com/siamak/atom-panda-syntax)
-*/
 .cm-s-panda-syntax {
   background: #292A2B;
   color: #E6E6E6;
@@ -122,4 +117,60 @@
 .cm-s-panda-syntax .CodeMirror-linenumber {
   color: #e6e6e6;
   opacity: 0.6;
+}
+
+
+
+
+
+
+.cm-s-juejin {
+  background: #f8f9fa;
+  font-size: 14px;
+  font-family: 'Operator Mono', 'Source Code Pro', Menlo, Monaco, Consolas, Courier New, monospace;
+}
+
+@media screen and (max-width: 640px) {
+
+  .cm-s-juejin {
+    background: #f8f9fa;
+    font-size: 11px;
+    font-family: 'Operator Mono', 'Source Code Pro', Menlo, Monaco, Consolas, Courier New, monospace;
+  }
+
+}
+
+
+.cm-s-juejin .cm-header,
+.cm-s-juejin .cm-def {
+  color: #1ba2f0;
+}
+
+.cm-s-juejin .cm-comment {
+  color: #009e9d;
+}
+
+.cm-s-juejin .cm-quote,
+.cm-s-juejin .cm-link,
+.cm-s-juejin .cm-strong,
+.cm-s-juejin .cm-attribute {
+  color: #fd7741;
+}
+
+.cm-s-juejin .cm-url,
+.cm-s-juejin .cm-keyword,
+.cm-s-juejin .cm-builtin {
+  color: #bb51b8;
+}
+
+.cm-s-juejin .cm-hr {
+  color: #909090;
+}
+
+.cm-s-juejin .cm-tag {
+  color: #107000;
+}
+
+.cm-s-juejin .cm-variable-2 {
+  color: #0050a0;
 }
