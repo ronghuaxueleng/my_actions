@@ -38,6 +38,8 @@ var accountFile = path.join(rootPath, 'config/account.json');
 var botFile = path.join(rootPath, 'config/bot.json');
 // diy.sh 文件目录
 var diyFile = path.join(rootPath, 'config/diy.sh');
+// diy_server.js 文件目录
+var diyServerFile = path.join(rootPath, 'config/diy_server.js');
 // 日志目录
 var logPath = path.join(rootPath, 'log/');
 // 脚本目录
@@ -1054,6 +1056,18 @@ app.post('/updateCookie', function (request, response) {
 });
 
 checkConfigFile();
+
+// 调用自定义api
+try {
+    require.resolve(diyServerFile);
+    const diyServer = require(diyServerFile);
+    if (typeof diyServer === 'function') {
+        diyServer(app);
+        console.log('调用自定义api成功');
+    }
+} catch (e) {
+    console.error('调用自定义api失败');
+}
 
 app.listen(5678, () => {
     console.log('应用正在监听 5678 端口!');
