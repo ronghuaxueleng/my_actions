@@ -218,48 +218,39 @@
                             <i class="fa fa-arrow-circle-o-down"></i>
                             <div class="animate-normal">跳转底部</div>
                         </button>
+                        <button id="list" class="cmd-btn">
+                            <i class="fa fa-list-alt"></i>
+                            <div class="animate-normal">列出脚本</div>
+                        </button>
+                        <button id="git_pull">
+                            <i class="fa fa-rotate-left"></i>
+                            <div class="animate-normal">更新脚本</div>
+                        </button>
                     </div>
-                    <div>
-                        <button id="list" class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="列出脚本">列出脚本</button><button id="git_pull" class="btn btn-primary btn-ghost btn-shine"
-                            style="height:30px;" title="git_pull">更新脚本文件</button><button id="jd_get_share_code"
-                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="获取互助码">获取互助码</button><button id="exsc" class="btn btn-primary btn-ghost btn-shine"
-                            style="height:30px;" title="exsc">导出互助码</button><button id="rmlog"
-                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="rmlog">删除日志</button><button id="ps" class="btn btn-primary btn-ghost btn-shine"
-                            style="height:30px;" title="ps">查看进程</button><button id="hangup"
-                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="hangup">启动/重启挂机</button><button id="hangdown"
-                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="hangdown">停止挂机</button>
-                    </div>
+                    <input id="jdScript" class="coco-input" name="jdScript" type="text" placeholder="请输入脚本名称" required>
+                    <button id="runCmd" class="btn btn-primary btn-ghost btn-shine" type="submit"
+                        style="height:28px; width: 60px; font-size: 13px; border-radius: 6px;"
+                        title="bash jd.sh <xxx> now">执行</button>
                 </div>
                 <br>
                 <div style="margin-bottom: 6px;">
-                    <input id="jdScript" class="coco-input" style="margin-left: 0.5em;" name="jdScript" type="text"
-                        placeholder="请输入脚本名称" required>
-                    <button id="runCmd" class="btn btn-primary btn-ghost btn-shine" type="submit"
-                        style="height:30px; width: 60px; font-size: 13px; border-radius: 6px;"
-                        title="bash jd.sh <xxx> now">执行</button>
-
-                    <div style="margin-left: 10px;">
+                    <div style="margin-left: 0.7em;">
                         <button id="jd_bean_change" class="cmd-btn btn btn-primary btn-ghost btn-shine"
-                            style="height:30px;" title="京豆变动通知">京豆变动通知</button><button id="jd_unsubscribe"
+                            style="height:30px; border-radius: 6px 0 0 6px;" title="jd_bean_change.js"><i
+                                class="fa fa-bell"></i>
+                            京豆变动</button><button id="jd_get_share_code"
                             class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="jd_unsubscribe.js">取关店铺和商品</button><button id="jd_fruit"
-                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="jd_fruit.js">东东农场</button><button id="jd_pet"
-                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="jd_pet.js">东东萌宠</button><button id="jd_jdfactory"
-                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="jd_jdfactory.js">东东工厂</button><button id="jd_dreamFactory"
-                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="jd_dreamFactory.js">京喜工厂</button><button id="jd_jxnc"
-                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="jd_jxnc.js">京喜农场</button><button id="jd_cfd"
-                            class="cmd-btn btn btn-primary btn-ghost btn-shine" style="height:30px;"
-                            title="jd_cfd.js">京喜财富岛</button>
+                            title="bash jd get_share_code now"><i class="fa fa-share-alt-square"></i>
+                            获取互助码</button><button id="exsc" class="btn btn-primary btn-ghost btn-shine"
+                            style="height:30px;" title="bash jd exsc"><i class="fa fa-code"></i> 导出互助码</button><button
+                            id="rmlog" class="btn btn-primary btn-ghost btn-shine" style="height:30px;"
+                            title="bash jd rmlog"><i class="fa fa-trash"></i> 删除日志</button><button id="ps"
+                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;" title="bash jd ps"><i
+                                class="fa fa-tasks"></i> 查看进程</button><button id="hangup"
+                            class="btn btn-primary btn-ghost btn-shine" style="height:30px;" title="bash jd hang up"><i
+                                class="fa fa-play-circle"></i> 启动/重启挂机</button><button id="bash jd hang down"
+                            class="btn btn-primary btn-ghost btn-shine" style="height:30px; border-radius: 0 6px 6px 0;"
+                            title="hangdown"><i class="fa fa-stop-circle"></i> 停止挂机</button>
                     </div>
                 </div>
             </header>

@@ -8,7 +8,7 @@ h1 {
     color: white;
     margin: 0 0 2px;
     font-size: 1.5rem;
-    padding-right: 1rem;
+    padding-right: 0.5rem;
 }
 
 h4 {
@@ -446,8 +446,8 @@ h4 {
 .multi-button button {
     border: 0 solid transparent;
     background: transparent;
-    padding: 1.5px 20px;
-    margin: 0 -2px;
+    padding: 1px 20px;
+    margin: 0px -3px;
     color: #273043;
     font-size: 18px;
     border-radius: 12px;
