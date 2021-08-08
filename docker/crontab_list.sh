@@ -99,8 +99,6 @@
 10 6 * * * node /scripts/jd_jxmc_stock.js >> /scripts/logs/jd_jxmc_stock.log 2>&1
 # 东东电竞经理
 0 0-23/2 * * * node /scripts/jd_EsportsManager.js >> /scripts/logs/jd_EsportsManager.log 2>&1
-# 众筹许愿池(活动时间：2021-7-1至2021-7-31)
-10 10,15 * 7 * node /scripts/jd_wishingPool.js >> /scripts/logs/jd_wishingPool.log 2>&1
 # 宠汪汪
 45 */2,23 * * * node /scripts/jd_joy_new.js >> /scripts/logs/jd_joy_new.log 2>&1
 # 宠汪汪积分兑换京豆
