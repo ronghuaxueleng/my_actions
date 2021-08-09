@@ -47,7 +47,7 @@ if ($.isNode()) {
 }
 let inviteCodes = [];
 $.shareCodesArr = [];
-$.updatePkActivityIdRes = ['ece29e04-0319-4c47-8a73-9d6bc3525e15'];
+
 const JD_API_HOST = 'https://api.m.jd.com/api';
 const activeEndTime = '2021/08/28 23:59:59+08:00';//活动结束时间
 let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000;
@@ -63,7 +63,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     if ($.isNode()) await notify.sendNotify($.name + '活动已结束', `请删除此脚本\n咱江湖再见`);
     return
   }
-  //await updateShareCodesCDN();
+  await readShareCode();
   // await requireConfig();
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
@@ -104,7 +104,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
         }
       }
       if ($.canHelp) {
-        console.log(`\n\n如果有剩余助力机会，则给作者以及随机码助力`)
+        console.log(`\n\n如果有剩余助力机会，则随机助力`)
         await doHelp();
       }
     }
@@ -594,8 +594,9 @@ function getHelp() {
           data = JSON.parse(data);
           if (data.code === 200) {
             console.log(`\n\n${$.name}互助码每天都变化,旧的不可继续使用`);
-            $.log(`【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data.shareId}\n\n`);
+            $.log(`【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data.shareId}\n`);
             $.temp.push(data.data.shareId);
+            submitCode(data.data.shareId);
           } else {
             console.log(`获取邀请码失败：${JSON.stringify(data)}`);
             if (data.code === 1002) $.blockAccount = true;
@@ -722,6 +723,65 @@ function updateShareCodesCDN(url = 'https://cdn.jsdelivr.net/gh/smiek2221/update
         resolve();
       }
     })
+  })
+}
+
+//提交互助码
+function submitCode(myInviteCode) {
+    return new Promise(async resolve => {
+    $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${myInviteCode}&type=jd818`, timeout: 10000}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} 提交助力码 API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+            data = JSON.parse(data);
+            if (data.code === 300) {
+              console.log("📱互助码已提交📱");
+            }else if (data.code === 200) {
+              console.log("📱互助码提交成功📱");
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    //await $.wait(15000);
+    resolve()
+  })
+}
+function readShareCode() {
+  return new Promise(async resolve => {
+    $.get({
+      url: `http://www.helpu.cf/jdcodes/getcode.php?type=jd818&num=10`,
+      'timeout': 10000
+    }, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+            //console.log(`随机取10个码放到您固定的互助码后面(不影响已有固定互助)`);
+            $.updatePkActivityIdRes = data.data;
+            //shareCodeDic[`${currentIndex}`] = data.data;
+            //console.log(`${data.data}`);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    //await $.wait(2000);
+    resolve()
   })
 }
 
