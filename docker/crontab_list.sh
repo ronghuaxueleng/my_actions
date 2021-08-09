@@ -443,6 +443,8 @@
 10 * * * * node /scripts/jd_zjd_tuan.js >> /scripts/logs/jd_zjd_tuan.log 2>&1
 #京东读书签到 
 0 10 0 * * * node /scripts/jddsSign.js >> /scripts/logs/jddsSign.log 2>&1
+#京东 
+0 9 * * * node /scripts/JD_DailyBonus.js >> /scripts/logs/JD_DailyBonus.log 2>&1
 #京东成长分 
 0 0 * * * node /scripts/jdczf.js >> /scripts/logs/jdczf.log 2>&1
 #京东到家 
