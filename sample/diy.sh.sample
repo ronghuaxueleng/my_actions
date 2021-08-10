@@ -37,7 +37,7 @@ rand() {
 }
 cd ${ShellDir}
 index=1
-echo -e "\033[33m[*]\033[0m 执行自定义脚本🔔"
+echo -e "\033[33m[*]\033[0m 执行自定义脚本🔔\n"
 for author in $author_list; do
   echo -e "\n\033[33m[*]\033[0m 开始下载/更新 $author 的活动脚本:"
   # 下载my_scripts_list中的每个js文件，重命名增加前缀"作者昵称_"，增加后缀".new"
@@ -52,19 +52,15 @@ for author in $author_list; do
     repository_platform="https://github.com"
     repository_branch=$(echo $format_url | awk -F '/' '{print$4}')
     reformat_url=$(echo $format_url | sed "s|$repository_branch|tree/$repository_branch|g")
-    if [[ ${EnableExtraShellProxyDownload} == true ]]; then
-      DownloadJudgment="通过代理"
-    else
-      DownloadJudgment=""
-    fi
+    [[ ${EnableExtraShellProxyDownload} == true ]] && DownloadJudgment="(已使用代理)" || DownloadJudgment=""
   elif [[ $(echo $url_list | egrep -o "github|gitee") == "gitee" ]]; then
     repository_platform="https://gitee.com"
     reformat_url=$(echo $format_url | sed "s|/raw/|/tree/|g")
     DownloadJudgment=""
   fi
-  repository_url=$(echo "$repository_platform$reformat_url")
-  echo -e "\n\033[33m[*]\033[0m 开始${DownloadJudgment}更新 $author 的活动脚本:"
-  echo -e "$repository_url\n"
+  repository_url="$repository_platform$reformat_url"
+  echo -e "\033[33m[更新]\033[0m $author 的活动脚本${DownloadJudgment}:"
+  echo -e "\033[33m[仓库]\033[0m $repository_url"
 
   for js in $scripts_list; do
     eval url=$url_list$js
@@ -83,7 +79,7 @@ for author in $author_list; do
       croname=$(echo "$name" | awk -F\. '{print $1}')
       script_date_standard=$(cat ${ScriptsDir}/$name | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
       if [[ ${script_date_standard} == "" ]]; then
-        script_date=$(cat ${ScriptsDir}/$name | grep "cron" | head -n 1 | sed "s/[a-zA-Z]//g" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
+        script_date=$(cat ${ScriptsDir}/$name | egrep "cron|script-path|tag|$name" | head -n 1 | sed "s/[a-zA-Z\"\-\.\=\:\_]//g" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
       else
         script_date=${script_date_standard}
       fi
@@ -109,10 +105,4 @@ echo -e "\033[32m[Done]\033[0m 结束🔔\n"
 DeletedScripts="" # 完整脚本名称填入双引号内，多个用空格隔开
 for del1 in ${DeletedScripts}; do
   [ -f ${ScriptsDir}/$del1 ] && rm -rf ${ScriptsDir}/$del1
-done
-
-## 删除定时
-DeletedCronTask="" # 定时任务名（完整脚本名称去掉后缀格式）填入双引号内，多个用空格隔开
-for del2 in ${DeletedCronTask}; do
-  grep -q "$del2" ${ListCron} && sed -i "/$del2/d" ${ListCron}
 done
