@@ -9,7 +9,7 @@ const stream = require('stream');
 const zlib = require('zlib');
 const vm = require('vm');
 const PNG = require('png-js');
-const UA = require('../USER_AGENTS.js').USER_AGENT;
+const UA = require('./USER_AGENTS.js').USER_AGENT;
 
 
 Math.avg = function average() {
@@ -545,6 +545,12 @@ async function injectToRequest(scene = 'cww') {
   const res = await new JDJRValidator().run(scene);
   return `&validate=${res.validate}`
 }
+
+exports.sleep = sleep;
+
+exports.injectToRequest = injectToRequest;
+
+exports.injectToRequest2 = injectToRequest2;
 
 module.exports = {
   sleep,
