@@ -34,6 +34,6 @@
     "ws": "^7.4.3"
   },
   "devDependencies": {
-    "@types/node": "^16.4.13"
+    "@types/node": "^16.4.14"
   }
 }
