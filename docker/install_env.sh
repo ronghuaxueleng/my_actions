@@ -16,6 +16,7 @@ elif [ $Arch = "armv6l" ]; then
 else
     apk update
     apk add --no-cache python3 py3-pip sudo
+    pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
     pip3 install --upgrade pip
 fi
 cd ${ScriptsDir}
@@ -56,5 +57,5 @@ yarn cache clean # 清空缓存
 npm install -g npm npm-install-peers
 npm install -g ts-node typescript --unsafe-perm=true --allow-root
 npm install -g ts-node typescript @types/node date-fns axios require tslib fs crypto-js ts-md5 dotenv
-npm install --save-dev @types/node
-echo -e '\n\033[32m------- 忽略 \033[33m[WARN]\033[0m \033[32m警告类输出内容! -------\033[0m\n\nTips: 如有 \033[31m[ERROR]\033[0m 类报错，90%都是由网络原因所导致的，自行解读日志。'
+npm install --save-dev @types/node @types/tunnel
+echo -e '\n\033[32mTips:\033[0m 忽略 \033[33m[WARN]\033[0m 警告类输出内容! 如有 \033[31m[ERROR]\033[0m 类报错，90% 都是由网络原因所导致的，自行解读日志。'
