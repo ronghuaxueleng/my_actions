@@ -1,20 +1,17 @@
 /*
-tgchannel：https://t.me/Ariszy8028
-github：https://github.com/Ariszy/Private-Script
-boxjs：https://raw.githubusercontent.com/Ariszy/Private-Script/master/Ariszy.boxjs.json
 
 [task_local]
 #汽车生活节
-20 1 * * * https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_qcshj.js, tag= 汽车生活节
+20 1,22 12-20 8 * jd_car_life.js, tag= 汽车生活节
 ================Loon==============
 [Script]
-cron "20 1 * * *" script-path= https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_qcshj.js,tag= 汽车生活节
+cron "20 1,22 12-20 8 *" script-path= jd_car_life.js,tag= 汽车生活节
 ===============Surge=================
-汽车生活节 = type=cron,cronexp="20 1 * * *",wake-system=1,timeout=3600,script-path= https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_qcshj.js
+汽车生活节 = type=cron,cronexp="20 1,22 12-20 8 *",wake-system=1,timeout=3600,script-path= jd_car_life.js
 ============小火箭=========
-汽车生活节 = type=cron,script-path= https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_qcshj.js, cronexpr="20 1 * * *", timeout=3600, enable=true
+汽车生活节 = type=cron,script-path= jd_car_life.js, cronexpr="20 1,22 12-20 8 *", timeout=3600, enable=true
 */
-const $ = new Env('汽车生活节')
+const $ = new Env('8.12-20汽车生活节')
 const notify = $.isNode() ?require('./sendNotify') : '';
 cookiesArr = []
 CodeArr = []
@@ -72,7 +69,9 @@ if ($.isNode()) {
             }
       
       await gethelpcode()
-      
+      await getlist()
+      await Ariszy()
+      await zy()
    }
 for(let i = 0; i < cookiesArr.length; i++){
       cookie = cookiesArr[i];
@@ -83,7 +82,6 @@ for(let i = 0; i < cookiesArr.length; i++){
        console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}助力模块*********\n`);
       
       await control()
-      await Lottery()
       await userScore()
 }
 
@@ -152,7 +150,7 @@ async function DoTask(){
    })
   }
 async function Lottery(){
- const body = `functionId=healthyDay_getLotteryResult&body=%7B%22appId%22%3A%221E1xRy6c%22%2C%22taskId%22%3A7%7D&client=wh5&clientVersion=1.0.0`
+ const body = `functionId=healthyDay_getLotteryResult&body=%7B%22appId%22%3A%221E1xRy6c%22%2C%22taskId%22%3A2%7D&client=wh5&clientVersion=1.0.0`
  const MyRequest = PostRequest(``,body)
  return new Promise((resolve) => {
    $.post(MyRequest,async(error, response, data) =>{
@@ -218,7 +216,7 @@ async function control(){
 }
 }
 async function dosupport(){
-   const body = `functionId=harmony_collectScore&body=%7B%22appId%22%3A%221E1xRy6c%22%2C%22taskToken%22%3A%22${helpcode}%22%2C%22taskId%22%3A6%2C%22actionType%22%3A0%7D&client=wh5&clientVersion=1.0.0`
+   const body = `functionId=harmony_collectScore&body=%7B%22appId%22%3A%221E1NYw6w%22%2C%22taskToken%22%3A%22${helpcode}%22%2C%22taskId%22%3A12%2C%22actionType%22%3A0%7D&client=wh5&clientVersion=1.0.0`
  const MyRequest = PostRequest(``,body)
  return new Promise((resolve) => {
    $.post(MyRequest,async(error, response, data) =>{
@@ -310,10 +308,10 @@ async function gethelpcode(){
 
 let list8 = result.data.result.taskVos.find(item => item.taskId == 8)
 
-       
-   list4tokenArr.push(8+list8.assistTaskDetailVo.taskToken)
-list6tokenArr.push(list8.assistTaskDetailVo.taskToken)
-        
+       for(let i = 0; i < list8.assistTaskDetailVo.length; i ++){
+   list4tokenArr.push(8+list8.assistTaskDetailVo[i].taskToken)
+list6tokenArr.push(list8.assistTaskDetailVo[i].taskToken)
+        }
         }else{
            $.log(result.data.bizMsg+"\n")
         }
