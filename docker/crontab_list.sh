@@ -120,6 +120,6 @@
 # 伊利养牛记
 0 12 * * * node /scripts/jd_yili_cow.js >> /scripts/logs/jd_yili_cow.log 2>&1
 # 领京豆
-21 9,15 * * * node /scripts/jd_bean_box.js >> /scripts/logs/jd_bean_box.log 2>&1
+0 9,12 * * * node /scripts/jd_bean_box.js >> /scripts/logs/jd_bean_box.log 2>&1
 # 京喜签到
 20 1 * * * node /scripts/jx_sign.js >> /scripts/logs/jx_sign.log 2>&1
