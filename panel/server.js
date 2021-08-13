@@ -690,7 +690,7 @@ app.get('/runLog/:jsName', function (request, response) {
     if (request.session.loggedin) {
         const jsName = request.params.jsName;
         let logFile;
-        if (jsName === 'git_pull' || jsName === 'exsc' || jsName === 'ttyd' || jsName === 'rmlog' || jsName === 'hangup' || jsName === 'cfd_loop' || jsName === 'exsc') {
+        if (jsName === 'git_pull' || jsName === 'ttyd' || jsName === 'rmlog' || jsName === 'hangup' || jsName === 'cfd_loop' || jsName === 'exsc') {
             logFile = path.join(rootPath, `log/${jsName}.log`);
         } else {
             let pathUrl = `log/${jsName}/`;
@@ -980,21 +980,16 @@ function updateCookie(cookie, userMsg = '无', response) {
                     maxCookieCount
                 );
                 lastIndex = i;
-                if (
-                    line.match(/pt_pin=.+?;/) &&
-                    line.match(/pt_pin=.+?;/)[0] == pt_pin
-                ) {
+                if (line.match(/pt_pin=.+?;/) && line.match(/pt_pin=.+?;/)[0] === pt_pin) {
                     const head = line.split('=')[0];
-                    const newLine = [head, '=', '"', cookie, '"'].join('');
-                    lines[i] = newLine;
+                    lines[i] = [head, '=', '"', cookie, '"'].join('');
                     updateFlag = true;
                     var lineNext = lines[i + 1];
                     if (
                         lineNext.match(/上次更新：/)
                     ) {
                         const bz = lineNext.split('备注：')[1];
-                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', bz ? bz : userMsg].join('');
-                        lines[i + 1] = newLine;
+                        lines[i + 1] = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', bz ? bz : userMsg].join('');
                     } else {
                         const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', userMsg].join('');
                         lines.splice(lastIndex + 1, 0, newLine);
@@ -1004,6 +999,7 @@ function updateCookie(cookie, userMsg = '无', response) {
         }
         let CookieCount = Number(maxCookieCount) + 1;
         if (!updateFlag && CK_AUTO_ADD === 'true') {
+            lastIndex ++;
             let newLine = [
                 'Cookie',
                 CookieCount,

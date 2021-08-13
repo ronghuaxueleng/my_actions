@@ -11,9 +11,8 @@
     <link rel="stylesheet" href="../css/onoffcanvas.min.css">
     <script type="text/javascript" src="../js/prefixfree.min.js"></script>
     <script type="text/javascript" src="../js/mmenu-light.js"></script>
-    <link rel="stylesheet" type="text/css" href="../css/mmenu-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mobile-nav.css" />
     <link rel="stylesheet" type="text/css" href="../css/codemirror.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/twilight.css">
     <link rel="stylesheet" type="text/css" href="../css/codemirror-theme.css">
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
@@ -27,24 +26,31 @@
                 <div class="elk-header">
                     <nav id="menu">
                         <ul>
-                            <span><a href="./home.html"><i class="fa fa-pencil-square-o"> 配置文件</i></a></span>
-                            <span><a href="./diff.html"><i class="fa fa-columns"> 对比工具</i></a></span>
-                            <span><a href="./crontab.html"><i class="fa fa-clock-o"> 定时任务</i></a></span>
-                            <span><a href="./diy.html"><i class="fa fa-send-o"> 自定义脚本</i></a></span>
-                            <span><a href="./bot.html"><i class="fa fa-telegram"> 机器人配置</i></a></span>
-                            <span><a href="./remarks.html"><i class="fa fa-user-circle"> 账号通知配置</i></a></span>
-                            <span><a href="./run.html"><i class="fa fa-play-circle"> 快速执行</i></a></span>
-                            <span><a href="./terminal.html"><i class="fa fa-terminal"> 终端</i></a></span>
-                            <span><a href="../cause/index.html"><i class="fa fa-info-circle">
-                                        使用教程</i></a></span>
-                            <span><a href="./tasklog.html"><i class="fa fa-history"> 查询日志</i></a></span>
-                            <span><a href="./viewScripts.html"><i class="fa fa-file-code-o"> 查阅脚本</i></a></span>
-                            <span><a href="https://github.com/JDHelloWorld/jd_scripts"><i class="fa fa-github">
-                                        浏览仓库</i></a></span>
-                            <span><a href="https://github.com/SuperManito/LinuxMirrors"><i class="fa fa-github">
-                                        支持作者</i></a></span>
-                            <span><a href="./pwd.html"><i class="fa fa-lock"> 修改密码</i></a></span>
-                            <span><a href="../logout"><i class="fa fa-sign-out"> 退出</i></a></span>
+                            <li><a href="./home.html">配置文件 <i class="fa fa-pencil-square-o"></i></a></li>
+                            <li><a href="./diff.html">对比工具 <i class="fa fa-columns"></i></a></li>
+                            <li><a href="./crontab.html">定时任务 <i class="fa fa-clock-o"></i></a></li>
+                            <li><a href="./diy.html">自定义脚本 <i class="fa fa-send-o"></i></a></li>
+                            <li><a href="./bot.html">机器人配置 <i class="fa fa-telegram"></i></a></li>
+                            <li><a href="./remarks.html">账号通知配置 <i class="fa fa-user-circle"></i></a></li>
+                            <li><a href="./run.html">快速执行 <i class="fa fa-play-circle"></i></a></li>
+                            <li><a href="./terminal.html">终端 <i class="fa fa-terminal"></i></a></li>
+                            <li><a href="../cause/index.html">使用教程 <i class="fa fa-book"></i></a></li>
+                            <li><a href="./tasklog.html">查询日志 <i class="fa fa-history"></i></a></li>
+                            <li><a href="./viewScripts.html">查阅脚本 <i class="fa fa-file-code-o"></i></a></li>
+                            <li><a href="https://github.com/JDHelloWorld/jd_scripts">浏览仓库 <i
+                                        class="fa fa-github"></i></a></li>
+                            <li><a href="https://github.com/SuperManito/LinuxMirrors">推广 <i
+                                        class="fa fa-lightbulb-o"></i></a></li>
+                            <li><a href="./pwd.html">修改密码 <i class="fa fa-lock"></i></a></li>
+                            <li><a href="../logout">退出登陆 <i class="fa fa-sign-out"></i></a></li>
+                            <li class="mobile-daynight">
+                                <span class="title">切换主题</span>
+                                <div class="toggle toggle--daynight">
+                                    <input type="checkbox" id="toggle--daynight" class="toggle--checkbox">
+                                    <label class="toggle--btn" for="toggle--daynight"><span
+                                            class="toggle--feature"></span></label>
+                                </div>
+                            </li>
                         </ul>
                     </nav>
                     <div class="new">
@@ -53,8 +59,8 @@
                                 <a href="#menu" style="color:white; text-decoration:none;"><span> <i
                                             class="fa fa-th-list"></i></span></a>
                             </div>
-                            <a id="toggleIcon" class="onoffcanvas-toggler is-animated"
-                                href="#elk-side" data-toggle="onoffcanvas"></a>
+                            <a id="toggleIcon" class="onoffcanvas-toggler is-animated" href="#elk-side"
+                                data-toggle="onoffcanvas"></a>
                             <h1> 运行日志</h1>
                             <div class="multi-button">
                                 <button id="wrap">

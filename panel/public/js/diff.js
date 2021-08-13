@@ -1,4 +1,4 @@
-var editor, origLeft, origRight;
+let origLeft, origRight;
 
 function initUI() {
     editor = CodeMirror.MergeView(document.getElementById('compare'), {
@@ -8,7 +8,7 @@ function initUI() {
         lineNumbers: true,
         lineWrapping: false,
         mode: 'shell',
-        theme: 'panda-syntax',
+        theme: themeChange.getAndUpdateEditorTheme(),
         keyMap: 'sublime',
         lineNumbers: true,
         highlightDifferences: true,

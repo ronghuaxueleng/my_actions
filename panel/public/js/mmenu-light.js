@@ -64,7 +64,7 @@
             }, t
         }(),
         i = {
-            title: "菜单",
+            title: "控 制 面 板",
             theme: "light",
             selected: "Selected"
         },

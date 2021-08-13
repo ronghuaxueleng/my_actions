@@ -1,11 +1,11 @@
 $(document).ready(function () {
-    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
         lineWrapping: true,
         styleActiveLine: true,
         matchBrackets: true,
         mode: 'application/json',
-        theme: 'panda-syntax',
+        theme: themeChange.getAndUpdateEditorTheme(),
         keyMap: 'sublime'
     });
     $.get(BASE_API_PATH + '/api/config/bot', function (data) {

@@ -184,16 +184,6 @@ h4 {
 }
 
 @media screen and (max-width: 480px) {
-
-    nav ul li a:link,
-    nav ul li a:visited,
-    nav ul li a:active {
-        font-size: 0.75rem;
-        padding: 0.5rem 0.5rem;
-        margin: 0;
-
-    }
-
     .container p {
         font-size: 0.75rem;
         margin: 0;
@@ -228,6 +218,10 @@ h4 {
     background-color: #f8f9fa !important;
 }
 
+.bg-dark {
+    background-color: #444444 !important;
+}
+
 .left-list {
     overflow: auto;
     z-index: 100;
@@ -242,54 +236,6 @@ h4 {
     color: #007bff;
     text-decoration: none;
     background-color: transparent;
-}
-
-/* diff页面 */
-.CodeMirror-merge {
-    flex: 1;
-    width: 100%;
-    height: auto;
-    display: flex;
-    overflow: hidden;
-}
-
-.CodeMirror-merge .CodeMirror {
-    height: 100%;
-}
-
-.CodeMirror-merge-2pane .CodeMirror-merge-pane {
-    width: calc(50% - 15px);
-}
-
-.CodeMirror-merge-2pane .CodeMirror-merge-gap {
-    width: 30px;
-}
-
-.CodeMirror-merge-2pane .CodeMirror-merge-scrolllock {
-    display: none;
-}
-
-.CodeMirror-merge-pane-rightmost {
-    position: static;
-}
-
-/* 对比工具差异处颜色 */
-.CodeMirror-merge-r-chunk {
-    background: #9D2932
-}
-
-.CodeMirror-merge-r-chunk-start {
-    border-top: 1px solid #9D2932;
-}
-
-.CodeMirror-merge-r-chunk-end {
-    border-bottom: 1px solid #9D2932;
-}
-
-.CodeMirror-merge-r-connect {
-    fill: #ebdc5c;
-    stroke: rgb(148, 238, 136);
-    stroke-width: 1px;
 }
 
 /* 输入框 */
@@ -604,13 +550,13 @@ h4 {
     border-color: #009e90;
 }
 
-.inp-cbx:checked+.cbx span:first-child {
+.inp-cbx:checked + .cbx span:first-child {
     background: #009e90;
     border-color: #009e90;
     animation: wave 0.4s ease;
 }
 
-.inp-cbx:checked+.cbx span:first-child svg {
+.inp-cbx:checked + .cbx span:first-child svg {
     stroke-dashoffset: 0;
 }
 
@@ -655,6 +601,116 @@ h4 {
     }
 }
 
+/* ===================================================
+   Day/Night and Gender toggle buttons
+   =================================================== */
+.toggle {
+    display: block;
+    user-select: none;
+}
+
+.toggle--checkbox {
+    display: none;
+}
+
+.toggle--btn {
+    display: block;
+    top: 8.5em;
+    left: 7em;
+    margin: 0 auto;
+    font-size: 1.4em;
+    transition: all 350ms ease-in;
+}
+
+.toggle--btn:hover {
+    cursor: pointer;
+}
+
+.toggle--btn,
+.toggle--btn:before,
+.toggle--btn:after,
+.toggle--checkbox,
+.toggle--checkbox:before,
+.toggle--checkbox:after,
+.toggle--feature,
+.toggle--feature:before,
+.toggle--feature:after {
+    transition: all 250ms ease-in;
+}
+
+.toggle--btn:before,
+.toggle--btn:after,
+.toggle--checkbox:before,
+.toggle--checkbox:after,
+.toggle--feature:before,
+.toggle--feature:after {
+    content: '';
+    display: block;
+}
+
+/*移动端相关css*/
+.mobile-daynight {
+    display: flex !important;
+    align-items: center;
+}
+
+.mobile-daynight .title {
+    display: inline-block;
+    position: relative;
+}
+
+.mobile-daynight .toggle {
+    display: inline-block;
+    margin-left: 25px;
+}
+
+.mobile-daynight .toggle .toggle--btn {
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+/*移动端相关css end*/
+
+.toggle--daynight .toggle--btn,
+.toggle--like .toggle--btn {
+    position: relative;
+    height: 20px;
+    width: 40px;
+    border-radius: 70px;
+}
+
+.toggle--daynight .toggle--btn:before,
+.toggle--like .toggle--btn:before {
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.toggle--daynight .toggle--btn {
+    border: 5px solid #1c1c1c;
+    background-color: #3c4145;
+}
+
+.toggle--daynight .toggle--btn:before {
+    background-color: #fff;
+    border: 5px solid #e3e3c7;
+}
+
+.toggle--daynight .toggle--checkbox:checked + .toggle--btn {
+    background-color: #9ee3fb;
+    border: 5px solid #86c3d7;
+}
+
+.toggle--daynight .toggle--checkbox:checked + .toggle--btn:before {
+    left: 20px;
+    background-color: #ffdf6d;
+    border: 5px solid #e1c348;
+}
+
 /* 滚动条 */
 ::-webkit-scrollbar,
 ::-webkit-scrollbar {
@@ -690,10 +746,14 @@ h4 {
     cursor: auto;
 }
 
-::-webkit-scrollbar-thumb,
-::-webkit-scrollbar-thumb {
+.container.dark ::-webkit-scrollbar-thumb {
     background-color: rgba(235, 235, 235, 0.5);
 }
+
+.container.light ::-webkit-scrollbar-thumb {
+    background-color: rgba(109, 109, 109, 0.7) !important;
+}
+
 
 ::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb:hover,

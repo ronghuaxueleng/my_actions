@@ -1,13 +1,13 @@
 $(document).ready(function () {
     var timer = 0;
-    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
         lineWrapping: false,
         styleActiveLine: true,
         matchBrackets: true,
         readOnly: true,
         mode: 'text',
-        theme: 'panda-syntax'
+        theme: themeChange.getAndUpdateEditorTheme(),
     });
 
     function getPath(request, page) {
@@ -68,7 +68,7 @@ $(document).ready(function () {
                     break;
                 case 'exsc':
                     confirmTxt = '确认导出互助码？';
-                    cmd = `bash jd ${this.id} 2>&1 | tee log/exsc.log`;
+                    cmd = `bash jd ${this.id} 2>&1`;
                     break;
                 case 'ps':
                     confirmTxt = '确认查看进程？';
@@ -77,7 +77,7 @@ $(document).ready(function () {
                     break;
                 case 'rmlog':
                     confirmTxt = '确认删除日志？';
-                    cmd = `bash jd ${this.id} 2>&1;`
+                    cmd = `bash jd ${this.id} 2>&1`
                     refreshLog = false;
                     break;
                 case 'hangup':

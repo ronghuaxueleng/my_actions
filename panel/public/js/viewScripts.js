@@ -1,13 +1,13 @@
 var qrcode, userCookie;
 $(document).ready(function () {
-    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
         lineWrapping: false,
         styleActiveLine: true,
         matchBrackets: true,
         readOnly: true,
         mode: 'javascript',
-        theme: 'panda-syntax'
+        theme: themeChange.getAndUpdateEditorTheme(),
     });
 
     $.get(BASE_API_PATH + '/api/scripts', function (data) {

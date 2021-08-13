@@ -1,15 +1,14 @@
 var qrcode, userCookie;
 $(document).ready(function () {
-    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
         lineWrapping: false,
         styleActiveLine: true,
         matchBrackets: true,
         mode: 'shell',
-        theme: 'panda-syntax',
+        theme: themeChange.getAndUpdateEditorTheme(),
         keyMap: 'sublime'
     });
-
     function loadConfig(callback) {
         $.get(BASE_API_PATH + '/api/config/config', function (data) {
             editor.setValue(data);

@@ -105,7 +105,7 @@ nav .menu-item:nth-of-type(3):hover~#sub-menu-container #sub-menu-holder {
 nav .menu-item:nth-of-type(4):hover~#sub-menu-container #sub-menu-holder {
     clip-path: inset(0 28.75em 0 0 round 10px);
     left: calc(18.5em + 1px);
-    height: 13.5em;
+    height: 17.5em;
 }
 
 
@@ -293,8 +293,16 @@ nav .menu-item:nth-of-type(4):hover~#sub-menu-container #sub-menu-holder {
     background-image: linear-gradient(45deg, #808080 35%, #bbbbbb 75%);
 }
 
+.icon-box.gb.l .icon i:before {
+    background-image: linear-gradient(45deg, #7fb80e 35%, #45b97c 75%);
+}
+
 .icon-box.gb.r .icon i:before {
-    background-image: linear-gradient(45deg, red 35%, red 75%);
+    background-image: linear-gradient(45deg, #d93a49 35%, #d93a49 75%);
+}
+
+.icon-box.gb.s .icon i:before {
+    background-image: linear-gradient(45deg, #fdb933 35%, #fdb933 75%);
 }
 
 .menu-item .icon-box:hover .text i {
