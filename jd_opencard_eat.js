@@ -6,7 +6,7 @@
 
 第一个账号助力我 其他依次助力CK1
 第一个CK失效应该全都会助力我，亲注意一下
-入口复制到jd：
+入口：
 25.0复制整段话 Https:/JofDQqLP9W0sRu 大牌联合送福利，免费领京豆￥q2j6I8aYVb%dakai》猄】崠】
 
 更新地址：https://github.com/Tsukasa007/my_script
@@ -64,8 +64,8 @@ if (!$.isNode() || !process.env.JD_OPENCARD_EAT_OPEN_OPENCARD) {
         });
         return;
     }
-    console.log('入口：25.0复制整段话 Https:/JofDQqLP9W0sRu 大牌联合送福利，免费领京豆￥q2j6I8aYVb%dakai》猄】崠】')
     $.shareUuid = '598ff3d2d8b14cebbb5b522ff109e039'
+    console.log(`入口:\n25.0复制整段话 Https:/JofDQqLP9W0sRu 大牌联合送福利，免费领京豆￥q2j6I8aYVb%dakai》猄】崠】`)
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
