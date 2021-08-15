@@ -71,14 +71,14 @@ $(document).ready(function () {
                     cmd = `bash jd ${this.id} 2>&1`;
                     break;
                 case 'ps':
-                    confirmTxt = '确认查看进程？';
+                    // confirmTxt = '确认查看进程？';
                     cmd = `bash jd ${this.id} 2>&1`;
                     refreshLog = false;
                     break;
                 case 'rmlog':
                     confirmTxt = '确认删除日志？';
-                    cmd = `bash jd ${this.id} 2>&1`
-                    refreshLog = false;
+                    cmd = `bash jd ${this.id} 2>&1 | tee log/rmlog.log`
+                    // refreshLog = false;
                     break;
                 case 'hangup':
                     confirmTxt = '确认启动/重启挂机程序？';
@@ -94,7 +94,7 @@ $(document).ready(function () {
                     break;
             }
 
-            if (!confirm(confirmTxt)) {
+            if (confirmTxt && !confirm(confirmTxt)) {
                 return;
             }
 
