@@ -607,18 +607,15 @@ h4 {
 .toggle {
     display: block;
     user-select: none;
+    width: 5em;
 }
-
 .toggle--checkbox {
     display: none;
 }
 
 .toggle--btn {
     display: block;
-    top: 8.5em;
-    left: 7em;
     margin: 0 auto;
-    font-size: 1.4em;
     transition: all 350ms ease-in;
 }
 
@@ -662,6 +659,7 @@ h4 {
 .mobile-daynight .toggle {
     display: inline-block;
     margin-left: 25px;
+    width: 3em;
 }
 
 .mobile-daynight .toggle .toggle--btn {

@@ -18,12 +18,17 @@ $(document).ready(function () {
             $('.progress-bar_item-3').removeClass('progress-bar_active');
             $('.progress-bar_active').css('background-color', '#F9AE35');
             //changeText(pbText, 'Could be stronger');
-        } else {
+        } else if(len > 8){
             $('.progress-bar_item').each(function () {
                 $(this).addClass('progress-bar_active');
             });
             $('.progress-bar_active').css('background-color', '#2DAF7D');
             //changeText(pbText, 'Strong password');
+        }else{
+            $('.progress-bar_item').each(function () {
+                $(this).removeClass('progress-bar_active');
+            });
+            $('.progress-bar_active').css('background-color', '#FF4B47');
         }
     });
 });
