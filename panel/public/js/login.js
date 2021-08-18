@@ -91,11 +91,7 @@ $(document).ready(function () {
             password: $password
         }, function (data) {
             if (data.err === 0) {
-                if (!!navigator.userAgent.match(/AppleWebKit.*Mobile.*/)) {
-                    window.location.href = BASE_PATH + "mobile/run.html"; //手机
-                } else {
-                    window.location.href = BASE_PATH + "run.html"; //电脑
-                }
+                window.location.href = BASE_PATH + data['redirect'];
             } else {
                 Swal.fire({
                     text: data.msg,

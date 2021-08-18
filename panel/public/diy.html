@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>自定义脚本 · 控制面板</title>
     <script type="text/javascript" src="./js/jquery.min.js"></script>
     <script type="text/javascript" src="./js/codemirror.min.js"></script>
@@ -17,213 +17,214 @@
     <link rel="stylesheet" type="text/css" href="./css/main.css">
     <link rel="stylesheet" type="text/css" href="./css/nav.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
-    <link rel="icon" type="image/x-icon" href="./icon/running_joy.gif" />
+    <link rel="icon" type="image/x-icon" href="./icon/running_joy.gif"/>
 </head>
 
 <body>
-    <div class="container">
-        <div class="diffs">
-            <nav id="menu">
-                <!--菜单1-->
-                <div class="menu-item highlight">
-                    <div class="menu-text">
-                        <a href="#"><i class="fa fa-home"></i> 编辑配置</a>
-                    </div>
-                    <div class="sub-menu double">
-                        <a href="./home">
-                            <div class="icon-box gb a">
-                                <div class="icon"><i class="fa fa-pencil-square-o"></i></div>
-                                <div class="text">
-                                    <div class="title">配置文件 <i class="fa fa-arrow-right"></i></div>
-                                    <div class="sub-text">编辑环境变量</div>
-                                </div>
+<div class="container">
+    <div class="diffs">
+        <nav id="menu">
+            <!--菜单1-->
+            <div class="menu-item highlight">
+                <div class="menu-text">
+                    <a href="#"><i class="fa fa-home"></i> 编辑配置</a>
+                </div>
+                <div class="sub-menu double">
+                    <a href="./home">
+                        <div class="icon-box gb a">
+                            <div class="icon"><i class="fa fa-pencil-square-o"></i></div>
+                            <div class="text">
+                                <div class="title">配置文件 <i class="fa fa-arrow-right"></i></div>
+                                <div class="sub-text">编辑环境变量</div>
                             </div>
-                        </a>
-                        <a href="./diff">
-                            <div class="icon-box gb g">
-                                <div class="icon"><i class="fa fa-columns"></i></div>
-                                <div class="text">
-                                    <div class="title">&nbsp;对比工具 <i class="fa fa-arrow-right"></i></div>
-                                    <div class="sub-text">&nbsp;将当前配置文件与模板进行比较</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="./crontab">
-                            <div class="icon-box gb d">
-                                <div class="icon"><i class="fa fa-clock-o"></i></div>
-                                <div class="text">
-                                    <div class="title">定时任务 <i class="fa fa-arrow-right"></i></div>
-                                    <div class="sub-text">配置 Crontab 定时任务</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="./diy">
-                            <div class="icon-box gb h">
-                                <div class="icon"><i class="fa fa-send-o"></i></div>
-                                <div class="text">
-                                    <div class="title">自定义脚本 <i class="fa fa-map-marker"></i></div>
-                                    <div class="sub-text">编辑 DIY 脚本</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="./bot">
-                            <div class="icon-box gb">
-                                <div class="icon"><i class="fa fa-telegram"></i></div>
-                                <div class="text">
-                                    <div class="title">机器人配置 <i class="fa fa-arrow-right"></i></div>
-                                    <div class="sub-text">编辑 Telegram Bot 配置文件</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="./remarks">
-                            <div class="icon-box gb e">
-                                <div class="icon"><i class="fa fa-user-circle"></i></div>
-                                <div class="text">
-                                    <div class="title">账号通知配置 <i class="fa fa-arrow-right"></i></div>
-                                    <div class="sub-text">编辑账号推送通知备注配置文件</div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="bottom-container">
-                            <i class="fa fa-comments"></i> 你知道我们有 Telegram 频道吗? <a
-                                href="https://t.me/jdhelloworld">立即关注</a>
                         </div>
-                        <div class="sub-menu-holder"></div>
-                    </div>
-                </div>
-                <!--菜单2-->
-                <div class="menu-item">
-                    <div class="menu-text">
-                        <a href="#"><i class="fa fa-list-ul"></i> 执行工具</a>
-                    </div>
-                    <div class="sub-menu">
-                        <a href="./run">
-                            <div class="icon-box gb i">
-                                <div class="icon"><i class="fa fa-play-circle"></i></div>
-                                <div class="text">
-                                    <div class="title">快速执行 <i class="fa fa-arrow-right"></i></div>
-                                    <div class="sub-text">一键执行部分命令和特定活动脚本</div>
-                                </div>
+                    </a>
+                    <a href="./diff">
+                        <div class="icon-box gb g">
+                            <div class="icon"><i class="fa fa-columns"></i></div>
+                            <div class="text">
+                                <div class="title">&nbsp;对比工具 <i class="fa fa-arrow-right"></i></div>
+                                <div class="sub-text">&nbsp;将当前配置文件与模板进行比较</div>
                             </div>
-                        </a>
-                        <a href="./terminal">
-                            <div class="icon-box gb b">
-                                <div class="icon"><i class="fa fa-terminal"></i></div>
-                                <div class="text">
-                                    <div class="title">终端 <i class="fa fa-arrow-right"></i></div>
-                                    <div class="sub-text">Web Shell 命令行</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a onclick="javascript:window.open('./cause/index.html')">
-                            <div class="icon-box gb c">
-                                <div class="icon"><i class="fa fa-book"></i></div>
-                                <div class="text">
-                                    <div class="title">使用教程 <i class="fa fa-external-link"></i></div>
-                                    <div class="sub-text">查看所有关于项目的教程</div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="sub-menu-holder"></div>
-                    </div>
-                </div>
-                <!--菜单3-->
-                <div class="menu-item">
-                    <div class="menu-text">
-                        <a href="#"><i class="fa fa-folder"></i> 文件浏览</a>
-                    </div>
-                    <div class="sub-menu">
-                        <a href="./log">
-                            <div class="icon-box gb d">
-                                <div class="icon"><i class="fa fa-history"></i></div>
-                                <div class="text">
-                                    <div class="title">查询日志 <i class="fa fa-arrow-right"></i></div>
-                                    <div class="sub-text">查看详细的活动脚本运行日志</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="./viewScripts">
-                            <div class="icon-box gb e">
-                                <div class="icon"><i class="fa fa-file-code-o"></i></div>
-                                <div class="text">
-                                    <div class="title">查阅脚本 <i class="fa fa-arrow-right"></i></div>
-                                    <div class="sub-text">浏览脚本内容</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a onclick="javascript:window.open('https://github.com/JDHelloWorld/jd_scripts')">
-                            <div class="icon-box">
-                                <div class="icon"><i class="fa fa-github"></i></div>
-                                <div class="text">
-                                    <div class="title">查看仓库 <i class="fa fa-external-link"></i></div>
-                                    <div class="sub-text">浏览 Scripts 仓库代码托管网站</div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="sub-menu-holder"></div>
-                    </div>
-                </div>
-                <!--菜单4-->
-                <div class="menu-item">
-                    <div class="menu-text">
-                        <a href="#"><i class="fab fa fa-cog"></i> 选项设置</a>
-                    </div>
-                    <div class="sub-menu">
-                        <a onclick="javascript:window.open('https://github.com/SuperManito/LinuxMirrors')">
-                            <div class="icon-box gb s">
-                                <div class="icon"><i class="fa fa-lightbulb-o"></i></div>
-                                <div class="text">
-                                    <div class="title">&nbsp;推广 <i class="fa fa-external-link"></i></div>
-                                    <div class="sub-text">&nbsp;Please star this repository</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="./changepwd">
-                            <div class="icon-box gb l">
-                                <div class="icon"><i class="fa fa-lock"></i></div>
-                                <div class="text">
-                                    <div class="title">&nbsp;修改密码 <i class="fa fa-arrow-right"></i></div>
-                                    <div class="sub-text">&nbsp;Change Password</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="./logout">
-                            <div class="icon-box gb r">
-                                <div class="icon"><i class="fa fa-sign-out"></i></div>
-                                <div class="text">
-                                    <div class="title">退出登陆 <i class="fa fa-hand-o-right"></i></div>
-                                    <div class="sub-text">Sign out</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a>
-                            <div class="icon-box gb k">
-                                <div class="icon"><i class="fa fa-delicious"></i></div>
-                                <div class="text">
-                                    <div class="title">切换主题 <i class="fa fa-sliders"></i></div>
-                                    <div class="sub-text">Switch theme to light or dark</div>
-                                </div>
-                                <div class="toggle toggle--daynight">
-                                    <input type="checkbox" id="toggle--daynight" class="toggle--checkbox">
-                                    <label class="toggle--btn" for="toggle--daynight"><span
-                                            class="toggle--feature"></span></label>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="sub-menu-holder"></div>
-                    </div>
-                </div>
-                <!--container-->
-                <div id="sub-menu-container">
-                    <div id="sub-menu-holder">
-                        <div id="sub-menu-bottom">
                         </div>
+                    </a>
+                    <a href="./crontab">
+                        <div class="icon-box gb d">
+                            <div class="icon"><i class="fa fa-clock-o"></i></div>
+                            <div class="text">
+                                <div class="title">定时任务 <i class="fa fa-arrow-right"></i></div>
+                                <div class="sub-text">配置 Crontab 定时任务</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="./diy">
+                        <div class="icon-box gb h">
+                            <div class="icon"><i class="fa fa-send-o"></i></div>
+                            <div class="text">
+                                <div class="title">自定义脚本 <i class="fa fa-map-marker"></i></div>
+                                <div class="sub-text">编辑 DIY 脚本</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="./bot">
+                        <div class="icon-box gb">
+                            <div class="icon"><i class="fa fa-telegram"></i></div>
+                            <div class="text">
+                                <div class="title">机器人配置 <i class="fa fa-arrow-right"></i></div>
+                                <div class="sub-text">编辑 Telegram Bot 配置文件</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="./remarks">
+                        <div class="icon-box gb e">
+                            <div class="icon"><i class="fa fa-user-circle"></i></div>
+                            <div class="text">
+                                <div class="title">账号通知配置 <i class="fa fa-arrow-right"></i></div>
+                                <div class="sub-text">编辑账号推送通知备注配置文件</div>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="bottom-container">
+                        <i class="fa fa-comments"></i> 你知道我们有 Telegram 频道吗? <a
+                            href="https://t.me/jdhelloworld">立即关注</a>
+                    </div>
+                    <div class="sub-menu-holder"></div>
+                </div>
+            </div>
+            <!--菜单2-->
+            <div class="menu-item">
+                <div class="menu-text">
+                    <a href="#"><i class="fa fa-list-ul"></i> 执行工具</a>
+                </div>
+                <div class="sub-menu">
+                    <a href="./run">
+                        <div class="icon-box gb i">
+                            <div class="icon"><i class="fa fa-play-circle"></i></div>
+                            <div class="text">
+                                <div class="title">快速执行 <i class="fa fa-arrow-right"></i></div>
+                                <div class="sub-text">一键执行部分命令和特定活动脚本</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="./terminal">
+                        <div class="icon-box gb b">
+                            <div class="icon"><i class="fa fa-terminal"></i></div>
+                            <div class="text">
+                                <div class="title">终端 <i class="fa fa-arrow-right"></i></div>
+                                <div class="sub-text">Web Shell 命令行</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a onclick="javascript:window.open('./cause/index.html')">
+                        <div class="icon-box gb c">
+                            <div class="icon"><i class="fa fa-book"></i></div>
+                            <div class="text">
+                                <div class="title">使用教程 <i class="fa fa-external-link"></i></div>
+                                <div class="sub-text">查看所有关于项目的教程</div>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="sub-menu-holder"></div>
+                </div>
+            </div>
+            <!--菜单3-->
+            <div class="menu-item">
+                <div class="menu-text">
+                    <a href="#"><i class="fa fa-folder"></i> 文件浏览</a>
+                </div>
+                <div class="sub-menu">
+                    <a href="./log">
+                        <div class="icon-box gb d">
+                            <div class="icon"><i class="fa fa-history"></i></div>
+                            <div class="text">
+                                <div class="title">查询日志 <i class="fa fa-arrow-right"></i></div>
+                                <div class="sub-text">查看详细的活动脚本运行日志</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="./viewScripts">
+                        <div class="icon-box gb e">
+                            <div class="icon"><i class="fa fa-file-code-o"></i></div>
+                            <div class="text">
+                                <div class="title">查阅脚本 <i class="fa fa-arrow-right"></i></div>
+                                <div class="sub-text">浏览脚本内容</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a onclick="javascript:window.open('https://github.com/JDHelloWorld/jd_scripts')">
+                        <div class="icon-box">
+                            <div class="icon"><i class="fa fa-github"></i></div>
+                            <div class="text">
+                                <div class="title">查看仓库 <i class="fa fa-external-link"></i></div>
+                                <div class="sub-text">浏览 Scripts 仓库代码托管网站</div>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="sub-menu-holder"></div>
+                </div>
+            </div>
+            <!--菜单4-->
+            <div class="menu-item">
+                <div class="menu-text">
+                    <a href="#"><i class="fab fa fa-cog"></i> 选项设置</a>
+                </div>
+                <div class="sub-menu">
+                    <a onclick="javascript:window.open('https://github.com/SuperManito/LinuxMirrors')">
+                        <div class="icon-box gb s">
+                            <div class="icon"><i class="fa fa-lightbulb-o"></i></div>
+                            <div class="text">
+                                <div class="title">&nbsp;推广 <i class="fa fa-external-link"></i></div>
+                                <div class="sub-text">&nbsp;Please star this repository</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="./changepwd">
+                        <div class="icon-box gb l">
+                            <div class="icon"><i class="fa fa-lock"></i></div>
+                            <div class="text">
+                                <div class="title">&nbsp;修改密码 <i class="fa fa-arrow-right"></i></div>
+                                <div class="sub-text">&nbsp;Change Password</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="./logout">
+                        <div class="icon-box gb r">
+                            <div class="icon"><i class="fa fa-sign-out"></i></div>
+                            <div class="text">
+                                <div class="title">退出登陆 <i class="fa fa-hand-o-right"></i></div>
+                                <div class="sub-text">Sign out</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a>
+                        <div class="icon-box gb k">
+                            <div class="icon"><i class="fa fa-delicious"></i></div>
+                            <div class="text">
+                                <div class="title">切换主题 <i class="fa fa-sliders"></i></div>
+                                <div class="sub-text">Switch theme to light or dark</div>
+                            </div>
+                            <div class="toggle toggle--daynight">
+                                <input type="checkbox" id="toggle--daynight" class="toggle--checkbox">
+                                <label class="toggle--btn" for="toggle--daynight"><span
+                                        class="toggle--feature"></span></label>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="sub-menu-holder"></div>
+                </div>
+            </div>
+            <!--container-->
+            <div id="sub-menu-container">
+                <div id="sub-menu-holder">
+                    <div id="sub-menu-bottom">
                     </div>
                 </div>
-            </nav>
-            <div class="new">
+            </div>
+        </nav>
+        <div>
+            <div class="new header">
                 <header>
-                    <h1 style="margin-left: 0.5em;">diy.sh</h1>
+                    <h1>diy.sh</h1>
                     <div class="multi-button">
                         <button id="save">
                             <i class="fa fa-save"></i>
@@ -235,16 +236,18 @@
                         </button>
                     </div>
                 </header>
-                <h4>
-                    <font size="2">温馨提示：此脚本的用途为收集并添加第三方作者编写的活动脚本，关于如何启用该功能详见配置文件与使用教程。</font>
-                </h4>
+
             </div>
-            <div class="wrapper">
-                <textarea id="code" name="code"></textarea>
-            </div>
+            <h4>
+                <font size="2">温馨提示：此脚本的用途为收集并添加第三方作者编写的活动脚本，关于如何启用该功能详见配置文件与使用教程。</font>
+            </h4>
+        </div>
+        <div class="wrapper">
+            <textarea id="code" name="code"></textarea>
         </div>
     </div>
-    <script type="text/javascript" src="./js/common.js"></script>
-    <script type="text/javascript" src="./js/diy.js"></script>
+</div>
+<script type="text/javascript" src="./js/common.js"></script>
+<script type="text/javascript" src="./js/diy.js"></script>
 
 </body>

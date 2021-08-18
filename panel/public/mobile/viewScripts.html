@@ -3,102 +3,104 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>查阅脚本 · 控制面板移动端</title>
-    <link rel="stylesheet" href="../css/metisMenu.min.css" />
+    <link rel="stylesheet" href="../css/metisMenu.min.css"/>
     <link rel="stylesheet" href="../css/elektron.min.css">
-    <link rel="stylesheet" href="../css/prism.css" />
+    <link rel="stylesheet" href="../css/prism.css"/>
     <link rel="stylesheet" href="../css/onoffcanvas.min.css">
     <script type="text/javascript" src="../js/prefixfree.min.js"></script>
     <script type="text/javascript" src="../js/mmenu-light.js"></script>
-    <link rel="stylesheet" type="text/css" href="../css/mobile-nav.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mobile-nav.css"/>
     <link rel="stylesheet" type="text/css" href="../css/codemirror.min.css">
     <link rel="stylesheet" type="text/css" href="../css/codemirror-theme.css">
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
-    <link rel="icon" type="image/x-icon" href="../icon/running_joy.gif" />
+    <link rel="icon" type="image/x-icon" href="../icon/running_joy.gif"/>
 </head>
 
 <body>
-    <div class="container">
-        <div class="elk-app">
-            <div class="elk-wrap diffs">
-                <div class="elk-header">
-                    <nav id="menu">
-                        <ul>
-                            <li><a href="./home.html">配置文件 <i class="fa fa-pencil-square-o"></i></a></li>
-                            <li><a href="./diff.html">对比工具 <i class="fa fa-columns"></i></a></li>
-                            <li><a href="./crontab.html">定时任务 <i class="fa fa-clock-o"></i></a></li>
-                            <li><a href="./diy.html">自定义脚本 <i class="fa fa-send-o"></i></a></li>
-                            <li><a href="./bot.html">机器人配置 <i class="fa fa-telegram"></i></a></li>
-                            <li><a href="./remarks.html">账号通知配置 <i class="fa fa-user-circle"></i></a></li>
-                            <li><a href="./run.html">快速执行 <i class="fa fa-play-circle"></i></a></li>
-                            <li><a href="./terminal.html">终端 <i class="fa fa-terminal"></i></a></li>
-                            <li><a href="../cause/index.html">使用教程 <i class="fa fa-book"></i></a></li>
-                            <li><a href="./tasklog.html">查询日志 <i class="fa fa-history"></i></a></li>
-                            <li><a href="./viewScripts.html">查阅脚本 <i class="fa fa-file-code-o"></i></a></li>
-                            <li><a href="https://github.com/JDHelloWorld/jd_scripts">浏览仓库 <i
-                                        class="fa fa-github"></i></a></li>
-                            <li><a href="https://github.com/SuperManito/LinuxMirrors">推广 <i
-                                        class="fa fa-lightbulb-o"></i></a></li>
-                            <li><a href="./pwd.html">修改密码 <i class="fa fa-lock"></i></a></li>
-                            <li><a href="../logout">退出登陆 <i class="fa fa-sign-out"></i></a></li>
-                            <li class="mobile-daynight">
-                                <span class="title">切换主题</span>
-                                <div class="toggle toggle--daynight">
-                                    <input type="checkbox" id="toggle--daynight" class="toggle--checkbox">
-                                    <label class="toggle--btn" for="toggle--daynight"><span
-                                            class="toggle--feature"></span></label>
-                                </div>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="new">
-                        <header>
-                            <div class="mobile-nav-button">
-                                <a href="#menu" style="color:white; text-decoration:none;"><span> <i
-                                            class="fa fa-th-list"></i></span></a>
+<div class="container">
+    <div class="elk-app">
+        <div class="elk-wrap diffs">
+            <div class="elk-header">
+                <nav id="menu">
+                    <ul>
+                        <li><a href="./home.html">配置文件 <i class="fa fa-pencil-square-o"></i></a></li>
+                        <li><a href="./diff.html">对比工具 <i class="fa fa-columns"></i></a></li>
+                        <li><a href="./crontab.html">定时任务 <i class="fa fa-clock-o"></i></a></li>
+                        <li><a href="./diy.html">自定义脚本 <i class="fa fa-send-o"></i></a></li>
+                        <li><a href="./bot.html">机器人配置 <i class="fa fa-telegram"></i></a></li>
+                        <li><a href="./remarks.html">账号通知配置 <i class="fa fa-user-circle"></i></a></li>
+                        <li><a href="./run.html">快速执行 <i class="fa fa-play-circle"></i></a></li>
+                        <li><a href="./terminal.html">终端 <i class="fa fa-terminal"></i></a></li>
+                        <li><a href="../cause/index.html">使用教程 <i class="fa fa-book"></i></a></li>
+                        <li><a href="./tasklog.html">查询日志 <i class="fa fa-history"></i></a></li>
+                        <li><a href="./viewScripts.html">查阅脚本 <i class="fa fa-file-code-o"></i></a></li>
+                        <li><a href="https://github.com/JDHelloWorld/jd_scripts">浏览仓库 <i
+                                class="fa fa-github"></i></a></li>
+                        <li><a href="https://github.com/SuperManito/LinuxMirrors">推广 <i
+                                class="fa fa-lightbulb-o"></i></a></li>
+                        <li><a href="./pwd.html">修改密码 <i class="fa fa-lock"></i></a></li>
+                        <li><a href="../logout">退出登陆 <i class="fa fa-sign-out"></i></a></li>
+                        <li class="mobile-daynight">
+                            <span class="title">切换主题</span>
+                            <div class="toggle toggle--daynight">
+                                <input type="checkbox" id="toggle--daynight" class="toggle--checkbox">
+                                <label class="toggle--btn" for="toggle--daynight"><span
+                                        class="toggle--feature"></span></label>
                             </div>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="new header">
+                    <header>
+                        <div class="mobile-nav-button">
+                            <a href="#menu" style="color:white; text-decoration:none;"><span> <i
+                                    class="fa fa-th-list"></i></span></a>
+                        </div>
+                        <div class="more-list">
                             <a id="toggleIcon" class="onoffcanvas-toggler is-animated" href="#elk-side"
-                                data-toggle="onoffcanvas"></a>
-                            <h1> 脚本文件</h1>
-                            <div class="multi-button">
-                                <button id="wrap">
-                                    <i class="fa fa-exchange"></i>
-                                    <div class="animate-normal">切换换行</div>
-                                </button>
-                            </div>
-                        </header>
-                    </div>
+                               data-toggle="onoffcanvas"></a>
+                        </div>
+                        <h1> 脚本文件</h1>
+                        <div class="multi-button">
+                            <button id="wrap">
+                                <i class="fa fa-exchange"></i>
+                                <div class="animate-normal">切换换行</div>
+                            </button>
+                        </div>
+                    </header>
                 </div>
-                <div class="elk-container">
-                    <aside class="elk-side bg-light left-list" id="elk-side">
-                        <div class="elk-side-content ">
-                            <div class="elk-side-nav">
-                                <ul class="nav flex-column" id="menu1">
-                                </ul>
-                            </div>
+            </div>
+            <div class="elk-container">
+                <aside class="elk-side bg-light left-list" id="elk-side">
+                    <div class="elk-side-content ">
+                        <div class="elk-side-nav">
+                            <ul class="nav flex-column" id="menu1">
+                            </ul>
                         </div>
-                    </aside>
-                    <div class="elk-main">
-                        <div class="wrapper">
-                            <textarea id="code" name="code">  请选择脚本文件</textarea>
-                        </div>
+                    </div>
+                </aside>
+                <div class="elk-main">
+                    <div class="wrapper">
+                        <textarea id="code" name="code">  请选择脚本文件</textarea>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="../js/mobile-nav.js"></script>
-    <script src="../js/jquery.min.js"></script>
-    <script src="../js/npm/prismjs.js"></script>
-    <script src="../js/npm/onoffcanvas.js"></script>
-    <script src="../js/npm/elektron.js"></script>
-    <script src="../js/npm/metismenu.js"></script>
-    <script src="../js/codemirror.min.js"></script>
-    <script src="../js/javascript.js"></script>
-    <script src="../js/common.js"></script>
-    <script src="../js/viewScripts.js"></script>
+</div>
+<script type="text/javascript" src="../js/mobile-nav.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/npm/prismjs.js"></script>
+<script src="../js/npm/onoffcanvas.js"></script>
+<script src="../js/npm/elektron.js"></script>
+<script src="../js/npm/metismenu.js"></script>
+<script src="../js/codemirror.min.js"></script>
+<script src="../js/javascript.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/viewScripts.js"></script>
 
 </body>
 

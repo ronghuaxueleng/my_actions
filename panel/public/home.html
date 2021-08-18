@@ -222,9 +222,9 @@
                     </div>
                 </div>
             </nav>
-            <div class="new">
+            <div class="new header">
                 <header>
-                    <h1 style="margin-left: 0.5em;">配置文件</h1>
+                    <h1>配置文件</h1>
                     <div class="multi-button">
                         <button id="save">
                             <i class="fa fa-save"></i>
@@ -239,20 +239,6 @@
                             <div class="animate-normal">获取账号</div>
                         </button>
                     </div>
-                    <input class="inp-cbx" id="autoReplace" type="checkbox" style="display: none;" checked="checked">
-                    <label class="cbx" for="autoReplace">
-                        <span>
-                            <svg width="12px" height="10px">
-                                <use xlink:href="#check"></use>
-                            </svg>
-                        </span>
-                        <span>扫码后自动替换</span>
-                    </label>
-                    <svg class="inline-svg">
-                        <symbol id="check" viewBox="0 0 12 10">
-                            <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                        </symbol>
-                    </svg>
                 </header>
             </div>
             <div class="wrapper">
@@ -269,6 +255,23 @@
                 </div>
             </div>
             <div id="qrcode"></div>
+
+            <div class="auto-replace">
+                <input class="inp-cbx" id="autoReplace" type="checkbox" style="display: none;" checked="checked">
+                <label class="cbx" for="autoReplace">
+                        <span>
+                            <svg width="12px" height="10px">
+                                <use xlink:href="#check"></use>
+                            </svg>
+                        </span>
+                    <span>扫码后自动替换</span>
+                </label>
+                <svg class="inline-svg">
+                    <symbol id="check" viewBox="0 0 12 10">
+                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                    </symbol>
+                </svg>
+            </div>
             <div class="info">请使用手机京东APP扫码</div>
             <div class="qframe-close" title="关闭">✖</div>
         </div>

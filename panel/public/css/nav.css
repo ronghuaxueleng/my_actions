@@ -94,19 +94,19 @@ nav .menu-item:nth-of-type(1):hover~#sub-menu-container #sub-menu-holder {
 nav .menu-item:nth-of-type(2):hover~#sub-menu-container #sub-menu-holder {
     /*clip-path: inset(0 28.75em 0 0 round 10px);*/
     left: calc(0.58em);
-    height: 13.5em;
+    height: 14.2em;
 }
 
 nav .menu-item:nth-of-type(3):hover~#sub-menu-container #sub-menu-holder {
     /*clip-path: inset(0 28.75em 0 0 round 10px);*/
     left: calc(9.95em);
-    height: 13.5em;
+    height: 14.2em;
 }
 
 nav .menu-item:nth-of-type(4):hover~#sub-menu-container #sub-menu-holder {
     /*clip-path: inset(0 28.75em 0 0 round 10px);*/
     left: calc(19.3em);
-    height: 17.5em;
+    height: 18.2em;
 }
 
 

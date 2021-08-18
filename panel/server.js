@@ -333,12 +333,49 @@ function getLastModifyFilePath(dir) {
     }
     return filePath;
 }
-
+var userAgentTools = {
+    Android: function (userAgent) {
+        return (/android/i.test(userAgent.toLowerCase()));
+    },
+    BlackBerry: function (userAgent) {
+        return (/blackberry/i.test(userAgent.toLowerCase()));
+    },
+    iOS: function (userAgent) {
+        return (/iphone|ipad|ipod/i.test(userAgent.toLowerCase()));
+    },
+    iPhone: function (userAgent) {
+        return (/iphone/i.test(userAgent.toLowerCase()));
+    },
+    iPad: function (userAgent) {
+        return (/ipad/i.test(userAgent.toLowerCase()));
+    },
+    iPod: function (userAgent) {
+        return (/ipod/i.test(userAgent.toLowerCase()));
+    },
+    Opera: function (userAgent) {
+        return (/opera mini/i.test(userAgent.toLowerCase()));
+    },
+    Windows: function (userAgent) {
+        return (/iemobile/i.test(userAgent.toLowerCase()));
+    },
+    mobile: function (userAgent) {
+        return (userAgentTools.Android(userAgent) || userAgentTools.iPhone(userAgent) || userAgentTools.BlackBerry(userAgent));
+    }
+};
 function getPath(request, page) {
-    if (!!request.headers["user-agent"].match(/AppleWebKit.*Mobile.*/)) {
+    let userAgent = request.headers["user-agent"];
+    if (userAgentTools.mobile(userAgent)) {
         return path.join(__dirname + '/public/mobile/' + page)
     }
     return path.join(__dirname + '/public/' + page)
+}
+
+function getUrl(request, page) {
+    let userAgent = request.headers["user-agent"];
+    if (userAgentTools.mobile(userAgent)) {
+        return 'mobile/' + page;
+    }
+    return page;
 }
 
 var app = express();
@@ -688,11 +725,14 @@ app.post('/runCmd', function (request, response) {
  */
 app.get('/runLog/:jsName', function (request, response) {
     if (request.session.loggedin) {
-        const jsName = request.params.jsName;
+        let jsName = request.params.jsName;
         let logFile;
         if (jsName === 'git_pull' || jsName === 'ttyd' || jsName === 'rmlog' || jsName === 'hangup' || jsName === 'cfd_loop' || jsName === 'exsc') {
             logFile = path.join(rootPath, `log/${jsName}.log`);
         } else {
+            if(jsName.indexOf(".") > -1){
+                jsName = jsName.substring(0,jsName.indexOf("."));
+            }
             let pathUrl = `log/${jsName}/`;
             if (!fs.existsSync(path.join(rootPath, pathUrl))) {
                 pathUrl = `log/jd_${jsName}/`;
@@ -728,7 +768,8 @@ app.post('/auth', function (request, response) {
                 request.session.loggedin = true;
                 request.session.username = username;
                 response.send({
-                    err: 0
+                    err: 0,
+                    redirect:getUrl(request,"run.html")
                 });
             } else {
                 response.send({

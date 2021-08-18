@@ -70,9 +70,12 @@ h4 {
     margin-bottom: 0.3em;
 }
 
+.diffs header h1{
+    padding-right: 0.6em;
+}
 .diffs header * {
     display: inline-block;
-    vertical-align: middle;
+    line-height: 22px;
 }
 
 .diffs .compare-wrapper,
@@ -174,7 +177,7 @@ h4 {
 }
 
 #qrcontainer .qframe .info {
-    padding: 1rem 0 0 0;
+    padding: 5px 0 15px 0;
 }
 
 #qrcontainer .qframe .qframe-close {
@@ -372,11 +375,40 @@ h4 {
 
 /* 移动端导航栏菜单按钮按钮 */
 .mobile-nav-button {
-    margin: 0;
-    padding-left: 0.5em;
     font-size: 1.5em;
     position: relative;
-    margin-top: -0.4em;
+    margin-right: 0.5em;
+}
+
+.new.header{
+    display: flex;
+    align-items: center;
+    margin: 0.8em;
+    flex-wrap: wrap;
+}
+.new.header header{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.new.header .tips{
+    display: inline-block;
+}
+.run.fast-run{
+
+}
+.new .run{
+    margin-left: 15px;
+}
+.fast-run{
+    margin: 10px 15px;
+    display: flex;
+}
+.run-mobile{
+    margin: 0.8em;
+}
+.new.header header .more-list{
+    margin-right: 0.8em
 }
 
 /* 白色按钮 */
@@ -388,11 +420,14 @@ h4 {
     box-shadow: 0 0 10px rgba(146, 152, 176, 0.2), 4px 4px 10px rgba(146, 152, 176, 0.2);
     cursor: default;
 }
+.multi-button.more{
+    margin-top: 10px;
+}
 
 .multi-button button {
     border: 0 solid transparent;
     background: transparent;
-    padding: 1px 20px;
+    padding: 1px 0.8em;
     margin: 0px -3px;
     color: #273043;
     font-size: 18px;
@@ -436,9 +471,12 @@ h4 {
 }
 
 .multi-button button:hover {
-    background: #f0f1f4;
+    background: #d6d8e1;
 }
-
+.multi-button button:active {
+    outline: none;
+    background: #d6d8e1;
+}
 .multi-button button:hover div {
     display: block;
     top: 40px;
@@ -453,9 +491,15 @@ h4 {
     animation: tooltip-animation-left 0.3s ease-out forwards;
 }
 
-.multi-button button:active {
-    outline: none;
-    background: #d6d8e1;
+.auto-replace{
+    margin: 0 auto;
+    padding-top: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.auto-replace .cbx span{
+    color: #222222;
 }
 
 @keyframes tooltip-animation-right {

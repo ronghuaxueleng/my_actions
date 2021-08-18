@@ -51,47 +51,52 @@
                     </li>
                 </ul>
             </nav>
-            <header>
-                <div class="new">
-                    <div class="mobile-nav-button">
-                        <a href="#menu" style="color:white; text-decoration:none;"><span> <i
+
+            <div>
+                <div class="new header">
+                    <header>
+                        <div class="mobile-nav-button">
+                            <a href="#menu" style="color:white; text-decoration:none;"><span> <i
                                     class="fa fa-th-list"></i></span></a>
-                    </div>
-                    <h1 style="margin-left: 0.5em;">快速执行</h1>
-                    <div class="multi-button">
-                        <button id="wrap">
-                            <i class="fa fa-exchange"></i>
-                            <div class="animate-normal">切换换行</div>
-                        </button>
-                        <button id="move-bottom">
-                            <i class="fa fa-arrow-circle-o-down"></i>
-                            <div class="animate-normal">跳转底部</div>
-                        </button>
-                        <button id="list" class="cmd-btn">
-                            <i class="fa fa-list-alt"></i>
-                            <div class="animate-normal">列出脚本</div>
-                        </button>
-                        <button id="git_pull">
-                            <i class="fa fa-rotate-left"></i>
-                            <div class="animate-normal">更新脚本</div>
-                        </button>
-                    </div>
+                        </div>
+                        <h1>快速执行</h1>
+                        <div class="multi-button">
+                            <button id="wrap">
+                                <i class="fa fa-exchange"></i>
+                                <div class="animate-normal">切换换行</div>
+                            </button>
+                            <button id="move-bottom">
+                                <i class="fa fa-arrow-circle-o-down"></i>
+                                <div class="animate-normal">跳转底部</div>
+                            </button>
+                            <button id="list" class="cmd-btn">
+                                <i class="fa fa-list-alt"></i>
+                                <div class="animate-normal">列出脚本</div>
+                            </button>
+                            <button id="git_pull">
+                                <i class="fa fa-rotate-left"></i>
+                                <div class="animate-normal">更新脚本</div>
+                            </button>
+                        </div>
+                    </header>
                 </div>
-                <br>
-                <div style="margin-bottom: 4px;">
-                    <input id="jdScript" class="coco-input" style="margin-left: 0.5em;" name="jdScript" type="text"
-                        placeholder="请输入脚本名称" required>
+                <div class="run-mobile">
+                    <input id="jdScript" class="coco-input" name="jdScript" type="text"
+                           placeholder="请输入脚本名称" required>
                     <button id="runCmd" class="btn btn-primary btn-ghost btn-shine" type="submit"
-                        style="height:30px; width: 60px; font-size: 13px; border-radius: 6px;"
-                        title="jtask <xxx> now">执行</button>
+                            style="height:30px; width: 60px; font-size: 13px; border-radius: 6px;"
+                            title="jtask <xxx> now">执行</button>
                     <button id="jd_bean_change" class="cmd-btn btn btn-primary btn-ghost btn-shine"
-                        style="height:30px; border-radius: 6px 0 0 6px;" title="bash jd jd_bean_change now"><i
+                            style="height:30px; border-radius: 6px 0 0 6px;" title="bash jd jd_bean_change now"><i
                             class="fa fa-bell"></i>
                         京豆变动</button><button id="ps" class="btn btn-primary btn-ghost btn-shine"
-                        style="height:30px; border-radius: 0 6px 6px 0;" title="bash jd ps"><i class="fa fa-tasks"></i>
-                        查看进程</button>
+                                             style="height:30px; border-radius: 0 6px 6px 0;" title="bash jd ps"><i class="fa fa-tasks"></i>
+                    查看进程</button>
+<!--                    <div class="fast-run">-->
+
+<!--                    </div>-->
                 </div>
-            </header>
+            </div>
             <div class="wrapper">
                 <textarea id="code" name="code" readonly="readonly"></textarea>
             </div>
