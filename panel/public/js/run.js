@@ -10,13 +10,6 @@ $(document).ready(function () {
         theme: themeChange.getAndUpdateEditorTheme(),
     });
 
-    function getPath(request, page) {
-        if (!!request.headers["user-agent"].match(/AppleWebKit.*Mobile.*/)) {
-            return path.join(__dirname + '/public/mobile/' + page)
-        }
-        return path.join(__dirname + '/public/' + page)
-    }
-
     /**
      * 执行cmd
      * @param jsName js 文件名称
