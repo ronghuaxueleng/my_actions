@@ -313,8 +313,6 @@
 10 0,20 * * * node /scripts/jd_necklace.js >> /scripts/logs/jd_necklace.log 2>&1
 #京东宠汪汪兑换photonmang修复版 
 0 0-16/8 * * * node /scripts/jd_joy_reward.js >> /scripts/logs/jd_joy_reward.log 2>&1
-#京东宠汪汪photonmang修复版 
-15 0-23/2 * * * node /scripts/jd_joy.js >> /scripts/logs/jd_joy.log 2>&1
 #京东待收货 
 8 8 12 * * * node /scripts/jddsh.js >> /scripts/logs/jddsh.log 2>&1
 #京东粽享优惠 
@@ -337,10 +335,6 @@
 5 0 * * * node /scripts/zooOpencard09.js >> /scripts/logs/zooOpencard09.log 2>&1
 #京东618开卡活动8 
 15 9 1-18 6 node /scripts/zooOpencard08.js >> /scripts/logs/zooOpencard08.log 2>&1
-#京东618开卡活动7 
-15 9 9-20 6 node /scripts/zooOpencard07.js >> /scripts/logs/zooOpencard07.log 2>&1
-#京东618开卡活动6 
-15 9 9-20 6 node /scripts/zooOpencard06.js >> /scripts/logs/zooOpencard06.log 2>&1
 #京东京喜88红包动物园版 
 8 8 * 6 * node /scripts/zooJx88hongbao.js >> /scripts/logs/zooJx88hongbao.log 2>&1
 #京东合肥旗舰店开业动物园版 
@@ -359,8 +353,6 @@
 1 0 * * * node /scripts/zooOpencard02.js >> /scripts/logs/zooOpencard02.log 2>&1
 #京东618开卡活动1 
 1 0 * * * node /scripts/zooOpencard01.js >> /scripts/logs/zooOpencard01.log 2>&1
-#京东宝洁消消乐 
-18 9 1-18 6 * node /scripts/zooBaojiexiaoxiaole.js >> /scripts/logs/zooBaojiexiaoxiaole.log 2>&1
 #京东浓情618与粽不同 
 0 9 * * * node /scripts/zooLongzhou.js >> /scripts/logs/zooLongzhou.log 2>&1
 #京东价格保护 
@@ -373,104 +365,6 @@
 0 0 * * * node /scripts/jdmn.js >> /scripts/logs/jdmn.log 2>&1
 #京东柠檬我是大老板农场 
 5 6-18/6 * * * node /scripts/jd_wsdlb.js >> /scripts/logs/jd_wsdlb.log 2>&1
-#京东柠檬京喜工厂抢茅台（需填变量） 
-58,59,0 18,19 * * * node /scripts/jd_jxgc.js >> /scripts/logs/jd_jxgc.log 2>&1
-#京东柠檬推一推（需填变量） 
-0 0 * * * node /scripts/jd_tyt.js >> /scripts/logs/jd_tyt.log 2>&1
-#京东京喜牧场刷金币 
-0 10 * * * * node /scripts/jx_mc_coin.js >> /scripts/logs/jx_mc_coin.log 2>&1
-#京东柠檬邀请有礼 
-0 0 * * * node /scripts/jd_yqyl.js >> /scripts/logs/jd_yqyl.log 2>&1
-#京东京喜牧场 
-0 * * * * node /scripts/jx_mc.js >> /scripts/logs/jx_mc.log 2>&1
-#京东京享值PK 
-15 0,6,13,19,21 * * * node /scripts/ddo_pk.js >> /scripts/logs/ddo_pk.log 2>&1
-#京东翻翻乐提现 
-5,35 * * 6 * node /scripts/jd_ffl.js >> /scripts/logs/jd_ffl.log 2>&1
-#京东城城分现金互助执意版 
-5 0 * * * node /scripts/zy_ccfxj.js >> /scripts/logs/zy_ccfxj.log 2>&1
-#京东618手机竞猜 
-1 0 * * * node /scripts/zy_618jc.js >> /scripts/logs/zy_618jc.log 2>&1
-#京东新潮品牌狂欢执意版 
-0 10 * * * node /scripts/zy_xckh.js >> /scripts/logs/zy_xckh.log 2>&1
-#京东618主会场红包雨 
-1 20 1-18 6 * node /scripts/long_hby_lottery.js >> /scripts/logs/long_hby_lottery.log 2>&1
-#京东欧乐b 
-0 9 * * * node /scripts/jay_member_olb.js >> /scripts/logs/jay_member_olb.log 2>&1
-#京东柠檬东东泡泡大战 
-1 0 * * * node /scripts/jd_ppdz.js >> /scripts/logs/jd_ppdz.log 2>&1
-#京东沸腾之夜 
-0 15-19/1 * * * node /scripts/jd_party_night.js >> /scripts/logs/jd_party_night.log 2>&1
-#京东一次性入会领豆13 
-0 7 * * * node /scripts/member_13.js >> /scripts/logs/member_13.log 2>&1
-#京东一次性入会领豆12 
-0 7 * * * node /scripts/member_12.js >> /scripts/logs/member_12.log 2>&1
-#京东步数换京豆柠檬版 
-* 15 * * * node /scripts/jd_bs.js >> /scripts/logs/jd_bs.log 2>&1
-#京东一次性入会领豆11 
-0 7 * * * node /scripts/member_11.js >> /scripts/logs/member_11.log 2>&1
-#京东星推官获取互助隐藏姓名版 
-0 0 0 * * * node /scripts/jd_xtg_help.js >> /scripts/logs/jd_xtg_help.log 2>&1
-#京东一次性入会领豆10 
-0 7 * * * node /scripts/member_10.js >> /scripts/logs/member_10.log 2>&1
-#京东抽盲盒一次性领豆 
-0 9 * * * node /scripts/jay_freshgoods.js >> /scripts/logs/jay_freshgoods.log 2>&1
-#京东一次性入会领豆9 
-0 8 * * * node /scripts/member_09.js >> /scripts/logs/member_09.log 2>&1
-#京东一次性入会领豆8 
-0 7 * * * node /scripts/member_08.js >> /scripts/logs/member_08.log 2>&1
-#京东金榜创造营 
-0 8 21-31 5-12 * node /scripts/jd_jbczy.js >> /scripts/logs/jd_jbczy.log 2>&1
-#京东金融领豆（不共用京东ck另抓） 
-0 7 * * * node /scripts/jd_jr_sign.js >> /scripts/logs/jd_jr_sign.log 2>&1
-#京东一次性入会领豆5 
-0 7 * * * node /scripts/member_05.js >> /scripts/logs/member_05.log 2>&1
-#京东一次性入会领豆2 
-0 7 * * * node /scripts/member_02.js >> /scripts/logs/member_02.log 2>&1
-#京东一次性入会领豆3 
-0 7 * * * node /scripts/member_03.js >> /scripts/logs/member_03.log 2>&1
-#京东半点京豆雨龙猪猪 
-30 * * * * node /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.log 2>&1
-#京东整点京豆雨 
-0 * * * * node /scripts/jd_super_redrain.js >> /scripts/logs/jd_super_redrain.log 2>&1
-#京东到家鲜豆庄园领水滴 
-0-25/5 0 * * * node /scripts/jddj_getPoints.js >> /scripts/logs/jddj_getPoints.log 2>&1
-#京东到家鲜豆庄园 
-0 9 * * * node /scripts/jddj_plantBeans.js >> /scripts/logs/jddj_plantBeans.log 2>&1
-#京东到家鲜豆任务 
-0 8 * * * node /scripts/jddj_bean.js >> /scripts/logs/jddj_bean.log 2>&1
-#京东到家果园收水滴 
-5 */2 * * * node /scripts/jddj_fruit_collectWater.js >> /scripts/logs/jddj_fruit_collectWater.log 2>&1
-#京东到家果园任务 
-10 0,8,11,17 * * * node /scripts/jddj_fruit.js >> /scripts/logs/jddj_fruit.log 2>&1
-#京东美丽研究院 
-1 7,12,19 * * * node /scripts/jd_beauty.js >> /scripts/logs/jd_beauty.log 2>&1
-#京喜农场whyour版 
-0 9,12,18 * * * node /scripts/jx_nc.js >> /scripts/logs/jx_nc.log 2>&1
-#京东删除优惠券 
-11 0 * * 1 node /scripts/jd_deleteCoupon.js >> /scripts/logs/jd_deleteCoupon.log 2>&1
-#京喜工厂商品列表详情 
-10 10 * * * node /scripts/jx_products_detail.js >> /scripts/logs/jx_products_detail.log 2>&1
-#京东赚京东开团 
-10 * * * * node /scripts/jd_zjd_tuan.js >> /scripts/logs/jd_zjd_tuan.log 2>&1
-#京东读书签到 
-0 10 0 * * * node /scripts/jddsSign.js >> /scripts/logs/jddsSign.log 2>&1
-#京东 
-0 9 * * * node /scripts/JD_DailyBonus.js >> /scripts/logs/JD_DailyBonus.log 2>&1
-#京东成长分 
-0 0 * * * node /scripts/jdczf.js >> /scripts/logs/jdczf.log 2>&1
-#京东到家 
-1 0 * * * node /scripts/jddj.js >> /scripts/logs/jddj.log 2>&1
-#京东到家 
-30 10 8 * * * node /scripts/jddj.js >> /scripts/logs/jddj.log 2>&1
-#京东排行榜 
-11 0 * * * node /scripts/jd_rankingList.js >> /scripts/logs/jd_rankingList.log 2>&1
-#京东抽奖机 
-11 1 * * * node /scripts/jd_lotteryMachine.js >> /scripts/logs/jd_lotteryMachine.log 2>&1
-#京喜工厂助力+参团 
-10 * * * * node /scripts/jx_factory.js >> /scripts/logs/jx_factory.log 2>&1
-#京东赚赚 
-0 9 * * * node /scripts/jdzz.js >> /scripts/logs/jdzz.log 2>&1
 # 更新脚本
 28,43 5-23 * * * bash git_pull >> /jd/log/git_pull.log 2>&1
 # 删除 RmLogDaysAgo 指定天数以前的旧日志，本行为不记录日志
