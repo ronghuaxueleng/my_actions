@@ -373,8 +373,6 @@
 58,59,0 18,19 * * * node /scripts/jd_jxgc.js >> /scripts/logs/jd_jxgc.log 2>&1
 #京东柠檬推一推（需填变量） 
 0 0 * * * node /scripts/jd_tyt.js >> /scripts/logs/jd_tyt.log 2>&1
-#京东京喜牧场刷金币 
-0 10 * * * * node /scripts/jx_mc_coin.js >> /scripts/logs/jx_mc_coin.log 2>&1
 #京东柠檬邀请有礼 
 0 0 * * * node /scripts/jd_yqyl.js >> /scripts/logs/jd_yqyl.log 2>&1
 #京东京喜牧场 
