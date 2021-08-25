@@ -311,12 +311,8 @@
 15 0-23/2 * * * node /scripts/jd_joy.js >> /scripts/logs/jd_joy.log 2>&1
 #京东待收货 
 8 8 12 * * * node /scripts/jddsh.js >> /scripts/logs/jddsh.log 2>&1
-#京东粽享优惠 
-15 13 6-18 6 * node /scripts/zooLongzhou03.js >> /scripts/logs/zooLongzhou03.log 2>&1
 #京东618开卡活动11 
 5 0 * * * node /scripts/zooOpencard11.js >> /scripts/logs/zooOpencard11.log 2>&1
-#京东东东电竞经理 
-15 10 * * * node /scripts/zooElecsport.js >> /scripts/logs/zooElecsport.log 2>&1
 #京东粽情端午 
 15 13 6-18 6 * node /scripts/zooLongzhou02.js >> /scripts/logs/zooLongzhou02.log 2>&1
 #京东618开卡活动10 
@@ -327,22 +323,12 @@
 15 9 1-18 6 node /scripts/zooOpencard08.js >> /scripts/logs/zooOpencard08.log 2>&1
 #京东618开卡活动7 
 15 9 9-20 6 node /scripts/zooOpencard07.js >> /scripts/logs/zooOpencard07.log 2>&1
-#京东618开卡活动6 
-15 9 9-20 6 node /scripts/zooOpencard06.js >> /scripts/logs/zooOpencard06.log 2>&1
-#京东京喜88红包动物园版 
-8 8 * 6 * node /scripts/zooJx88hongbao.js >> /scripts/logs/zooJx88hongbao.log 2>&1
-#京东合肥旗舰店开业动物园版 
-0 6 * * * node /scripts/zooSupershophf.js >> /scripts/logs/zooSupershophf.log 2>&1
 #京东GNC组队瓜分京豆 
 0 8 * * * node /scripts/zooJointeam01.js >> /scripts/logs/zooJointeam01.log 2>&1
-#京东618限时盲盒动物园版 
-10 10 1-18 6 * node /scripts/zooLimitbox.js >> /scripts/logs/zooLimitbox.log 2>&1
 #京东618开卡活动5 
 1 0 * * * node /scripts/zooOpencard05.js >> /scripts/logs/zooOpencard05.log 2>&1
 #京东618开卡活动4 
 1 0 * * * node /scripts/zooOpencard04.js >> /scripts/logs/zooOpencard04.log 2>&1
-#京东618开卡活动3 
-1 0 * * * node /scripts/zooOpencard03.js >> /scripts/logs/zooOpencard03.log 2>&1
 #京东618开卡活动2 
 1 0 * * * node /scripts/zooOpencard02.js >> /scripts/logs/zooOpencard02.log 2>&1
 #京东618开卡活动1 
