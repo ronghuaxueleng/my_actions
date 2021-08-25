@@ -311,6 +311,8 @@
 15 0-23/2 * * * node /scripts/jd_joy.js >> /scripts/logs/jd_joy.log 2>&1
 #京东待收货 
 8 8 12 * * * node /scripts/jddsh.js >> /scripts/logs/jddsh.log 2>&1
+#京东粽享优惠 
+15 13 6-18 6 * node /scripts/zooLongzhou03.js >> /scripts/logs/zooLongzhou03.log 2>&1
 #京东618开卡活动11 
 5 0 * * * node /scripts/zooOpencard11.js >> /scripts/logs/zooOpencard11.log 2>&1
 #京东东东电竞经理 
@@ -339,6 +341,8 @@
 1 0 * * * node /scripts/zooOpencard05.js >> /scripts/logs/zooOpencard05.log 2>&1
 #京东618开卡活动4 
 1 0 * * * node /scripts/zooOpencard04.js >> /scripts/logs/zooOpencard04.log 2>&1
+#京东618开卡活动3 
+1 0 * * * node /scripts/zooOpencard03.js >> /scripts/logs/zooOpencard03.log 2>&1
 #京东618开卡活动2 
 1 0 * * * node /scripts/zooOpencard02.js >> /scripts/logs/zooOpencard02.log 2>&1
 #京东618开卡活动1 
