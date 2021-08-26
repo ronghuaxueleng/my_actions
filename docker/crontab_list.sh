@@ -321,6 +321,8 @@
 15 9 1-18 6 node /scripts/zooOpencard08.js >> /scripts/logs/zooOpencard08.log 2>&1
 #京东GNC组队瓜分京豆 
 0 8 * * * node /scripts/zooJointeam01.js >> /scripts/logs/zooJointeam01.log 2>&1
+#京东618开卡活动5 
+1 0 * * * node /scripts/zooOpencard05.js >> /scripts/logs/zooOpencard05.log 2>&1
 #京东618开卡活动2 
 1 0 * * * node /scripts/zooOpencard02.js >> /scripts/logs/zooOpencard02.log 2>&1
 #京东618开卡活动1 
