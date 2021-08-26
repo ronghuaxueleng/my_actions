@@ -63,7 +63,7 @@ function Git_PullShell() {
     cd ${ShellDir}
     git fetch --all
     ExitStatusShell=$?
-    git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')
+    git reset --hard origin/new0826
     git pull
 }
 
@@ -80,7 +80,7 @@ function Git_PullScripts() {
     cd ${ScriptsDir}
     git fetch --all
     ExitStatusScripts=$?
-    git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')
+    git reset --hard origin/j_scripts
     git pull
 }
 
