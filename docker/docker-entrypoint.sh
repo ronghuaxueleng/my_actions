@@ -16,7 +16,7 @@ echo -e "\n======================== 1. 更新源代码 ========================\
 crond
 cd ${JD_DIR}
 git fetch --all
-git reset --hard origin/master
+git reset --hard origin/new0826
 git pull
 bash git_pull.sh
 echo
