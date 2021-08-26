@@ -12,15 +12,11 @@
 0 1,22 * * * node /scripts/jd_gold_creator.js >> /scripts/logs/jd_gold_creator.log 2>&1
 # 发财大赢家
 20 * * * * node /scripts/jd_big_winner.js >> /scripts/logs/jd_big_winner.log 2>&1
-# 发财大赢家助力
-25 * * * * node /scripts/jd_speed_redEnvelope.js >> /scripts/logs/jd_speed_redEnvelope.log 2>&1
 # 京东手机狂欢城
 0 0-18/6 * * * node /scripts/jd_carnivalcity.js >> /scripts/logs/jd_carnivalcity.log 2>&1
 ##############长期活动##############
 # 签到
 7 0,17 * * * node /scripts/jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
-# 东东超市兑换奖品
-0,30 0 * * * node /scripts/jd_blueCoin.js >> /scripts/logs/jd_blueCoin.log 2>&1
 # 摇京豆
 6 0,23 * * * node /scripts/jd_club_lottery.js >> /scripts/logs/jd_club_lottery.log 2>&1
 # 东东农场
@@ -112,7 +108,7 @@
 # QQ星系牧场
 1 0-23/2 * * * node /scripts/jd_qq_pasture.js >> /scripts/logs/jd_qq_pasture.log 2>&1
 # 京喜财富岛
-45 0-23/2 * * * node /scripts/jd_cfd.js >> /scripts/logs/jd_cfd.log 2>&1
+40 * * * * node /scripts/jd_cfd.js >> /scripts/logs/jd_cfd.log 2>&1
 # 零食街
 10 11 * * * node /scripts/jd_foodRunning.js >> /scripts/logs/jd_foodRunning.log 2>&1
 # 早起福利
@@ -123,3 +119,5 @@
 0 9,12 * * * node /scripts/jd_bean_box.js >> /scripts/logs/jd_bean_box.log 2>&1
 # 京喜签到
 20 1 * * * node /scripts/jx_sign.js >> /scripts/logs/jx_sign.log 2>&1
+# 东东农场额外任务
+0 11,12 * * * node /scripts/jd_fruit_moreTask.js >> /scripts/logs/jd_fruit_moreTask.log 2>&1
