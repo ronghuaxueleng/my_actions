@@ -321,14 +321,12 @@
 15 9 1-18 6 node /scripts/zooOpencard08.js >> /scripts/logs/zooOpencard08.log 2>&1
 #京东GNC组队瓜分京豆 
 0 8 * * * node /scripts/zooJointeam01.js >> /scripts/logs/zooJointeam01.log 2>&1
-#京东618开卡活动4 
-1 0 * * * node /scripts/zooOpencard04.js >> /scripts/logs/zooOpencard04.log 2>&1
-#京东618开卡活动3 
-1 0 * * * node /scripts/zooOpencard03.js >> /scripts/logs/zooOpencard03.log 2>&1
 #京东618开卡活动2 
 1 0 * * * node /scripts/zooOpencard02.js >> /scripts/logs/zooOpencard02.log 2>&1
 #京东618开卡活动1 
 1 0 * * * node /scripts/zooOpencard01.js >> /scripts/logs/zooOpencard01.log 2>&1
+#京东浓情618与粽不同 
+0 9 * * * node /scripts/zooLongzhou.js >> /scripts/logs/zooLongzhou.log 2>&1
 #京东价格保护 
 5 0 * * * node /scripts/jd_priceProtect.js >> /scripts/logs/jd_priceProtect.log 2>&1
 #京东特物ZX签到Tom版 
