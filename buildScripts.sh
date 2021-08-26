@@ -120,9 +120,6 @@ if [ $? -eq 0 ]; then
     . ${FileDiy}
 fi
 
-cat ${ListCronSh} | sort -k2n | uniq > ${ListCronSh}.bak
-mv ${ListCronSh}.bak ${ListCronSh}
-
 cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
 cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
