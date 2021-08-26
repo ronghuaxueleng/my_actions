@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
+## Author: SuperManito
+## Modified: 2021-08-25
 
-## 路径
 ShellDir=${JD_DIR:-$(
     cd $(dirname $0)
     pwd
@@ -14,6 +15,7 @@ ConfigDir=${ShellDir}/config
 FileConf=${ConfigDir}/config.sh
 FileConfSample=${ShellDir}/sample/config.sh.sample
 LogDir=${ShellDir}/log
+CodeDir=${LogDir}/export_sharecodes
 BotLogDir=${LogDir}/bot
 BotPath=${ToolsDir}/dockerbot
 ListCron=${ConfigDir}/crontab.list
@@ -52,10 +54,19 @@ function Help() {
 
 function Combin_All() {
     export JD_COOKIE=$(Combin_Sub Cookie)
-    Combin_SHARECODES
+    Combin_ShareCodes
+    Trans_UN_SUBSCRIBES
 }
 
-function Combin_SHARECODES() {
+function Trans_UN_SUBSCRIBES() {
+    export UN_SUBSCRIBES="${goodPageSize}\n${shopPageSize}\n${jdUnsubscribeStopGoods}\n${jdUnsubscribeStopShop}"
+}
+
+function Combin_ShareCodes() {
+    if [[ $AutoHelpOther == true ]] && [[ $(ls $CodeDir) ]]; then
+        Latest_Log=$(ls -r $CodeDir | head -1)
+        . $CodeDir/$Latest_Log
+    fi
     ## 东东农场(jd_fruit.js)
     export FRUITSHARECODES=$(Combin_Sub ForOtherFruit)
     ## 东东萌宠(jd_pet.js)
@@ -66,6 +77,8 @@ function Combin_SHARECODES() {
     export DDFACTORY_SHARECODES=$(Combin_Sub ForOtherJdFactory)
     ## 京喜工厂(jd_dreamFactory.js)
     export DREAM_FACTORY_SHARE_CODES=$(Combin_Sub ForOtherDreamFactory)
+    ## 惊喜农场(jd_jxnc.js)
+    export JXNC_SHARECODES=$(Combin_Sub ForOtherJxnc)
     ## 口袋书店(jd_bookshop.js)
     export BOOKSHOP_SHARECODES=$(Combin_Sub ForOtherBookShop)
     ## 签到领现金(jd_cash.js)
@@ -74,10 +87,11 @@ function Combin_SHARECODES() {
     export JDSGMH_SHARECODES=$(Combin_Sub ForOtherSgmh)
     ## 东东健康社区(jd_health.js)
     export JDHEALTH_SHARECODES=$(Combin_Sub ForOtherHealth)
+    #手机狂欢城(jd_carnivalcity.js)
+    export JD818_SHARECODES=$(Combin_Sub ForOtherCarni)
 }
 
-## 更新crontab
-function Detect_Cron() {
+function Update_Crontab() {
     if [[ $(cat ${ListCron}) != $(crontab -l) ]]; then
         crontab ${ListCron}
     fi
@@ -91,48 +105,23 @@ function Count_UserSum() {
     done
 }
 
+## 组合变量
 function Combin_Sub() {
-    CombinAll=""
+    local What_Combine=$1
+    local CombinAll=""
+    local Tmp1 Tmp2
     for ((i = 0x1; i <= ${UserSum}; i++)); do
         for num in ${TempBlockCookie}; do
-            if [[ $i -eq $num ]]; then
-                continue 2
-            fi
+            [[ $i -eq $num ]] && continue 2
         done
-        Tmp1=$1$i
+        Tmp1=$What_Combine$i
         Tmp2=${!Tmp1}
-        case $# in
-        1)
-            CombinAll="${CombinAll}&${Tmp2}"
-            ;;
-        2)
-            CombinAll="${CombinAll}&${Tmp2}@$2"
-            ;;
-        3)
-            if [ $(($i % 2)) -eq 1 ]; then
-                CombinAll="${CombinAll}&${Tmp2}@$2"
-            else
-                CombinAll="${CombinAll}&${Tmp2}@$3"
-            fi
-            ;;
-        4)
-            case $(($i % 3)) in
-            1)
-                CombinAll="${CombinAll}&${Tmp2}@$2"
-                ;;
-            2)
-                CombinAll="${CombinAll}&${Tmp2}@$3"
-                ;;
-            0)
-                CombinAll="${CombinAll}&${Tmp2}@$4"
-                ;;
-            esac
-            ;;
-        esac
+        CombinAll="${CombinAll}&${Tmp2}"
     done
-    echo ${CombinAll} | perl -pe "{s|^&||; s|^@+||; s|&@|&|g; s|@+|@|g}"
+    echo $CombinAll | perl -pe "{s|^&||; s|^@+||; s|&@|&|g; s|@+&|&|g; s|@+|@|g; s|@+$||}"
 }
 
+## 更新源码
 function Git_Pull() {
     cd ${ShellDir}
     git fetch --all >/dev/null 2>&1
@@ -140,6 +129,7 @@ function Git_Pull() {
     git pull >/dev/null 2>&1
 }
 
+## 导入配置文件中的变量
 function Import_Config() {
     if [ -f ${FileConf} ]; then
         . ${FileConf}
@@ -147,69 +137,44 @@ function Import_Config() {
             echo -e "\n${ERROR} 请先在 config.sh 配置文件中配置好 Cookie ！\n"
             exit 1
         fi
-        Tmp=$(echo -e '\0103\0157\0157\0153\0151\0145\0061\0060\0060')
-        if [[ ${!Tmp} ]]; then
-            rm -rf ${FileConf} && rm -rf ${ConfigDir}/bak/*
-            Git_Pull
-            exit
-        fi
     else
         echo -e "\n${ERROR} 配置文件 ${FileConf} 不存在，请先按教程配置好该文件！\n"
         exit 1
     fi
 }
 
-function Trans_UN_SUBSCRIBES() {
-    export UN_SUBSCRIBES="${goodPageSize}\n${shopPageSize}\n${jdUnsubscribeStopGoods}\n${jdUnsubscribeStopShop}"
-}
-
-function Set_Env() {
-    Count_UserSum
-    Trans_UN_SUBSCRIBES
-}
-
+## 重置控制面板和密码
 function Reset_Pwd() {
     cp -f ${ShellDir}/sample/auth.json ${ConfigDir}/auth.json
-    echo -e "\n${SUCCESS} 控制面板登录密码重置成功，用户名：useradmin  密码：supermanito\n"
+    echo -e "\n${SUCCESS} 控制面板登录密码重置成功，用户名：admin  密码：admin\n"
 }
 
+## 删除日志
 function Remove_LogFiles() {
     Import_Config
     function Rm_JsLog() {
         LogFileList=$(ls -l ${LogDir}/*/*.log | awk '{print $9}' | grep -v "log/bot")
         for log in ${LogFileList}; do
             LogDate=$(echo ${log} | awk -F "/" '{print $NF}' | cut -c1-10) #文件名比文件属性获得的日期要可靠
-            if [[ $(uname -s) == Darwin ]]; then
-                DiffTime=$(($(date +%s) - $(date -j -f "%Y-%m-%d" "${LogDate}" +%s)))
-            else
-                DiffTime=$(($(date +%s) - $(date +%s -d "${LogDate}")))
-            fi
+            DiffTime=$(($(date +%s) - $(date +%s -d "${LogDate}")))
             [ ${DiffTime} -gt $((${RmLogDaysAgo} * 86400)) ] && rm -vf ${log}
         done
     }
 
     ## 删除 git_pull 的运行日志
     function Rm_GitPullLog() {
-        if [[ $(uname -s) == Darwin ]]; then
-            DateDelLog=$(date -v-${RmLogDaysAgo}d "+%Y-%m-%d")
-        else
-            Stmp=$(($(date "+%s") - 86400 * ${RmLogDaysAgo}))
-            DateDelLog=$(date -d "@${Stmp}" "+%Y-%m-%d")
-        fi
+        Stmp=$(($(date "+%s") - 86400 * ${RmLogDaysAgo}))
+        DateDelLog=$(date -d "@${Stmp}" "+%Y-%m-%d")
         LineEndGitPull=$(($(cat ${LogDir}/git_pull.log | grep -n "${DateDelLog}" | head -1 | awk -F ":" '{print $1}') - 3))
-        [ ${LineEndGitPull} -gt 0 ] && perl -i -ne "{print unless 1 .. ${LineEndGitPull} }" ${LogDir}/git_pull.log
+        [ -f ${LogDir}/git_pull.log ] && [ ${LineEndGitPull} -gt 0 ] && perl -i -ne "{print unless 1 .. ${LineEndGitPull} }" ${LogDir}/git_pull.log
     }
 
     ## 删除 Bot 的运行日志
     function Rm_BotLog() {
-        if [[ $(uname -s) == Darwin ]]; then
-            DateDelLog=$(date -v-${RmLogDaysAgo}d "+%Y-%m-%d")
-        else
-            Stmp=$(($(date "+%s") - 86400 * ${RmLogDaysAgo}))
-            DateDelLog=$(date -d "@${Stmp}" "+%Y-%m-%d")
-        fi
+        Stmp=$(($(date "+%s") - 86400 * ${RmLogDaysAgo}))
+        DateDelLog=$(date -d "@${Stmp}" "+%Y-%m-%d")
         LineEndBotRun=$(($(cat ${BotLogDir}/run.log | grep -n "${DateDelLog}" | tail -n 1 | awk -F ":" '{print $1}') - 3))
-        [ ${LineEndBotRun} -gt 0 ] && perl -i -ne "{print unless 1 .. ${LineEndBotRun} }" ${BotLogDir}/run.log
+        [ -f ${BotLogDir}/run.log ] && [ ${LineEndBotRun} -gt 0 ] && perl -i -ne "{print unless 1 .. ${LineEndBotRun} }" ${BotLogDir}/run.log
     }
 
     ## 删除空文件夹
@@ -224,7 +189,7 @@ function Remove_LogFiles() {
 
     ## 运行
     if [ -n "${RmLogDaysAgo}" ]; then
-        echo -e "\n${WAITING} 开始检索日志文件...\n"
+        echo -e "\n${WAITING} 开始检索日志文件\n删除日志耗时较长，请耐心等待..."
         Rm_JsLog
         Rm_GitPullLog
         Rm_BotLog
@@ -233,125 +198,188 @@ function Remove_LogFiles() {
     fi
 }
 
+## 导出互助码
 function Export_Sharecodes() {
-    [[ ${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT} ]] && Opt="P" || Opt="E"
-    ## 所有有互助码的活动，只需要把脚本名称去掉前缀 jd_ 后列在 Name1 中，将其中文名称列在 Name2 中，对应 config.sh 中互助码后缀列在 Name3 中即可。
-    ## Name1、Name2 和 Name3 中的三个名称必须一一对应，分别对应 "脚本名称、脚本中输出互助码的活动名称前缀、互助码格式名称" 。
+    Import_Config && Count_UserSum
+    LatestCodeLogFile=$CodeDir/$(ls -r $CodeDir | head -1)
 
-    Name1=(fruit pet plantBean dreamFactory jdfactory bookshop cash sgmh health)
-    Name2=(东东农场 东东萌宠 京东种豆得豆 京喜工厂 东东工厂 口袋书店 签到领现金 闪购盲盒 东东健康社区)
-    Name3=(Fruit Pet Bean DreamFactory JdFactory BookShop Cash Sgmh Health)
-
-    ## 导出互助码的通用程序
-    function Cat_Scodes() {
-        if [ -d ${LogDir}/jd_$1 ] && [[ $(ls ${LogDir}/jd_$1) != "" ]]; then
-            cd ${LogDir}/jd_$1
-
-            ## 导出助力码变量（My）
-            for log in $(ls -r); do
-                case $# in
-                2)
-                    codes=$(cat ${log} | grep -${Opt} "开始【京东账号|您的(好友)?助力码为" | uniq | perl -0777 -pe "{s|\*||g; s|开始||g; s|\n您的(好友)?助力码为(：)?:?|：|g; s|，.+||g}" | sed -r "s/【京东账号/My$2/;s/】.*?：/='/;s/】.*?/='/;s/$/'/;s/\(每次运行都变化,不影响\)//")
-                    ;;
-                3)
-                    codes=$(grep -${Opt} $3 ${log} | uniq | sed -r "s/【京东账号/My$2/;s/（.*?】/='/;s/$/'/")
-                    ;;
-                esac
-                if [[ ${codes} ]]; then
-                    ## 添加判断，若未找到该用户互助码，则设置为空值
-                    for ((user_num = 1; user_num <= ${UserSum}; user_num++)); do
-                        echo -e "${codes}" | grep -${Opt}q "My$2${user_num}="
-                        if [ $? -eq 1 ]; then
-                            if [ $user_num == 1 ]; then
-                                codes=$(echo "${codes}" | sed -r "1i My${2}1=''")
-                            else
-                                codes=$(echo "${codes}" | sed -r "/My$2$(expr ${user_num} - 1)=/a\My$2${user_num}=''")
-                            fi
-                        fi
-                    done
-                    break
-                fi
-            done
-
-            ## 导出为他人助力变量（ForOther）
-            if [[ ${codes} ]]; then
-                help_code=""
-                for ((user_num = 1; user_num <= ${UserSum}; user_num++)); do
-                    echo -e "${codes}" | grep -${Opt}q "My$2${user_num}=''"
-                    if [ $? -eq 1 ]; then
-                        help_code=${help_code}"\${My"$2${user_num}"}@"
-                    fi
-                done
-                ## 生成互助规则模板
-                for_other_codes=""
-                case $HelpType in
-                ## export HelpType="" 指定助力模版全局环境变量
-                0) ### 统一优先级助力模板
-                    new_code=$(echo ${help_code} | sed "s/@$//")
-                    for ((user_num = 1; user_num <= ${UserSum}; user_num++)); do
-                        if [ $user_num == 1 ]; then
-                            for_other_codes=${for_other_codes}"ForOther"$2${user_num}"=\""${new_code}"\"\n"
-                        else
-                            for_other_codes=${for_other_codes}"ForOther"$2${user_num}"=\"\${ForOther"${2}1"}\"\n"
-                        fi
-                    done
-                    ;;
-                1) ### 均匀助力模板
-                    for ((user_num = 1; user_num <= ${UserSum}; user_num++)); do
-                        echo ${help_code} | grep "\${My"$2${user_num}"}@" >/dev/null
-                        if [ $? -eq 0 ]; then
-                            left_str=$(echo ${help_code} | sed "s/\${My$2${user_num}}@/ /g" | awk '{print $1}')
-                            right_str=$(echo ${help_code} | sed "s/\${My$2${user_num}}@/ /g" | awk '{print $2}')
-                            mark="\${My$2${user_num}}@"
-                        else
-                            left_str=$(echo ${help_code} | sed "s/${mark}/ /g" | awk '{print $1}')${mark}
-                            right_str=$(echo ${help_code} | sed "s/${mark}/ /g" | awk '{print $2}')
-                        fi
-                        new_code=$(echo ${right_str}${left_str} | sed "s/@$//")
-                        for_other_codes=${for_other_codes}"ForOther"$2${user_num}"=\""${new_code}"\"\n"
-                    done
-                    ;;
-                *) ### 普通优先级助力模板(默认)
-                    for ((user_num = 1; user_num <= ${UserSum}; user_num++)); do
-                        new_code=$(echo ${help_code} | sed "s/\${My"$2${user_num}"}@//;s/@$//")
-                        for_other_codes=${for_other_codes}"ForOther"$2${user_num}"=\""${new_code}"\"\n"
-                    done
-                    ;;
-                esac
-                echo -e "${codes}\n\n${for_other_codes}" | sed s/[[:space:]]//g
-            else
-                echo "从日志中未找到任何互助码"
-            fi
-        else
-            echo "未运行过 jd_$1 脚本，未产生日志"
-        fi
-    }
-
-    ## 汇总
-    function Cat_All() {
-        echo -e "\n从最后一个日志提取互助码，受日志内容影响，仅供参考。"
-        for ((i = 0; i < ${#Name1[*]}; i++)); do
-            echo -e "\n## ${Name2[i]}:"
-            [[ $(Cat_Scodes "${Name1[i]}" "${Name3[i]}" "的${Name2[i]}好友互助码") == "从日志中未找到任何互助码" ]] && Cat_Scodes "${Name1[i]}" "${Name3[i]}" || Cat_Scodes "${Name1[i]}" "${Name3[i]}" "的${Name2[i]}好友互助码"
+    ## 生成pt_pin清单
+    Gen_pt_pin_array() {
+        local Tmp1 Tmp2 i pt_pin_temp
+        for ((user_num = 1; user_num <= $UserSum; user_num++)); do
+            Tmp1=Cookie$user_num
+            Tmp2=${!Tmp1}
+            i=$(($user_num - 1))
+            pt_pin_temp=$(echo $Tmp2 | perl -pe "{s|.*pt_pin=([^; ]+)(?=;?).*|\1|; s|%|\\\x|g}")
+            [[ $pt_pin_temp == *\\x* ]] && pt_pin[i]=$(printf $pt_pin_temp) || pt_pin[i]=$pt_pin_temp
         done
     }
 
+    ## 导出互助码的通用程序，$1：去掉后缀的脚本名称，$2：config.sh中的后缀，$3：活动中文名称
+    Export_Codes_Sub() {
+        local task_name=$1
+        local config_name=$2
+        local chinese_name=$3
+        local config_name_my=My$config_name
+        local config_name_for_other=ForOther$config_name
+        local i j k m n pt_pin_in_log code tmp_grep tmp_my_code tmp_for_other user_num random_num_list previous_value
+        if cd $LogDir/$task_name &>/dev/null && [[ $(ls) ]]; then
+            ## 寻找所有互助码以及对应的pt_pin
+            i=0
+            pt_pin_in_log=()
+            code=()
+            pt_pin_and_code=$(ls -r *.log | xargs awk -F '（|）|】' -v var="的${chinese_name}好友互助码" '$3~var {print $2"&"$4}')
+            for line in $pt_pin_and_code; do
+                pt_pin_in_log[i]=$(echo $line | awk -F "&" '{print $1}')
+                code[i]=$(echo $line | awk -F "&" '{print $2}')
+                let i++
+            done
+
+            ## 输出My系列变量
+            if [[ ${#code[*]} -gt 0 ]]; then
+                for ((m = 0; m < ${#pt_pin[*]}; m++)); do
+                    tmp_my_code=""
+                    previous_value=""
+                    j=$((m + 1))
+                    for ((n = 0; n < ${#code[*]}; n++)); do
+                        if [[ ${pt_pin[m]} == ${pt_pin_in_log[n]} ]]; then
+                            tmp_my_code=${code[n]}
+                            break
+                        fi
+                    done
+                    if [[ -z $tmp_my_code ]] && [[ "$(ls -A $CodeDir)" != "" ]]; then
+                        previous_value=$(grep "${config_name_my}${j}" $LatestCodeLogFile | head -1 | awk -F "\'" '{print$2}')
+                        echo "$config_name_my$j='${previous_value}'"
+                    else
+                        echo "$config_name_my$j='$tmp_my_code'"
+                    fi
+                done
+            else
+                echo "## 从日志中未找到任何互助码"
+            fi
+
+            ## 输出ForOther系列变量
+            if [[ ${#code[*]} -gt 0 ]]; then
+                echo
+                case $HelpType in
+                0) ## 按编号优先
+                    for ((m = 0; m < ${#pt_pin[*]}; m++)); do
+                        tmp_for_other=""
+                        j=$((m + 1))
+                        for ((n = 0; n < ${#pt_pin[*]}; n++)); do
+                            [[ $m -eq $n ]] && continue
+                            k=$((n + 1))
+                            tmp_for_other="$tmp_for_other@\${$config_name_my$k}"
+                        done
+                        echo "$config_name_for_other$j=\"$tmp_for_other\"" | perl -pe "s|($config_name_for_other\d+=\")@|\1|"
+                    done
+                    ;;
+
+                1) ## 全部一致
+                    tmp_for_other=""
+                    for ((m = 0; m < ${#pt_pin[*]}; m++)); do
+                        j=$((m + 1))
+                        tmp_for_other="$tmp_for_other@\${$config_name_my$j}"
+                    done
+                    echo "${config_name_for_other}1=\"$tmp_for_other\"" | perl -pe "s|($config_name_for_other\d+=\")@|\1|"
+                    for ((m = 1; m < ${#pt_pin[*]}; m++)); do
+                        j=$((m + 1))
+                        echo "$config_name_for_other$j=\"\${${config_name_for_other}1}\""
+                    done
+                    ;;
+
+                2) ## 均等助力
+                    for ((m = 0; m < ${#pt_pin[*]}; m++)); do
+                        tmp_for_other=""
+                        j=$((m + 1))
+                        for ((n = $m; n < $((${UserSum} + $m)); n++)); do
+                            [[ $m -eq $n ]] && continue
+                            if [[ $((n + 1)) -le ${UserSum} ]]; then
+                                k=$((n + 1))
+                            else
+                                k=$((n + 1 - ${UserSum}))
+                            fi
+                            tmp_for_other="$tmp_for_other@\${$config_name_my$k}"
+                        done
+                        echo "$config_name_for_other$j=\"$tmp_for_other\"" | perl -pe "s|($config_name_for_other\d+=\")@|\1|"
+                    done
+                    ;;
+
+                3) ## 本套脚本内账号间随机顺序助力
+                    for ((m = 0; m < ${#pt_pin[*]}; m++)); do
+                        tmp_for_other=""
+                        random_num_list=$(seq ${UserSum} | sort -R)
+                        j=$((m + 1))
+                        for n in $random_num_list; do
+                            [[ $j -eq $n ]] && continue
+                            tmp_for_other="$tmp_for_other@\${$config_name_my$n}"
+                        done
+                        echo "$config_name_for_other$j=\"$tmp_for_other\"" | perl -pe "s|($config_name_for_other\d+=\")@|\1|"
+                    done
+                    ;;
+
+                *) ## 按编号优先
+                    for ((m = 0; m < ${#pt_pin[*]}; m++)); do
+                        tmp_for_other=""
+                        j=$((m + 1))
+                        for ((n = 0; n < ${#pt_pin[*]}; n++)); do
+                            [[ $m -eq $n ]] && continue
+                            k=$((n + 1))
+                            tmp_for_other="$tmp_for_other@\${$config_name_my$k}"
+                        done
+                        echo "$config_name_for_other$j=\"$tmp_for_other\"" | perl -pe "s|($config_name_for_other\d+=\")@|\1|"
+                    done
+                    ;;
+                esac
+            fi
+        else
+            echo "## 未运行过 $task_name.js 脚本，未产生日志"
+        fi
+    }
+
+    ## 汇总输出
+    Export_Codes_All() {
+        echo -e "\n# 从日志提取互助码，编号和配置文件中Cookie编号完全对应，如果为空就是所有日志中都没有。\n\n# 即使某个MyXxx变量未赋值，也可以将其变量名填在ForOtherXxx中，脚本会自动过滤空值。\n"
+        echo -n "# 你选择的互助码模板为："
+        case $HelpType in
+        0)
+            echo "按账号编号优先。"
+            ;;
+        1)
+            echo "所有账号助力码全部一致。"
+            ;;
+        2)
+            echo "所有账号机会均等助力。"
+            ;;
+        3)
+            echo "本套脚本内账号间随机顺序助力。"
+            ;;
+        *)
+            echo "按账号编号优先。"
+            ;;
+        esac
+        for ((i = 0; i < ${#name_script[*]}; i++)); do
+            echo -e "\n## ${name_chinese[i]}："
+            Export_Codes_Sub "${name_script[i]}" "${name_config[i]}" "${name_chinese[i]}"
+        done
+    }
+
+    Gen_pt_pin_array
     ## 执行并写入日志
     LogTime=$(date "+%Y-%m-%d-%H-%M-%S")
-    LogFile="${LogDir}/export_sharecodes/${LogTime}.log"
-    [ ! -d "${LogDir}/export_sharecodes" ] && mkdir -p ${LogDir}/export_sharecodes
-    Import_Config && Count_UserSum && Cat_All | perl -pe "{s|京东种豆|种豆|; s|crazyJoy任务|疯狂的JOY|}" | tee ${LogFile}
+    LogPath="$CodeDir/$LogTime.log"
+    [ -d "${CodeDir}" ] || mkdir -p ${CodeDir}
+    Export_Codes_All | perl -pe "{s|京东种豆|种豆|; s|crazyJoy任务|疯狂的JOY|}" | tee ${LogPath}
 }
 
+## 后台挂机功能
 function Hang_Control() {
     HangUpScripts="jd_cfd_loop"
     case $2 in
     up)
         for scripts in ${HangUpScripts}; do
             cd ${ScriptsDir}
-            Import_Config $scripts
-            Set_Env
-            Combin_All
+            Import_Config $scripts && Count_UserSum && Combin_All
             pm2 stop ${scripts} >/dev/null 2>&1
             pm2 flush >/dev/null 2>&1
             pm2 delete ${scripts} >/dev/null 2>&1
@@ -374,6 +402,7 @@ function Hang_Control() {
     esac
 }
 
+## 控制面板和网页终端
 function Panel_Control() {
     pm2 list | grep "server" -wq
     local ExitStatusSERVER=$?
@@ -394,7 +423,7 @@ function Panel_Control() {
                 echo -e "\n${SUCCESS} 控制面板已启动\n"
                 ;;
             errored)
-                echo -e "\n${WARN} 检测到服务状态异常\n\n${WAITING} 开始尝试修复\n" && sleep 1
+                echo -e "\n${WAITING} 检测到服务状态异常，开始尝试修复\n"
                 pm2 delete server
                 Git_Pull
                 cd ${PanelDir}
@@ -432,7 +461,7 @@ function Panel_Control() {
                 echo -e "\n${SUCCESS} 网页终端已启动\n"
                 ;;
             errored)
-                echo -e "\n${WARN} 检测到服务状态异常\n\n${WAITING} 开始尝试修复\n" && sleep 1
+                echo -e "\n${WAITING} 检测到服务状态异常，开始尝试修复\n"
                 pm2 delete ttyd
                 Git_Pull && cd ${PanelDir}
                 Install_WebShell && sleep 3
@@ -470,6 +499,7 @@ function Panel_Control() {
     esac
 }
 
+## 安装网页终端
 function Install_WebShell() {
     [ -f /usr/local/bin/ttyd ] && rm -rf /usr/local/bin/ttyd
     Arch=$(uname -m)
@@ -493,6 +523,7 @@ function Install_WebShell() {
     pm2 start ttyd --name="ttyd" -- -t fontSize=15 -t disableLeaveAlert=true -t rendererType=webgl bash
 }
 
+## Telegram Bot
 function Bot_Control() {
     if [[ -z $(grep -E "123456789" ${ConfigDir}/bot.json) ]]; then
         pm2 list | grep "jbot" -wq
@@ -521,7 +552,7 @@ function Bot_Control() {
                     fi
                     ;;
                 errored)
-                    echo -e "\n${WARN} 检测到服务状态异常\n\n${WAITING} 开始尝试修复\n" && sleep 1
+                    echo -e "\n${WAITING} 检测到服务状态异常，开始尝试修复\n"
                     pm2 delete jbot
                     rm -rf ${BotPath} ${BotDir}
                     bash ${ToolsDir}/install_bot.sh
@@ -572,6 +603,7 @@ function Bot_Control() {
     fi
 }
 
+## 列出各服务状态
 function Server_Status() {
     SERVICE_ONLINE="\033[32m正在运行\033[0m"
     SERVICE_STOPPED="\033[33m未在运行\033[0m"
@@ -692,60 +724,49 @@ function Server_Status() {
     echo ''
 }
 
+## 确定脚本
 function Find_Script() {
-    FileNameTmp1=$(echo $1 | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
-    FileNameTmp2=$(echo $1 | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
+    FileNameTmp1=$(echo $1 | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
+    FileNameTmp2=$(echo $1 | awk -F "/" '{print $NF}' | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
     SeekDir="${ScriptsDir} ${ScriptsDir}/backUp ${ScriptsDir}/tools ${ConfigDir}"
     FileName=""
     WhichDir=""
-    FileFormat="${1##*.}"
     for dir in ${SeekDir}; do
         if [ -f ${dir}/${FileNameTmp1}.js ]; then
             FileName=${FileNameTmp1}
-            if [ -z "${FileFormat}"  ]; then
-                FileFormat="js"
-            fi
-            WhichDir=${dir}
-            break
-        elif [ -f ${dir}/${FileNameTmp1}.py ]; then
-            FileName=${FileNameTmp1}
-            if [ -z "${FileFormat}"  ]; then
-                FileFormat="py"
-            fi
+            FileFormat="js"
             WhichDir=${dir}
             break
         elif [ -f ${dir}/${FileNameTmp1}.ts ]; then
             FileName=${FileNameTmp1}
-            if [ -z "${FileFormat}"  ]; then
-                FileFormat="ts"
-            fi
+            FileFormat="ts"
+            WhichDir=${dir}
+            break
+        elif [ -f ${dir}/${FileNameTmp1}.py ]; then
+            FileName=${FileNameTmp1}
+            FileFormat="py"
             WhichDir=${dir}
             break
         elif [ -f ${dir}/${FileNameTmp2}.js ]; then
             FileName=${FileNameTmp2}
-            if [ -z "${FileFormat}"  ]; then
-                FileFormat="js"
-            fi
-            WhichDir=${dir}
-            break
-        elif [ -f ${dir}/${FileNameTmp2}.py ]; then
-            FileName=${FileNameTmp2}
-            if [ -z "${FileFormat}"  ]; then
-                FileFormat="py"
-            fi
+            FileFormat="js"
             WhichDir=${dir}
             break
         elif [ -f ${dir}/${FileNameTmp2}.ts ]; then
             FileName=${FileNameTmp2}
-            if [ -z "${FileFormat}"  ]; then
-                FileFormat="ts"
-            fi
+            FileFormat="ts"
+            WhichDir=${dir}
+            break
+        elif [ -f ${dir}/${FileNameTmp2}.py ]; then
+            FileName=${FileNameTmp2}
+            FileFormat="py"
             WhichDir=${dir}
             break
         fi
     done
 }
 
+## 随机时间
 function Random_Delay() {
     if [[ -n ${RandomDelay} ]] && [[ ${RandomDelay} -gt 0 ]]; then
         CurMin=$(date "+%-M")
@@ -757,26 +778,28 @@ function Random_Delay() {
     fi
 }
 
+## 依次执行
 function Run_Normal() {
     local p=$1
     Find_Script $p
     if [ -n "${FileName}" ] && [ -n "${WhichDir}" ]; then
-        Import_Config $1
-        Detect_Cron
-        Set_Env
-        Combin_All
+        Import_Config $p && Update_Crontab && Count_UserSum && Combin_All
         [ $# -eq 1 ] && Random_Delay
         LogTime=$(date "+%Y-%m-%d-%H-%M-%S")
         LogFile="${LogDir}/${FileName}/${LogTime}.log"
         [ ! -d ${LogDir}/${FileName} ] && mkdir -p ${LogDir}/${FileName}
         cd ${WhichDir}
-        if [ ${FileFormat} == "js" ]; then
+        case ${FileFormat} in
+        js)
             node ${FileName}.js | tee ${LogFile}
-        elif [ ${FileFormat} == "py" ]; then
-            python3 ${FileName}.py | tee ${LogFile}
-        elif [ ${FileFormat} == "ts" ]; then
+            ;;
+        py)
+            python3 -u ${FileName}.py | tee ${LogFile}
+            ;;
+        ts)
             ts-node ${FileName}.ts | tee ${LogFile}
-        fi
+            ;;
+        esac
     else
         FormatInput=$(echo $p | awk -F "/" '{print $NF}')
         echo -e "\n${ERROR} 在 ${ScriptsDir}、${ScriptsDir}/backUp、${ConfigDir}、${ScriptsDir}/tools 四个目录下均未检测到 $FormatInput 脚本的存在，请确认！\n"
@@ -784,11 +807,12 @@ function Run_Normal() {
     fi
 }
 
+## 并发执行
 function Run_Concurrent() {
     local p=$1
     Find_Script $p
     if [ -n "${FileName}" ] && [ -n "${WhichDir}" ]; then
-        Import_Config $1 && Detect_Cron && Set_Env && Combin_SHARECODES
+        Import_Config $p && Update_Crontab && Count_UserSum && Combin_ShareCodes && Trans_UN_SUBSCRIBES
         LogTime=$(date "+%Y-%m-%d-%H-%M-%S")
         [ ! -d ${LogDir}/${FileName} ] && mkdir -p ${LogDir}/${FileName}
         echo -e "\n各账号间已经在后台开始并发执行，前台不显示脚本输出内容而是直接写入到日志文件中。\n"
@@ -800,13 +824,17 @@ function Run_Concurrent() {
             export JD_COOKIE=${!Cookie_Num}
             LogFile="${LogDir}/${FileName}/${LogTime}_${user_num}.log"
             cd ${WhichDir}
-            if [ ${FileFormat} == "js" ]; then
+            case ${FileFormat} in
+            js)
                 node ${FileName}.js &>$LogFile &
-            elif [ ${FileFormat} == "py" ]; then
-                python3 ${FileName}.py &>$LogFile &
-            elif [ ${FileFormat} == "ts" ]; then
+                ;;
+            py)
+                python3 -u ${FileName}.py &>$LogFile &
+                ;;
+            ts)
                 ts-node ${FileName}.ts &>$LogFile &
-            fi
+                ;;
+            esac
         done
         echo -e "${WAITING} 并发任务正在执行中，请耐心等待所有任务执行完毕...\n"
         wait
@@ -818,12 +846,13 @@ function Run_Concurrent() {
     fi
 }
 
+## 指定执行
 function Run_Specify() {
     local p=$1
     local ck_num=$2
     Find_Script $p
     if [ -n "${FileName}" ] && [ -n "${WhichDir}" ]; then
-        Import_Config && Detect_Cron && Set_Env && Combin_SHARECODES
+        Import_Config && Update_Crontab && Count_UserSum && Combin_ShareCodes && Trans_UN_SUBSCRIBES
         LogTime=$(date "+%Y-%m-%d-%H-%M-%S")
         [ ! -d ${LogDir}/${FileName} ] && mkdir -p ${LogDir}/${FileName}
         LogFile="${LogDir}/${FileName}/${LogTime}_${user_num}.log"
@@ -833,7 +862,7 @@ function Run_Specify() {
         if [ ${FileFormat} == "js" ]; then
             node ${FileName}.js | tee ${LogFile}
         elif [ ${FileFormat} == "py" ]; then
-            python3 ${FileName}.py | tee ${LogFile}
+            python3 -u ${FileName}.py | tee ${LogFile}
         elif [ ${FileFormat} == "ts" ]; then
             ts-node ${FileName}.ts | tee ${LogFile}
         fi
@@ -844,10 +873,10 @@ function Run_Specify() {
     fi
 }
 
+## 迅速执行
 function Run_Rapidly() {
     local p=$1
-    Import_Config $1
-    Count_UserSum
+    Import_Config $p && Count_UserSum
     export JD_COOKIE=$(Combin_Sub Cookie)
     FileNameTmp1=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
     FileNameTmp2=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
@@ -857,7 +886,7 @@ function Run_Rapidly() {
         node ${FileNameTmp1}.js | tee ${LogDir}/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
     elif [ -f ${ScriptsDir}/${FileNameTmp1}.py ]; then
         [ ! -d ${LogDir}/${FileNameTmp1} ] && mkdir -p ${LogDir}/${FileNameTmp1}
-        python3 ${FileNameTmp1}.py | tee ${LogDir}/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
+        python3 -u ${FileNameTmp1}.py | tee ${LogDir}/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
     elif [ -f ${ScriptsDir}/${FileNameTmp1}.ts ]; then
         [ ! -d ${LogDir}/${FileNameTmp1} ] && mkdir -p ${LogDir}/${FileNameTmp1}
         ts-node ${FileNameTmp1}.ts | tee ${LogDir}/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
@@ -866,7 +895,7 @@ function Run_Rapidly() {
         node ${FileNameTmp2}.js | tee ${LogDir}/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
     elif [ -f ${ScriptsDir}/${FileNameTmp2}.py ]; then
         [ ! -d ${LogDir}/${FileNameTmp2} ] && mkdir -p ${LogDir}/${FileNameTmp2}
-        python3 ${FileNameTmp2}.py | tee ${LogDir}/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
+        python3 -u ${FileNameTmp2}.py | tee ${LogDir}/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
     elif [ -f ${ScriptsDir}/${FileNameTmp2}.ts ]; then
         [ ! -d ${LogDir}/${FileNameTmp2} ] && mkdir -p ${LogDir}/${FileNameTmp2}
         ts-node ${FileNameTmp2}.ts | tee ${LogDir}/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
@@ -877,26 +906,26 @@ function Run_Rapidly() {
     fi
 }
 
+## 终止执行
 function Process_Kill() {
     local p=$1
     Find_Script $p
     if [ -n "${FileName}" ] && [ -n "${WhichDir}" ]; then
-        ps -ef | grep -v "grep" | grep "${FileName}" -qw
+        ps -ef | egrep -v "grep|pkill" | grep "${FileName}" -wq
         local ExitSearchProcess=$?
         if [[ ${ExitSearchProcess} == 0 ]]; then
             kill -9 $(ps -ef | grep "${FileName}" | grep -v "pkill" | awk '$0 !~/grep/ {print $1}' | tr -s '\n' ' ') >/dev/null 2>&1
             sleep 1
             kill -9 $(ps -ef | grep "${FileName}" | grep -v "pkill" | awk '$0 !~/grep/ {print $1}' | tr -s '\n' ' ') >/dev/null 2>&1
-            ps -ef | grep -v "grep" | grep "${FileName}" -qw
-            if [ $? -ne 0 ]; then
-                echo -e "\n${SUCCESS} 已终止进程\n"
-            else
+            ps -ef | egrep -v "grep|pkill" | grep "${FileName}" -wq
+            if [ $? -eq 0 ]; then
                 echo -e "\n${ERROR} 进程终止失败，请尝试手动终止 kill -9 <pid>\n"
+            else
+                echo -e "\n${SUCCESS} 已终止进程\n"
             fi
         else
             FormatInput=$(echo $p | awk -F "/" '{print $NF}')
             echo -e "\n${ERROR} 未检测到关于 $FormatInput 脚本的进程，进程可能不存在或输入有误\n"
-            Help
         fi
     else
         FormatInput=$(echo $p | awk -F "/" '{print $NF}')
@@ -905,27 +934,35 @@ function Process_Kill() {
     fi
 }
 
+## 远程执行
 function Run_RawScript() {
     local Raw_Url=$1 && local DownloadJudgment=""
     FileName=$(echo $Raw_Url | awk -F "/" '{print $NF}')
     RepositoryName=$(echo $Raw_Url | egrep -o "github|gitee|gitlab")
-    if [[ ${RepositoryName} == "github" ]]; then
+    case ${RepositoryName} in
+    github)
         RepositoryJudge=" Github "
-    elif [[ ${RepositoryName} == "gitee" ]]; then
+        ;;
+    gitee)
         RepositoryJudge=" Gitee "
-    elif [[ ${RepositoryName} == "gitlab" ]]; then
+        ;;
+    gitlab)
         RepositoryJudge=" GitLab "
-    else
+        ;;
+    *)
         RepositoryJudge=""
-    fi
-    if [[ $# == 3 ]]; then
-        if [ $3 = "-p" ]; then
+        ;;
+    esac
+
+    case $# in
+    2)
+        if [ $2 = "-p" ]; then
             DownloadJudgment="https://ghproxy.com/"
             RunMod="normal"
-        elif [ $3 = "-c" ]; then
+        elif [ $2 = "-c" ]; then
             DownloadJudgment=""
             RunMod="concurrent"
-        elif [[ $3 = "-pc" ]] || [[ $3 = "-cp" ]]; then
+        elif [[ $2 = "-pc" ]] || [[ $3 = "-cp" ]]; then
             DownloadJudgment="https://ghproxy.com/"
             RunMod="concurrent"
         else
@@ -933,29 +970,33 @@ function Run_RawScript() {
             Help
             exit
         fi
-    elif [[ $# == 4 ]]; then
-        if [ $3 = "-p" ]; then
+        ;;
+    3)
+        if [ $2 = "-p" ]; then
             DownloadJudgment="https://ghproxy.com/"
-        elif [ $3 = "-c" ]; then
+        elif [ $2 = "-c" ]; then
             RunMod="concurrent"
         else
             echo -e "\n${COMMAND_ERROR}\n"
             Help
             exit
         fi
-        if [ $4 = "-c" ]; then
+        if [ $3 = "-c" ]; then
             RunMod="concurrent"
-        elif [ $4 = "-p" ]; then
+        elif [ $3 = "-p" ]; then
             DownloadJudgment="https://ghproxy.com/"
         else
             echo -e "\n${COMMAND_ERROR}\n"
             Help
             exit
         fi
-    else
+        ;;
+    *)
         DownloadJudgment=""
         RunMod="normal"
-    fi
+        ;;
+    esac
+
     if [[ ${DownloadJudgment} == "https://ghproxy.com/" ]]; then
         ProxyJudge="使用代理"
     else
@@ -965,25 +1006,32 @@ function Run_RawScript() {
     wget -q --no-check-certificate ${DownloadJudgment}$Raw_Url -O "${ScriptsDir}/${FileName}.new"
     if [[ $? -eq 0 ]]; then
         mv -f "${ScriptsDir}/${FileName}.new" "${ScriptsDir}/${FileName}"
-        if [ ${RunMod} = "normal" ]; then
+        case ${RunMod} in
+        normal)
             RunModJudge="依次"
-        elif [ ${RunMod} = "concurrent" ]; then
+            ;;
+        concurrent)
             RunModJudge="并发"
-        fi
+            ;;
+        esac
         echo -e "\n${SUCCESS} 下载完成，倒计时 3 秒后开始${RunModJudge}执行\n"
         sleep 1 && echo -e "3..." && sleep 1 && echo -e "2.." && sleep 1 && echo -e "1." && sleep 1
         FormatFileName=$(echo ${FileName} | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
-        if [ ${RunMod} = "normal" ]; then
+        case ${RunMod} in
+        normal)
             Run_Normal ${FormatFileName} now
-        elif [ ${RunMod} = "concurrent" ]; then
+            ;;
+        concurrent)
             Run_Concurrent ${FormatFileName}
-        fi
+            ;;
+        esac
     else
         [ -f "${ScriptsDir}/${FileName}.new" ] && rm -rf "${ScriptsDir}/${FileName}.new"
         echo -e "\n${ERROR} 下载 ${FileName} 失败，请检查 URL 地址是否正确或网络连通性问题...\n"
     fi
 }
 
+## 本地脚本清单
 function ScriptsList() {
     ListScripts=($(
         cd ${ScriptsDir}
@@ -1023,6 +1071,9 @@ function ScriptsList() {
         for ((i = 0; i < ${#ListTypeScriptScripts[*]}; i++)); do
             ## 手动定义脚本名称
             case ${ListTypeScriptScripts[i]} in
+            jd_IndustryLottery.ts)
+                Name="京东工业品抽奖"
+                ;;
             jd_bean_box.ts)
                 Name="领京豆"
                 ;;
@@ -1031,6 +1082,9 @@ function ScriptsList() {
                 ;;
             jd_cfd.ts)
                 Name="京喜财富岛"
+                ;;
+            jd_cfd_hb.ts)
+                Name="京喜财富岛兑换红包"
                 ;;
             jd_cfd_loop.ts)
                 Name="京喜财富岛热气球挂机"
@@ -1043,6 +1097,9 @@ function ScriptsList() {
                 ;;
             jd_foodRunning.ts)
                 Name="零食街"
+                ;;
+            jd_fruit_moreTask.ts)
+                Name="东东农场额外任务"
                 ;;
             jd_getUp.ts)
                 Name="早起福利"
@@ -1113,6 +1170,7 @@ function ScriptsList() {
     echo ''
 }
 
+## 判定命令
 case $# in
 0)
     echo
@@ -1151,7 +1209,7 @@ case $# in
     conc)
         Run_Concurrent $1 $2
         ;;
-    [1-9] | [1-3][0-9])
+    [1-9] | [1-9][0-9] | [1-9][0-9][0-9])
         Run_Specify $1 $2
         ;;
     rapid)
@@ -1230,9 +1288,9 @@ case $# in
 3 | 4)
     if [[ $2 == raw ]]; then
         if [[ $# == 4 ]]; then
-            Run_RawScript $1 $2 $3 $4
+            Run_RawScript $1 $3 $4
         else
-            Run_RawScript $1 $2 $3
+            Run_RawScript $1 $3
         fi
     else
         echo -e "\n${TOO_MANY_COMMANDS}\n"

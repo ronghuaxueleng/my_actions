@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-shopt -s extglob
+
 ## 文件路径、脚本网址、文件版本以及各种环境的判断
 ShellDir=${JD_DIR:-$(
     cd $(dirname $0)
@@ -8,23 +8,20 @@ ShellDir=${JD_DIR:-$(
 [[ ${JD_DIR} ]] && ShellJd=jd || ShellJd=${ShellDir}/jd.sh
 LogDir=${ShellDir}/log
 [ ! -d ${LogDir} ] && mkdir -p ${LogDir}
-ScriptsDir=${ShellDir}/jd_scripts
-ScriptsCombined=${ShellDir}/scripts
-[ ! -d ${ScriptsCombined} ] && mkdir -p ${ScriptsCombined}
-DockerDir=${ScriptsCombined}/docker
-[ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
-ListCronSh=${DockerDir}/crontab_list.sh
-ListCronLxk=${ScriptsDir}/docker/crontab_list.sh
+ScriptsDir=${ShellDir}/scripts
 ConfigDir=${ShellDir}/config
+ToolsDir=${ShellDir}/docker
 FileRunAll=${ShellDir}/run_all.sh
 FileConf=${ConfigDir}/config.sh
 FileDiy=${ConfigDir}/diy.sh
 FileConfSample=${ShellDir}/sample/config.sh.sample
-ListCronSample=${ShellDir}/sample/docker.list.sample
 ListCron=${ConfigDir}/crontab.list
-ListCronUniq=${ConfigDir}/crontab.list.uniq
+## 判断 Scripts 仓库是否提供定时清单
+[[ -f ${ScriptsDir}/docker/crontab_list.sh ]] && ListCronPublic=${ScriptsDir}/docker/crontab_list.sh || ListCronPublic=${ToolsDir}/crontab_list.sh
 ListTask=${LogDir}/task.list
+ListDiyTask=${LogDir}/task-diy.list
 ListJs=${LogDir}/js.list
+ListDiyJs=${LogDir}/js-diy.list
 ListJsAdd=${LogDir}/js-add.list
 ListJsDrop=${LogDir}/js-drop.list
 ContentVersion=${ShellDir}/version
@@ -32,7 +29,12 @@ ContentNewTask=${ShellDir}/new_task
 ContentDropTask=${ShellDir}/drop_task
 SendCount=${ShellDir}/send_count
 isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
-OwnActionsURL=https://gitee.com/getready/my_actions.git
+ScriptsURL=https://gitee.com/getready/my_actions.git
+
+SUCCESS='\033[32m[Done]\033[0m'
+WARN='\033[33m[WARN]\033[0m'
+ERROR='\033[31m[ERROR]\033[0m'
+WAITING='\033[33m[*]\033[0m'
 
 ## 更新crontab，gitee服务器同一时间限制5个链接，因此每个人更新代码必须错开时间，每次执行git_pull随机生成。
 ## 每天次数随机，更新时间随机，更新秒数随机，至少6次，至多12次，大部分为8-10次，符合正态分布。
@@ -50,127 +52,92 @@ function Update_Cron() {
         for ((i = 1; i < ${#RanHourArray[*]}; i++)); do
             RanHour="${RanHour},${RanHourArray[i]}"
         done
-	perl -i -pe "s|.+(bash.+git_pull.+log.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCron}
-        sort -u ${ListCron} >${ListCronUniq}
-        mv -f ${ListCronUniq} ${ListCron}
+        perl -i -pe "s|.+(bash.+git_pull.+log.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCron}
         crontab ${ListCron}
     fi
 }
 
 ## 更新Shell源码
 function Git_PullShell() {
-    echo -e "\n开始更新仓库 /jd\n"
+    echo -e "\n${WAITING} 开始更新仓库 /jd\n"
     cd ${ShellDir}
     git fetch --all
     ExitStatusShell=$?
-    git reset --hard origin/source
+    git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')
     git pull
 }
 
 ## 克隆scripts
 function Git_CloneScripts() {
-    echo -e "克隆${OwnActionsURL} JDHelloWorld分支脚本\n"
-    git clone -b j_scripts ${OwnActionsURL} ${ScriptsDir}
+    echo -e "\n${WAITING} 开始克隆仓库 /jd/scripts\n"
+    git clone -b j_scripts ${ScriptsURL} ${ScriptsDir}
     ExitStatusScripts=$?
-    echo
 }
 
 ## 更新scripts
 function Git_PullScripts() {
-    echo -e "更新${OwnActionsURL} j_scripts分支脚本\n"
+    echo -e "\n${WAITING} 开始更新仓库 /jd/scripts\n"
     cd ${ScriptsDir}
     git fetch --all
     ExitStatusScripts=$?
-    git reset --hard origin/j_scripts
-    echo
+    git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')
+    git pull
 }
 
-## 用户数量UserSum
-function Count_UserSum() {
-    i=1
-    while [ $i -le 1000 ]; do
-        Tmp=Cookie$i
-        CookieTmp=${!Tmp}
-        [[ ${CookieTmp} ]] && UserSum=$i || break
-        let i++
-    done
-}
-
-## 把config.sh中提供的所有账户的PIN附加在jd_joy_run.js中，让各账户相互进行宠汪汪赛跑助力
-function Change_JoyRunPins() {
-    j=${UserSum}
-    PinALL=""
-    while [[ $j -ge 1 ]]; do
-        Tmp=Cookie$j
-        CookieTemp=${!Tmp}
-        PinTemp=$(echo ${CookieTemp} | perl -pe "{s|.*pt_pin=(.+);|\1|; s|%|\\\x|g}")
-        PinTempFormat=$(printf ${PinTemp})
-        PinALL="${PinTempFormat},${PinALL}"
-        let j--
-    done
-    perl -i -pe "{s|(let invite_pins = \[\')(.+\'\];?)|\1${PinALL}\2|; s|(let run_pins = \[\')(.+\'\];?)|\1${PinALL}\2|}" ${ScriptsCombined}/jd_joy_run.js
-}
-
-## 修改lxk0301大佬js文件的函数汇总
-function Change_ALL() {
+## 导入配置文件并组合函数
+function Import_Conf() {
     if [ -f ${FileConf} ]; then
         . ${FileConf}
-        if [ -n "${Cookie1}" ]; then
-            Count_UserSum
-            # Change_JoyRunPins
-        fi
     fi
 }
 
-## 合并脚本
-function Combined_Cron {
-    [ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
-    
-    rm -rf `ls ${ScriptsCombined}/*.* | grep -v '\.json'`
-    cp -rf $(ls ${ScriptsDir} | grep -v docker | sed "s:^:${ScriptsDir}/:" | xargs) ${ScriptsCombined}
-    # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do cp ${jsname} ${ScriptsCombined}/jd_monkcoder_${jsname##*/}; done
-    cat ${ListCronLxk} | tr -s [:space:] | grep -v '#' | sort -u >${ListCronSh}
-    # for jsname in $(find ${Scripts4Dir} -name "*.js" | grep -vE "\/backup\/"); do
-    #     croname=${jsname##*/}
-    #     jsnamecron=$(cat $jsname | grep "http" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
-    #     if [ -n "${jsnamecron}" ]; then
-    #         echo "$jsnamecron node /scripts/jd_monkcoder_$croname >> /scripts/logs/jd_monkcoder_${croname%.*}.log 2>&1" >>${ListCronSh}
-    #     fi
-    # done
-    rm -rf ${ScriptsCombined}/*.md
-    rm -rf ${ScriptsCombined}/package-lock.json
+## 推送通知 pt_pin 标记备注（Helloworld库功能）
+## 自行编辑 config 目录下的 account.json 配置文件
+function NotifyAccountsRemarks() {
+    if [ -f ${ScriptsDir}/tools/account.json ]; then
+        [ -f ${ConfigDir}/account.json ] || cp -fv ${ShellDir}/sample/account.json ${ConfigDir}/account.json
+        cp -rf ${ConfigDir}/account.json ${ScriptsDir}/tools/account.json
+    fi
 }
 
-## 检测文件：lxk0301/jd_scripts 仓库中的 docker/crontab_list.sh
+## 检测文件：scripts 仓库中的 docker/crontab_list.sh
 ## 检测定时任务是否有变化，此函数会在Log文件夹下生成四个文件，分别为：
-## task.                       list    crontab.list中的所有任务清单，仅保留脚本名
-## js.list      上述检测文件中用来运行js脚本的清单（去掉后缀.js，非运行脚本的不会包括在内）
-## js-add.list  如果上述检测文件增加了定时任务，这个文件内容将不为空
-## js-drop.list 如果上述检测文件删除了定时任务，这个文件内容将不为空
+## task.list      crontab.list中的所有任务清单，仅保留脚本名
+## task-diy.list  自定义脚本中的所有任务清单，仅保留脚本名，主要用于定时变动判断
+## js.list        上述检测文件中用来运行js脚本的清单（去掉后缀.js，非运行脚本不会包括在内）
+## js-diy.list    自定义脚本导入的js脚本清单（去掉后缀.js，非运行脚本不会包括在内）
+## js-add.list    如果上述检测文件增加了定时任务，这个文件内容将不为空
+## js-drop.list   如果上述检测文件删除了定时任务，这个文件内容将不为空
 function Diff_Cron() {
     if [ -f ${ListCron} ]; then
         if [ -n "${JD_DIR}" ]; then
-            grep -E " \S+_?\w+" ${ListCron} | grep -v "#" | sort -u >${ListTask}
+            grep -E " j[drx]_\w+" ${ListCron} | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | sort -u >${ListTask}
         else
-            grep "${ShellDir}/" ${ListCron} | grep -E " \S+_?\w+" | grep -v "#" | sort -u >${ListTask}
+            grep "${ShellDir}/" ${ListCron} | grep -E " j[drx]_\w+" | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | sort -u >${ListTask}
+        fi
+        cat ${ListCronPublic} | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >${ListJs}
+
+        if [ -f ${FileDiy} ]; then
+            if [[ -n ${EnableExtraShell} && ${EnableExtraShell} == "true" ]]; then
+                grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js|\w+\.py|\w+\.ts" | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}" | grep -v 'Tokens' | sort -u >>${ListJs}
+                grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js|\w+\.py|\w+\.ts" | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}" | grep -v 'Tokens' | sort -u >>${ListTask}
+                grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js|\w+\.py|\w+\.ts" | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}" | grep -v 'Tokens' | sort -u >${ListDiyJs}
+            fi
         fi
 
-        cat ${ListCronSh} | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)(?:.+)?node\s+(?:/scripts/)?(\S+_?\w+\.(?:js)?(?:ts)?).+|\1bash ${ShellJd} \2|" | sort -u >${ListJs}
-        if [ "${EnableExtraShell}" == "true" ]; then
-            grep "my_scripts_list" ${FileDiy} | grep -v '#' | sort -u >>${ListJs}
-            grep "my_scripts_list" ${FileDiy} | grep -v '#' | sort -u >>${ListTask}
+        grep -vwf ${ListTask} ${ListJs} >${ListJsAdd}
+        grep -vwf ${ListJs} ${ListTask} >${ListJsDrop}
+
+        if [ -f ${FileDiy} ]; then
+            if [[ -n ${EnableExtraShell} && ${EnableExtraShell} == "true" ]]; then
+                grep -vwf ${ListDiyTask} ${ListDiyJs} >>${ListJsAdd}
+                grep -vwf ${ListDiyJs} ${ListDiyTask} >>${ListJsDrop}
+                sort -u ${ListJsDrop} -o ${ListJsDrop}
+                grep "my_scripts_list" ${FileDiy} | grep -v '#' | grep -ioE "\w+\.js|\w+\.py|\w+\.ts" | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}" | grep -v 'Tokens' | sort -u >${ListDiyTask}
+            fi
         fi
-
-        sort -u ${ListJs} > ${ListJs}.sort
-        sort -u ${ListTask} > ${ListTask}.sort
-        mv -f ${ListJs}.sort ${ListJs}
-        mv -f ${ListTask}.sort ${ListTask}
-
-        # 第一个文件中出现第二个文件中未出现
-        comm -23 ${ListTask} ${ListJs} | sort -u >${ListJsDrop}
-        comm -23 ${ListJs} ${ListTask} | sort -u >${ListJsAdd}
     else
-        echo -e "${ListCron} 文件不存在，请先定义您自己的crontab.list...\n"
+        echo -e "${ListCron} 文件不存在，请先定义你自己的crontab.list...\n"
     fi
 }
 
@@ -208,6 +175,9 @@ function Notify_Version() {
             echo -e "如需更新请手动操作，仅更新当天通知一次!" >>${ContentVersion}
             cd ${ShellDir}
             node notify.js
+            echo -e "检查到配置文件有更新，已复制一份 config.sh.sample 到 ${ConfigDir} 目录"
+            cp -fv ${FileConfSample} ${ConfigDir}/config.sh.sample
+            echo ''
             if [ $? -eq 0 ]; then
                 echo "${VerConfSample}" >${SendCount}
                 [ -f ${ContentVersion} ] && rm -f ${ContentVersion}
@@ -233,23 +203,23 @@ function Npm_InstallSub() {
 
 ## npm install
 function Npm_Install() {
-    cd ${ScriptsCombined}
+    cd ${ScriptsDir}
     if [[ "${PackageListOld}" != "$(cat package.json)" ]]; then
         echo -e "${WAITING} 检测到 package.json 有变化，运行 npm install...\n"
         Npm_InstallSub
         if [ $? -ne 0 ]; then
-            echo -e "\n${ERROR} npm install 运行不成功，自动删除 ${ScriptsCombined}/node_modules 后再次尝试一遍..."
-            rm -rf ${ScriptsCombined}/node_modules
+            echo -e "\n${ERROR} npm install 运行不成功，自动删除 ${ScriptsDir}/node_modules 后再次尝试一遍..."
+            rm -rf ${ScriptsDir}/node_modules
         fi
         echo
     fi
 
-    if [ ! -d ${ScriptsCombined}/node_modules ]; then
+    if [ ! -d ${ScriptsDir}/node_modules ]; then
         echo -e "运行 npm install...\n"
         Npm_InstallSub
         if [ $? -ne 0 ]; then
-            echo -e "\nnpm install 运行不成功，自动删除 ${ScriptsCombined}/node_modules...\n"
-            echo -e "请进入 ${ScriptsCombined} 目录后按照wiki教程手动运行 npm install...\n"
+            echo -e "\nnpm install 运行不成功，自动删除 ${ScriptsDir}/node_modules...\n"
+            echo -e "请进入 ${ScriptsDir} 目录后按照wiki教程手动运行 npm install...\n"
             echo -e "当 npm install 失败时，如果检测到有新任务或失效任务，只会输出日志，不会自动增加或删除定时任务...\n"
             echo -e "3...\n"
             sleep 1
@@ -257,7 +227,7 @@ function Npm_Install() {
             sleep 1
             echo -e "1...\n"
             sleep 1
-            rm -rf ${ScriptsCombined}/node_modules
+            rm -rf ${ScriptsDir}/node_modules
         fi
     fi
 }
@@ -284,33 +254,19 @@ function Output_ListJsDrop() {
 ## 检测文件：scripts 仓库中的 docker/crontab_list.sh
 ## 如果检测到某个定时任务在上述检测文件中已删除，那么在本地也删除对应定时任务
 function Del_Cron() {
-    if [ -s ${ListJsDrop} ] && [ -s ${ListCron} ] && [ -d ${ScriptsCombined}/node_modules ]; then
+    if [ "${AutoDelCron}" = "true" ] && [ -s ${ListJsDrop} ] && [ -s ${ListCron} ] && [ -d ${ScriptsDir}/node_modules ]; then
         echo -e "开始尝试自动删除定时任务如下：\n"
         cat ${ListJsDrop}
         echo
         JsDrop=$(cat ${ListJsDrop})
-        # for Cron in "${JsDrop}"; do
-        #     result=$(echo "${Cron}" | grep -E "^\S+\s\S+\s\S+\s\S+\s(\S+\s)?")
-        #     if [[ "$result" != "" ]]; then
-        #         regx=$(echo "${Cron}" | sed -e 's/\([[\/.*]\|\]\)/\\&/g' | sed -e 's/ /\\s/g')
-        #         cat ${ListCron} | grep -v -E "${regx}" | sort -u >${ListCronUniq}
-        #         mv -f ${ListCronUniq} ${ListCron}
-        #     else
-        #         perl -i -ne "{print unless / ${Cron}( |$)/}" ${ListCron}
-        #     fi
-        # done
-        regx=$(cat ${ListJsDrop} | sed -e 's/\([[\/.*+]\|\]\)/\\&/g' | sed -e 's/ /\\s/g' |tr '\n' '|')
-        final=${regx: -1}
-        if [ final=='|' ]; then
-            regx=${regx%?}
-        fi
-        cat ${ListCron} | grep -v -E "${regx}" | sort -u >${ListCronUniq}
-        mv -f ${ListCronUniq} ${ListCron}
+        for Cron in ${JsDrop}; do
+            perl -i -ne "{print unless / ${Cron}( |$)/}" ${ListCron}
+        done
         crontab ${ListCron}
         echo -e "成功删除失效的脚本与定时任务，当前的定时任务清单如下：\n\n--------------------------------------------------------------\n"
         crontab -l
         echo -e "\n--------------------------------------------------------------\n"
-        if [ -d ${ScriptsCombined}/node_modules ]; then
+        if [ -d ${ScriptsDir}/node_modules ]; then
             echo -e "删除失效的定时任务：\n\n${JsDrop}" >${ContentDropTask}
             Notify_DropTask
         fi
@@ -322,34 +278,32 @@ function Del_Cron() {
 ## 如果检测到检测文件中增加新的定时任务，那么在本地也增加
 ## 本功能生效时，会自动从检测文件新增加的任务中读取时间，该时间为北京时间
 function Add_Cron() {
-    if [ -s ${ListJsAdd} ] && [ -s ${ListCron} ] && [ -d ${ScriptsCombined}/node_modules ]; then
+    if [ "${AutoAddCron}" = "true" ] && [ -s ${ListJsAdd} ] && [ -s ${ListCron} ] && [ -d ${ScriptsDir}/node_modules ]; then
         echo -e "开始尝试自动添加定时任务如下：\n"
         cat ${ListJsAdd}
         echo
-        JsAdd=$(cat "${ListJsAdd}")
-        for Cron in "${JsAdd}"; do
-            result=$(echo "${Cron}" | grep -E "^\S+\s\S+\s\S+\s\S+\s(\S+\s)?")
-            if [[ "$result" != "" ]]; then
-                echo "${Cron}" | sort -u >>${ListCron}
+        JsAdd=$(cat ${ListJsAdd})
+
+        for Cron in ${JsAdd}; do
+            if [[ ${Cron} == jd_bean_sign ]]; then
+                echo "4 0,9 * * * bash ${ShellJd} ${Cron}" >>${ListCron}
             else
-                cat ${ListCronSh} | grep -E "${Cron}" | perl -pe "s|(^\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)(?:.+)?node\s+(?:/scripts/)?(\S+_?\w+\.(?:js)?(?:ts)?).+|\1bash ${ShellJd} \2|" | sort -u >>${ListCron}
+                cat ${ListCronPublic} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.js.+|\1bash ${ShellJd} \2|" >>${ListCron}
             fi
         done
 
         if [ $? -eq 0 ]; then
-            sort -u ${ListCron} >${ListCronUniq}
-            mv -f ${ListCronUniq} ${ListCron}
             crontab ${ListCron}
             echo -e "成功添加新的定时任务，当前的定时任务清单如下：\n\n--------------------------------------------------------------\n"
             crontab -l
             echo -e "\n--------------------------------------------------------------\n"
-            if [ -d ${ScriptsCombined}/node_modules ]; then
+            if [ -d ${ScriptsDir}/node_modules ]; then
                 echo -e "成功添加新的定时任务：\n\n${JsAdd}" >${ContentNewTask}
                 Notify_NewTask
             fi
         else
             echo -e "添加新的定时任务出错，请手动添加...\n"
-            if [ -d ${ScriptsCombined}/node_modules ]; then
+            if [ -d ${ScriptsDir}/node_modules ]; then
                 echo -e "尝试自动添加以下新的定时任务出错，请手动添加：\n\n${JsAdd}" >${ContentNewTask}
                 Notify_NewTask
             fi
@@ -357,35 +311,25 @@ function Add_Cron() {
     fi
 }
 
-## 用户数量UserSum
-function Count_UserSum() {
-    for ((i = 1; i <= 1000; i++)); do
-        Tmp=Cookie$i
-        CookieTmp=${!Tmp}
-        [[ ${CookieTmp} ]] && UserSum=$i || break
-    done
-}
-
-## 自定义脚本功能
-function ExtraShell() {
+## 同步自定义脚本
+function ExtraShellSync() {
     ## 自动同步用户自定义的diy.sh
     if [[ ${EnableExtraShellUpdate} == true ]]; then
         wget -q --no-check-certificate $EnableExtraShellURL -O ${FileDiy}.new
         if [ $? -eq 0 ]; then
-	    mv -f "${FileDiy}.new" "${FileDiy}"
-            echo -e "自定义 DIY 脚本同步完成......"
-            echo -e ''
-            sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
-            sed -i 's/ScriptsDir/ScriptsCombined/' ${FileDiy}
-            sed -i -E '/^rm\s+-rf\s+\$\{ScriptsCombined\}.+\$\{ListCron\}/d' ${FileDiy}
-            sleep 2s
+            mv -f "${FileDiy}.new" "${FileDiy}"
+            echo -e "${SUCCESS} 自定义脚本同步完成\n"
+            sleep 1s
         else
-            echo -e "\033[31m[ERROR]\033[0m 自定义脚本同步失败，请检查原因或再次执行更新命令......\n"
+            echo -e "${ERROR} 自定义脚本同步失败，请检查原因或再次执行更新命令......\n"
             sleep 3s
         fi
         [ -f "${FileDiy}.new" ] && rm -rf "${FileDiy}.new"
     fi
+}
 
+## 自定义脚本功能
+function ExtraShell() {
     ## 调用用户自定义的diy.sh
     if [[ ${EnableExtraShell} == true ]]; then
         if [ -f ${FileDiy} ]; then
@@ -401,31 +345,34 @@ function ExtraShell() {
 function Run_All() {
     ## 默认将 "jd、jx、jr" 开头的活动脚本加入其中
     rm -rf ${FileRunAll}
-    cat ${ListJs} | grep -v bean_change >${FileRunAll}
+    Tips='echo -e "\n\\033[32m[Tips]\\033[0m 执行期间如果卡住，可按回车键尝试或通过命令 Ctrl + Z 跳过继续执行剩余活动脚本，倒计时 3 秒后开始执行\n" && sleep 1 && echo -e "3..." && sleep 1 && echo -e "2.." && sleep 1 && echo -e "1." && sleep 1'
 
     ## 调整执行顺序
+    cat ${ListJs} | grep -v "jd_bean_change|jd_joy_reward|blueCoin" >>${FileRunAll}
     sed -i "1i\jd_bean_change" ${FileRunAll} ## 置顶京豆变动通知
-    # echo "jd_crazy_joy_coin" >>${FileRunAll} ## 末尾加入挂机脚本
 
     ## 去除不适合的活动脚本
-    sed -i '/jd_delCoupon/d' ${FileRunAll} ## 不执行 "京东家庭号" 活动
-    sed -i '/jd_family/d' ${FileRunAll}    ## 不执行 "删除优惠券" 活动
-    ## 第三方脚本
-    sed -i '/jd_try/d' ${FileRunAll}
-    sed -i '/jx_cfdtx/d' ${FileRunAll}
+    sed -i '/jd_delCoupon/d' ${FileRunAll} ## "删除优惠券"
+    sed -i '/jd_family/d' ${FileRunAll}    ## "京东家庭号"
 
-    sed -i "s/^/bash ${ShellJd} &/g" ${FileRunAll}
+    ## 去除执行时间过长的脚本
+    sed -i '/jd_try/d' ${FileRunAll}
+
+    sed -i "s/^/jtask &/g" ${FileRunAll}
     sed -i 's/$/& now/g' ${FileRunAll}
+
+    ## 加入说明
+    sed -i "1i\ ${Tips}" ${FileRunAll}
     sed -i '1i\#!/bin/env bash' ${FileRunAll}
-    sed -i '/^\s*$/d' ${FileRunAll}
+    # sed -i '/^\s*$/d' ${FileRunAll}
 }
 
 function Title() {
     echo -e "\n+----------------- 开 始 执 行 更 新 脚 本 -----------------+"
     echo -e ''
-    echo -e "   脚本根目录：${ScriptsCombined}"
+    echo -e "   脚本根目录：${ShellDir}"
     echo -e ''
-    echo -e "   Scripts 仓库目录：${ScriptsCombined}"
+    echo -e "   Scripts 仓库目录：${ScriptsDir}"
     echo -e ''
     echo -e "   当前系统时间：$(date "+%Y-%m-%d %H:%M")"
     echo -e ''
@@ -448,20 +395,23 @@ function Notice() {
 
 ## 在日志中记录时间与路径
 Title
+## 导入配置文件
+Import_Conf
 ## 更新crontab
 [[ $(date "+%-H") -le 2 ]] && Update_Cron
 ## 更新源码
 [ -d ${ShellDir}/.git ] && Git_PullShell
-## 赋权
-chmod 777 ${ShellDir}/*
 ## 克隆或更新js脚本
-Combined_Cron
-[ -f ${ScriptsCombined}/package.json ] && PackageListOld=$(cat ${ScriptsCombined}/package.json)
+[ -f ${ScriptsDir}/package.json ] && PackageListOld=$(cat ${ScriptsDir}/package.json)
+[ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
+# [ -f ${ScriptsDir}/sendNotify.js ] && sed -i '/desp += author;/a\  if (text.includes("FreeFuck") || desp.includes("FreeFuck")) return ;' ${ScriptsDir}/sendNotify.js
 Notice
 ## 执行各函数
 if [[ ${ExitStatusScripts} -eq 0 ]]; then
-    Change_ALL
-    [ -d ${ScriptsCombined}/node_modules ] && Notify_Version
+    echo -e "${SUCCESS} Scripts 仓库更新完成\n"
+    ExtraShellSync
+    NotifyAccountsRemarks
+    [ -d ${ScriptsDir}/node_modules ] && Notify_Version
     Diff_Cron
     Npm_Install
     Output_ListJsAdd
@@ -470,11 +420,10 @@ if [[ ${ExitStatusScripts} -eq 0 ]]; then
     Add_Cron
     ExtraShell
     Run_All
-    echo -e "\033[32m[Done]\033[0m 活动脚本更新完成\n"
 else
-    Change_ALL
-    echo -e "\033[31m[ERROR]\033[0m Scripts仓库脚本更新失败，请检查原因或再次执行更新命令......\n"
+    echo -e "${ERROR} Scripts 仓库更新失败，请检查原因或再次执行更新命令...\n"
+    ExtraShellSync
+    NotifyAccountsRemarks
     ExtraShell
     Run_All
 fi
-chmod 777 ${ShellDir}/*
