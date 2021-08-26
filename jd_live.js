@@ -104,8 +104,9 @@ function getTaskList() {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (safeGet(data)) {
+console.log(data);
             data = JSON.parse(data);
-            if(data.data.starLiveList)｛
+            if(data.data)｛
               for (let key of Object.keys(data.data.starLiveList)) {
                 let vo = data.data.starLiveList[key]
                 if (vo.state !== 3) {
