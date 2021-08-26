@@ -309,6 +309,8 @@
 15 0-23/2 * * * node /scripts/jd_joy.js >> /scripts/logs/jd_joy.log 2>&1
 #京东待收货 
 8 8 12 * * * node /scripts/jddsh.js >> /scripts/logs/jddsh.log 2>&1
+#京东618开卡活动1 
+1 0 * * * node /scripts/zooOpencard01.js >> /scripts/logs/zooOpencard01.log 2>&1
 #京东价格保护 
 5 0 * * * node /scripts/jd_priceProtect.js >> /scripts/logs/jd_priceProtect.log 2>&1
 #京东特物ZX签到Tom版 
