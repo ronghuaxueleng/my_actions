@@ -63,7 +63,7 @@ function Git_PullShell() {
     cd ${ShellDir}
     git fetch --all
     ExitStatusShell=$?
-    git reset --hard origin/new0826
+    git reset --hard origin/source
     git pull
 }
 
