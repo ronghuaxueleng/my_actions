@@ -319,14 +319,20 @@
 5 0 * * * node /scripts/zooOpencard09.js >> /scripts/logs/zooOpencard09.log 2>&1
 #京东618开卡活动8 
 15 9 1-18 6 node /scripts/zooOpencard08.js >> /scripts/logs/zooOpencard08.log 2>&1
+#京东618开卡活动6 
+15 9 9-20 6 node /scripts/zooOpencard06.js >> /scripts/logs/zooOpencard06.log 2>&1
+#京东合肥旗舰店开业动物园版 
+0 6 * * * node /scripts/zooSupershophf.js >> /scripts/logs/zooSupershophf.log 2>&1
 #京东GNC组队瓜分京豆 
 0 8 * * * node /scripts/zooJointeam01.js >> /scripts/logs/zooJointeam01.log 2>&1
-#京东618开卡活动5 
-1 0 * * * node /scripts/zooOpencard05.js >> /scripts/logs/zooOpencard05.log 2>&1
 #京东618开卡活动2 
 1 0 * * * node /scripts/zooOpencard02.js >> /scripts/logs/zooOpencard02.log 2>&1
 #京东618开卡活动1 
 1 0 * * * node /scripts/zooOpencard01.js >> /scripts/logs/zooOpencard01.log 2>&1
+#京东宝洁消消乐 
+18 9 1-18 6 * node /scripts/zooBaojiexiaoxiaole.js >> /scripts/logs/zooBaojiexiaoxiaole.log 2>&1
+#京东浓情618与粽不同 
+0 9 * * * node /scripts/zooLongzhou.js >> /scripts/logs/zooLongzhou.log 2>&1
 #京东价格保护 
 5 0 * * * node /scripts/jd_priceProtect.js >> /scripts/logs/jd_priceProtect.log 2>&1
 #京东特物ZX签到Tom版 
