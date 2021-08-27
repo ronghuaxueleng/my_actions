@@ -60,6 +60,7 @@ jobs:
           sed -i 's/supermanito/admin/' jd.sh
           cd ../
           git clone git@jd_scripts_githup:ronghuaxueleng/my_actions.git
+          cp -rf ./my_actions/sample ./JD-FreeFuck/
           cp -f ./my_actions/jd.sh ./JD-FreeFuck
           cp -f ./my_actions/git_pull.sh ./JD-FreeFuck
           cp -f ./my_actions/shareCode.py ./JD-FreeFuck
