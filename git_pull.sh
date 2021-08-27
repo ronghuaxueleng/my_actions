@@ -117,7 +117,7 @@ function Diff_Cron() {
         else
             grep "${ShellDir}/" ${ListCron} | grep -E " j[drx]_\w+" | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | sort -u >${ListTask}
         fi
-        cat ${ListCronPublic} | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >${ListJs}
+        cat ${ListCronPublic} ${ToolsDir}/crontab_list.sh | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >${ListJs}
 
         if [ -f ${FileDiy} ]; then
             if [[ -n ${EnableExtraShell} && ${EnableExtraShell} == "true" ]]; then
@@ -292,7 +292,7 @@ function Add_Cron() {
             if [[ ${Cron} == jd_bean_sign ]]; then
                 echo "4 0,9 * * * bash ${ShellJd} ${Cron}" >>${ListCron}
             else
-                cat ${ListCronPublic} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.js.+|\1bash ${ShellJd} \2|" >>${ListCron}
+                cat ${ListCronPublic} ${ToolsDir}/crontab_list.sh | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.js.+|\1bash ${ShellJd} \2|" >>${ListCron}
             fi
         done
 
