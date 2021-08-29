@@ -71,6 +71,7 @@ jobs:
           cp -rf ./my_actions/docker/requirements.txt ./JD-FreeFuck/docker/
           cp -rf ./my_actions/docker/refresh.sh ./JD-FreeFuck/docker/
           cp -rf ./my_actions/docker/install_env.sh ./JD-FreeFuck/docker/
+          cp -rf ./my_actions/docker/ext_crontab_list.sh ./JD-FreeFuck/docker/
           cp -f ./my_actions/buildScripts.sh ./
           cd ./my_actions
           git checkout source

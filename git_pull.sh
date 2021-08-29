@@ -55,6 +55,8 @@ function Update_Cron() {
         perl -i -pe "s|.+(bash.+git_pull.+log.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCron}
         cat ${ListCron} | sort -k2n | uniq > ${ListCron}.uniq
         mv ${ListCron}.uniq ${ListCron}
+        cat ${ListCron} ${ToolsDir}/ext_crontab_list.sh > ${ListCron}.mix
+        mv ${ListCron}.mix ${ListCron}
         crontab ${ListCron}
     fi
 }
@@ -266,6 +268,8 @@ function Del_Cron() {
         done
         cat ${ListCron} | sort -k2n | uniq > ${ListCron}.uniq
         mv ${ListCron}.uniq ${ListCron}
+        cat ${ListCron} ${ToolsDir}/ext_crontab_list.sh > ${ListCron}.mix
+        mv ${ListCron}.mix ${ListCron}
         crontab ${ListCron}
         echo -e "成功删除失效的脚本与定时任务，当前的定时任务清单如下：\n\n--------------------------------------------------------------\n"
         crontab -l
@@ -299,6 +303,8 @@ function Add_Cron() {
         if [ $? -eq 0 ]; then
             cat ${ListCron} | sort -k2n | uniq > ${ListCron}.uniq
             mv ${ListCron}.uniq ${ListCron}
+            cat ${ListCron} ${ToolsDir}/ext_crontab_list.sh > ${ListCron}.mix
+            mv ${ListCron}.mix ${ListCron}
             crontab ${ListCron}
             echo -e "成功添加新的定时任务，当前的定时任务清单如下：\n\n--------------------------------------------------------------\n"
             crontab -l
