@@ -1,6 +1,6 @@
 /*
-种豆得豆 脚本更新地址：jd_plantBean.js
-更新时间：2021-04-9
+种豆得豆
+更新时间：2021-08-19
 活动入口：京东APP我的-更多工具-种豆得豆
 已支持IOS京东多账号,云端多京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
@@ -9,24 +9,20 @@
 每个京东账号每天只能帮助3个人。多出的助力码将会助力失败。
 =====================================Quantumult X=================================
 [task_local]
-1 7-21/2 * * * jd_plantBean.js, tag=种豆得豆, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdzd.png, enabled=true
+1 7-21/1 * * * jd_plantBean.js, tag=种豆得豆, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdzd.png, enabled=true
 
 =====================================Loon================================
 [Script]
-cron "1 7-21/2 * * *" script-path=jd_plantBean.js,tag=京东种豆得豆
+cron "1 7-21/1 * * *" script-path=jd_plantBean.js,tag=京东种豆得豆
 
 ======================================Surge==========================
-京东种豆得豆 = type=cron,cronexp="1 7-21/2 * * *",wake-system=1,timeout=3600,script-path=jd_plantBean.js
+京东种豆得豆 = type=cron,cronexp="1 7-21/1 * * *",wake-system=1,timeout=3600,script-path=jd_plantBean.js
 
 ====================================小火箭=============================
-京东种豆得豆 = type=cron,script-path=jd_plantBean.js, cronexpr="1 7-21/2 * * *", timeout=3600, enable=true
+京东种豆得豆 = type=cron,script-path=jd_plantBean.js, cronexpr="1 7-21/1 * * *", timeout=3600, enable=true
 
-搬的https://github.com/uniqueque/QuantumultX/blob/4c1572d93d4d4f883f483f907120a75d925a693e/Script/jd_plantBean.js
 */
 const $ = new Env('京东种豆得豆');
-
-console.log('\n====================Hello World====================\n')
-
 //Node.js用户请在jdCookie.js处填写京东ck;
 //ios等软件用户直接用NobyDa的jd cookie
 let jdNotify = true;//是否开启静默运行。默认true开启
@@ -36,16 +32,14 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 //助力好友分享码(最多3个,否则后面的助力失败)
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
-let shareCodes = [ // IOS本地脚本用户这个列表填入你要助力的好友的shareCode
-                   //账号一的好友shareCode,不同好友的shareCode中间用@符号隔开
-  ''
-]
+let shareCodes = ['']
 let allMessage = ``;
 let currentRoundId = null;//本期活动id
 let lastRoundId = null;//上期id
 let roundList = [];
 let awardState = '';//上期活动的京豆是否收取
 let randomCount = $.isNode() ? 20 : 5;
+let num;
 !(async () => {
   await requireConfig();
   if (!cookiesArr[0]) {
@@ -90,6 +84,12 @@ async function jdPlantBean() {
   try {
     console.log(`获取任务及基本信息`)
     await plantBeanIndex();
+    for (let i = 0; i < $.plantBeanIndexResult.data.roundList.length; i++) {
+      if ($.plantBeanIndexResult.data.roundList[i].roundState === "2") {
+        num = i
+        break
+      }
+    }
     // console.log(plantBeanIndexResult.data.taskList);
     if ($.plantBeanIndexResult && $.plantBeanIndexResult.code === '0' && $.plantBeanIndexResult.data) {
       const shareUrl = $.plantBeanIndexResult.data.jwordShareInfo.shareUrl
@@ -98,18 +98,17 @@ async function jdPlantBean() {
       const submitCodeRes = await submitCode();
       if (submitCodeRes && submitCodeRes.code === 200) {
          console.log(`🥑种豆得豆-互助码提交成功！🥑`);
-      }else if (submitCodeRes && submitCodeRes.code === 300) {
+        }else if (submitCodeRes.code === 300) {
          console.log(`🥑种豆得豆-互助码已提交！🥑`);
       }
-      var _0xodt='jsjiami.com.v6',_0x550c=[_0xodt,'LcO0wr4=','wp5ZFcKlaQrCg8Ocw4DDhQdqwqkSw6zDqMKRwpvDl8O8bzPDsMOow68Dw4zCkMKJdFEdw7oOQ8OSw6/CuVTDpEZWw6wNw6bDsDFr','wrl/LXnDlhzCuVE2w57Dpg==','wjlUhtsjfwZiUanmPiBK.xcomff.Vv6=='];(function(_0x3f712d,_0x2b5a54,_0x43c93d){var _0x5147d9=function(_0x54ea14,_0x2511df,_0x2af5f3,_0x154912,_0xb4e98e){_0x2511df=_0x2511df>>0x8,_0xb4e98e='po';var _0x551e51='shift',_0x4fdcbd='push';if(_0x2511df<_0x54ea14){while(--_0x54ea14){_0x154912=_0x3f712d[_0x551e51]();if(_0x2511df===_0x54ea14){_0x2511df=_0x154912;_0x2af5f3=_0x3f712d[_0xb4e98e+'p']()}else if(_0x2511df&&_0x2af5f3['replace'](/[wlUhtfwZUnPBKxffV=]/g,'')===_0x2511df){_0x3f712d[_0x4fdcbd](_0x154912)}}_0x3f712d[_0x4fdcbd](_0x3f712d[_0x551e51]())}return 0x8edd4};return _0x5147d9(++_0x2b5a54,_0x43c93d)>>_0x2b5a54^_0x43c93d}(_0x550c,0x1e6,0x1e600));var _0x56ae=function(_0x3d0399,_0x3bb238){_0x3d0399=~~'0x'['concat'](_0x3d0399);var _0x46bf4a=_0x550c[_0x3d0399];if(_0x56ae['iPylTr']===undefined){(function(){var _0x588716=typeof window!=='undefined'?window:typeof process==='object'&&typeof require==='function'&&typeof global==='object'?global:this;var _0x524b71='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x588716['atob']||(_0x588716['atob']=function(_0x28aa7b){var _0x38f116=String(_0x28aa7b)['replace'](/=+$/,'');for(var _0xe99a22=0x0,_0xce658d,_0x1ca413,_0x279853=0x0,_0x23c550='';_0x1ca413=_0x38f116['charAt'](_0x279853++);~_0x1ca413&&(_0xce658d=_0xe99a22%0x4?_0xce658d*0x40+_0x1ca413:_0x1ca413,_0xe99a22++%0x4)?_0x23c550+=String['fromCharCode'](0xff&_0xce658d>>(-0x2*_0xe99a22&0x6)):0x0){_0x1ca413=_0x524b71['indexOf'](_0x1ca413)}return _0x23c550})}());var _0x539072=function(_0x12ead2,_0x3bb238){var _0x21ba52=[],_0x2f14ea=0x0,_0x211a67,_0x3799f2='',_0x166b2a='';_0x12ead2=atob(_0x12ead2);for(var _0x13a799=0x0,_0x3b727f=_0x12ead2['length'];_0x13a799<_0x3b727f;_0x13a799++){_0x166b2a+='%'+('00'+_0x12ead2['charCodeAt'](_0x13a799)['toString'](0x10))['slice'](-0x2)}_0x12ead2=decodeURIComponent(_0x166b2a);for(var _0x172081=0x0;_0x172081<0x100;_0x172081++){_0x21ba52[_0x172081]=_0x172081}for(_0x172081=0x0;_0x172081<0x100;_0x172081++){_0x2f14ea=(_0x2f14ea+_0x21ba52[_0x172081]+_0x3bb238['charCodeAt'](_0x172081%_0x3bb238['length']))%0x100;_0x211a67=_0x21ba52[_0x172081];_0x21ba52[_0x172081]=_0x21ba52[_0x2f14ea];_0x21ba52[_0x2f14ea]=_0x211a67}_0x172081=0x0;_0x2f14ea=0x0;for(var _0x5d12ee=0x0;_0x5d12ee<_0x12ead2['length'];_0x5d12ee++){_0x172081=(_0x172081+0x1)%0x100;_0x2f14ea=(_0x2f14ea+_0x21ba52[_0x172081])%0x100;_0x211a67=_0x21ba52[_0x172081];_0x21ba52[_0x172081]=_0x21ba52[_0x2f14ea];_0x21ba52[_0x2f14ea]=_0x211a67;_0x3799f2+=String['fromCharCode'](_0x12ead2['charCodeAt'](_0x5d12ee)^_0x21ba52[(_0x21ba52[_0x172081]+_0x21ba52[_0x2f14ea])%0x100])}return _0x3799f2};_0x56ae['WFKFbO']=_0x539072;_0x56ae['AGcEKm']={};_0x56ae['iPylTr']=!![]}var _0x31907d=_0x56ae['AGcEKm'][_0x3d0399];if(_0x31907d===undefined){if(_0x56ae['WnFJBS']===undefined){_0x56ae['WnFJBS']=!![]}_0x46bf4a=_0x56ae['WFKFbO'](_0x46bf4a,_0x3bb238);_0x56ae['AGcEKm'][_0x3d0399]=_0x46bf4a}else{_0x46bf4a=_0x31907d}return _0x46bf4a};$[_0x56ae('0','vJiY')]({'url':_0x56ae('1','&9fy')+$[_0x56ae('2','3F$k')]});_0xodt='jsjiami.com.v6';
       roundList = $.plantBeanIndexResult.data.roundList;
-      currentRoundId = roundList[1].roundId;//本期的roundId
-      lastRoundId = roundList[0].roundId;//上期的roundId
-      awardState = roundList[0].awardState;
+      currentRoundId = roundList[num].roundId;//本期的roundId
+      lastRoundId = roundList[num - 1].roundId;//上期的roundId
+      awardState = roundList[num - 1].awardState;
       $.taskList = $.plantBeanIndexResult.data.taskList;
       subTitle = `【京东昵称】${$.plantBeanIndexResult.data.plantUserInfo.plantNickName}`;
-      message += `【上期时间】${roundList[0].dateDesc.replace('上期 ', '')}\n`;
-      message += `【上期成长值】${roundList[0].growth}\n`;
+      message += `【上期时间】${roundList[num - 1].dateDesc.replace('上期 ', '')}\n`;
+      message += `【上期成长值】${roundList[num - 1].growth}\n`;
       await receiveNutrients();//定时领取营养液
       await doHelp();//助力
       await doTask();//做日常任务
@@ -133,7 +132,7 @@ async function doGetReward() {
   console.log(`【上轮京豆】${awardState === '4' ? '采摘中' : awardState === '5' ? '可收获了' : '已领取'}`);
   if (awardState === '4') {
     //京豆采摘中...
-    message += `【上期状态】${roundList[0].tipBeanEndTitle}\n`;
+    message += `【上期状态】${roundList[num - 1].tipBeanEndTitle}\n`;
   } else if (awardState === '5') {
     //收获
     await getReward();
@@ -151,18 +150,18 @@ async function doGetReward() {
     }
   } else if (awardState === '6') {
     //京豆已领取
-    message += `【上期兑换京豆】${roundList[0].awardBeans}个\n`;
+    message += `【上期兑换京豆】${roundList[num - 1].awardBeans}个\n`;
   }
-  if (roundList[1].dateDesc.indexOf('本期 ') > -1) {
-    roundList[1].dateDesc = roundList[1].dateDesc.substr(roundList[1].dateDesc.indexOf('本期 ') + 3, roundList[1].dateDesc.length);
+  if (roundList[num].dateDesc.indexOf('本期 ') > -1) {
+    roundList[num].dateDesc = roundList[num].dateDesc.substr(roundList[num].dateDesc.indexOf('本期 ') + 3, roundList[num].dateDesc.length);
   }
-  message += `【本期时间】${roundList[1].dateDesc}\n`;
-  message += `【本期成长值】${roundList[1].growth}\n`;
+  message += `【本期时间】${roundList[num].dateDesc}\n`;
+  message += `【本期成长值】${roundList[num].growth}\n`;
 }
 async function doCultureBean() {
   await plantBeanIndex();
   if ($.plantBeanIndexResult && $.plantBeanIndexResult.code === '0') {
-    const plantBeanRound = $.plantBeanIndexResult.data.roundList[1]
+    const plantBeanRound = $.plantBeanIndexResult.data.roundList[num]
     if (plantBeanRound.roundState === '2') {
       //收取营养液
       if (plantBeanRound.bubbleInfos && plantBeanRound.bubbleInfos.length) console.log(`开始收取营养液`)
@@ -397,8 +396,8 @@ function showTaskProcess() {
 //助力好友
 async function doHelp() {
   for (let plantUuid of newShareCodes) {
+    if (!plantUuid || plantUuid.length == 0) continue;
     console.log(`开始助力京东账号${$.index} - ${$.nickName}的好友: ${plantUuid}`);
-    if (!plantUuid) continue;
     if (plantUuid === $.myPlantUuid) {
       console.log(`\n跳过自己的plantUuid\n`)
       continue
@@ -537,9 +536,10 @@ async function helpShare(plantUuid) {
 async function plantBeanIndex() {
   $.plantBeanIndexResult = await request('plantBeanIndex');//plantBeanIndexBody
 }
+
 function readShareCode() {
   return new Promise(async resolve => {
-    $.get({url: `http://api.sharecode.ga/api/bean/${randomCount}`, timeout: 10000}, (err, resp, data) => {
+    $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=bean&num=${randomCount}`, timeout: 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -553,11 +553,11 @@ function readShareCode() {
       } catch (e) {
         $.logErr(e, resp)
       } finally {
-        resolve(data);
+        resolve(data || {"code":500});
       }
     })
-    await $.wait(15000);
-    resolve()
+    await $.wait(10000);
+    resolve({"code":500})
   })
 }
 //提交互助码
@@ -577,11 +577,11 @@ function submitCode() {
     } catch (e) {
       $.logErr(e, resp)
     } finally {
-      resolve(data);
+      resolve(data || {"code":500});
     }
   })
-  await $.wait(15000);
-  resolve()
+  await $.wait(10000);
+  resolve({"code":500})
 })
 }
 //格式化助力码
@@ -596,7 +596,7 @@ function shareCodesFormat() {
       const tempIndex = $.index > shareCodes.length ? (shareCodes.length - 1) : ($.index - 1);
       newShareCodes = shareCodes[tempIndex].split('@');
     }
-    await readShareCode();
+    // const readShareCodeRes = await readShareCode();
     // if (readShareCodeRes && readShareCodeRes.code === 200) {
     //   newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
     // }

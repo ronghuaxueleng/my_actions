@@ -1,5 +1,5 @@
 /*
-Last Modified time: 2020-12-26 22:58:02
+Last Modified time: 2021-8-19
 东东工厂，不是京喜工厂
 活动入口：京东APP首页-数码电器-东东工厂
 免费产生的电量(10秒1个电量，500个电量满，5000秒到上限不生产，算起来是84分钟达到上限)
@@ -12,21 +12,19 @@ Last Modified time: 2020-12-26 22:58:02
 ============Quantumultx===============
 [task_local]
 #东东工厂
-10 * * * * jd_jdfactory.js, tag=东东工厂, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_factory.png, enabled=true
+10 * * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js, tag=东东工厂, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_factory.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "10 * * * *" script-path=jd_jdfactory.js,tag=东东工厂
+cron "10 * * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js,tag=东东工厂
 
 ===============Surge=================
-东东工厂 = type=cron,cronexp="10 * * * *",wake-system=1,timeout=3600,script-path=jd_jdfactory.js
+东东工厂 = type=cron,cronexp="10 * * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js
 
 ============小火箭=========
-东东工厂 = type=cron,script-path=jd_jdfactory.js, cronexpr="10 * * * *", timeout=3600, enable=true
+东东工厂 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js, cronexpr="10 * * * *", timeout=3600, enable=true
  */
 const $ = new Env('东东工厂');
-
-console.log('\n====================Hello World====================\n')
 
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -46,7 +44,7 @@ if ($.isNode()) {
 }
 let wantProduct = ``;//心仪商品名称
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-const inviteCodes = [''];
+const inviteCodes = [``];
 let myInviteCode;
 !(async () => {
   await requireConfig();
@@ -452,7 +450,7 @@ function jdfactory_getTaskDetail() {
                   const submitCodeRes = submitCode();
                   if (submitCodeRes && submitCodeRes.code === 200) {
                       console.log(`🏭东东工厂-互助码提交成功！🏭`);
-                  }else if (submitCodeRes && submitCodeRes.code === 300) {
+                  }else if (submitCodeRes.code === 300) {
                       console.log(`🏭东东工厂-互助码已提交！🏭`);
                   }
                 }
@@ -627,7 +625,7 @@ function jdfactory_getHomeData() {
 function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
-    $.get({url: `http://api.sharecode.ga/api/ddfactory/${randomCount}`, timeout: 10000}, (err, resp, data) => {
+    $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=ddfactory&num=${randomCount}`, timeout: 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -641,11 +639,11 @@ function readShareCode() {
       } catch (e) {
         $.logErr(e, resp)
       } finally {
-        resolve(data);
+        resolve(data || {"code":500});
       }
     })
     await $.wait(10000);
-    resolve()
+    resolve({"code":500})
   })
 }
 //提交互助码
@@ -665,11 +663,11 @@ function submitCode() {
     } catch (e) {
       $.logErr(e, resp)
     } finally {
-      resolve(data);
+      resolve(data || {"code":500});
     }
   })
-  await $.wait(15000);
-  resolve()
+  await $.wait(10000);
+  resolve({"code":500})
 })
 }
 //格式化助力码
@@ -684,7 +682,7 @@ function shareCodesFormat() {
       const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
       $.newShareCodes = inviteCodes[tempIndex].split('@');
     }
-    await readShareCode();
+    // const readShareCodeRes = await readShareCode();
     // if (readShareCodeRes && readShareCodeRes.code === 200) {
     //   $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
     // }
