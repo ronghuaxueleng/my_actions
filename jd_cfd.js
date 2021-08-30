@@ -121,7 +121,7 @@ async function cfd() {
   try {
     nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000)
     let beginInfo = await getUserInfo();
-    if (beginInfo.LeadInfo.ddwFundTargTm === 2) {
+    if (beginInfo && beginInfo.LeadInfo && beginInfo.LeadInfo.ddwFundTargTm === 2) {
       console.log(`还未开通活动，尝试初始化`)
       await noviceTask()
       await $.wait(2000)

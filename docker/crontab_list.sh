@@ -393,8 +393,6 @@
 0 9 * * * node /scripts/jdzz.js >> /scripts/logs/jdzz.log 2>&1
 # 导出所有互助码清单，日志在log/export_sharecodes下
 48 5 * * * bash export_sharecodes
-# 京豆变更通知
-5 9 * * * bash jd jd_bean_change
 #拾取好友与自己零件、厂长翻倍任务、点击厂长任务
 0 1,18 * * * node /scripts/jd_factory_component.js >> /scripts/logs/jd_factory_component.log 2>&1
 #财富岛提现
@@ -409,16 +407,6 @@
 1 * * * * node /scripts/jd_cfd_loop.js >> /scripts/logs/jd_cfd_loop.log 2>&1
 # 预存验证
 50 * * * * node /scripts/jd_validate_Worker.js >> /scripts/logs/jd_validate_Worker.log 2>&1
-# 零食街
-10 11 * * * node /scripts/jd_foodRunning.js >> /scripts/logs/jd_foodRunning.log 2>&1
-# 早起福利
-30 6 * * * node /scripts/jd_getUp.js >> /scripts/logs/jd_getUp.log 2>&1
-# 宠汪汪二代目
-15 */2 * * * node /scripts/jd_joy_new.js >> /scripts/logs/jd_joy_new.log 2>&1
-# 发财大赢家
-20 * * * * node /scripts/jd_big_winner.js >> /scripts/logs/jd_big_winner.log 2>&1
-# 发财大赢家助力
-25 * * * * node /scripts/jd_speed_redEnvelope.js >> /scripts/logs/jd_speed_redEnvelope.log 2>&1
 # 京东资产变动通知
 2 9 * * * node /scripts/jd_bean_change.js >> /scripts/logs/jd_bean_change.log 2>&1
 # 领京豆额外奖励
