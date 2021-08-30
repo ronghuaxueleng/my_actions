@@ -44,14 +44,6 @@ jobs:
           cat scripts/docker/crontab_list.sh >> jd_scripts/docker/crontab_list.sh
           cp -rf ./scripts/* ./jd_scripts
           cd ./jd_scripts
-          npm install
-          npm install -g npm npm-install-peers
-          npm install -g ts-node typescript --unsafe-perm=true --allow-root
-          npm install -g ts-node typescript @types/node date-fns axios require tslib fs
-          npm install --save-dev @types/node
-          ls *.ts | xargs tsc
-          rm -rf node_modules
-          rm -rf package-lock.json
           git add .
           git commit --allow-empty -m "up"
           git push
