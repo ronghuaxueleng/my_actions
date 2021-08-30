@@ -65,6 +65,7 @@ jobs:
           cp -f ./my_actions/git_pull.sh ./JD-FreeFuck
           cp -f ./my_actions/shareCode.py ./JD-FreeFuck
           cp -f ./my_actions/shareCode.sh ./JD-FreeFuck
+          cp -f ./my_actions/submitme.sh ./JD-FreeFuck
           cp -f ./my_actions/verificationShareCodeUrl.py ./JD-FreeFuck
           cp -rf ./my_actions/OpenCard ./JD-FreeFuck/
           cp -rf ./my_actions/docker/docker-entrypoint.sh ./JD-FreeFuck/docker/
