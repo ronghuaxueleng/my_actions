@@ -50,30 +50,15 @@ jobs:
       - name: 开始同步
         run: |
           shopt -s extglob
-          git clone -b master git@jd_base_gitee:supermanito/jd_base.git JD-FreeFuck
+          git clone -b main git@jd_base_gitee:supermanito/jd_base.git JD-FreeFuck
           cd JD-FreeFuck
           rm -rf .git
           rm -rf .github
           rm -rf .gitignore
-          rm -rf git_pull.sh
           sed -i 's/useradmin/admin/' jd.sh
           sed -i 's/supermanito/admin/' jd.sh
           cd ../
           git clone git@jd_scripts_githup:ronghuaxueleng/my_actions.git
-          cp -rf ./my_actions/sample ./JD-FreeFuck/
-          cp -f ./my_actions/jd.sh ./JD-FreeFuck
-          cp -f ./my_actions/git_pull.sh ./JD-FreeFuck
-          cp -f ./my_actions/shareCode.py ./JD-FreeFuck
-          cp -f ./my_actions/shareCode.sh ./JD-FreeFuck
-          cp -f ./my_actions/submitme.sh ./JD-FreeFuck
-          cp -f ./my_actions/verificationShareCodeUrl.py ./JD-FreeFuck
-          cp -rf ./my_actions/OpenCard ./JD-FreeFuck/
-          cp -rf ./my_actions/docker/docker-entrypoint.sh ./JD-FreeFuck/docker/
-          cp -rf ./my_actions/docker/requirements.txt ./JD-FreeFuck/docker/
-          cp -rf ./my_actions/docker/refresh.sh ./JD-FreeFuck/docker/
-          cp -rf ./my_actions/docker/install_env.sh ./JD-FreeFuck/docker/
-          cp -rf ./my_actions/docker/ext_crontab_list.sh ./JD-FreeFuck/docker/
-          cp -f ./my_actions/buildScripts.sh ./
           cd ./my_actions
           git checkout source
           rm -rf !(.git | .githup)
