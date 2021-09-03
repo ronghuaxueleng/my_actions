@@ -60,7 +60,7 @@ jobs:
           cd ../
           git clone git@jd_scripts_githup:ronghuaxueleng/my_actions.git
           cd ./my_actions
-          git checkout source
+          git checkout source0904
           rm -rf !(.git | .githup)
           cd ../
           cp -rf ./JD-FreeFuck/* ./my_actions
