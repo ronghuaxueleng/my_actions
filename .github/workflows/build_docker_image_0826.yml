@@ -1,0 +1,17 @@
+name: "构建Docker镜像"
+on:
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: 构建Github镜像
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@master
+      - name: docker build and push
+        run: |
+          cd docker
+          docker login docker.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} 
+          docker build -t ronghuaxueleng/jd:0826 .
+          docker push ronghuaxueleng/jd:0826
