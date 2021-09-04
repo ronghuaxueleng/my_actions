@@ -33,7 +33,6 @@ let shopname = ''
 const token = [
   'CDC56C42F64CA34677E5894F28AF4871',//每日，100分；1天，200分、2豆；2天，1000分、25-3券；
   "A0F78AB303FAB2F731115934FAAFA5AF",//1天，20豆；7天，50豆；
-  "380E6F754F12D6461DF15ED4B0908375",//1天，10豆；5天，100豆；
 ]
 //IOS等用户直接用NobyDa的jd cookie
 
