@@ -395,7 +395,7 @@ function Update_Own_Raw() {
             [ -f "$RawDir/${raw_file_name[$i]}.new" ] && rm -f "$RawDir/${raw_file_name[$i]}.new"
         fi
     done
-    for file in $(ls $RawDir); do
+    for file in $(ls $RawDir | egrep -v "jdCookie.js|USER_AGENTS.js|sendNotify.js|node_modules|package"); do
         rm_mark="yes"
         for ((i = 0; i < ${#raw_file_name[*]}; i++)); do
             if [[ $file == ${raw_file_name[$i]} ]]; then
