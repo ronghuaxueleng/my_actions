@@ -18,7 +18,7 @@ cd $JD_DIR
 crond
 sleep 1
 git fetch --all
-git reset --hard origin/main
+git reset --hard origin/source0904
 bash update.sh
 echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➀ 同步最新源码结束 -----\n"
 
