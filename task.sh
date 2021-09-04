@@ -555,6 +555,7 @@ function Cookies_Control() {
             Import_Config updateCookies
             Update_Crontab
             Count_UserSum
+            FileName="updateCookies"
             LogPath="$LogDir/${FileName}"
             Make_Dir ${LogPath}
             echo -e "\n$WORKING 正在依次更新中，请耐心等待所有任务执行完毕..."
