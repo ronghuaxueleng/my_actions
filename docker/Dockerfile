@@ -14,7 +14,7 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
     && apk update -f \
     && apk upgrade \
-    && apk --no-cache ca-certificates add -f coreutils \
+    && apk --no-cache ca-certificates add -f bash coreutils \
         moreutils \
         diffutils \
         git \

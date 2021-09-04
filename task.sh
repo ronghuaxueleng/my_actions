@@ -555,8 +555,7 @@ function Cookies_Control() {
             Import_Config updateCookies
             Update_Crontab
             Count_UserSum
-            FileName="updateCookies"
-            LogPath="$LogDir/${FileName}"
+            LogPath="$LogDir/updateCookies"
             Make_Dir ${LogPath}
             echo -e "\n$WORKING 正在依次更新中，请耐心等待所有任务执行完毕..."
             for ((UserNum = 1; UserNum <= ${UserSum}; UserNum++)); do
@@ -565,12 +564,12 @@ function Cookies_Control() {
                 done
                 AccountNum=Cookie$UserNum
                 export JD_COOKIE=${!AccountNum}
-                LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S").log"
+                LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_$UserNum.log"
                 cd $PanelDir
                 node updateCookies.js &>>${LogFile} &
                 wait
+                grep "Cookie =>" ${LogFile}
             done
-            cat ${LogFile}
             echo -e "$COMPLETE 更新完成\n"
         fi
         ;;

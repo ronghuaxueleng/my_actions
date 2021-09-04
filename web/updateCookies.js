@@ -5,7 +5,7 @@ const notify = $.isNode() ? require('../scripts/sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('../utils/jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], message = '', successCount = 0, accounts = {}, accountsList = [], newAccountsList = [],
+let cookiesArr = [], message = '', successCount = 0, accountsList = [], newAccountsList = [],
     signJsonFileCount = 5, signList = [], signServerUrl = "";
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -16,10 +16,11 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-let UA = `okhttp/3.12.1;jdmall;android;version/10.1.2;build/89743;screen/1080x2206;os/11;network/wifi;`
-let configShPath = "../config/config.sh";
-let accountPath = "../config/account.json";
-let signPath = "../utils/sign/";
+
+let UA = `okhttp/3.12.1;jdmall;android;version/10.1.2;build/89743;screen/1080x2206;os/11;network/wifi;`;
+const configShPath = "../config/config.sh";
+const accountPath = "../config/account.json";
+const signPath = "../utils/sign/";
 const sleep = (ms) => {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
@@ -37,12 +38,9 @@ const sleep = (ms) => {
         loadLocalSign();
     }
     loadAccount();
-    parseAccountToObj(accountsList);
     for (const cookie of cookiesArr) {
         await updateCookies(cookie)
     }
-    saveAccount();
-    message += `\nCookies 定时更新执行成功,共更新${successCount}个cookie`;
     $.msg($.name, 'Cookies更新结果:', message);
     // if ($.isNode() && message) {
     //     await notify.sendNotify(`${$.name}`, `${message}`)
@@ -59,31 +57,30 @@ const sleep = (ms) => {
 
 async function updateCookies(cookie) {
     let pt_pin  = cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1];
-    let account = {pt_pin: pt_pin, ws_key: "", remarks: pt_pin};
-    if (accounts.hasOwnProperty(pt_pin)) {
-        let obj = accounts[pt_pin];
-        if (obj.remarks && obj.remarks !== "") account.remarks = obj.remarks;
-        account.ws_key = obj.ws_key;
-        if (account.ws_key && account.ws_key !== "") {
-            let success = false;
-            let ck = await getCkByWsKey(account);
-            if(ck !== ''){
-                let checkResult = await checkCookie(ck);
-                if(checkResult){
-                    success = await updateLocalCookie(ck);
-                    successCount ++;
-                    message += `Cookie [remarks=${account.remarks}] ${success ? '更新成功' : '更新失败'}\n`;
-                }else if(!checkResult){
-                    message += `Cookie [remarks=${account.remarks}] 生成的cookie已失效\n`;
+    //let account = {pt_pin: pt_pin, ws_key: "", remarks: pt_pin};
+    for (const account of accountsList) {
+        if(pt_pin === account.pt_pin){
+            let headerMsg = `Cookie => [remarks=${decodeURIComponent(account.remarks)}] `;
+            if (account.ws_key && account.ws_key !== "") {
+                let success = false;
+                let ck = await getCkByWsKey(account);
+                if(ck !== ''){
+                    let checkResult = await checkCookie(ck);
+                    if(checkResult){
+                        success = await updateLocalCookie(ck);
+                        successCount ++;
+                        message += `${headerMsg} ${success ? '更新成功' : '更新失败'}\n`;
+                    }else if(!checkResult){
+                        message += `${headerMsg} 生成的cookie已失效\n`;
+                    }
+                }else {
+                    message += `${headerMsg} 更新失败,请检查ws_key是否正确}\n`;
                 }
-            }else {
-                message += `Cookie [remarks=${account.remarks}] 更新失败,请检查ws_key是否正确}\n`;
+            } else {
+                message += `${headerMsg} 未设置ws_key不更新\n`;
             }
-        } else {
-            message += `Cookie [remarks=${account.remarks}] 未设置ws_key不更新\n`;
         }
     }
-    newAccountsList.push(account)
 }
 
 async function getCkByWsKey(account) {
@@ -102,13 +99,6 @@ function loadAccount() {
     }
 }
 
-function saveAccount() {
-    try {
-        fs.writeFileSync(accountPath, JSON.stringify(newAccountsList, null, 2));
-    } catch (e) {
-        console.log(e)
-    }
-}
 
 function random(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -148,11 +138,7 @@ function getSign() {
     })
 }
 
-function parseAccountToObj(accountsList = []) {
-    accountsList.map((item) => {
-        accounts[item['pt_pin']] = item;
-    })
-}
+
 
 async function checkCookie(cookie) {
     //console.log(ws_Key,pt_pin,sign)
@@ -209,7 +195,6 @@ async function getJDCookie(pt_pin,tokenKey) {
                 url: `https://un.m.jd.com/cgi-bin/app/appjmp?tokenKey=${tokenKey}&to=https%3A%2F%2Fhome.m.jd.com%2FmyJd%2Fnewhome.action`,
                 method: 'GET',
                 headers: {
-                    Connection: 'Keep-Alive',
                     'Content-Type': 'application/x-www-form-urlencoded',
                     Accept: 'application/json, text/plain, */*',
                     'Accept-Language': 'zh-cn',
@@ -217,17 +202,17 @@ async function getJDCookie(pt_pin,tokenKey) {
                 },
                 followRedirect: false,
             }, async function (error, response, body) {
-                    try {
-                        const cookies = setCookie(response);
-                        const ck = {};
-                        cookies.filter((o) => o.name === 'pt_key' || o.name === 'pt_pin')
-                            .forEach((o) => {
-                                ck[o.name] = o.value;
-                            });
-                        resolve(`pt_key=${ck.pt_key};pt_pin=${pt_pin};`);
-                    } catch (error) {
-                        resolve('');
-                    }
+                try {
+                    const cookies = setCookie(response);
+                    const ck = {};
+                    cookies.filter((o) => o.name === 'pt_key' || o.name === 'pt_pin')
+                        .forEach((o) => {
+                            ck[o.name] = o.value;
+                        });
+                    resolve(`pt_key=${ck.pt_key};pt_pin=${pt_pin};`);
+                } catch (error) {
+                    resolve('');
+                }
 
             }
         );

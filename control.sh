@@ -206,7 +206,7 @@ function Panel_Control() {
         ;;
     respwd)
         cp -f $FileAuthSample $FileAuth
-        echo -e "\n$COMPLETE 已重置控制面板的用户名和登录密码\n\n[用户名]： admin\n[密  码]： admin\n"
+        echo -e "\n$COMPLETE 已重置控制面板的用户名和登录密码\n\n[用户名]： useradmin\n[密  码]： supermanito\n"
         ;;
     esac
     [ -f $FilePm2List ] && rm -rf $FilePm2List
@@ -382,7 +382,7 @@ function Check_Files() {
         cp -fv $FileConfSample $FileConfUser
         echo -e "检测到 $ConfigDir 目录下不存在 config.sh 配置文件，已生成...\n"
     fi
-    JsonFiles="auth.json bot.json account.json"
+    JsonFiles="auth.json bot.json account.json account.db"
     for file in $JsonFiles; do
         if [ ! -s "$ConfigDir/$file" ]; then
             cp -fv "$SampleDir/$file" "$ConfigDir/$file"
