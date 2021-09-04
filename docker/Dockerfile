@@ -36,7 +36,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && npm config set registry https://registry.npm.taobao.org \
     && cd ${JD_DIR}/docker \
     && pip3 install -r requirements.txt \
-    && RUN ln -sf /usr/bin/python3 /usr/bin/python \
+    && /usr/bin/python3 -m pip install --upgrade pip \
+    && ln -sf /usr/bin/python3 /usr/bin/python \
     && npm install -g pm2 \
     && rm -rf /root/.npm \
     && touch ${JD_DIR}/runall.sh \
