@@ -63,6 +63,11 @@ jobs:
           sed -i 's/supermanito/admin/' utils/init.sh
           cd ../
           git clone git@jd_scripts_githup:ronghuaxueleng/my_actions.git
+          cp -rf ./my_actions/docker ./JD-FreeFuck/
+          cp -rf ./my_actions/OpenCard ./JD-FreeFuck/
+          cp -rf ./my_actions/utils ./JD-FreeFuck/
+          cp -f ./my_actions/*.sh ./JD-FreeFuck
+          cp -f ./my_actions/*.py ./JD-FreeFuck
           cd ./my_actions
           git checkout source0904
           rm -rf !(.git | .githup)

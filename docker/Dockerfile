@@ -1,9 +1,9 @@
 FROM dreamacro/clash as clash
 
-FROM node:lts-alpine
+FROM mitmproxy/mitmproxy:6.0.2
 LABEL maintainer="jishuixiansheng"
 ARG JD_BASE_URL=https://gitee.com/getready/my_actions.git
-ARG JD_BASE_BRANCH=source
+ARG JD_BASE_BRANCH=source0904
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     LANG=zh_CN.UTF-8 \
     SHELL=/bin/bash \
@@ -14,42 +14,44 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
     && apk update -f \
     && apk upgrade \
-    && apk --no-cache ca-certificates add -f bash \
-                             coreutils \
-                             moreutils \
-                             git \
-                             wget \
-                             curl \
-                             nano \
-                             tzdata \
-                             perl \
-                             openssl \
-                             openssh \
-			     jq \
-			     python3 py3-pip \
-    && rm -rf /var/cache/apk/* \
+    && apk --no-cache ca-certificates add -f coreutils \
+        moreutils \
+        diffutils \
+        git \
+        wget \
+        curl \
+        nano \
+        vim \
+        make \
+        procps \
+        tzdata \
+        perl \
+        openssh-client \
+        ttyd \
+        nodejs-lts \
+        npm \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && git clone -b ${JD_BASE_BRANCH} ${JD_BASE_URL} ${JD_DIR} \
     && yarn config set registry https://registry.npm.taobao.org \
     && cd ${JD_DIR}/docker \
     && pip3 install -r requirements.txt \
-    && cd ${JD_DIR}/panel \
+    && RUN ln -sf /usr/bin/python3 /usr/bin/python \
     && npm install -g pm2 \
-    && npm install -g npm npm-install-peers \
-    && npm install -g ts-node typescript --unsafe-perm=true --allow-root \
-    && npm install -g ts-node typescript @types/node date-fns axios require tslib fs crypto-js ts-md5 dotenv \
-    && npm install \
-    && npm install --save-dev @types/node \
-    && touch ${JD_DIR}/run_all.sh \
-    && ln -sf ${JD_DIR}/run_all.sh /usr/local/bin/run_all \
-    && ln -sf ${JD_DIR}/jd.sh /usr/local/bin/jd \
-    && ln -sf ${JD_DIR}/git_pull.sh /usr/local/bin/git_pull \
-    && ln -sf ${JD_DIR}/rm_log.sh /usr/local/bin/rm_log \
-    && ln -sf ${JD_DIR}/export_sharecodes.sh /usr/local/bin/export_sharecodes \
-    && cp -f ${JD_DIR}/docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh \
-    && chmod 777 /usr/local/bin/docker-entrypoint.sh \
-    && chmod 777 ${JD_DIR}/* && rm -rf /tmp/* \
+    && rm -rf /root/.npm \
+    && touch ${JD_DIR}/runall.sh \
+    && ln -sf ${JD_DIR}/runall.sh /usr/local/bin/runall \
+    && ln -sf ${JD_DIR}/task.sh /usr/local/bin/task \
+    && ln -sf ${JD_DIR}/task.sh /usr/local/bin/jtask \
+    && ln -sf ${JD_DIR}/task.sh /usr/local/bin/mtask \
+    && ln -sf ${JD_DIR}/task.sh /usr/local/bin/otask \
+    && ln -sf ${JD_DIR}/control.sh /usr/local/bin/taskctl \
+    && ln -sf ${JD_DIR}/code.sh /usr/local/bin/code \
+    && ln -sf ${JD_DIR}/update.sh /usr/local/bin/update \
+    && chmod 777 /usr/local/bin/* \
+    && chmod 777 ${JD_DIR}/* \
+    && rm -rf /tmp/* \
+    && rm -rf /var/cache/apk/* \
     && rm -rf /root/.npm \
     && rm -rf ${JD_DIR}/docker
 WORKDIR ${JD_DIR}
@@ -63,4 +65,4 @@ RUN chmod 777 /root/.config/clash/refresh.sh
 ADD ./ll /bin/ll 
 RUN chmod +x /bin/ll
 
-ENTRYPOINT docker-entrypoint.sh
+ENTRYPOINT ${JD_DIR}/utils/init.sh
