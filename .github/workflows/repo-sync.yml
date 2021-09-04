@@ -55,8 +55,12 @@ jobs:
           rm -rf .git
           rm -rf .github
           rm -rf .gitignore
-          sed -i 's/useradmin/admin/' jd.sh
-          sed -i 's/supermanito/admin/' jd.sh
+          sed -i 's/useradmin/admin/' control.sh
+          sed -i 's/supermanito/admin/' control.sh
+          sed -i 's/useradmin/admin/' sample/auth.json
+          sed -i 's/supermanito/admin/' sample/auth.json
+          sed -i 's/useradmin/admin/' utils/init.sh
+          sed -i 's/supermanito/admin/' utils/init.sh
           cd ../
           git clone git@jd_scripts_githup:ronghuaxueleng/my_actions.git
           cd ./my_actions
