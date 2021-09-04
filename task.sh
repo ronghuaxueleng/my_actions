@@ -550,7 +550,28 @@ function Cookies_Control() {
             git reset --hard origin/master >/dev/null
         fi
         ## 执行脚本
-        [ -f $FileUpdateCookie ] && Run_Normal $FileUpdateCookie now
+        if [ -f $FileUpdateCookie ]; then
+            local UserNum AccountNum
+            Import_Config updateCookies
+            Update_Crontab
+            Count_UserSum
+            LogPath="$LogDir/${FileName}"
+            Make_Dir ${LogPath}
+            echo -e "\n$WORKING 正在依次更新中，请耐心等待所有任务执行完毕..."
+            for ((UserNum = 1; UserNum <= ${UserSum}; UserNum++)); do
+                for num in ${TempBlockCookie}; do
+                    [[ $UserNum -eq $num ]] && continue 2
+                done
+                AccountNum=Cookie$UserNum
+                export JD_COOKIE=${!AccountNum}
+                LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S").log"
+                cd $PanelDir
+                node updateCookies.js &>>${LogFile} &
+                wait
+            done
+            cat ${LogFile}
+            echo -e "$COMPLETE 更新完成\n"
+        fi
         ;;
     esac
 }
