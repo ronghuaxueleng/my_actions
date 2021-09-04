@@ -1,8 +1,6 @@
 name: "构建Docker镜像0826"
 on:
   workflow_dispatch:
-    branches:
-      - new0826  # 指定了用于部署的源码所在的分支
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,6 +8,8 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@master
+        with: 
+          repository: my_actions/new0826
       - name: docker build and push
         run: |
           cd docker
