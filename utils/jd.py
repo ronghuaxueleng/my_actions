@@ -1,8 +1,8 @@
 import re
 
-from db import Jd
-from logger import logger
-from utils import send_message
+from utils.db import Jd
+from utils.logger import logger
+from utils.utils import send_message
 
 is_legal_header_name = re.compile(rb'[^:\s][^:\r\n]*').fullmatch
 
