@@ -7,7 +7,7 @@ jobs:
     name: 构建Github镜像
     steps:
       - name: Checkout source
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
         with: 
           repository: ronghuaxueleng/my_actions
           path: new0826
