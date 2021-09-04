@@ -1,2 +1,0 @@
-Telethon==1.21.1
-PySocks==1.7.1

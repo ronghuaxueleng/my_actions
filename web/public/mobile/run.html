@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>快速执行 · 控制面板移动端</title>
+    <script type="text/javascript" src="../js/third/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror.min.js"></script>
+    <script type="text/javascript" src="../js/page/shell.js"></script>
+    <script type="text/javascript" src="../js/third/sweetalert2.js"></script>
+    <script type="text/javascript" src="../js/third/prefixfree.min.js"></script>
+    <script type="text/javascript" src="../js/page/mobile/mmenu-light.js"></script>
+    <script type="text/javascript" src="../js/third/multiFunctionSelect.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/mobile-nav.css" />
+    <link rel="stylesheet" type="text/css" href="../css/codemirror.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/codemirror-theme.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="icon" type="image/x-icon" href="../icon/running_joy.gif" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="diffs">
+            <nav id="mobile-menu"></nav>
+
+            <div>
+                <div class="new header">
+                    <header>
+                        <div class="mobile-nav-button">
+                            <a href="#menu" style="color:white; text-decoration:none;"><span> <i
+                                        class="fa fa-indent"></i></span></a>
+                        </div>
+                        <h1>快速执行</h1>
+                        <div class="multi-button">
+                            <button id="wrap">
+                                <i class="fa fa-exchange"></i>
+                                <span class="animate-normal">切换换行</span>
+                            </button>
+                            <button id="move-bottom">
+                                <i class="fa fa-arrow-circle-o-down"></i>
+                                <span class="animate-normal">跳转底部</span>
+                            </button>
+                            <button class="cmd-btn" data-cmd="task list" data-name="list" data-refresh-log="false">
+                                <i class="fa fa-list-alt"></i>
+                                <span class="animate-normal">列出脚本</span>
+                            </button>
+                            <button class="cmd-btn" data-cmd="update 2>&1 | tee -a log/update.log" data-name="update">
+                                <i class="fa fa-rotate-left"></i>
+                                <span class="animate-normal">更新脚本</span>
+                            </button>
+                        </div>
+                    </header>
+                </div>
+                <div class="run run-mobile">
+                    <div>
+                        <div class="selectSearchArea">
+                            <input class="jdScript coco-input" type="text" placeholder="请输入脚本名称"
+                                   required/>
+                        </div>
+                        <button id="runCmd" class="btn btn-primary btn-ghost btn-shine submit" type="submit" title="jtask <xxx> now"><i class="fa fa-rocket"></i> 执行</button>
+                    </div>
+                    <div class="fast-run">
+                        <button class="cmd-btn btn btn-primary btn-ghost btn-shine" data-cmd="bash task jd_bean_change now" data-name="jd_bean_change">
+                            <i class="fa fa-bell"></i> 京豆变动
+                        </button>
+                        <button class="cmd-btn btn btn-primary btn-ghost btn-shine" data-cmd="bash task ps" data-name="ps" data-refresh-log="false">
+                            <i class="fa fa-tasks"></i> 查看进程
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper">
+                <textarea id="code" name="code" readonly="readonly"></textarea>
+            </div>
+
+        </div>
+    </div>
+    <script type="text/javascript" src="../js/page/mobile/mobile-nav.js"></script>
+    <script type="text/javascript" src="../js/page/common/common.js"></script>
+    <script type="text/javascript" src="../js/page/run.js"></script>
+</body>
+
+</html>

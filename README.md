@@ -1,266 +1,263 @@
-## 《群规》
-__ㅤ修订日期：2021 年 5 月 8 日__
+# 《使用教程》
+- __修订日期：2021 年 9 月 4 日__
 
-1. 本群为技术交流群，请不要发送、分享任何与涉黄、政治相关的内容或信息。
-2. 任何人不得转发、分享群内资源以及相关信息，若发现大规模传播将删库跑路。
-3. 群内成员不得对外泄露关于群内资源的任何信息，如有在其它群组发现直接封禁。
-4. 本群内部资源仅供内部使用，如果您不使用请自行退群，v4新版除外，谢谢配合。
-
-ㅤ★ 如有问题请先仔细查看文档，解决不了再@作者寻求帮助，看到后会回复的，请勿私聊。\
-ㅤ★ 群内可随意自由讨论除敏感限制话题外的任何内容，不带节奏即可。\
-ㅤ★ 请大家遵守上述规定，谨慎发言低调使用，谢谢配合！
-ㅤ
-ㅤ
-# 《使用与更新》教程
-## 修订日期：2021 年 5 月 24 日
-ㅤ
-## 一、基础使用教程
+## 容器基础教程：
 >附：[Docker 容器基础使用教程](https://www.runoob.com/docker/docker-container-usage.html)
 
+***
 
-#### 1. 容器的进入与退出：
-- 进入容器
-
-      docker exec -it jd bash
-- 退出容器
-
-      exit
-> _ㅤ注意：1. 大部分命令都可在容器外部执行，但部分复杂命令只能在容器内执行，注意区分下面教程的命令执行位置。_\
-> _ㅤㅤㅤㅤ2. 如果您修改了默认的容器名称，当使用下面所有的命令时则需要将 `jd`替换为新的名称。_\
-> _ㅤㅤㅤㅤ3. 下面的命令中如果前面加上了 `docker exec -it jd` 则表示在容器外部运行此命令。_\
-> _ㅤㅤㅤㅤ4. 例如 `docker exec -it newname bash jd.sh xxx now` ，也可使用 `容器ID`代替。_
+ㅤ
+## 一、基础使用教程
+### 1. 执行特定脚本：
+    task <name/path> now
+> _注意：1. `name` 为脚本名（仅限scripts目录）、`path` 脚本的相对路径或绝对路径。_\
+> _ㅤㅤㅤ2. 依次执行，无论是否设置了随机延迟，均立即运行，前台会输出日志，同时记录在日志文件中。_\
+> _ㅤㅤㅤ3. 可通过下面教程中的 `task list` 命令具体查看本地有哪些可以执行的活动脚本。_
 
 
-#### 2. 手动运行一键脚本开始您的薅羊毛行为：
-- 进入容器
-
-      docker exec -it jd bash
-
-- 执行一键脚本
-
-      source run_all.sh 或 . run_all.sh
-> _ㅤ注意：1. 此脚本的作用为执行所有活动脚本，共有高达几十个活动脚本，时间较长且与账号数量成正比。_\
-> _ㅤㅤㅤㅤ2. 除手动运行活动脚本外该项目还会通过定时的方式自动执行活动脚本，可通过日志查看运行记录。_\
-> _ㅤㅤㅤㅤ3. 执行此脚本后无需守在电脑旁，会自动在最后无限制运行挂机活动脚本，直到您手动停止运行为止。_
-- 退出容器
-
-      exit
-
-
-#### 3. 一键更新脚本：
-    docker exec -it jd bash git_pull.sh
+### 2. 更新全部脚本：
+    update 或 update all
 > _注意：每次使用前请执行此命令，确保使用最新的项目脚本和活动脚本，此脚本也配置了定时任务可自动执行。_
 
-> 常见报错：\
-> 提示 `Repository more than 5 connections` 是由于 `Gitee` 限制了每秒同时拉取项目的IP不能超过 `5` 个所导致，此报错为正常现象，重新执行更新命令即可。\
-> 提示 `ssh: connect to host gitee.com port 22: Connection timed out` 是由于您使用平台的 `22` 端口不可用所导致，自行解决处理。\
-> 提示 `Could not resolve hostname gitee.com: Temporary failure in name resolution lost connection` 是由于无法解析到 `Gitee` 服务器地址所导致，表明网络环境异常，自行解决处理。
+> _更新仓库时的常见报错：_\
+> _提示 `Repository more than 5 connections` 是由于 `Gitee` 限制了每秒同时拉取项目的IP不能超过 `5` 个所导致，此报错为正常现象，重新执行更新命令即可。_\
+> _提示 `ssh: connect to host gitee.com port 22/443: Connection timed out` 是由于您使用平台的 `22/443` 端口不可用所导致，自行解决处理。_\
+> _提示 `Could not resolve hostname gitee.com: Temporary failure in name resolution lost connection` 是由于无法解析到 `Gitee` 服务器，表明网络环境异常，自行解决处理。_
 
 
-#### 4. 执行特定活动脚本：
-    docker exec -it jd bash jd.sh xxx      # 如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数
-    docker exec -it jd bash jd.sh xxx now  # 无论是否设置了随机延迟，均立即运行
-> _注意：具体查看活动脚本列表可通过命令 `docker exec -it jd bash jd.sh` 查看， `xxx` 为脚本名。_
+### 3. 查看本地脚本清单：
+    task list
 
 
-#### 5. 使用 Diy 自定义脚本扩展活动脚本数量：
-- 使用需知
+### 4. 查看命令帮助：
+    task
+> _注意：所有的使用命令都在其中，并且针对不同架构的设备做了特殊处理。_
 
-      1. 此脚本的用途为添加第三方作者编写的活动脚本到项目中
-      2. 您必须使用本项目中的模板文件根据教程说明自己动手编写
-      3. 您还可以将自制的 Diy 脚本上传至您的仓库并使用自动同步功能
-- 启用该功能
-
-      docker exec -it jd cp -f sample/diy.sh.sample config/diy.sh
-      docker exec -it jd sed -i 's/EnableExtraShell=""/EnableExtraShell="true"/g' config/config.sh
-- 启用自动同步功能（选择）
-
-      docker exec -it jd sed -i 's/EnableExtraShellUpdate=""/EnableExtraShellUpdate="true"/g' config/config.sh
-> _注意：启用该功能后便可直接下载或同步更新本项目中的 Diy 脚本，同时代表每次更新时会覆盖您本地编写的内容。_
-
-#### 6. 查看帮助文档：
-    docker exec -it jd cat README.md
-> _注意：此文档为《使用与更新》教程，即当前页面内容，跟随项目同步更新。_
 
 ***
 
 ㅤ
 ## 二、高阶使用教程
-#### 1. 获取互助码：
-    docker exec -it jd bash jd.sh get_share_code now
+### 1. 并发执行：
+    task <name/path> conc
+> _注意：并发执行非常消耗资源，不要盲目使用尤其是0点，否则资源占满导致终端连不上后只能物理重启。_
 
 
-#### 2. 格式化导出互助码：
-    docker exec -it jd bash export_sharecodes.sh
-> _注意：其原理是从各个活动脚本的日志中获取，只有运行完所有活动脚本后才可使用。_
+### 2. 延迟执行
+    task <name/path>
+> _注意：如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数。_
 
 
-#### 3. 配置互助码与相互助力：
-> 填法示例：
-> 
-> ################################## 1. 定义东东农场互助（选填） ##################################
-> 
-> MyFruit1="xxxxxxxxxxxxxxxxxxxxxxxxx"\
-> MyFruit2="xxxxxxxxxxxxxxxxxxxxxxxxx"\
-> MyFruitA=""\
-> MyFruitB=""
-> 
-> ForOtherFruit1="${MyFruit1}@${MyFruit2}"
-> ForOtherFruit2="${MyFruit1}@${MyFruit2}"
->
-> 
-> ################################## 2. 定义东东萌宠互助（选填） ##################################
-> 
-> MyPet1="xxxxxxxxxxxxxxxxxxxxxxxxx"\
-> MyPet2="xxxxxxxxxxxxxxxxxxxxxxxxx"\
-> MyPet3="xxxxxxxxxxxxxxxxxxxxxxxxx"\
-> MyPet4="xxxxxxxxxxxxxxxxxxxxxxxxx"\
-> MyPet5="xxxxxxxxxxxxxxxxxxxxxxxxx"\
-> MyPet6="xxxxxxxxxxxxxxxxxxxxxxxxx"\
-> MyPetA=""\
-> MyPetB=""
-> 
-> ForOtherPet1="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"\
-> ForOtherPet2="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"\
-> ForOtherPet3="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"\
-> ForOtherPet4="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"\
-> ForOtherPet5="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"\
-> ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
+### 3. 指定执行：
+    task <name/path> <num>
+> _注意：指定某账号单独运行脚本，num为某 Cookie 账号在配置文件中的具体编号。_
 
 
-#### 4. 提交您的互助码到公共库（Telegram Bot）：
-> Telegram Bot：  
-> @TuringLabbot   https://t.me/TuringLabbot
-> @LvanLamCommitCodeBot   https://t.me/LvanLamCommitCodeBot
-> 
-> 【随机互助Bot使用规则】
-> 1.用/Start开启bot 用/help获取帮助
-> 2.支持互助码批量提交(使用 & 隔开)每周期内最多提交同一活动5个互助码，尽量错峰提交。频繁提交，一经发现永 ban ！
-> 3.每个月1号，8号，16号，24号凌晨2点清理一次数据库，清理后需重新在Bot提交互助码。
-> 
-> 下面是提交格式
-> 
-> Turing Lab Bot：
-> 
-> ## 东东农场
-> /submit_activity_codes farm &&&&
-> ## 东东萌宠
-> /submit_activity_codes pet &&&&
-> ## 种豆得豆
-> /submit_activity_codes bean &&&&
-> ## 东东工厂
-> /submit_activity_codes ddfactory &&&&
-> ## 京喜工厂
-> /submit_activity_codes jxfactory &&&&
-> ## 闪购盲盒
-> /submit_activity_codes sgmh &&&&
-> ## 京喜财富岛
-> /submit_activity_codes jxcfd &&&&
-> ## 东东健康社区
-> /submit_activity_codes health &&&&
-> 
-> Commit Code Bot：
-> 
-> ## 京东赚赚
-> /jdzz &&&&
-> ## 疯狂的JOY
-> /jdcrazyjoy &&&&
-> ## 签到领现金
-> /jdcash &&&&
-> 
-> ## 格式示例（已 & 划分开每个互助码）：
-> /submit_activity_codes farm 123456&000000&abcde&ABCDE&123ABC
-
-> _注意：此公共库由活动脚本作者 `lxk0301` 大佬开发并维护，用于活动间的相互助力以解决助力机会和被助力次数不足的问题，此库定时清空且名额有限，具体提交教程详见回复信息。_
+### 4. 远程执行：
+    task <url> raw
+> _注意：拉取位于远程仓库的脚本后并执行，url为链接地址，可选参数(加在末尾)：-p 使用代理([Ghproxy](https://ghproxy.com))、-c 并发执行。_
 
 
-#### 5. 启动/重启后台运行挂机活动脚本程序：
-    docker exec -it jd bash jd.sh hangup
-> _注意：当有新的账号添加后必须重启此程序，否则此程序将继续执行之前配置文件中的账号。_
+### 5. 迅速执行：
+    task <name> rapid
+> _注意：此功能不会组合互助码变量，最大化降低脚本执行前耗时，主要适用于抢兑类脚本，可选参数(加在末尾)：-c 并发执行。_
 
 
-#### 6. 停止后台运行挂机活动脚本程序：
-    docker exec -it jd pm2 stop jd_crazy_joy_coin
+### 6. 终止执行：
+    task <name/path> pkill
+> _注意：根据脚本名称搜索对应的进程并立即杀死，当脚本报错死循环时可使用此功能。_
 
 
-#### 7. 导入并使用第三方活动脚本：
-    1. 将脚本放置在该项目容器内 scripts 子目录下，也可放在外部的挂载目录（默认为/opt/jd/scripts）
-    2. 然后通过命令 docker exec -it jd bash jd.sh xxx now 运行
-    3. 如果您想将第三方脚本加入到 run_all.sh 一键脚本中可将脚本名改为"jd_"开头即可
-> _注意：导入的第三方活动脚本不会随项目本身活动脚本的更新而删除。_
+### 7. 全部执行：
+    source runall  或  . runall
+> _注意：1. 此脚本的作用为执行所有本地所有的脚本，高达数十个甚至上百，时间较长且与账号数量成正比。_\
+> _ㅤㅤㅤ2. 除手动运行活动脚本外该项目还会通过定时的方式自动执行活动脚本，可通过日志查看运行记录。_
 
 
-#### 8. 删除活动运行日志：
-    docker exec -it jd bash rm_log.sh 
-> _注意：默认删除 `7天` 以上的日志文件，可以通过配置文件中的相关变量更改默认时间值。_
+### 8. 单独更新：
+    update <cmd>
+> _注意：项目源码 shell、"Scripts"仓库 scripts、"Own"仓库 own。_
+
+
+### 9. 删除脚本运行日志：
+    task rmlog
+> _注意：删除活动脚本与更新脚本的日志文件，默认删除 `7天` 以上的日志文件，可以通过配置文件中的相关变量更改默认时间值。_
+
+
+### 10. 进程监控：
+    task ps
+> _注意：查看资源消耗情况和正在运行的脚本进程。_
+
+
+### 11. 账号功能：
+    task cookie <cmd>
+> _注意：1. 检测账号是否有效 check，更新日期从配置文件中的备注获取，同时判断账号过期时间。_\
+> _ㅤㅤㅤ2. 使用WSKEY更新CK update，需要在 account.json 中正确配置您的信息。_
+
+
+### 12. 安装 Python 和 TypeSciprt 环境：
+    taskctl env install
+
+
+### 13. 安装脚本依赖：
+- 进入容器内脚本目录：
+
+      cd /jd/scripts
+- JavaScript | TypeScript 类脚本安装/修复方法：
+
+      npm install <xxx>                 ## npm安装指定模块（看报错提示缺什么就尝试装什么）
+- Python 类脚本安装/修复方法：
+
+      pip3 install <xxx>                ## pip通用安装模块命令
+
+> _注意：当新脚本报错提示 `need module xxx` 类似字样说明缺少脚本所需的依赖，看见 `module` 字样应立即联想到安装模块上。_
+
 
 ***
 
 ㅤ
-## 三、控制面板教程
-#### 1. 手动开启控制面板：
-    docker exec -it jd bash
-    cd panel
-    pm2 start ecosystem.config.js
-    exit
-> _注意：在某些环境下当系统重启导致控制面板无法访问提示拒绝连接时可用此命令恢复使用。_
+## 三、互助功能教程
+### 1. 获取互助码：
+    task get_share_code now
 
 
-#### 2. 手动关闭控制面板：
-    docker exec -it jd pm2 stop panel/ecosystem.config.js
-> _注意：`VPS` 平台用户关机前请先执行此命令手动停止控制面板，否则在仪表盘强制关机重启后可能会出现无法保存配置文件的问题。_
+### 2. 格式化导出互助码：
+    task exsc
+> _注意：输出可直接应用在配置文件中的代码，其原理是从各个活动脚本的日志中获取，所以当新装环境运行完相关活动脚本后才能正常使用。_
 
 
-#### 3. 重启控制面板：
-    docker exec -it jd pm2 restart panel/ecosystem.config.js
+### 3. 自动互助功能：
+    ## 配置文件
+    AutoHelpOther="true"
+> _注意：详见配置文件中的相关注释。_
 
 
-#### 4. 重置控制面板的用户名和密码：
-    docker exec -it jd bash jd.sh resetpwd
+### 4. 手动定义互助码与相互助力：
+    填法示例：
+
+    1. 定义东东农场互助
+    MyFruit1="xxxxxxxxxxxxxxxxxxxxxxxxx"
+    MyFruit2="xxxxxxxxxxxxxxxxxxxxxxxxx"
+    MyFruitA=""
+    MyFruitB=""
+    ForOtherFruit1="${MyFruit1}@${MyFruit2}"
+    ForOtherFruit2="${MyFruit1}@${MyFruit2}"
+    
+    1. 定义东东萌宠互助
+    MyPet1="xxxxxxxxxxxxxxxxxxxxxxxxx"
+    MyPet2="xxxxxxxxxxxxxxxxxxxxxxxxx"
+    MyPet3="xxxxxxxxxxxxxxxxxxxxxxxxx"
+    MyPet4="xxxxxxxxxxxxxxxxxxxxxxxxx"
+    MyPet5="xxxxxxxxxxxxxxxxxxxxxxxxx"
+    MyPet6="xxxxxxxxxxxxxxxxxxxxxxxxx"
+    MyPetA=""
+    MyPetB=""
+    ForOtherPet1="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
+    ForOtherPet2="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
+    ForOtherPet3="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
+    ForOtherPet4="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
+    ForOtherPet5="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
+    ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
+> _注意：所有符号需严格使用英文格式！_
 
 
-#### 5. 重新安装控制面板：
-    docker exec -it jd bash
-    cd panel
-    npm install -g pm2
-    pm2 start ecosystem.config.js
-    exit
-> _注意：此命令适用于在容器初始化过程中安装失败时使用。_
+### 5. 提交您的互助码到公共助力池（Telegram Bot）：
+> Telegram Bot：\
+> [@JD_ShareCode_Bot](https://t.me/JD_ShareCode_Bot) \
+> 每周六晚 9 点清空助力池，同时开放提交，需要加官方群才可以提交
 
+> 输入 /help 查看使用帮助
 
-#### 6. 手动开启网页终端：
-    docker exec -it jd pm2 start ttyd
-
-
-#### 7. 重启网页终端：
-    docker exec -it jd pm2 restart ttyd
-
-
-#### 8. 查看控制面板和网页终端启动状态
-    docker exec -it jd pm2 list
 
 ***
 
 ㅤ
-## 四、更新教程
-#### 1. 更新配置文件：
-- 备份当前配置文件
+## 四、相关功能控制教程
+### 1. 查看所有服务的状态
 
-      docker exec -it jd mv config/config.sh config/bak/config.sh
-- 替换新版配置文件
+    taskctl server status
+> _注意：如遇相关服务没有启动或状态异常，在容器初始成功的前提下请先尝试手动启动。_
 
-      docker exec -it jd cp -f sample/config.sh.sample config/config.sh
-> _ㅤ注意：操作为直接替换配置文件，您也可以通过控制面板对比工具自行修改。_
+
+### 2. 后台挂机程序
+> _作用：在后台循环执行挂机类活动脚本。_
+  - 启动/重启后台挂机程序：
+
+        taskctl hang up
+    > _注意：当有新的账号添加或账号变动时须重启此程序，否则仍加载之前配置文件中的变量执行挂机活动脚本。_
+
+  - 停止后台挂机程序：
+
+        taskctl hang down
+
+  - 查看后台挂机程序的运行日志：
+
+        taskctl hang logs
+    > _注意：Ctrl+C 退出，如发现脚本报错可尝试重启。_
+ㅤ
+
+### 3. 控制面板和网页终端
+  - 开启/重启控制面板和网页终端：
+
+        taskctl panel on
+    > _注意：1. 容器第一次启动时如果启用了该功能变量后会自动启动相关服务无需手动执行此命令。_\
+    > _ㅤㅤㅤ2. 在某些环境下当系统重启导致控制面板没有在容器启动时自启可用此命令手动启动。_\
+    > _ㅤㅤㅤ3. 当控制面板或网页终端服务进程异常时还可尝试修复，如果仍然无法访问请检查容器是否初始化成功。_
+
+  - 关闭控制面板和网页终端：
+
+        taskctl panel off
+
+  - 查看控制面板的登录信息：
+
+        taskctl panel info
+
+  - 重置控制面板的用户名和密码：
+
+        taskctl respwd
+    > _注意：重置后的用户名和密码均为初始信息。_
+
+
+### 4. Telegram Bot
+  - 配置 Bot：
+
+        https://crawling-nectarine-ef2.notion.site/Telegram-Bot-9709bbae7bf8488ab01f3b4867e29b44
+
+  - 启动/重启 Bot 服务：
+
+        taskctl jbot start
+
+  - 停止 Bot 服务：
+
+        taskctl jbot stop
+
+  - 查看 Bot 的运行日志：
+
+        taskctl jbot logs
 
 ***
 
 ㅤ
-## 五、使用需知
-#### 1. `git_pull.sh` 为一键更新脚本，`run_all.sh` 为一键执行所有活动脚本
-#### 2. 本项目可以通过定时的方式全天候自动运行活动脚本，具体运行记录可通过日志查看
-#### 3. 项目已配置好 `Crontab` 定时任务，定时配置文件 `crontab.list` 会通过活动脚本的更新而同步更新
-#### 4. 您可以通过容器外的主机挂载目录来编辑配置文件、查看活动运行日志、查看脚本文件
-#### 5. 手动执行 `run_all.sh` 脚本后无需守在电脑旁，会自动在最后运行挂机活动脚本
-#### 6. 执行 `run_all` 脚本期间如果卡住，可按回车键尝试或通过命令 `Ctrl + Z` 跳过继续执行剩余活动脚本
-#### 7. 由于京东活动一直变化可能会出现无法参加活动、报错等正常现象，可手动执行一键更新脚本完成更新
-#### 8. 之前填入的 `Cookie部分内容` 具有一定的时效性，若提示失效请根据教程重新获取并手动更新
+## 五、环境相关教程
+### 1. 更新配置文件：
+  - 备份当前配置文件
+
+      mv config/config.sh config/bak/config.sh
+
+  - 替换新版配置文件
+
+      cp -f sample/config.sh.sample config/config.sh
+    > _注意：此操作为直接替换配置文件，您也可以通过控制面板的对比工具自行修改。_
+
+
+### 2. 修复环境：
+    taskctl env repairs
+> _注意：当 npm 程序崩溃时可执行此命令进行修复。_
+
+
+### 3. 检测配置文件完整性：
+    taskctl check files
+> _注意：检测项目相关配置文件是否存在，如果缺失就从模板导入。_
+
+
+***
