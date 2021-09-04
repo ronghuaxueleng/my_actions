@@ -2,10 +2,9 @@ import functools
 import logging
 import logging.handlers
 
-# 日志配置
-import re
+from utils.jd import save_jd_pin
 
-from toutiao.toutiao import save_jd_pin
+# 日志配置
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -45,6 +44,7 @@ class mproxy:
     def request(self, flow):
         if 'api.m.jd.com' in flow.request.host:
             save_jd_pin(flow)
+
 
 addons = [
     mproxy()

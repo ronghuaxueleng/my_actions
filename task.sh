@@ -557,7 +557,7 @@ function Cookies_Control() {
             Count_UserSum
             LogPath="$LogDir/updateCookies"
             Make_Dir ${LogPath}
-            echo -e "\n$WORKING 正在依次更新中，请耐心等待所有任务执行完毕..."
+            echo -e "\n$WORKING 正在依次更新中，请耐心等待所有任务执行完毕...\n"
             for ((UserNum = 1; UserNum <= ${UserSum}; UserNum++)); do
                 for num in ${TempBlockCookie}; do
                     [[ $UserNum -eq $num ]] && continue 2
@@ -566,11 +566,11 @@ function Cookies_Control() {
                 export JD_COOKIE=${!AccountNum}
                 LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_$UserNum.log"
                 cd $PanelDir
-                node updateCookies.js &>>${LogFile} &
+                node updateCookies.js &>${LogFile} &
                 wait
                 grep "Cookie =>" ${LogFile}
             done
-            echo -e "$COMPLETE 更新完成\n"
+            echo -e "\n$COMPLETE 更新完成\n"
         fi
         ;;
     esac
