@@ -9,8 +9,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
         with: 
-          # repository: ronghuaxueleng/my_actions
-          path: new0826
+          ref: new0826
       - name: docker build and push
         run: |
           cd docker
