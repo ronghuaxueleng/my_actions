@@ -9,9 +9,10 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@master
+        with: 
+          repository: 'new0826'
       - name: docker build and push
         run: |
-          git checkout new0826
           cd docker
           docker login docker.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} 
           docker build -t ronghuaxueleng/jd:0826 .
