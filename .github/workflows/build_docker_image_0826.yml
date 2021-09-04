@@ -11,6 +11,7 @@ jobs:
         uses: actions/checkout@master
       - name: docker build and push
         run: |
+          checkout new0826
           cd docker
           docker login docker.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} 
           docker build -t ronghuaxueleng/jd:0826 .
