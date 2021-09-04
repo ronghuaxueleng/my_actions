@@ -76,7 +76,7 @@ RUN mkdir -p /root/.ssh \
     && mkdir -p /etc/ssh && touch /etc/ssh/ssh_config \
     && chmod 700 /root/.ssh \
     && cd /root/.ssh \
-    && echo -e $JD_BASE_KEY > /root/.ssh/$JD_BASE \
+    && echo -e "$JD_BASE_KEY" > /root/.ssh/$JD_BASE \
     && chmod 600 /root/.ssh/$JD_BASE \
     && echo -e "Host $JD_BASE_HOST\n\tHostname $REPO_URL\n\tIdentityFile=/root/.ssh/$JD_BASE\n\nHost" > /root/.ssh/config \
     && echo -e "\n\nHost *\n  StrictHostKeyChecking no\n" >> /etc/ssh/ssh_config \

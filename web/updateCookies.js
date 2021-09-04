@@ -6,7 +6,7 @@ const notify = $.isNode() ? require('../scripts/sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('../utils/jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], message = '', successCount = 0, accountsList = [], newAccountsList = [],
-    signJsonFileCount = 5, signList = [], signServerUrl = "";
+    signJsonFileCount = 50, signList = [], signServerUrl = "";
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
