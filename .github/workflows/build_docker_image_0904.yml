@@ -1,4 +1,4 @@
-name: "构建Docker镜像"
+name: "构建Docker镜像0904"
 on:
   workflow_dispatch:
   
@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@master
+        with: 
+          ref: new0904
       - name: docker build and push
         run: |
           cd docker
