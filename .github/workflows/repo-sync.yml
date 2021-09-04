@@ -68,6 +68,7 @@ jobs:
           cp -rf ./my_actions/utils ./JD-FreeFuck/
           cp -f ./my_actions/*.sh ./JD-FreeFuck
           cp -f ./my_actions/*.py ./JD-FreeFuck
+          cp -f ./my_actions/config/* ./JD-FreeFuck/sample
           cd ./my_actions
           git checkout source0904
           rm -rf !(.git | .githup)
