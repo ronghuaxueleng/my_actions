@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-04
+## Modified: 2021-09-05
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -152,14 +152,30 @@ function Gen_ListOwn() {
     rm -f $LogTmpDir/own*.list >/dev/null 2>&1
     for ((i = 0; i < ${#array_own_scripts_path[*]}; i++)); do
         cd ${array_own_scripts_path[i]}
-        if [[ $(ls *.js 2>/dev/null) ]]; then
-            for file in $(ls *.js); do
-                if [ -f $file ]; then
-                    perl -ne "print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*\/?$file/" $file |
-                        perl -pe "s|.*(([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*])( \|,\|\").*/?$file.*|${array_own_scripts_path[i]}/$file|g" |
-                        sort -u | head -1 >>$ListOwnScripts
-                fi
-            done
+        if [ ${array_own_scripts_path[i]} = $RawDir ]; then
+            if [[ $(ls | egrep ".js\b|.py\b|.ts\b" 2>/dev/null) ]]; then
+                for file in $(ls | egrep ".js\b|.py\b|.ts\b"); do
+                    if [ -f $file ]; then
+                        echo "$RawDir/$file" >>$ListOwnScripts
+                    fi
+                done
+            fi
+        else
+            if [[ -z $OwnRepoCronShielding ]]; then
+                local Matching=$(ls *.js)
+            else
+                local ShieldTmp=$(echo $OwnRepoCronShielding | perl -pe '{s|\" |\"|g; s| \"|\"|g; s# #|#g;}')
+                local Matching=$(ls *.js | egrep -v ${ShieldTmp})
+            fi
+            if [[ $(ls *.js 2>/dev/null) ]]; then
+                for file in $Matching; do
+                    if [ -f $file ]; then
+                        perl -ne "print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*\/?$file/" $file |
+                            perl -pe "s|.*(([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*])( \|,\|\").*/?$file.*|${array_own_scripts_path[i]}/$file|g" |
+                            sort -u | head -1 >>$ListOwnScripts
+                    fi
+                done
+            fi
         fi
     done
     Own_Scripts_Tmp=$(sort -u $ListOwnScripts)
@@ -298,9 +314,16 @@ function Add_Cron_Own() {
         for FilePath in $Detail; do
             local FileName=$(echo $FilePath | awk -F "/" '{print $NF}')
             if [ -f $FilePath ]; then
-                perl -ne "print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*$FileName/" $FilePath |
-                    perl -pe "{s|[^\d\*]*(([\d\*]*[\*-\/,\d]*[\d\*] ){4,5}[\d\*]*[\*-\/,\d]*[\d\*])( \|,\|\").*/?$FileName.*|\1 $TaskCmd $FilePath|g;s|  | |g; s|^[^ ]+ (([^ ]+ ){5}$TaskCmd $FilePath)|\1|;}" |
-                    sort -u | head -1 >>$ListCrontabOwnTmp
+                if [ $FilePath = "$RawDir/$FileName" ]; then
+                    local Tmp1=$(egrep "cron|script-path|tag| \* |$FileName" $FilePath | head -1 | perl -pe '{s|[a-zA-Z\"\-\.\=\:\:\_]||g;}')
+                    local Tmp2=$(echo "$Tmp1" | awk -F '[0-9]' '{print$1}' | perl -pe '{s| ||g;}')
+                    local cron=$(echo "$Tmp1" | perl -pe "{s|${Tmp2}||g;}" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
+                    echo "$cron $TaskCmd $FilePath" | sort -u | head -1 >>$ListCrontabOwnTmp
+                else
+                    perl -ne "print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*$FileName/" $FilePath |
+                        perl -pe "{s|[^\d\*]*(([\d\*]*[\*-\/,\d]*[\d\*] ){4,5}[\d\*]*[\*-\/,\d]*[\d\*])( \|,\|\").*/?$FileName.*|\1 $TaskCmd $FilePath|g;s|  | |g; s|^[^ ]+ (([^ ]+ ){5}$TaskCmd $FilePath)|\1|;}" |
+                        sort -u | head -1 >>$ListCrontabOwnTmp
+                fi
             fi
         done
         crontab_tmp="$(cat $ListCrontabOwnTmp)"
