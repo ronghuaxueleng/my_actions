@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-05
+## Modified: 2021-09-06
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -34,7 +34,6 @@ function Random_Update_Cron() {
             Tmp=$((${RANDOM} % 3 + ${RanHourArray[j]} + 2))
             [[ ${Tmp} -lt 24 ]] && RanHourArray[i]=${Tmp} || break
         done
-
         for ((i = 1; i < ${#RanHourArray[*]}; i++)); do
             RanHour="${RanHour},${RanHourArray[i]}"
         done
@@ -233,7 +232,7 @@ function Npm_Install_1() {
     local CurrentDir=$(pwd)
     local WorkDir=$1
     cd $WorkDir
-    echo -e "$WORKING 运行 npm install...\n"
+    echo -e "$WORKING 运行 npm install ...\n"
     npm install
     [[ $? -ne 0 ]] && echo -e "\n$ERROR 依赖安装失败，请进入 $WorkDir 目录后手动运行 npm install ...\n"
     cd $CurrentDir
@@ -242,10 +241,9 @@ function Npm_Install_2() {
     local CurrentDir=$(pwd)
     local WorkDir=$1
     cd $WorkDir
-    echo -e "\n$WORKING 检测到 $WorkDir 的依赖包有变化，运行 npm install...\n"
+    echo -e "\n$WORKING 检测到 $WorkDir 的依赖包有变化，运行 npm install ...\n"
     npm install
-    [[ $? -ne 0 ]] && echo -e "\n$ERROR 位于 $WorkDir 的依赖包安装失败，再次尝试一遍...\n"
-    Npm_Install_1 $WorkDir
+    [[ $? -ne 0 ]] && echo -e "\n$ERROR 位于 $WorkDir 的依赖包安装失败，再次尝试一遍...\n" && Npm_Install_1 $WorkDir
     cd $CurrentDir
 }
 

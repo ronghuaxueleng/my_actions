@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-04
+## Modified: 2021-09-06
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -13,20 +13,62 @@ function Find_Script() {
     local input=$1
     echo $input | grep "/" -q
     if [[ $? -eq 0 ]]; then
-        local AbsolutePath=$(echo $input | perl -pe "{s|$ShellDir/||; s|\./||; s|^*|$(pwd)/|; s|\.js||; s|\.py||; s|\.ts||;}")
-        if [ -f $AbsolutePath.js ]; then
-            FileFormat="JavaScript"
-            FileName=$(echo $AbsolutePath | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||;}")
-            WhichDir=$(echo $AbsolutePath | awk -F "$FileName" '{print$1}')
-        elif [ -f $AbsolutePath.ts ]; then
-            FileFormat="TypeScript"
-            FileName=$(echo $AbsolutePath | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||;}")
-            WhichDir=$(echo $AbsolutePath | awk -F "$FileName" '{print$1}')
-        elif [ -f $AbsolutePath.py ]; then
-            FileFormat="Python"
-            FileName=$(echo $AbsolutePath | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||;}")
-            WhichDir=$(echo $AbsolutePath | awk -F "$FileName" '{print$1}')
+        ## 指定路径：
+        ## 判定输入的是绝对路径还是相对路径
+        echo $input | grep "$ShellDir/" -q
+        if [[ $? -eq 0 ]]; then
+            local AbsolutePath=$input
+        else
+            echo $input | grep "\.\./" -q
+            if [[ $? -eq 0 ]]; then
+                local PwdTmp=$(pwd | perl -pe "{s|/$(pwd | awk -F '/' '{printf$NF}')||g;}")
+                local AbsolutePath=$(echo "$input" | perl -pe "{s|\.\./|${PwdTmp}/|;}")
+            else
+                local AbsolutePath=$(echo "$input" | perl -pe "{s|\./||; s|^*|$(pwd)/|;}")
+            fi
         fi
+        ## 判定输入是否含有后缀
+        local FileNameTmp=$(echo $AbsolutePath | awk -F "/" '{print $NF}')
+        local WhichDirTmp=$(echo $AbsolutePath | awk -F "$FileNameTmp" '{print$1}')
+        echo $FileNameTmp | grep "\." -q
+        if [[ $? -eq 0 ]]; then
+            if [ -f $AbsolutePath ]; then
+                local FileFormatTmp=$(echo $FileNameTmp | awk -F "\." '{print$NF}')
+                case ${FileFormatTmp} in
+                js)
+                    FileFormat="JavaScript"
+                    ;;
+                ts)
+                    FileFormat="TypeScript"
+                    ;;
+                python)
+                    FileFormat="Python"
+                    ;;
+                *)
+                    echo -e "\n$ERROR 不支持运行 ${FileFormatTmp} 类型的脚本，请确认！"
+                    Help
+                    exit 1
+                    ;;
+                esac
+                FileName=$(echo ${FileNameTmp} | perl -pe "{s|\.js||; s|\.py||; s|\.ts||;}")
+                WhichDir=${WhichDirTmp}
+            fi
+        else
+            if [ -f ${WhichDirTmp}/${FileNameTmp}.js ]; then
+                FileName=${FileNameTmp}
+                FileFormat="JavaScript"
+                WhichDir=${WhichDirTmp}
+            elif [ -f ${WhichDirTmp}/${FileNameTmp}.ts ]; then
+                FileName=${FileNameTmp}
+                FileFormat="TypeScript"
+                WhichDir=${WhichDirTmp}
+            elif [ -f ${WhichDirTmp}/${FileNameTmp}.py ]; then
+                FileName=${FileNameTmp}
+                FileFormat="Python"
+                WhichDir=${WhichDirTmp}
+            fi
+        fi
+        ## 判定变量是否存在否则退出
         if [ -n "${FileName}" ] && [ -n "${WhichDir}" ]; then
             Check_Moudules $WhichDir
             if [ $(echo $AbsolutePath | awk -F '/' '{print$3}') = "own" ]; then
@@ -35,11 +77,15 @@ function Find_Script() {
                 LogPath="$LogDir/${FileName}"
             fi
         else
-            echo -e "\n$ERROR 在 $WhichDir 目录未检测到 $FileName 脚本的存在，请确认！\n"
+            local FormatInputName=$(echo $AbsolutePath | awk -F "/" '{print $NF}')
+            local FormatInputDir=$(echo $AbsolutePath | awk -F "$FormatInputName" '{print$1}')
+            echo -e "\n$ERROR 在 $FormatInputDir 目录未检测到 $FormatInputName 脚本的存在，请确认！"
             Help
             exit 1
         fi
+
     else
+        ## 仅 Scripts 目录：
         local FileNameTmp1=$(echo $input | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
         local FileNameTmp2=$(echo $input | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
         local SeekDir="$ScriptsDir $ScriptsDir/tools $ScriptsDir/backUp $ScriptsDir/utils"
@@ -77,7 +123,7 @@ function Find_Script() {
             fi
         done
         if [ ! -n "${FileName}" ] && [ ! -n "${WhichDir}" ]; then
-            echo -e "\n$ERROR 在 $ScriptsDir、$ScriptsDir/tools、$ScriptsDir/backUp、$ScriptsDir/utils 四个目录下均未检测到 $input 脚本的存在，请确认！\n"
+            echo -e "\n$ERROR 在 $ScriptsDir、$ScriptsDir/tools、$ScriptsDir/backUp、$ScriptsDir/utils 四个目录下均未检测到 $input 脚本的存在，请确认！"
             Help
             exit 1
         else
@@ -88,7 +134,7 @@ function Find_Script() {
     Python | TypeScript)
         case $Arch in
         armv7l | armv6l)
-            echo -e "\n$ERROR 您的处理器架构不支持运行 Python 和 TypeScript 脚本，建议更换运行环境！\n"
+            echo -e "\n$ERROR 您的处理器架构不支持运行 Python 和 TypeScript 脚本，建议更换运行环境！"
             Help
             exit 1
             ;;
@@ -110,7 +156,7 @@ function Check_Moudules() {
         if [ $? -eq 0 ]; then
             echo -e "\n$COMPLETE 安装完成，开始执行...\n"
         else
-            echo -e "\n$ERROR 安装失败，请检查原因后重试或复制该脚本到 Scripts 目录后执行！\n"
+            echo -e "\n$ERROR 安装失败，请检查原因后重试或复制该脚本到 Scripts 目录后执行！"
             Help
             exit 1
         fi
@@ -160,7 +206,7 @@ function Run_Normal() {
 function Run_Concurrent() {
     case $Arch in
     armv7l | armv6l)
-        echo -e "\n$ERROR 您当前使用的是32位处理器，考虑到性能不佳已禁用并发执行功能，建议更换运行环境！\n"
+        echo -e "\n$ERROR 您当前使用的是32位处理器，考虑到性能不佳已禁用并发执行功能，建议更换运行环境！"
         Help
         exit 1
         ;;
@@ -411,7 +457,6 @@ function Run_RawScript() {
         else
             echo -e "\n$COMMAND_ERROR"
             Help
-            exit 1
         fi
         if [ $3 = "-c" ]; then
             RunMod="concurrent"

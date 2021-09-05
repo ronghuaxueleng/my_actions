@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-04
+## Modified: 2021-09-06
 
 set -e
 SUCCESS='[\033[32mOK\033[0m]'
@@ -81,18 +81,18 @@ if [[ ${ENABLE_WEB_PANEL} == true ]]; then
   echo -e "Tips: 如未修改用户名密码，则初始用户名为：admin，初始密码为：admin"
   echo -e "      请访问 http://<IP>:5678 登陆控制面板并修改配置，第一次登录会自动修改初始密码"
 elif [[ ${ENABLE_WEB_PANEL} == false ]]; then
-  echo -e "已设置为不自动启动控制面板\n"
+  echo -e "已设置为不自动启动控制面板"
 fi
 echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➄ 控制面板和网页终端结束 -----\n"
 
 ## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 第 六 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 自动安装Python 和 TypeSciprt 环境开始 -----\n"
+echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 预装 Python 和 TypeSciprt 环境开始 -----\n"
 if [[ ${ENABLE_ALL_ENV} == true ]]; then
-  taskctl env install
+  $ContrlCmd env install
 else
-  echo -e "已设置为不自动安装Python 和 TypeSciprt 环境\n"
+  echo -e "已设置为不在容器启动时自动安装 Python 和 TypeSciprt 环境\n"
 fi
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 自动安装Python 和 TypeSciprt 环境结束 -----\n"
+echo -e "[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 预装 Python 和 TypeSciprt 环境结束 -----\n"
 
 echo -e "..."
 sleep 1

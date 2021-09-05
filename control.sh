@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-04
+## Modified: 2021-09-06
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -461,7 +461,7 @@ function Environment_Deployment() {
     install)
         case $Arch in
         armv7l | armv6l)
-            echo -e "\n$ERROR 由于您的处理器架构不受官方支持导致无法安装 Python 和 TypeScript 软件包，建议更换运行环境！\n"
+            echo -e "\n$ERROR 由于您的处理器架构不受官方支持导致无法安装 Python 和 TypeScript 软件包，建议更换运行环境！"
             Help
             exit 1
             ;;
@@ -478,46 +478,13 @@ function Environment_Deployment() {
         pip3 install requests
         npm install -g ts-node typescript --unsafe-perm=true --allow-root
         npm install --save-dev @types/node @types/tunnel
-        function Install_Normal() {
-            for i in $@; do
-                if [[ "$(npm ls $i)" =~ $i ]]; then
-                    npm uninstall $i
-                elif [[ "$(echo $(npm ls $i -g) | grep ERR)" != "" ]]; then
-                    npm uninstall $i -g
-                fi
-                if [[ "$(npm ls $i -g)" =~ (empty) ]]; then
-                    [[ $i = "typescript" ]] && npm i $i -g --force || npm i $i -g
-                fi
-            done
-        }
-        function Install_Force() {
-            for i in $@; do
-                cd /jd/scripts
-                if [[ "$(npm ls $i)" =~ $i ]]; then
-                    npm uninstall $i
-                    rm -rf $ScriptsDir_NodeModules/$i
-                    rm -rf /usr/local/lib/node_modules/lodash/*
-                elif [[ "$(npm ls $i -g)" =~ $i && "$(echo $(npm ls $i -g) | grep ERR)" != "" ]]; then
-                    npm uninstall $i -g
-                    rm -rf $ScriptsDir_NodeModules/$i
-                    rm -rf /usr/local/lib/node_modules/lodash/*
-                fi
-                if [[ "$(npm ls $i -g)" =~ (empty) ]]; then
-                    echo -e " 正在安装 $i"
-                    npm i $i -g --force
-                fi
-            done
-        }
-        function Install_All() {
-            Install_Normal $PackageName
-            #for i in $PackageName; do
-            #    Install_dependencies_Force $i
-            #done
-        }
-        Install_All
+        npm install -g ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs crypto-js crypto dotenv png-js
+        ## 设置环境变量，在项目中可以直接require全局模块
+        export NODE_PATH="$(npm root -g)"
+        echo ''
         ;;
     repairs)
-        echo -e "\n$WORKING 开始进行暴力修复...\n"
+        echo -e "\n$WORKING 开始暴力修复 npm ...\n"
         apk del -f nodejs-lts npm
         apk --no-cache add -f nodejs-lts npm
         echo -e "\n$SUCCESS 修复完成\n"
