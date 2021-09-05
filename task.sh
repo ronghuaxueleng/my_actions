@@ -714,7 +714,7 @@ function List_Local_Scripts() {
         local ListFiles=($(
             git ls-files | egrep "${ScriptType}" | grep -E "j[drx]_" | grep -Ev "/|${ShieldingKeywords}"
         ))
-        echo -e "\nScripts 仓库的脚本："
+        echo -e "\n❖ Scripts 仓库的脚本："
         for ((i = 0; i < ${#ListFiles[*]}; i++)); do
             Query_Name ${ListFiles[i]}
             echo -e "$(($i + 1)).${Name}：${ListFiles[i]}"
@@ -729,7 +729,7 @@ function List_Local_Scripts() {
             local ListFiles=($(
                 cat $ListOwnScripts
             ))
-            echo -e "\nOwn 仓库的脚本："
+            echo -e "\n❖ Own 仓库的脚本："
             for ((i = 0; i < ${#ListFiles[*]}; i++)); do
                 FileName=$(echo ${ListFiles[i]} | awk -F "/" '{print $NF}')
                 WhichDir=$(echo ${ListFiles[i]} | awk -F "$FileName" '{print$1}')
@@ -748,7 +748,7 @@ function List_Local_Scripts() {
             ls | egrep "${ScriptType}" | grep -Ev "$(git ls-files)|${ShieldingKeywords}"
         ))
         if [ ${#ListFiles[*]} != 0 ]; then
-            echo -e "\n第三方脚本："
+            echo -e "\n❖ 第三方脚本："
             for ((i = 0; i < ${#ListFiles[*]}; i++)); do
                 Query_Name ${ListFiles[i]}
                 echo -e "$(($i + 1)).${Name}：${ListFiles[i]}"
