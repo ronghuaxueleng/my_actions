@@ -6,8 +6,8 @@ ShellDir=${JD_DIR}
 . $ShellDir/share.sh
 
 ## 定义 Scripts 仓库
-ScriptsBranch="j_scripts"
-ScriptsUrl="https://gitee.com/getready/my_actions.git"
+ScriptsBranch="jd_scripts"
+ScriptsUrl="${GithubProxy}https://github.com/Aaron-lv/sync.git"
 
 ## Aaron-lv（当前默认）
 # ScriptsUrl="${GithubProxy}https://github.com/Aaron-lv/sync.git"
@@ -39,10 +39,6 @@ function Random_Update_Cron() {
             RanHour="${RanHour},${RanHourArray[i]}"
         done
         perl -i -pe "s|.+(update.+update.+log.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCrontabUser}
-        cat ${ListCrontabUser} | sort -k2n | uniq > ${ListCrontabUser}.uniq
-        mv ${ListCrontabUser}.uniq ${ListCrontabUser}
-        cat ${ListCrontabUser} ${UtilsDir}/ext_crontab_list.sh > ${ListCrontabUser}.mix
-        mv ${ListCrontabUser}.mix ${ListCrontabUser}
         crontab ${ListCrontabUser}
     fi
 }
@@ -257,10 +253,6 @@ function Del_Cron() {
             local Tmp=$(echo $cron | perl -pe "s|/|\.|g")
             perl -i -ne "{print unless / $Type $Tmp( |$)/}" $ListCrontabUser
         done
-        cat ${ListCrontabUser} | sort -k2n | uniq > ${ListCrontabUser}.uniq
-        mv ${ListCrontabUser}.uniq ${ListCrontabUser}
-        cat ${ListCrontabUser} ${UtilsDir}/ext_crontab_list.sh > ${ListCrontabUser}.mix
-        mv ${ListCrontabUser}.mix ${ListCrontabUser}
         crontab $ListCrontabUser
         Detail2=$(echo $Detail | perl -pe "s| |\\\n|g")
         echo -e "$SUCCESS 成功删除失效的定时任务\n"
@@ -318,10 +310,6 @@ function Add_Cron_Notify() {
     local Detail=$(echo $Tmp | perl -pe "s| |\\\n|g")
     local Type=$3
     if [[ $status_code -eq 0 ]]; then
-        cat ${ListCrontabUser} | sort -k2n | uniq > ${ListCrontabUser}.uniq
-        mv ${ListCrontabUser}.uniq ${ListCrontabUser}
-        cat ${ListCrontabUser} ${UtilsDir}/ext_crontab_list.sh > ${ListCrontabUser}.mix
-        mv ${ListCrontabUser}.mix ${ListCrontabUser}
         crontab $ListCrontabUser
         echo -e "$SUCCESS 成功添加新的定时任务\n"
         Notify "新增任务通知" "成功添加新的定时任务（$Type）：\n$Detail"
@@ -526,10 +514,10 @@ function Update_Own() {
             Add_Cron_Own $ListOwnAdd
             [[ ${AutoAddOwnCron} == true ]] && Add_Cron_Notify $ExitStatus $ListOwnAdd "Own仓库脚本"
         fi
+        echo ''
     else
         perl -i -ne "{print unless / $TaskCmd \/jd\/own/}" $ListCrontabUser
     fi
-    [[ ${#array_own_scripts_path[*]} -gt 0 ]] && echo ''
 }
 
 ## 自定义脚本
@@ -538,7 +526,8 @@ function ExtraShell() {
     if [[ $EnableExtraShell == true ]]; then
         echo -e "-------------------------------------------------------------\n"
         ## 自动同步用户自定义的diy.sh
-        if [[ $EnableExtraShellSync == true ]]; then
+        if [[ $EnableExtraShellSync == true ]] && [[ ! -z $ExtraShellSyncUrl ]]; then
+            echo -e "$WORKING 开始同步自定义脚本：$ExtraShellSyncUrl\n"
             wget -q --no-check-certificate $ExtraShellSyncUrl -O $FileExtra.new
             if [ $? -eq 0 ]; then
                 mv -f "$FileExtra.new" "$FileExtra"

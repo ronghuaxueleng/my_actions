@@ -18,7 +18,7 @@ cd $JD_DIR
 crond
 sleep 1
 git fetch --all
-git reset --hard origin/source0904
+git reset --hard origin/main
 bash update.sh
 echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➀ 同步最新源码结束 -----\n"
 
@@ -78,7 +78,7 @@ if [[ ${ENABLE_WEB_PANEL} == true ]]; then
   pm2 start ecosystem.config.js
   cd $JD_DIR
   echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] 控制面板启动成功 $SUCCESS\n"
-  echo -e "Tips: 如未修改用户名密码，则初始用户名为：useradmin，初始密码为：supermanito"
+  echo -e "Tips: 如未修改用户名密码，则初始用户名为：admin，初始密码为：admin"
   echo -e "      请访问 http://<IP>:5678 登陆控制面板并修改配置，第一次登录会自动修改初始密码"
 elif [[ ${ENABLE_WEB_PANEL} == false ]]; then
   echo -e "已设置为不自动启动控制面板\n"
@@ -95,7 +95,7 @@ sleep 1
 if [ "${1#-}" != "${1}" ] || [ -z "$(command -v "${1}")" ]; then
   set -- node "$@"
 fi
-/usr/bin/mitmdump -p 5900 -s mproxy.py --set block_global=false
+
 echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] \033[32m容器启动成功\033[0m\n"
 echo -e "Tips: 请退出查看日志"
 exec "$@"

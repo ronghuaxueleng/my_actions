@@ -206,7 +206,7 @@ function Panel_Control() {
         ;;
     respwd)
         cp -f $FileAuthSample $FileAuth
-        echo -e "\n$COMPLETE 已重置控制面板的用户名和登录密码\n\n[用户名]： useradmin\n[密  码]： supermanito\n"
+        echo -e "\n$COMPLETE 已重置控制面板的用户名和登录密码\n\n[用户名]： admin\n[密  码]： admin\n"
         ;;
     esac
     [ -f $FilePm2List ] && rm -rf $FilePm2List
@@ -382,7 +382,7 @@ function Check_Files() {
         cp -fv $FileConfSample $FileConfUser
         echo -e "检测到 $ConfigDir 目录下不存在 config.sh 配置文件，已生成...\n"
     fi
-    JsonFiles="auth.json bot.json account.json account.db"
+    JsonFiles="auth.json bot.json account.json"
     for file in $JsonFiles; do
         if [ ! -s "$ConfigDir/$file" ]; then
             cp -fv "$SampleDir/$file" "$ConfigDir/$file"
@@ -466,7 +466,7 @@ function Environment_Deployment() {
             exit 1
             ;;
         *)
-            local PackageName="ts-node typescript @types/node ts-md5 tslib date-fns axios require fs dotenv"
+            local PackageName="ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs dotenv tunnel"
             ;;
         esac
         echo -e '\n\033[32mTips:\033[0m 忽略 \033[33m[WARN]\033[0m 警告类输出内容，如有 \033[31m[ERR!]\033[0m 类报错，90% 都是由网络原因所导致的，自行解读日志。\n'
