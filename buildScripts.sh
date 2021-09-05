@@ -4,7 +4,7 @@ function replaceShareCode() {
     if [ ! -f "$1" ]; then
         sed -i 's/const readShareCodeRes = await readShareCode();/const readShareCodeRes = {"code": -1};/g' $1.js
         mv $1.js $1_$2.js
-        sed -i 's/$1.js/$1_$2.js/g' docker/crontab_list.sh
+        sed -i s/$1/$1_$2/g docker/crontab_list.sh
     fi
 }
 
@@ -12,7 +12,7 @@ function replaceShareCodeV1() {
     if [ ! -f "$1" ]; then
         sed -i 's/readShareCodeRes = await readShareCode();/readShareCodeRes = {"code": -1};/g' $1.js
         mv $1.js $1_$2.js
-        sed -i 's/$1.js/$1_$2.js/g' docker/crontab_list.sh
+        sed -i s/$1/$1_$2/g docker/crontab_list.sh
     fi
 }
 
@@ -20,7 +20,7 @@ function deleteShareCode() {
     if [ ! -f "$1" ]; then
         sed -i '/await readShareCode();/d' $1.js
         mv $1.js $1_$2.js
-        sed -i 's/$1.js/$1_$2.js/g' docker/crontab_list.sh
+        sed -i s/$1/$1_$2/g docker/crontab_list.sh
     fi
 }
 
