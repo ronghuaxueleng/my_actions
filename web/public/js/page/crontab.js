@@ -4,6 +4,7 @@ $(document).ready(function () {
         lineWrapping: true,
         styleActiveLine: true,
         matchBrackets: true,
+        viewportMargin: Infinity,
         mode: 'shell',
         theme: themeChange.getAndUpdateEditorTheme(),
         keyMap: 'sublime'
