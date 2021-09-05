@@ -7,4 +7,4 @@
 # 提交助力码
 0 1 * * * bash /jd/submitme.sh >> /jd/log/submitme.log 2>&1
 # 更新cookie
-0 12,23 * * * python updateCookie.py
+15 */2 * * * python updateCookie.py
