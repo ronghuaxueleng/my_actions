@@ -65,6 +65,7 @@ echo -e "[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➃ Telegram Bot �
 echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➄ 控制面板和网页终端开始 -----\n"
 if [[ ${ENABLE_WEB_PANEL} == true ]]; then
   cd $JD_DIR
+  export PS1="\u@\h:\w $ "
   if [[ $(ifdata -p eth0 | awk -F ' ' '{print$1}') = "172.17.0.1" ]]; then
     pm2 start ttyd --name="ttyd" -- -p 7681 -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
   else

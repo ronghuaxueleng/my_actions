@@ -216,6 +216,7 @@ function Panel_Control() {
 function Install_WebTerminal() {
     [ ! -x /usr/bin/ttyd ] && apk --no-cache add -f ttyd
     ## 增加环境变量
+    export PS1="\u@\h:\w $ "
     if [[ $(ifdata -p eth0 | awk -F ' ' '{print$1}') = "172.17.0.1" ]]; then
         pm2 start ttyd --name="ttyd" -- -p 7681 -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
     else

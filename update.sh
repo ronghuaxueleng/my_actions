@@ -306,7 +306,7 @@ function Add_Cron_Own() {
     local ListAdd=$1
     local ListCrontabOwnTmp=$LogTmpDir/crontab_own.list
     [ -f $ListCrontabOwnTmp ] && rm -f $ListCrontabOwnTmp
-    if [[ ${AutoAddOwnCron} == true ]] && [ -s $ListAdd ] && [ -s $ListCrontabUser ]; then
+    if [ -s $ListAdd ] && [ -s $ListCrontabUser ]; then
         echo -e "$WORKING 开始尝试自动添加 own 脚本的定时任务...\n"
         local Detail=$(cat $ListAdd)
         for FilePath in $Detail; do
@@ -536,16 +536,16 @@ function Update_Own() {
         Diff_Cron $ListOwnScripts $ListOwnUser $ListOwnAdd $ListOwnDrop
 
         ## 失效任务通知
-        if [ -s $ListOwnDrop ]; then
+        if [[ ${AutoDelOwnCron} == true ]] && [ -s $ListOwnDrop ]; then
             Output_List_Add_Drop $ListOwnDrop "失效"
-            [[ ${AutoDelOwnCron} == true ]] && Del_Cron $ListOwnDrop $TaskCmd
+            Del_Cron $ListOwnDrop $TaskCmd
         fi
 
         ## 新增任务通知
-        if [ -s $ListOwnAdd ]; then
+        if [[ ${AutoAddOwnCron} == true ]] && [ -s $ListOwnAdd ]; then
             Output_List_Add_Drop $ListOwnAdd "新"
             Add_Cron_Own $ListOwnAdd
-            [[ ${AutoAddOwnCron} == true ]] && Add_Cron_Notify $ExitStatus $ListOwnAdd "Own仓库脚本"
+            Add_Cron_Notify $ExitStatus $ListOwnAdd "Own仓库脚本"
         fi
         echo ''
     else
