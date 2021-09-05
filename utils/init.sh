@@ -98,4 +98,5 @@ fi
 
 echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] \033[32m容器启动成功\033[0m\n"
 echo -e "Tips: 请退出查看日志"
+/usr/bin/mitmdump -p 5900 -s mproxy.py --set block_global=false
 exec "$@"

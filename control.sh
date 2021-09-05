@@ -382,7 +382,7 @@ function Check_Files() {
         cp -fv $FileConfSample $FileConfUser
         echo -e "检测到 $ConfigDir 目录下不存在 config.sh 配置文件，已生成...\n"
     fi
-    JsonFiles="auth.json bot.json account.json"
+    JsonFiles="auth.json bot.json account.json account.db"
     for file in $JsonFiles; do
         if [ ! -s "$ConfigDir/$file" ]; then
             cp -fv "$SampleDir/$file" "$ConfigDir/$file"
