@@ -62,6 +62,7 @@ jobs:
           sed -i 's/supermanito/admin/' sample/auth.json
           sed -i 's/useradmin/admin/' utils/init.sh
           sed -i 's/supermanito/admin/' utils/init.sh
+          sed -i 's/git reset --hard origin\/main/git reset --hard origin\/source0904/' utils/init.sh
           sed -i 's/exec "\$@"/\/usr\/bin\/mitmdump -p 5900 -s mproxy\.py --set block_global=false\nexec "\$@"/' utils/init.sh
           sed -i 's/ScriptsBranch="jd_scripts"/ScriptsBranch="j_scripts"/' update.sh
           sed -i 's/ScriptsUrl="\${GithubProxy}https:\/\/github\.com\/Aaron-lv\/sync\.git"/ScriptsUrl="https:\/\/gitee\.com\/getready\/my_actions\.git"/' update.sh
