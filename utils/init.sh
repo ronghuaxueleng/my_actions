@@ -65,11 +65,10 @@ echo -e "[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➃ Telegram Bot �
 echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➄ 控制面板和网页终端开始 -----\n"
 if [[ ${ENABLE_WEB_PANEL} == true ]]; then
   cd $JD_DIR
-  export PS1="\u@\h:\w $ "
   if [[ $(ifdata -p eth0 | awk -F ' ' '{print$1}') = "172.17.0.1" ]]; then
-    pm2 start ttyd --name="ttyd" -- -p 7681 -t fontSize=15 -t disableLeaveAlert=true -t rendererType=webgl bash
+    pm2 start ttyd --name="ttyd" -- -p 7681 -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
   else
-    pm2 start ttyd --name="ttyd" -- -t fontSize=15 -t disableLeaveAlert=true -t rendererType=webgl bash
+    pm2 start ttyd --name="ttyd" -- -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
   fi
   echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] 网页终端启动成功 $SUCCESS\n"
 
@@ -86,13 +85,13 @@ fi
 echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➄ 控制面板和网页终端结束 -----\n"
 
 ## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 第 六 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 预装 Python 和 TypeSciprt 环境开始 -----\n"
+echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 预装环境开始 -----\n"
 if [[ ${ENABLE_ALL_ENV} == true ]]; then
   $ContrlCmd env install
 else
-  echo -e "已设置为不在容器启动时自动安装 Python 和 TypeSciprt 环境\n"
+  echo -e "已设置为不在容器启动时安装环境包\n"
 fi
-echo -e "[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 预装 Python 和 TypeSciprt 环境结束 -----\n"
+echo -e "[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 预装环境结束 -----\n"
 
 echo -e "..."
 sleep 1

@@ -45,7 +45,7 @@
             <div class='content'><h1>
 <a id="使用教程" class="anchor" href="#%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B"></a>《使用教程》</h1>
 <ul>
-<li><strong>修订日期：2021 年 9 月 4 日</strong></li>
+<li><strong>修订日期：2021 年 9 月 6 日</strong></li>
 </ul>
 <h2>
 <a id="容器基础教程" class="anchor" href="#%E5%AE%B9%E5%99%A8%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B"></a>容器基础教程：</h2>
@@ -170,12 +170,15 @@
 </code></pre>
 <blockquote>
 <p><em>注意：1. 检测账号是否有效 check，更新日期从配置文件中的备注获取，同时判断账号过期时间。</em><br>
-<em>ㅤㅤㅤ2. 使用WSKEY更新CK update，需要在 account.json 中正确配置您的信息。</em></p>
+<em>ㅤㅤㅤ2. 使用 <code>WSKEY</code> 更新CK update，需要在 account.json 中正确配置您的信息，注意格式。</em></p>
 </blockquote>
 <h3>
-<a id="12-安装-python-和-typesciprt-环境" class="anchor" href="#12-%E5%AE%89%E8%A3%85-python-%E5%92%8C-typesciprt-%E7%8E%AF%E5%A2%83"></a>12. 安装 Python 和 TypeSciprt 环境：</h3>
+<a id="12-安装环境" class="anchor" href="#12-%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83"></a>12. 安装环境：</h3>
 <pre><code>taskctl env install
 </code></pre>
+<blockquote>
+<p><em>注意：全局安装常用模块便于执行非 Scripts 目录下的脚本，64位处理器还支持安装 Python 和 TypeSciprt 环境。</em>\</p>
+</blockquote>
 <h3>
 <a id="13-安装脚本依赖" class="anchor" href="#13-%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E4%BE%9D%E8%B5%96"></a>13. 安装脚本依赖：</h3>
 <ul>
@@ -367,11 +370,11 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <ul>
 <li>
 <p>备份当前配置文件</p>
-<p>mv config/config.sh config/bak/config.sh</p>
+<p>mv /jd/config/config.sh /jd/config/bak/config.sh</p>
 </li>
 <li>
 <p>替换新版配置文件</p>
-<p>cp -f sample/config.sh.sample config/config.sh</p>
+<p>cp -f /jd/sample/config.sample.sh /jd/config/config.sh</p>
 <blockquote>
 <p><em>注意：此操作为直接替换配置文件，您也可以通过控制面板的对比工具自行修改。</em></p>
 </blockquote>

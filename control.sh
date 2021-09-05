@@ -81,7 +81,7 @@ function Hang_Control() {
             ExitStatus=$?
             if [[ $ExitStatus -eq 0 ]]; then
                 pm2 stop $ServiceName
-                LastRunTime=$(date --date "$(pm2 describe jd_cfd_loop | grep "created at" | awk '{print $5}')")
+                LastRunTime=$(date --date "$(pm2 describe $ServiceName | grep "created at" | awk '{print $5}')")
                 echo -e "\n$COMPLETE $ServiceName 已终止\n\033[34m[上次启动]\033[0m: ${LastRunTime}\n"
             else
                 echo -e "\n$ERROR $ServiceName 不存在！\n"
@@ -216,11 +216,10 @@ function Panel_Control() {
 function Install_WebTerminal() {
     [ ! -x /usr/bin/ttyd ] && apk --no-cache add -f ttyd
     ## 增加环境变量
-    export PS1="\u@\h:\w $ "
     if [[ $(ifdata -p eth0 | awk -F ' ' '{print$1}') = "172.17.0.1" ]]; then
-        pm2 start ttyd --name="ttyd" -- -p 7681 -t fontSize=15 -t disableLeaveAlert=true -t rendererType=webgl bash
+        pm2 start ttyd --name="ttyd" -- -p 7681 -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
     else
-        pm2 start ttyd --name="ttyd" -- -t fontSize=15 -t disableLeaveAlert=true -t rendererType=webgl bash
+        pm2 start ttyd --name="ttyd" -- -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
     fi
 }
 
@@ -459,28 +458,20 @@ function Server_Status() {
 function Environment_Deployment() {
     case $1 in
     install)
+        echo -e '\n\033[32mTips:\033[0m 忽略 \033[33m[WARN]\033[0m 警告类输出内容，如有 \033[31m[ERR!]\033[0m 类报错，90% 都是由网络原因所导致的，自行解读日志。\n'
+        npm install -g npm npm-install-peers
         case $Arch in
         armv7l | armv6l)
-            echo -e "\n$ERROR 由于您的处理器架构不受官方支持导致无法安装 Python 和 TypeScript 软件包，建议更换运行环境！"
-            Help
-            exit 1
+            npm install -g date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got
             ;;
         *)
-            local PackageName="ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs tunnel"
+            npm install -g ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got
+            apk --no-cache add -f python3 py3-pip sudo
+            pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+            pip3 install --upgrade pip
+            pip3 install requests
             ;;
         esac
-        echo -e '\n\033[32mTips:\033[0m 忽略 \033[33m[WARN]\033[0m 警告类输出内容，如有 \033[31m[ERR!]\033[0m 类报错，90% 都是由网络原因所导致的，自行解读日志。\n'
-        cd $ScriptsDir
-        npm install -g npm npm-install-peers
-        apk --no-cache add -f python3 py3-pip sudo
-        pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
-        pip3 install --upgrade pip
-        pip3 install requests
-        npm install -g ts-node typescript --unsafe-perm=true --allow-root
-        npm install --save-dev @types/node @types/tunnel
-        npm install -g ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs crypto-js crypto dotenv png-js
-        ## 设置环境变量，在项目中可以直接require全局模块
-        export NODE_PATH="$(npm root -g)"
         echo ''
         ;;
     repairs)

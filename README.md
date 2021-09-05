@@ -1,5 +1,5 @@
 # 《使用教程》
-- __修订日期：2021 年 9 月 4 日__
+- __修订日期：2021 年 9 月 6 日__
 
 ## 容器基础教程：
 >附：[Docker 容器基础使用教程](https://www.runoob.com/docker/docker-container-usage.html)
@@ -92,11 +92,12 @@
 ### 11. 账号功能：
     task cookie <cmd>
 > _注意：1. 检测账号是否有效 check，更新日期从配置文件中的备注获取，同时判断账号过期时间。_\
-> _ㅤㅤㅤ2. 使用WSKEY更新CK update，需要在 account.json 中正确配置您的信息。_
+> _ㅤㅤㅤ2. 使用 `WSKEY` 更新CK update，需要在 account.json 中正确配置您的信息，注意格式。_
 
 
-### 12. 安装 Python 和 TypeSciprt 环境：
+### 12. 安装环境：
     taskctl env install
+>  _注意：全局安装常用模块便于执行非 Scripts 目录下的脚本，64位处理器还支持安装 Python 和 TypeSciprt 环境。_\
 
 
 ### 13. 安装脚本依赖：
@@ -242,11 +243,11 @@
 ### 1. 更新配置文件：
   - 备份当前配置文件
 
-      mv config/config.sh config/bak/config.sh
+      mv /jd/config/config.sh /jd/config/bak/config.sh
 
   - 替换新版配置文件
 
-      cp -f sample/config.sh.sample config/config.sh
+      cp -f /jd/sample/config.sample.sh /jd/config/config.sh
     > _注意：此操作为直接替换配置文件，您也可以通过控制面板的对比工具自行修改。_
 
 

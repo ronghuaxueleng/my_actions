@@ -150,17 +150,6 @@ function Check_Moudules() {
     cd $WorkDir
     [ ! -f $WorkDir/jdCookie.js ] && cp -rf $UtilsDir/jdCookie.js .
     [ ! -f $WorkDir/USER_AGENTS.js ] && cp -rf $UtilsDir/USER_AGENTS.js .
-    if [ ! -f $WorkDir/sendNotify.js ]; then
-        echo -e "\n$WORKING 检测到当前可能是首次执行该目录下的脚本，开始安装环境...\n"
-        npm install tough-cookie got
-        if [ $? -eq 0 ]; then
-            echo -e "\n$COMPLETE 安装完成，开始执行...\n"
-        else
-            echo -e "\n$ERROR 安装失败，请检查原因后重试或复制该脚本到 Scripts 目录后执行！"
-            Help
-            exit 1
-        fi
-    fi
     cp -rf $FileSendNotify .
     cd $CurrentDir
 }
