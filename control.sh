@@ -466,7 +466,7 @@ function Environment_Deployment() {
             exit 1
             ;;
         *)
-            local PackageName="ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs dotenv tunnel"
+            local PackageName="ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs tunnel"
             ;;
         esac
         echo -e '\n\033[32mTips:\033[0m 忽略 \033[33m[WARN]\033[0m 警告类输出内容，如有 \033[31m[ERR!]\033[0m 类报错，90% 都是由网络原因所导致的，自行解读日志。\n'
