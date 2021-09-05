@@ -1,21 +1,22 @@
 /*
 活动入口： 京东极速版-我的-发财大赢家
+https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js
 已支持IOS双京东账号, Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
 ============Quantumultx===============
 [task_local]
 #发财大赢家
-1 0 * * * jd_fcdyj.js, tag=新潮品牌狂欢, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+1 0 * 6 * https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js, tag=新潮品牌狂欢, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "1 0 * * *" script-path=jd_fcdyj.js tag=翻翻乐
+cron "1 0 * * *" script-path=https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js tag=翻翻乐
 
 ===============Surge=================
-发财大赢家 = type=cron,cronexp="1 0 * * *",wake-system=1,timeout=3600,script-path=jd_fcdyj.js
+发财大赢家 = type=cron,cronexp="1 0 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js
 
 ============小火箭=========
-发财大赢家 = type=cron,script-path=jd_fcdyj.js, cronexpr="1 0 * * *", timeout=3600, enable=true
+发财大赢家 = type=cron,script-path=https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js, cronexpr="1 0 * * *", timeout=3600, enable=true
 
  */
 const $ = new Env('发财大赢家');
@@ -62,7 +63,7 @@ const JD_API_HOST = `https://api.m.jd.com`;
         if (cookie) {
             $.index = i + 1;
             console.log(`\n******查询【京东账号${$.index}】红包情况\n`);
-            //await getauthorid()
+            await getauthorid()
             if (!dyjCode) {
                 console.log(`环境变量中没有检测到助力码,开始获取 账号${openred} 助力码`)
                 await open()
@@ -74,7 +75,7 @@ const JD_API_HOST = `https://api.m.jd.com`;
                     $.inviter = dyjStr[1]
                 }
             }
-            await help('86cbd9c76a2841af964b39f6e408815216941629907262240', 'TcRo9GSFphN6X-DAuLLTzkXJgjiVoUJzlYLUvgszEh0', 1, true) //用你开包的号给我助力一次
+            await help($.authorid, $.authorinviter, 1, true) //用你开包的号给我助力一次
         }
     }
 
