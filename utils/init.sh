@@ -85,6 +85,15 @@ elif [[ ${ENABLE_WEB_PANEL} == false ]]; then
 fi
 echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➄ 控制面板和网页终端结束 -----\n"
 
+## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 第 六 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 自动安装Python 和 TypeSciprt 环境开始 -----\n"
+if [[ ${ENABLE_ALL_ENV} == true ]]; then
+  taskctl env install
+else
+  echo -e "已设置为不自动安装Python 和 TypeSciprt 环境\n"
+fi
+echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 自动安装Python 和 TypeSciprt 环境结束 -----\n"
+
 echo -e "..."
 sleep 1
 echo -e "...."
