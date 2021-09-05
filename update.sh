@@ -153,8 +153,8 @@ function Gen_ListOwn() {
     for ((i = 0; i < ${#array_own_scripts_path[*]}; i++)); do
         cd ${array_own_scripts_path[i]}
         if [ ${array_own_scripts_path[i]} = $RawDir ]; then
-            if [[ $(ls | egrep ".js\b|.py\b|.ts\b" 2>/dev/null) ]]; then
-                for file in $(ls | egrep ".js\b|.py\b|.ts\b"); do
+            if [[ $(ls | egrep ".js\b|.py\b|.ts\b" | egrep -v "jdCookie.js|USER_AGENTS.js|sendNotify.js" 2>/dev/null) ]]; then
+                for file in $(ls | egrep ".js\b|.py\b|.ts\b" | egrep -v "jdCookie.js|USER_AGENTS.js|sendNotify.js"); do
                     if [ -f $file ]; then
                         echo "$RawDir/$file" >>$ListOwnScripts
                     fi
