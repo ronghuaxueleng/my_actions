@@ -8,14 +8,14 @@
 =================================Quantumultx=========================
 [task_local]
 #店铺签到
-5 1,9 * * * https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_shop_sign.js, tag=店铺签到, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+5 1,9 * * * https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js, tag=店铺签到, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 =================================Loon===================================
 [Script]
-cron "5 1,9 * * *" script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_shop_sign.js,tag=京东零食街
+cron "5 1,9 * * *" script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js,tag=京东零食街
 ===================================Surge================================
-店铺签到 = type=cron,cronexp="5 1,9 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_shop_sign.js
+店铺签到 = type=cron,cronexp="5 1,9 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js
 ====================================小火箭=============================
-店铺签到 = type=cron,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_shop_sign.js, cronexpr="5 1,9 * * *", timeout=3600, enable=true
+店铺签到 = type=cron,script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js, cronexpr="5 1,9 * * *", timeout=3600, enable=true
 */
 const $ = new Env('店铺签到');
 
@@ -32,7 +32,8 @@ let num = 0
 let shopname = ''
 const token = [
   'CDC56C42F64CA34677E5894F28AF4871',//每日，100分；1天，200分、2豆；2天，1000分、25-3券；
-  "A0F78AB303FAB2F731115934FAAFA5AF",//1天，20豆；7天，50豆；
+  'A0F78AB303FAB2F731115934FAAFA5AF',//1天，20豆；7天，50豆；
+  '5F14FA620FA933930135F7EC0868ED1B',
 ]
 //IOS等用户直接用NobyDa的jd cookie
 
