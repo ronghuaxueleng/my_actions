@@ -610,6 +610,11 @@ function Cookies_Control() {
     esac
 }
 
+## 推送通知
+function SendNotify() {
+    Notify $1 $2
+}
+
 ## 删除日志
 function Remove_LogFiles() {
     local LogFileList LogDate DiffTime Stmp DateDelLog LineEndGitPull LineEndBotRun
@@ -826,22 +831,32 @@ case $# in
         ;;
     esac
     ;;
-3 | 4)
+3)
     case $2 in
     raw)
-        if [[ $# == 4 ]]; then
-            Run_RawScript $1 $3 $4
-        else
-            Run_RawScript $1 $3
-        fi
+        Run_RawScript $1 $3
         ;;
     rapid)
-        if [[ $# == 3 ]]; then
-            Run_Rapidly $1 $3
-        else
-            echo -e "\n$TOO_MANY_COMMANDS"
+        Run_Rapidly $1 $3
+        ;;
+    *)
+        case $1 in
+        notify)
+            SendNotify $2 $3
+            ;;
+        *)
+            echo -e "\n$COMMAND_ERROR"
             Help
-        fi
+            ;;
+        esac
+        ;;
+    esac
+    ;;
+
+4)
+    case $2 in
+    raw)
+        Run_RawScript $1 $3 $4
         ;;
     *)
         echo -e "\n$COMMAND_ERROR"
