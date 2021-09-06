@@ -307,27 +307,17 @@ function Run_Rapidly() {
         Import_Config $p
         Count_UserSum
         export JD_COOKIE=$(Combin_Sub Cookie)
-        FileNameTmp1=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
-        FileNameTmp2=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
+        local FileNameTmp=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
         cd $ScriptsDir
-        if [ -f $ScriptsDir/${FileNameTmp1}.js ]; then
-            Make_Dir "$LogDir/${FileNameTmp1}"
-            node ${FileNameTmp1}.js 2>&1 | tee $LogDir/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
-        elif [ -f $ScriptsDir/${FileNameTmp1}.py ]; then
-            Make_Dir "$LogDir/${FileNameTmp1}"
-            python3 -u ${FileNameTmp1}.py 2>&1 | tee $LogDir/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
-        elif [ -f $ScriptsDir/${FileNameTmp1}.ts ]; then
-            Make_Dir "$LogDir/${FileNameTmp1}"
-            ts-node-transpile-only ${FileNameTmp1}.ts 2>&1 | tee $LogDir/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
-        elif [ -f $ScriptsDir/${FileNameTmp2}.js ]; then
-            Make_Dir "$LogDir/${FileNameTmp2}"
-            node ${FileNameTmp2}.js 2>&1 | tee $LogDir/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
-        elif [ -f $ScriptsDir/${FileNameTmp2}.py ]; then
-            Make_Dir "$LogDir/${FileNameTmp2}"
-            python3 -u ${FileNameTmp2}.py 2>&1 | tee $LogDir/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
-        elif [ -f $ScriptsDir/${FileNameTmp2}.ts ]; then
-            Make_Dir "$LogDir/${FileNameTmp2}"
-            ts-node-transpile-only ${FileNameTmp2}.ts 2>&1 | tee $LogDir/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
+        if [ -f $ScriptsDir/${FileNameTmp}.js ]; then
+            Make_Dir "$LogDir/${FileNameTmp}"
+            node ${FileNameTmp1}.js 2>&1 | tee $LogDir/${FileNameTmp}/$(date "+%Y-%m-%d-%H-%M-%S").log
+        elif [ -f $ScriptsDir/${FileNameTmp}.py ]; then
+            Make_Dir "$LogDir/${FileNameTmp}"
+            python3 -u ${FileNameTmp1}.py 2>&1 | tee $LogDir/${FileNameTmp}/$(date "+%Y-%m-%d-%H-%M-%S").log
+        elif [ -f $ScriptsDir/${FileNameTmp}.ts ]; then
+            Make_Dir "$LogDir/${FileNameTmp}"
+            ts-node-transpile-only ${FileNameTmp1}.ts 2>&1 | tee $LogDir/${FileNameTmp}/$(date "+%Y-%m-%d-%H-%M-%S").log
         else
             FormatInput=$(echo $p | awk -F "/" '{print $NF}')
             echo -e "\n$ERROR 在 $ScriptsDir 目录下未检测到 $FormatInput 脚本的存在，请确认！"
@@ -348,20 +338,13 @@ function Run_Rapidly() {
                 Import_Config $p
                 Count_UserSum
                 export JD_COOKIE=$(Combin_Sub Cookie)
-                FileNameTmp1=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
-                FileNameTmp2=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
-                if [ -f $ScriptsDir/${FileNameTmp1}.js ]; then
-                    Run_Concurrent_Lite ${FileNameTmp1} JavaScript
-                elif [ -f $ScriptsDir/${FileNameTmp1}.py ]; then
-                    Run_Concurrent_Lite ${FileNameTmp1} Python
-                elif [ -f $ScriptsDir/${FileNameTmp1}.ts ]; then
-                    Run_Concurrent_Lite ${FileNameTmp1} TypeScript
-                elif [ -f $ScriptsDir/${FileNameTmp2}.js ]; then
-                    Run_Concurrent_Lite ${FileNameTmp2} JavaScript
-                elif [ -f $ScriptsDir/${FileNameTmp2}.py ]; then
-                    Run_Concurrent_Lite ${FileNameTmp2} Python
-                elif [ -f $ScriptsDir/${FileNameTmp2}.ts ]; then
-                    Run_Concurrent_Lite ${FileNameTmp2} TypeScript
+                local FileNameTmp=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
+                if [ -f $ScriptsDir/${FileNameTmp}.js ]; then
+                    Run_Concurrent_Lite ${FileNameTmp} JavaScript
+                elif [ -f $ScriptsDir/${FileNameTmp}.py ]; then
+                    Run_Concurrent_Lite ${FileNameTmp} Python
+                elif [ -f $ScriptsDir/${FileNameTmp}.ts ]; then
+                    Run_Concurrent_Lite ${FileNameTmp} TypeScript
                 else
                     FormatInput=$(echo $p | awk -F "/" '{print $NF}')
                     echo -e "\n$ERROR 在 $ScriptsDir 目录下未检测到 $FormatInput 脚本的存在，请确认！"
@@ -469,7 +452,7 @@ function Run_RawScript() {
         ProxyJudge=""
     fi
     echo -e "\n$WORKING 开始从${RepositoryJudge}远程仓库${ProxyJudge}下载 ${FileName} 脚本..."
-    wget -q --no-check-certificate "${DownloadJudge}$input_url" -O "$ScriptsDir/${FileName}.new"
+    wget -q --no-check-certificate "${DownloadJudge}$input_url" -O "$ScriptsDir/${FileName}.new" -T 10
     if [[ $? -eq 0 ]]; then
         mv -f "$ScriptsDir/${FileName}.new" "$ScriptsDir/${FileName}"
         case ${RunMod} in
@@ -694,7 +677,7 @@ function Process_Monitor() {
 ## 列出本地脚本清单
 function List_Local_Scripts() {
     local ScriptType Tmp1 Tmp2
-    local ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|JDJR|validate|ZooFaker|tencentscf|api_test|app.|main.|jd_update.js|jd_env_copy.js|index.js"
+    local ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|JDJR|validate|ZooFaker|MovementFaker|tencentscf|api_test|app.|main.|jd_update.js|jd_env_copy.js|index.js|.json|ql.js|jdEnv"
     case $Arch in
     armv7l | armv6l)
         ScriptType=".js\b"
@@ -730,12 +713,41 @@ function List_Local_Scripts() {
 
     ## 列出本地其它仓库中的脚本
     function List_Own() {
-        local Name FileName WhichDir
+        local Name FileName WhichDir Tmp1 Tmp2 Tmp3 repo_num
         Import_Config_Not_Check
+
         if [ ! -z ${OwnRepoUrl1} ]; then
+            for ((i = 1; i <= 0x64; i++)); do
+                Tmp1=OwnRepoUrl$i
+                Tmp2=${!Tmp1}
+                [[ $Tmp2 ]] && OwnRepoSum=$i || break
+            done
+
+            if [[ $OwnRepoSum -ge 1 ]]; then
+                for ((i = 1; i <= $OwnRepoSum; i++)); do
+                    repo_num=$((i - 1))
+                    Tmp1=OwnRepoUrl$i
+                    array_own_repo_url[$repo_num]=${!Tmp1}
+                    array_own_repo_dir[$repo_num]=$(echo ${array_own_repo_url[$repo_num]} | perl -pe "s|\.git||" | awk -F "/|:" '{print $((NF - 1)) "_" $NF}')
+                    Tmp3=OwnRepoPath$i
+                    if [[ -z ${!Tmp3} ]]; then
+                        array_own_repo_path[$repo_num]="$OwnDir/${array_own_repo_dir[$repo_num]}"
+                    else
+                        array_own_repo_path[$repo_num]="$OwnDir/${array_own_repo_dir[$repo_num]}/${!Tmp3}"
+                    fi
+                done
+            fi
+
             local ListFiles=($(
-                cat $ListOwnScripts
+                for ((i = 1; i <= $OwnRepoSum; i++)); do
+                    repo_num=$((i - 1))
+                    ls ${array_own_repo_path[repo_num]} | egrep "${ScriptType}" | grep -Ev "/|${ShieldingKeywords}" | perl -pe "{s|^|${array_own_repo_path[repo_num]}/|g;}"
+                done
+                if [[ ${#OwnRawFile[*]} -ge 1 ]]; then
+                    ls $RawDir | egrep "${ScriptType}" | grep -Ev "/|${ShieldingKeywords}" | perl -pe "{s|^|$RawDir/|g;}"
+                fi
             ))
+
             echo -e "\n❖ Own 仓库的脚本："
             for ((i = 0; i < ${#ListFiles[*]}; i++)); do
                 FileName=$(echo ${ListFiles[i]} | awk -F "/" '{print $NF}')

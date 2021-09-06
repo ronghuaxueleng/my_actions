@@ -315,11 +315,11 @@ function Query_Name() {
     local p=$1
     case $(echo $p | awk -F '\.' '{print$NF}') in
     js)
-        grep -Eq "^[const $ = ].*Env" $p
+        grep "\$ \=" $p | grep -Eiq ".*Env"
         if [ $? -eq 0 ]; then
-            Name=$(grep -E "^[const $ = ].*Env" $p | awk -F "\(" '{print $2}' | awk -F "\)" '{print $1}' | sed 's:^.\(.*\).$:\1:' | head -1)
+            Name=$(grep "\$ \=" $p | grep -Ei ".*Env" | head -1 | awk -F "\(" '{print $2}' | awk -F "\)" '{print $1}' | sed 's:^.\(.*\).$:\1:')
         else
-            Name=$(grep -w "script-path" $p | sed "s/\W//g" | sed "s/[0-9a-zA-Z_]//g" | head -n 1)
+            Name=$(grep -w "script-path" $p | head -1 | sed "s/\W//g" | sed "s/[0-9a-zA-Z_]//g")
         fi
         ;;
     py | ts)
@@ -369,6 +369,9 @@ function Query_Name() {
         jd_joy_reward.ts)
             Name="宠汪汪兑换二代目"
             ;;
+        jd_jxgc_help.ts)
+            Name="京喜工厂助力"
+            ;;
         jd_jxmc.ts)
             Name="京喜牧场"
             ;;
@@ -390,8 +393,17 @@ function Query_Name() {
         jx_sign.ts)
             Name="京喜签到"
             ;;
+        jd_OpenCard.py)
+            Name="开卡有礼"
+            ;;
+        jd_blueCoin.py)
+            Name="东东超市商品兑换"
+            ;;
         jd_cashHelp.py)
             Name="签到领现金"
+            ;;
+        jd_getFollowGift.py)
+            Name="关注有礼"
             ;;
         jd_jxgc_tuan.py)
             Name="京喜工厂开团"

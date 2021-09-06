@@ -419,7 +419,7 @@ function Update_Own_Raw() {
         esac
         repository_url="$repository_platform$reformat_url"
         echo -e "\n$WORKING 开始从仓库 $repository_url 下载 ${raw_file_name[$i]} 脚本"
-        wget -q --no-check-certificate -O "$RawDir/${raw_file_name[$i]}.new" ${OwnRawFile[i]}
+        wget -q --no-check-certificate -O "$RawDir/${raw_file_name[$i]}.new" ${OwnRawFile[i]} -T 10
         if [[ $? -eq 0 ]]; then
             mv -f "$RawDir/${raw_file_name[$i]}.new" "$RawDir/${raw_file_name[$i]}"
             echo -e "$COMPLETE ${raw_file_name[$i]} 下载完成，脚本保存路径：$RawDir/${raw_file_name[$i]}"
