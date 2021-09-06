@@ -16,6 +16,24 @@ $(document).ready(function () {
     $('#save').click(function () {
         var confContent = editor.getValue();
         let timeStamp = (new Date()).getTime()
+        try {
+            let accountArr = JSON.parse(confContent);
+            for (const account of accountArr) {
+                if(account.ws_key && account.ws_key !== "" && new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）|{}【】‘；：”“'。，、？ ]").test(account.ws_key)){
+                    Swal.fire({
+                        text: `${account.pt_pin} ${account.remarks}的 ws_key 格式不正确`,
+                        icon: 'error'
+                    })
+                    return;
+                }
+            }
+        }catch (e) {
+            Swal.fire({
+                text: "格式出现问题，请仔细检查",
+                icon: 'error'
+            })
+            return;
+        }
         $.post(BASE_API_PATH + '/api/save?t=' + timeStamp, {
             content: confContent,
             name: "account.json"
