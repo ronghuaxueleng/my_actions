@@ -125,7 +125,7 @@ $(document).ready(function () {
 
     $('.refresh').click(get_code);
 
-    $('#cookietools').click(get_code);
+    $('#cookieTools').click(get_code);
 
     $('.qframe-close').click(function () {
         $("#qrcontainer").addClass("hidden");

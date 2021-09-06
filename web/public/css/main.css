@@ -566,17 +566,17 @@ h4 {
     outline: none;
     background: #d6d8e1;
 }
-.multi-button button:hover div {
+.multi-button button:hover span {
     display: block;
     top: 40px;
     animation: tooltip-animation-normal 0.3s ease-out forwards;
 }
 
-.multi-button button:hover div.animate-right {
+.multi-button button:hover span.animate-right {
     animation: tooltip-animation-right 0.3s ease-out forwards;
 }
 
-.multi-button button:hover div.animate-left {
+.multi-button button:hover span.animate-left {
     animation: tooltip-animation-left 0.3s ease-out forwards;
 }
 

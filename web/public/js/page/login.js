@@ -138,14 +138,13 @@ $(document).ready(function () {
                 if (data.newPwd) {
                     Swal.fire({
                         title: "温馨提示",
-                        text: `系统检测到您的密码为初始密码，已修改为随机密码：${data.newPwd}`,
+                        text: `系统检测到您的密码为初始密码，已修改为随机密码：${data.newPwd}，请重新登录`,
                         icon: "warning",
                         //confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "复制新密码并继续",
+                        confirmButtonText: "复制新密码并重新登录",
                     }).then((isConfirm) => {
                         if (isConfirm.value) {
                             copyToClip(data.newPwd);
-                            window.location.href = BASE_API_PATH + data['redirect'];
                         }
                     });
                 } else {
