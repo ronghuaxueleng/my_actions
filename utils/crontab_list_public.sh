@@ -1,5 +1,5 @@
 ## 此定时清单仅适配 https://github.com/JDHelloWorld/jd_scripts
-## 更新日期 2021-09-03
+## 更新日期 2021-09-07
 
 # 每3天的23:50分清理一次日志(互助码不清理，proc_file.sh对该文件进行了去重)
 50 23 */3 * * find /scripts/logs -name '*.log' | grep -v 'sharecodeCollection' | xargs rm -rf
@@ -116,3 +116,5 @@
 20 1 * * * node /scripts/jx_sign.js >> /scripts/logs/jx_sign.log 2>&1
 # 东东农场额外任务
 0 11,12 * * * node /scripts/jd_fruit_moreTask.js >> /scripts/logs/jd_fruit_moreTask.log 2>&1
+# 女装盲盒
+35 1,23 * * * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1

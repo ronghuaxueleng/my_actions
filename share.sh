@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-03
+## Modified: 2021-09-07
 
 ## 目录
 ShellDir=${JD_DIR}
@@ -290,8 +290,8 @@ function Combin_All() {
 
 ## 推送通知
 function Notify() {
-    local title=$(echo $1 | perl -pe 's|-|_|g')
-    local msg="$(echo -e $2)"
+    local title=$(echo "$1" | perl -pe 's|-|_|g')
+    local msg="$(echo -e "$2")"
     if [ -d $ScriptsDir_NodeModules ]; then
         node $FileNotify "$title" "$msg"
     fi
@@ -374,6 +374,9 @@ function Query_Name() {
             ;;
         jd_jxmc_stock.ts)
             Name="京喜牧场兑换新品通知"
+            ;;
+        jd_moneyTree.ts)
+            Name="摇钱树"
             ;;
         jd_qq_pasture.ts)
             Name="星系牧场"
