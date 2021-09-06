@@ -612,6 +612,7 @@ function Cookies_Control() {
 
 ## 推送通知
 function SendNotify() {
+    Import_Config_Not_Check
     Notify $1 $2
 }
 
@@ -826,8 +827,16 @@ case $# in
         esac
         ;;
     *)
-        echo -e "\n$COMMAND_ERROR"
-        Help
+        case $1 in
+        list | exsc | rmlog | ps)
+            echo -e "\n$TOO_MANY_COMMANDS"
+            Help
+            ;;
+        *)
+            echo -e "\n$COMMAND_ERROR"
+            Help
+            ;;
+        esac
         ;;
     esac
     ;;
@@ -839,6 +848,11 @@ case $# in
     rapid)
         Run_Rapidly $1 $3
         ;;
+    now | conc | pkill | update | check | [1-9] | [1-9][0-9] | [1-9][0-9][0-9])
+        echo -e "\n$TOO_MANY_COMMANDS"
+        Help
+        ;;
+
     *)
         case $1 in
         notify)
