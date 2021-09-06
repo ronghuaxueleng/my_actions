@@ -805,7 +805,7 @@ app.post('/api/auth', function (request, response) {
         let authErrorCount = con['authErrorCount'] || 0;
         if(authErrorCount >= 30){
             //错误次数超过30次，直接
-            panelSendNotify(`异常登录提醒`, `您的面板登录验证错误次数已达到，已禁用面板登录 \n 请手动设置/jd/config/auth.json文件里面的“authErrorCount”为0来恢复面板登录！`);
+            panelSendNotify(`异常登录提醒`, `您的面板登录验证错误次数已达到\t${authErrorCount}\t次，已禁用面板登录\n请手动设置/jd/config/auth.json文件里面的“authErrorCount”为0来恢复面板登录！`);
             response.send({
                 err: 1,
                 msg: '面板错误登录次数到达30次，已禁止登录!',
@@ -861,7 +861,7 @@ app.post('/api/auth', function (request, response) {
             } else {
                 authErrorCount++;
                 if(authErrorCount === 10 || authErrorCount === 20){
-                    panelSendNotify(`异常登录提醒`, `您的面板登录验证错误次数已达到 ${authErrorCount}次，为了保障您的面板安全，请进行检查！\n\n\n 温馨提示：请定期修改账号和密码，并将面板更新至最新版本`);
+                    panelSendNotify(`异常登录提醒`, `您的面板登录验证错误次数已达到\t${authErrorCount}\t次，为了保障您的面板安全，请进行检查！\n\n\n温馨提示：请定期修改账号和密码，并将面板更新至最新版本`);
                 }
                 con['authErrorCount'] = authErrorCount;
                 fs.writeFileSync(authConfigFile, JSON.stringify(con));
