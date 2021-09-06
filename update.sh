@@ -395,7 +395,7 @@ function Update_Own_Repo() {
     done
 }
 
-## 更新 own 所有 raw 脚本
+## 更新 own 的所有 raw 脚本
 function Update_Own_Raw() {
     local rm_mark format_url repository_platform repository_branch reformat_url repository_url repository_url_tmp
     if [[ ${#array_own_repo_url[*]} -eq 0 ]] && [[ ${#OwnRawFile[*]} -gt 0 ]]; then
@@ -440,7 +440,7 @@ function Update_Own_Raw() {
     done
 }
 
-## 更新shell
+## 更新项目源码
 function Update_Shell() {
     echo -e "-------------------------------------------------------------"
     [ -f $PanelDir/package.json ] && local PanelDependOld=$(cat $PanelDir/package.json)
@@ -472,7 +472,7 @@ function Update_Shell() {
     Detect_Config_Version
 }
 
-## 更新scripts仓库
+## 更新 Scripts 仓库
 function Update_Scripts() {
     echo -e "-------------------------------------------------------------"
     ## 更新前先存储package.json
@@ -522,7 +522,7 @@ function Update_Scripts() {
     fi
 }
 
-## 更新own脚本
+## 更新 own 仓库
 function Update_Own() {
     Count_OwnRepoSum
     Gen_own_dir_and_path
@@ -561,7 +561,7 @@ function ExtraShell() {
         ## 自动同步用户自定义的diy.sh
         if [[ $EnableExtraShellSync == true ]] && [[ ! -z $ExtraShellSyncUrl ]]; then
             echo -e "$WORKING 开始同步自定义脚本：$ExtraShellSyncUrl\n"
-            wget -q --no-check-certificate $ExtraShellSyncUrl -O $FileExtra.new
+            wget -q --no-check-certificate $ExtraShellSyncUrl -O $FileExtra.new -T 10
             if [ $? -eq 0 ]; then
                 mv -f "$FileExtra.new" "$FileExtra"
                 echo -e "$COMPLETE 自定义脚本同步完成\n"

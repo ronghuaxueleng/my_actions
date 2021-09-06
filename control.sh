@@ -467,7 +467,7 @@ function Environment_Deployment() {
             ;;
         *)
             npm install -g ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got
-            apk --no-cache add -f python3 py3-pip sudo
+            apk --no-cache add -f python3 py3-pip sudo build-base pkgconfig pixman-dev cairo-dev pango-dev
             pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
             pip3 install --upgrade pip
             pip3 install requests
@@ -487,6 +487,10 @@ function Environment_Deployment() {
 ## 判定命令
 case $# in
 0)
+    Help
+    ;;
+1)
+    echo -e "\n$COMMAND_ERROR"
     Help
     ;;
 2)
