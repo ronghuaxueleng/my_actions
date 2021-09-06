@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-06
+## Modified: 2021-09-07
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -79,9 +79,9 @@ function Reset_Romote_Url() {
     local Branch=$3
     if [ -d "$WorkDir/.git" ]; then
         cd $WorkDir
-        git remote set-url origin $Url >/dev/null
-        git fetch --all >/dev/null
-        git reset --hard origin/$Branch >/dev/null
+        git remote set-url origin $Url >/dev/null 2>&1
+        git fetch --all >/dev/null 2>&1
+        git reset --hard origin/$Branch >/dev/null 2>&1
         cd $CurrentDir
     fi
 }
@@ -388,9 +388,9 @@ function Update_Own_Repo() {
             Git_Clone ${array_own_repo_url[i]} ${array_own_repo_path[i]} ${array_own_repo_branch[i]}
         fi
         if [[ $ExitStatus -eq 0 ]]; then
-            echo -e "\n$COMPLETE ${array_own_repo_path[i]} 仓库更新完成"
+            echo -e "\n$COMPLETE ${array_own_repo_dir[i]} 仓库更新完成"
         else
-            echo -e "\n$ERROR ${array_own_repo_path[i]} 仓库更新失败，请检查原因..."
+            echo -e "\n$ERROR ${array_own_repo_dir[i]} 仓库更新失败，请检查原因..."
         fi
     done
 }
