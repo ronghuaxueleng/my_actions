@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-06
+## Modified: 2021-09-07
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -240,7 +240,7 @@ function Run_Concurrent_Lite() {
     local FileName=$1
     local FileFormat=$2
     local UserNum AccountNum
-    Make_Dir ${LogPath}
+    Make_Dir "$LogDir/${FileName}"
     echo -e "\n各账号间已经在后台开始并发执行，前台不显示脚本输出内容而是直接写入到日志文件中。\n"
     for ((UserNum = 1; UserNum <= ${UserSum}; UserNum++)); do
         for num in ${TempBlockCookie}; do
@@ -248,15 +248,16 @@ function Run_Concurrent_Lite() {
         done
         AccountNum=Cookie$UserNum
         export JD_COOKIE=${!AccountNum}
+        cd $ScriptsDir
         case ${FileFormat} in
         JavaScript)
-            node ${FileName}.js &>${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
+            node ${FileName}.js &>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
             ;;
         Python)
-            python3 -u ${FileName}.py &>${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
+            python3 -u ${FileName}.py &>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
             ;;
         TypeScript)
-            ts-node-transpile-only ${FileName}.ts &>${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
+            ts-node-transpile-only ${FileName}.ts &>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
             ;;
         esac
     done
@@ -852,7 +853,6 @@ case $# in
         echo -e "\n$TOO_MANY_COMMANDS"
         Help
         ;;
-
     *)
         case $1 in
         notify)
@@ -866,7 +866,6 @@ case $# in
         ;;
     esac
     ;;
-
 4)
     case $2 in
     raw)
