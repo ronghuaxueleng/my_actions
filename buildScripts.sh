@@ -120,7 +120,6 @@ cat > JDHelp/docker/crontab_list.sh <<EOF
 $(echo -e "$crontab_list")
 EOF
 sed '/^$/d' JDHelp/docker/crontab_list.sh
-rm -rf JDHelp/package.json
 
 cd JDHelp
 replaceShareCode jd_cash JDHelp
@@ -216,6 +215,8 @@ if [ $? -eq 0 ]; then
     . ${FileDiy}
 fi
 
+jq -s 'reduce .[] as $item ({}; . * $item)' MyActions/package.json JDHelloWorld/package.json JDHelp/package.json Aaron/package.json faker2/package.json > package.json
+
 cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
 # cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
@@ -223,3 +224,4 @@ cp -rf $(ls JDHelp | grep -v docker | sed "s:^:JDHelp/:" | xargs) ${ScriptsDir}
 cp -rf $(ls Aaron | grep -v docker | sed "s:^:Aaron/:" | xargs) ${ScriptsDir}
 cp -rf $(ls faker2 | grep -v docker | sed "s:^:faker2/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
+cp -rf package.json ${ScriptsDir}
