@@ -116,7 +116,7 @@ $(document).ready(function () {
         runCmd(curScript.value, `${curScript.key} now`, curScript.refreshLog);
     });
     $runCmdConc.click(function () {
-        runCmd(curScript.value, `${curScript.key} conc`, curScript.refreshLog);
+        runCmd(curScript.value, `${curScript.key} conc`, false);
     });
 
     function getLogInterval(jsName) {
