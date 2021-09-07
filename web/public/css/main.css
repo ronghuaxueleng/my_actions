@@ -281,7 +281,7 @@ h4 {
 /* 输入框 */
 .coco-input {
     margin: 0;
-    width: 140px;
+    width: 180px;
     height: 22px;
     border-radius: 6px;
     -webkit-appearance: none;
@@ -424,19 +424,24 @@ h4 {
 
 .new .run {
     margin-left: 15px;
-    align-items: baseline;
+    align-items: center;
     display: flex;
 }
-.run-mobile .btn.submit{
-    width: 60px;
-    height: 30px;
+.btn[type=submit]{
     margin-right: 5px;
+}
+.run-mobile .btn.submit{
+    /*width: 60px;*/
+    height: 30px;
 }
 .run .btn{
     height:28px;
     font-size: 13px;
     border-radius: 6px;
 }
+/*.run .btn:nth-of-type(1){*/
+/*    margin-right: 5px;*/
+/*}*/
 .fast-run .btn{
     height: 30px;
 }
@@ -461,7 +466,7 @@ h4 {
 
 .run-mobile {
     display: flex;
-    align-items: center;
+    /*align-items: center;*/
     flex-wrap: wrap;
     margin: 0.6em 0.6em 0.4em 0.6em;
 }
@@ -483,8 +488,8 @@ h4 {
 }
 
 .new.header header>div{
-    margin-bottom: 5px;
-    margin-top: 5px;
+    /*margin-bottom: 5px;*/
+    /*margin-top: 5px;*/
 }
 .new.header header .more-list {
     margin-right: 0.8em
@@ -492,7 +497,7 @@ h4 {
 
 /* 白色按钮 */
 .multi-button {
-    padding: 1px 6px;
+    padding: 1.5px 6px;
     border-radius: 50px;
     background: #fff;
     border: 0.5px solid rgba(146, 152, 176, 0.4);
@@ -900,7 +905,7 @@ h4 {
 .selectSearchArea {
     /*width: 170px;*/
     height: 100%;
-    line-height: 27px !important;
+    line-height: 26.75px !important;
     margin-right: 5px;
     float: left;
     position: relative;
@@ -929,7 +934,7 @@ h4 {
 .selectSearchArea > .multiFunctionSelectList {
     position: absolute;
     width: 100%;
-    max-height: 280px;
+    max-height: 300px;
     top: 30px;
     margin: 0;
     padding: 0;

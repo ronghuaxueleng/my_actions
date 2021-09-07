@@ -45,6 +45,8 @@ var extraServerFile = path.join(rootPath, 'config/extra_server.js');
 var logPath = path.join(rootPath, 'log/');
 // 脚本目录
 var ScriptsPath = path.join(rootPath, 'scripts/');
+// own目录
+var OwnPath = path.join(rootPath, 'own/');
 
 var authError = '错误的用户名密码，请重试';
 var loginFaild = '请先登录!';
@@ -87,7 +89,7 @@ function getCookie(response) {
     return userCookie;
 }
 
-let LOGIN_UA = process.env.LOGIN_UA ? process.env.LOGIN_UA: "jdapp;iPhone;10.1.2;14.7.1;${randomString(40)};network/wifi;model/iPhone10,2;addressid/4091160336;appBuild/167802;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1";
+let LOGIN_UA = process.env.LOGIN_UA ? process.env.LOGIN_UA : "jdapp;iPhone;10.1.2;14.7.1;${randomString(40)};network/wifi;model/iPhone10,2;addressid/4091160336;appBuild/167802;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1";
 
 async function step1() {
     try {
@@ -221,7 +223,7 @@ function mkdirConfigBakDir() {
     }
 }
 
-function panelSendNotify(title, content){
+function panelSendNotify(title, content) {
     execSync(`task notify "${title}" "${content}"`);
 }
 
@@ -368,7 +370,7 @@ var userAgentTools = {
         return (/pad|m2105k81ac/i.test(userAgent.toLowerCase()));
     },
     mobile: function (userAgent) {
-        if(userAgentTools.Pad(userAgent)){
+        if (userAgentTools.Pad(userAgent)) {
             return false;
         }
         return (userAgentTools.Android(userAgent) || userAgentTools.iPhone(userAgent) || userAgentTools.BlackBerry(userAgent));
@@ -530,10 +532,10 @@ app.get('/auth', function (request, response) {
 
 app.get('/:page', (request, response) => {
     let page = request.params.page;
-    let pageList = ['bot','crontab','config','diff','extra','changePwd','remarks','run','taskLog','terminal','viewScripts'];
-    if(page && request.session.loggedin && pageList.includes(page)){
+    let pageList = ['bot', 'crontab', 'config', 'diff', 'extra', 'changePwd', 'remarks', 'run', 'taskLog', 'terminal', 'viewScripts'];
+    if (page && request.session.loggedin && pageList.includes(page)) {
         response.sendFile(getPath(request, `${page}.html`));
-    }else {
+    } else {
         response.redirect('./auth');
     }
 })
@@ -722,19 +724,27 @@ app.post('/api/runCmd', function (request, response) {
 /**
  * 使用jsName获取最新的日志
  */
-app.get('/api/runLog/:jsName', function (request, response) {
+app.get('/api/runLog', function (request, response) {
     if (request.session.loggedin) {
-        let jsName = request.params.jsName;
+        let jsName = request.query.jsName;
         let logFile;
         if (jsName === 'update' || jsName === 'ttyd' || jsName === 'rmlog' || jsName === 'hangup' || jsName === 'cfd_loop' || jsName === 'exsc') {
             logFile = path.join(rootPath, `log/${jsName}.log`);
         } else {
             if (jsName.indexOf(".") > -1) {
-                jsName = jsName.substring(0, jsName.indexOf("."));
+                jsName = jsName.substring(0, jsName.lastIndexOf("."));
             }
             let pathUrl = `log/${jsName}/`;
-            if (!fs.existsSync(path.join(rootPath, pathUrl))) {
-                pathUrl = `log/jd_${jsName}/`;
+            if (jsName.startsWith("scripts/")) {
+                jsName = jsName.substring(jsName.indexOf("/") + 1);
+                pathUrl = `log/${jsName}/`;
+            } else if (jsName.startsWith("own/")) {
+                jsName = jsName.substring(jsName.indexOf("/") + 1);
+                pathUrl = `log/${jsName.replaceAll('/','_')}/`;
+            } else {
+                if (!fs.existsSync(path.join(rootPath, pathUrl))) {
+                    pathUrl = `log/jd_${jsName}/`;
+                }
             }
             logFile = getLastModifyFilePath(
                 path.join(rootPath, pathUrl)
@@ -778,15 +788,15 @@ async function ip2Address(ip) {
         });
         if (body.code === 0 && body.address) {
             let address = body.address;
-            if(address.indexOf("内网IP") > -1){
+            if (address.indexOf("内网IP") > -1) {
                 return '局域网'
             }
             let type = address.substring(address.lastIndexOf(" "));
             address = address.replace(type, '').replace(/\s*/g, '');
             return address + type;
         }
-    }catch (e){
-        console.error("IP 转为地址失败",e);
+    } catch (e) {
+        console.error("IP 转为地址失败", e);
     }
     return '未知';
 }
@@ -803,7 +813,7 @@ app.post('/api/auth', function (request, response) {
         if (err) console.log(err);
         var con = JSON.parse(data);
         let authErrorCount = con['authErrorCount'] || 0;
-        if(authErrorCount >= 30){
+        if (authErrorCount >= 30) {
             //错误次数超过30次，直接
             response.send({
                 err: 1,
@@ -859,9 +869,9 @@ app.post('/api/auth', function (request, response) {
                 })
             } else {
                 authErrorCount++;
-                if(authErrorCount === 10 || authErrorCount === 20){
+                if (authErrorCount === 10 || authErrorCount === 20) {
                     panelSendNotify(`异常登录提醒`, `您的面板登录验证错误次数已达到${authErrorCount}次，为了保障您的面板安全，请进行检查！温馨提示：请定期修改账号和密码，并将面板更新至最新版本`);
-                }else if(authErrorCount === 30) {
+                } else if (authErrorCount === 30) {
                     panelSendNotify(`异常登录提醒`, `您的面板登录验证错误次数已达到${authErrorCount}次，已禁用面板登录。请手动设置/jd/config/auth.json文件里面的“authErrorCount”为0来恢复面板登录！`);
                 }
                 con['authErrorCount'] = authErrorCount;
@@ -952,8 +962,8 @@ app.get('/api/logs', function (request, response) {
         var fileList = fs.readdirSync(logPath, 'utf-8');
         var dirs = [];
         var rootFiles = [];
-        fileList.map((name,index)=>{
-            if(keywords === '' || name.indexOf(keywords) > -1){
+        fileList.map((name, index) => {
+            if (keywords === '' || name.indexOf(keywords) > -1) {
                 let stat = fs.lstatSync(logPath + name);
                 // 是目录，需要继续
                 if (stat.isDirectory()) {
@@ -998,61 +1008,75 @@ app.get('/api/logs/:dir/:file', function (request, response) {
     }
 });
 
+function loadFile(loadPath, dirName, keywords, onlyRunJs) {
+    let arrFiles = [], arrDirs = [];
+    let excludeRegExp = /(git)|(node_modules)|(icon)/;
+    let fileRegExp = /.*?/g;
+    if (onlyRunJs) {
+        excludeRegExp = /(ShareCodes)|(AGENTS)|(index.js)|(validate)|(JDJR)|(Faker)|(tencentscf)|(Notify)|(Cookie)|(cookie)|(Tokens)|(app.)|(main.)|(.json)/
+        fileRegExp = /(.js)|(.ts)|(.py)/
+    }
+    const files = fs.readdirSync(rootPath + "/" + loadPath, {withFileTypes: true})
+    files.map((item, index) => {
+        let name = item.name;
+        let dirPath = loadPath + '/' + name;
+        let filter = (!excludeRegExp.test(name) && fileRegExp.test(name)) && (keywords === '' || name.indexOf(keywords) > -1);
+        if (filter) {
+            const stat = fs.lstatSync(rootPath + '/' + dirPath);
+            if (stat.isDirectory()) {
+                let dirPathFiles = loadFile(dirPath, name, keywords, onlyRunJs)
+                //dirPathFiles.reverse();
+                if (onlyRunJs) {
+                    arrFiles = arrFiles.concat(dirPathFiles)
+                } else {
+                    arrDirs.push({
+                        dirName: name,
+                        dirPath: dirPath,
+                        files: dirPathFiles,
+                    })
+                }
+            } else if (!stat.isDirectory()) {
+                arrFiles.push({
+                    fileName: name,
+                    filePath: dirPath,
+                })
+            }
+        }
+
+    })
+    return arrDirs.concat(arrFiles);
+}
 
 /**
  * 脚本列表
  */
 app.get('/api/scripts', function (request, response) {
     if (request.session.loggedin) {
-        var fileList = fs.readdirSync(ScriptsPath, 'utf-8');
-        var dirs = [];
-        var rootFiles = [];
+        let rootFiles = [], scriptsDir = 'scripts', ownDir = 'own', dirList = [scriptsDir];
         let keywords = request.query.keywords || '';
-        let filterDir = request.query.filterDir || false;
-        let onlyRunJs  = request.query.onlyRunJs || false;
-        var excludeRegExp = /(git)|(node_modules)|(icon)/;
-        let fileRegExp = /.*?/g;
-        if(onlyRunJs){
-            excludeRegExp = /(ShareCodes)|(AGENTS)|(index.js)|(validate)|(JDJR)|(Faker)|(tencentscf)|(Notify)|(Cookie)|(cookie)|(Tokens)|(app.)|(main.)|(.json)/
-            fileRegExp =/(.js)|(.ts)|(.py)/
-        }
-        fileList.map((name,index)=> {
-            let flag = !excludeRegExp.test(name) && fileRegExp.test(name);
-            if (keywords === '' || name.indexOf(keywords) > -1) {
-                var stat = fs.lstatSync(ScriptsPath + name);
-                // 是目录，需要继续
-                if (stat.isDirectory()) {
-                    if(!filterDir){
-                        var fileListTmp = fs.readdirSync(
-                            ScriptsPath + '/' + name,
-                            'utf-8'
-                        );
-                        fileListTmp.reverse();
-
-                        if (flag) {
-                            var dirMap = {
-                                dirName: name,
-                                files: fileListTmp,
-                            };
-                            dirs.push(dirMap);
-                        }
-                    }
-                } else {
-                    if (flag) {
-                        rootFiles.push(name);
-                    }
-                }
-            }
+        let onlyRunJs = request.query.onlyRunJs || 'false';
+        onlyRunJs = onlyRunJs === 'true';
+        dirList.forEach((dirName) => {
+            rootFiles.push({
+                dirName: dirName,
+                dirPath: dirName,
+                files: loadFile(dirName, dirName, keywords, onlyRunJs),
+            })
         })
-
-        dirs.push({
-            dirName: '@',
-            files: rootFiles,
-        });
-        var result = {
-            dirs
-        };
-        response.send(result);
+        if (onlyRunJs) {
+            let ownFileList = fs.readdirSync(OwnPath, {withFileTypes: true});
+            ownFileList.forEach((item) => {
+                let name = item.name;
+                if (item.isDirectory()) {
+                    rootFiles.push({
+                        dirName: name,
+                        dirPath: ownDir + "/" + name,
+                        files: loadFile(ownDir + "/" + name, name, keywords, onlyRunJs),
+                    })
+                }
+            })
+        }
+        response.send(rootFiles);
     } else {
         response.redirect('/');
     }
@@ -1061,13 +1085,15 @@ app.get('/api/scripts', function (request, response) {
 /**
  * 脚本文件
  */
-app.get('/api/scripts/:dir/:file', function (request, response) {
+app.get('/api/scripts/content', function (request, response) {
     if (request.session.loggedin) {
         let filePath;
-        if (request.params.dir === '@') {
-            filePath = ScriptsPath + request.params.file;
+        if (request.query.dir === '@') {
+            filePath = ScriptsPath + request.query.file;
+        } else if (request.query.path && request.query.path !== '') {
+            filePath = rootPath + '/' + request.query.path;
         } else {
-            filePath = ScriptsPath + request.params.dir + '/' + request.params.file;
+            filePath = rootPath + '/' + request.query.dir + '/' + request.query.file;
         }
         var content = getFileContentByName(filePath);
         response.setHeader('Content-Type', 'text/plain');
@@ -1167,7 +1193,6 @@ app.post('/updateCookie', function (request, response) {
         }
     })
 });
-
 
 
 checkConfigFile();

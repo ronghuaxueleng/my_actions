@@ -10,39 +10,58 @@ $(document).ready(function () {
         mode: 'javascript',
         theme: themeChange.getAndUpdateEditorTheme(),
     });
-    let metisMenu,$menuTree = $('#menuTree');
+    let metisMenu, $menuTree = $('#menuTree');
+
+    function createFileTree(dirs){
+        let navHtml = ``
+        dirs.map((item,index)=>{
+            if(typeof item === 'object' && item.dirName){
+                navHtml += `<li class="nav-item ${item.dirPath === 'scripts' ? 'mm-active':''}">`
+                navHtml += `<a class="nav-link text-dark has-arrow" href="#">${item.dirName}</a>`
+                navHtml += `<ul class="nav flex-column pl-1">${createFileTree(item.files)}</ul>`
+            }else {
+                navHtml += `<li class="nav-item">`
+                navHtml += `<a class="nav-link" href="javascript:viewScript('${item.filePath}');">${item.fileName}</a>`
+            }
+            navHtml +=`</li>`;
+        })
+
+        return navHtml;
+    }
+
     function loadData(keywords = '') {
         $.get(BASE_API_PATH + '/api/scripts',{keywords}, function (data) {
-            var dirs = data.dirs;
-            var navHtml = "";
-            for (let index in dirs) {
-                var dirName = dirs[index].dirName;
-                // 文件在scripts/目录时
-                if (dirName === '@') {
-                    var row = `<li class="nav-item">`;
-                    for (let filesKey in dirs[index].files) {
-                        var fileName = dirs[index].files[filesKey];
-                        row +=
-                            `<a class="nav-link" href="javascript:viewScript('${dirName}', '${fileName}');">${fileName}</a>`
-                    }
-                    row += `</li>`;
-                } else {
-                    var row = `<li class="nav-item">
-                                <a class="nav-link text-dark has-arrow" href="#">${dirName}</a>
-                                <ul class="nav flex-column pl-1">
-                                    <li class="nav-item">`;
-                    for (let filesKey in dirs[index].files) {
-                        var fileName = dirs[index].files[filesKey];
-                        row +=
-                            `<a class="nav-link" href="javascript:viewScript('${dirName}', '${fileName}');">${fileName}</a>`
-                    }
-                    row += `</li>
-                                    </ul>
-                                </li>`;
-                }
-
-                navHtml += row;
-            }
+            let navHtml = createFileTree(data);
+            // var dirs = data.dirs;
+            // var navHtml = "";
+            // for (let index in dirs) {
+            //     var dirName = dirs[index].dirName;
+            //     // 文件在scripts/目录时
+            //     if (dirName === '@') {
+            //         var row = `<li class="nav-item">`;
+            //         for (let filesKey in dirs[index].files) {
+            //             var fileName = dirs[index].files[filesKey];
+            //             row +=
+            //                 `<a class="nav-link" href="javascript:viewScript('${dirName}', '${fileName}');">${fileName}</a>`
+            //         }
+            //         row += `</li>`;
+            //     } else {
+            //         var row = `<li class="nav-item">
+            //                     <a class="nav-link text-dark has-arrow" href="#">${dirName}</a>
+            //                     <ul class="nav flex-column pl-1">
+            //                         <li class="nav-item">`;
+            //         for (let filesKey in dirs[index].files) {
+            //             var fileName = dirs[index].files[filesKey];
+            //             row +=
+            //                 `<a class="nav-link" href="javascript:viewScript('${dirName}', '${fileName}');">${fileName}</a>`
+            //         }
+            //         row += `</li>
+            //                         </ul>
+            //                     </li>`;
+            //     }
+            //
+            //     navHtml += row;
+            // }
             $menuTree.metisMenu('dispose')
             $menuTree.html(navHtml);
             metisMenu = $menuTree.metisMenu();
@@ -50,20 +69,20 @@ $(document).ready(function () {
     }
 
     loadData();
-    $("#submitSearch").click(function (){
+    $("#submitSearch").click(function () {
         loadData($("#searchInput").val())
     })
-    $('#searchInput').bind('keypress',function(event){
-        if(event.keyCode === 13) {
+    $('#searchInput').bind('keypress', function (event) {
+        if (event.keyCode === 13) {
             $("#submitSearch").click();
         }
     });
-    window.viewScript = function viewScript(dir, file) {
+    window.viewScript = function viewScript(path) {
         if (window.innerWidth < 993) {
             dispatch(document.getElementById('toggleIcon'), 'click');
         }
 
-        $.get(BASE_API_PATH + `/api/scripts/${dir}/${file}`, function (data) {
+        $.get(BASE_API_PATH + `/api/scripts/content`, {path:path}, function (data) {
             editor.setValue(data);
         });
     }
@@ -85,7 +104,9 @@ $(document).ready(function () {
             } else {
                 ele.fireEvent('on' + type);
             }
-        } catch (e) {};
+        } catch (e) {
+        }
+        ;
 
     }
 });

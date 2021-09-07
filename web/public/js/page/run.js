@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    var timer = 0, curScript = {key: "task list", value: "list", refreshLog: false},$runCmd = $('#runCmd');
+    var timer = 0, curScript = {key: "task list", value: "list", refreshLog: false}, $runCmd = $('#runCmd'),
+        $runCmdConc = $('#runCmdConc');
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
         lineWrapping: false,
@@ -92,19 +93,16 @@ $(document).ready(function () {
     }
 
     $.get(BASE_API_PATH + '/api/scripts', {filterDir: true, onlyRunJs: true}, function (data) {
-        data.dirs.map((item) => {
-            if (item.dirName === "@") {
-                let list = item.files.map((script) => {
-                    let name = script.substring(0, script.indexOf("."));
-                    return {key: `bash task ${name} now`, value: script, refreshLog: true}
-                })
-                initSearch(list)
-            }
-
+        let list = [];
+        data.map((item) => {
+            list = list.concat(item.files.map((file) => {
+                //let fileName = file.fileName;
+                // let name = fileName.substring(0, fileName.indexOf("."));
+                return {key: `bash task ${file.filePath}`, value: file.filePath, refreshLog: true}
+            }));
         })
-
+        initSearch(list)
     })
-
 
 
     $('.cmd-btn').click(function () {
@@ -115,7 +113,10 @@ $(document).ready(function () {
     });
 
     $runCmd.click(function () {
-        runCmd(curScript.value, curScript.key, curScript.refreshLog);
+        runCmd(curScript.value, `${curScript.key} now`, curScript.refreshLog);
+    });
+    $runCmdConc.click(function () {
+        runCmd(curScript.value, `${curScript.key} conc`, curScript.refreshLog);
     });
 
     function getLogInterval(jsName) {
@@ -129,7 +130,7 @@ $(document).ready(function () {
     }
 
     function getLog(jsName) {
-        $.get(BASE_API_PATH + `/api/runLog/${jsName}`, function (data) {
+        $.get(BASE_API_PATH + `/api/runLog`,{jsName}, function (data) {
             if (data !== 'no logs') {
                 editor.setValue(data);
             }
