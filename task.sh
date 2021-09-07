@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-07
+## Modified: 2021-09-08
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -385,13 +385,14 @@ function Process_Kill() {
     ps -ef | egrep -v "grep|pkill" | grep "${FileName}" -wq
     local ExitSearchProcess=$?
     if [[ ${ExitSearchProcess} == 0 ]]; then
-        kill -9 $(ps -ef | grep "${FileName}" | grep -v "pkill" | awk '$0 !~/grep/ {print $1}' | tr -s '\n' ' ') >/dev/null 2>&1
+        kill -9 $(ps -ef | grep "${FileName}" | grep -v "pkill" | awk '$0 !~/grep/ {print $2}' | tr -s '\n' ' ') >/dev/null 2>&1
         sleep 1
-        kill -9 $(ps -ef | grep "${FileName}" | grep -v "pkill" | awk '$0 !~/grep/ {print $1}' | tr -s '\n' ' ') >/dev/null 2>&1
+        kill -9 $(ps -ef | grep "${FileName}" | grep -v "pkill" | awk '$0 !~/grep/ {print $2}' | tr -s '\n' ' ') >/dev/null 2>&1
         ps -ef | egrep -v "grep|pkill" | grep "${FileName}" -wq
         if [ $? -eq 0 ]; then
             echo -e "\n$ERROR 进程终止失败，请尝试手动终止 kill -9 <pid>\n"
             ps -axo pid,pcpu,pmem,command --sort -pmem | less | grep ${FileName} | egrep -v "grep|pkill"
+            echo ''
         else
             echo -e "\n$COMPLETE 已终止进程\n"
         fi
@@ -687,7 +688,7 @@ function Process_Monitor() {
         echo -e "\033[34m[释放后]\033[0m  Memory：\033[33m${MemoryUsageNew}\033[0m   剩余可用内存：\033[33m${MemoryFreeNew}MB\033[0m"
     fi
     echo -e "\n\033[34m[运行时长]  [CPU]    [内存]    [脚本名称]\033[0m"
-    ps -axo user,time,pcpu,user,pmem,user,command --sort -pmem | less | egrep ".js\b|.py\b|.ts\b" | egrep -Ev "server.js|pm2|egrep|perl|sed|bash" | perl -pe '{s| root     |% |g; s|\/usr\/bin\/ts-node ||g; s|\/usr\/bin\/node ||g; s|node ||g;  s|root     |#|g; s|#[0-9][0-9]:|#|g;  s|  | |g; s| |     |g; s|#|•  |g;}'
+    ps -axo user,time,pcpu,user,pmem,user,command --sort -pmem | less | egrep ".js\b|.py\b|.ts\b" | egrep -Ev "server.js|pm2|egrep|perl|sed|bash" | perl -pe '{s| root     |% |g; s|\/usr\/bin\/ts-node ||g; s|\/usr\/bin\/node ||g; s|node ||g;  s|root     |#|g; s|#[0-9][0-9]:|#|g;  s|  | |g; s| |     |g; s|#|•  |g; s|/jd/scripts/jd_cfd_loop\.js|jd_cfd_loop\.js|g;}'
     echo ''
 }
 
