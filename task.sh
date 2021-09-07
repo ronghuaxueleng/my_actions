@@ -307,17 +307,27 @@ function Run_Rapidly() {
         Import_Config $p
         Count_UserSum
         export JD_COOKIE=$(Combin_Sub Cookie)
-        local FileNameTmp=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
+        FileNameTmp1=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
+        FileNameTmp2=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
         cd $ScriptsDir
-        if [ -f $ScriptsDir/${FileNameTmp}.js ]; then
-            Make_Dir "$LogDir/${FileNameTmp}"
-            node ${FileNameTmp1}.js 2>&1 | tee $LogDir/${FileNameTmp}/$(date "+%Y-%m-%d-%H-%M-%S").log
-        elif [ -f $ScriptsDir/${FileNameTmp}.py ]; then
-            Make_Dir "$LogDir/${FileNameTmp}"
-            python3 -u ${FileNameTmp1}.py 2>&1 | tee $LogDir/${FileNameTmp}/$(date "+%Y-%m-%d-%H-%M-%S").log
-        elif [ -f $ScriptsDir/${FileNameTmp}.ts ]; then
-            Make_Dir "$LogDir/${FileNameTmp}"
-            ts-node-transpile-only ${FileNameTmp1}.ts 2>&1 | tee $LogDir/${FileNameTmp}/$(date "+%Y-%m-%d-%H-%M-%S").log
+        if [ -f $ScriptsDir/${FileNameTmp1}.js ]; then
+            Make_Dir "$LogDir/${FileNameTmp1}"
+            node ${FileNameTmp1}.js 2>&1 | tee $LogDir/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
+        elif [ -f $ScriptsDir/${FileNameTmp1}.py ]; then
+            Make_Dir "$LogDir/${FileNameTmp1}"
+            python3 -u ${FileNameTmp1}.py 2>&1 | tee $LogDir/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
+        elif [ -f $ScriptsDir/${FileNameTmp1}.ts ]; then
+            Make_Dir "$LogDir/${FileNameTmp1}"
+            ts-node-transpile-only ${FileNameTmp1}.ts 2>&1 | tee $LogDir/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
+        elif [ -f $ScriptsDir/${FileNameTmp2}.js ]; then
+            Make_Dir "$LogDir/${FileNameTmp2}"
+            node ${FileNameTmp2}.js 2>&1 | tee $LogDir/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
+        elif [ -f $ScriptsDir/${FileNameTmp2}.py ]; then
+            Make_Dir "$LogDir/${FileNameTmp2}"
+            python3 -u ${FileNameTmp2}.py 2>&1 | tee $LogDir/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
+        elif [ -f $ScriptsDir/${FileNameTmp2}.ts ]; then
+            Make_Dir "$LogDir/${FileNameTmp2}"
+            ts-node-transpile-only ${FileNameTmp2}.ts 2>&1 | tee $LogDir/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
         else
             FormatInput=$(echo $p | awk -F "/" '{print $NF}')
             echo -e "\n$ERROR 在 $ScriptsDir 目录下未检测到 $FormatInput 脚本的存在，请确认！"
@@ -338,13 +348,20 @@ function Run_Rapidly() {
                 Import_Config $p
                 Count_UserSum
                 export JD_COOKIE=$(Combin_Sub Cookie)
-                local FileNameTmp=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
-                if [ -f $ScriptsDir/${FileNameTmp}.js ]; then
-                    Run_Concurrent_Lite ${FileNameTmp} JavaScript
-                elif [ -f $ScriptsDir/${FileNameTmp}.py ]; then
-                    Run_Concurrent_Lite ${FileNameTmp} Python
-                elif [ -f $ScriptsDir/${FileNameTmp}.ts ]; then
-                    Run_Concurrent_Lite ${FileNameTmp} TypeScript
+                FileNameTmp1=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
+                FileNameTmp2=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
+                if [ -f $ScriptsDir/${FileNameTmp1}.js ]; then
+                    Run_Concurrent_Lite ${FileNameTmp1} JavaScript
+                elif [ -f $ScriptsDir/${FileNameTmp1}.py ]; then
+                    Run_Concurrent_Lite ${FileNameTmp1} Python
+                elif [ -f $ScriptsDir/${FileNameTmp1}.ts ]; then
+                    Run_Concurrent_Lite ${FileNameTmp1} TypeScript
+                elif [ -f $ScriptsDir/${FileNameTmp2}.js ]; then
+                    Run_Concurrent_Lite ${FileNameTmp2} JavaScript
+                elif [ -f $ScriptsDir/${FileNameTmp2}.py ]; then
+                    Run_Concurrent_Lite ${FileNameTmp2} Python
+                elif [ -f $ScriptsDir/${FileNameTmp2}.ts ]; then
+                    Run_Concurrent_Lite ${FileNameTmp2} TypeScript
                 else
                     FormatInput=$(echo $p | awk -F "/" '{print $NF}')
                     echo -e "\n$ERROR 在 $ScriptsDir 目录下未检测到 $FormatInput 脚本的存在，请确认！"
