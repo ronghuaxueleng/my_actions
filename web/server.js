@@ -1052,10 +1052,13 @@ function loadFile(loadPath, dirName, keywords, onlyRunJs) {
  */
 app.get('/api/scripts', function (request, response) {
     if (request.session.loggedin) {
-        let rootFiles = [], scriptsDir = 'scripts', ownDir = 'own', dirList = [scriptsDir];
         let keywords = request.query.keywords || '';
         let onlyRunJs = request.query.onlyRunJs || 'false';
         onlyRunJs = onlyRunJs === 'true';
+        let rootFiles = [], scriptsDir = 'scripts', ownDir = 'own', dirList = [scriptsDir];
+        if(!onlyRunJs){
+            dirList.push(ownDir);
+        }
         dirList.forEach((dirName) => {
             rootFiles.push({
                 dirName: dirName,
