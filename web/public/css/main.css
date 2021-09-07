@@ -218,14 +218,14 @@ h4 {
     }
 }
 .dark .elk-side{
-    background: #444444;
+    background: #353739;
 }
 .light .elk-side{
     background: #f8f9fa;
 }
 .elk-side-search{
     padding: .5rem;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #85858554;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -251,6 +251,10 @@ h4 {
 }
 
 .dark .elk-side-nav .metismenu>.nav-item>a.has-arrow{
+    color: #ccc !important;
+}
+
+.dark .elk-side-nav ul>.nav-item>a.has-arrow{
     color: #ccc !important;
 }
 

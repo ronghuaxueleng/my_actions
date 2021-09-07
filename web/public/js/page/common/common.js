@@ -200,7 +200,7 @@ let MenuTools = {
             titleFaIcon: "fa-external-link",
             subText: "浏览 Scripts 仓库代码托管网站",
             customClass: '',
-            path: "javascript:window.open('https://github.com/JDHelloWorld/jd_scripts')"
+            path: "javascript:window.open('https://github.com/Aaron-lv/sync')"
         }]
     }, {
         title: "选项设置",

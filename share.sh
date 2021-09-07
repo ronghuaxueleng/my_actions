@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-07
+## Modified: 2021-09-08
 
 ## 目录
 ShellDir=${JD_DIR}
@@ -379,7 +379,7 @@ function Query_Name() {
             Name="京喜牧场兑换新品通知"
             ;;
         jd_moneyTree.ts)
-            Name="摇钱树"
+            Name="京东摇钱树"
             ;;
         jd_qq_pasture.ts)
             Name="星系牧场"
