@@ -1013,7 +1013,7 @@ function loadFile(loadPath, dirName, keywords, onlyRunJs) {
     let excludeRegExp = /(.git)|(.github)|(node_modules)|(icon)/;
     let fileRegExp = /.*?/g;
     if (onlyRunJs) {
-        excludeRegExp = /(.git)|(.github)|(node_modules)|(icon)(ShareCodes)|(AGENTS)|(index.js)|(validate)|(JDJR)|(Faker)|(tencentscf)|(Notify)|(Cookie)|(cookie)|(Tokens)|(app.)|(main.)|(.json)|(.jpg)|(.png)|(.gif)|(.jpeg)/
+        excludeRegExp = /(.git)|(.github)|(node_modules)|(icon)|(ShareCodes)|(AGENTS)|(index.js)|(validate)|(JDJR)|(Faker)|(tencentscf)|(Notify)|(Cookie)|(cookie)|(Tokens)|(app.)|(main.)|(jd_update.js)|(jd_env_copy.js)|(ql.js)|(jdEnv)|(.json)|(.jpg)|(.png)|(.gif)|(.jpeg)/
         fileRegExp = /(.js)|(.ts)|(.py)/
     }
     const files = fs.readdirSync(rootPath + "/" + loadPath, {withFileTypes: true})

@@ -944,7 +944,7 @@ h4 {
 }
 .selectSearchArea > .multiFunctionSelectList {
     position: absolute;
-    width: 100%;
+    width: 300px;
     max-height: 300px;
     top: 30px;
     margin: 0;
