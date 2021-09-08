@@ -463,8 +463,9 @@ function Update_Shell() {
     cd $ShellDir
     echo -e "\n$WORKING 开始更新源码仓库：/jd\n"
     git fetch --all
-    git pull
     git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')
+    git pull
+
     if [[ $ExitStatus -eq 0 ]]; then
         echo -e "\n$COMPLETE 源码仓库更新完成\n"
     else
