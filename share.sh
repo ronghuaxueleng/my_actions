@@ -50,6 +50,7 @@ ListOwnScripts=$LogTmpDir/own_scripts.list
 ListOwnUser=$LogTmpDir/own_user.list
 ListOwnAdd=$LogTmpDir/own_add.list
 ListOwnDrop=$LogTmpDir/own_drop.list
+ListOwnPersonal=$LogTmpDir/own_personal.list
 
 ## 字符串
 Arch=$(uname -m)

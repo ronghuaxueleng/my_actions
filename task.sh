@@ -41,7 +41,7 @@ function Find_Script() {
                 ts)
                     FileFormat="TypeScript"
                     ;;
-                python)
+                py)
                     FileFormat="Python"
                     ;;
                 *)

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-07
+## Modified: 2021-09-08
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -148,7 +148,11 @@ function Gen_ListTask() {
 function Gen_ListOwn() {
     local CurrentDir=$(pwd)
     local Own_Scripts_Tmp
-    rm -f $LogTmpDir/own*.list >/dev/null 2>&1
+    ## 导入用户的定时
+    local ListCrontabOwnTmp=$LogTmpDir/crontab_own.list
+    grep -vwf $ListOwnScripts $ListCrontabUser | grep -E " $TaskCmd $OwnDir" | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" >$ListCrontabOwnTmp
+
+    rm -rf $LogTmpDir/own*.list
     for ((i = 0; i < ${#array_own_scripts_path[*]}; i++)); do
         cd ${array_own_scripts_path[i]}
         if [ ${array_own_scripts_path[i]} = $RawDir ]; then
@@ -177,9 +181,17 @@ function Gen_ListOwn() {
             fi
         fi
     done
+    ## 汇总去重
     Own_Scripts_Tmp=$(sort -u $ListOwnScripts)
     echo "$Own_Scripts_Tmp" >$ListOwnScripts
-    grep -E " $TaskCmd $OwnDir" $ListCrontabUser | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" | sort -u >$ListOwnUser
+
+    cat $ListOwnScripts >$ListOwnPersonal
+    cat $ListCrontabOwnTmp >>$ListOwnPersonal
+
+    grep -E " $TaskCmd $OwnDir" $ListCrontabUser | egrep -v "$(cat $ListCrontabOwnTmp)" | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" | sort -u >$ListOwnUser
+    cat $ListCrontabOwnTmp >>$ListOwnUser
+
+    [ -f $ListCrontabOwnTmp ] && rm -f $ListCrontabOwnTmp
     cd $CurrentDir
 }
 
@@ -324,8 +336,8 @@ function Add_Cron_Own() {
                 fi
             fi
         done
-        crontab_tmp="$(cat $ListCrontabOwnTmp)"
-        perl -i -pe "s|(# 自用own任务结束.+)|$crontab_tmp\n\1|" $ListCrontabUser
+        Crontab_Tmp="$(cat $ListCrontabOwnTmp)"
+        perl -i -pe "s|(# 自用own任务结束.+)|$Crontab_Tmp\n\1|" $ListCrontabUser
         ExitStatus=$?
     fi
     [ -f $ListCrontabOwnTmp ] && rm -f $ListCrontabOwnTmp
@@ -533,7 +545,7 @@ function Update_Own() {
         Update_Own_Raw
         ## 比较定时任务
         Gen_ListOwn
-        Diff_Cron $ListOwnScripts $ListOwnUser $ListOwnAdd $ListOwnDrop
+        Diff_Cron $ListOwnPersonal $ListOwnUser $ListOwnAdd $ListOwnDrop
 
         ## 失效任务通知
         if [[ ${AutoDelOwnCron} == true ]] && [ -s $ListOwnDrop ]; then
