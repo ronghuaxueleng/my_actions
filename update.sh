@@ -283,10 +283,6 @@ function Del_Cron() {
             local Tmp=$(echo $cron | perl -pe "s|/|\.|g")
             perl -i -ne "{print unless / $Type $Tmp( |$)/}" $ListCrontabUser
         done
-        cat ${ListCrontabUser} | sort -k2n | uniq > ${ListCrontabUser}.uniq
-        mv ${ListCrontabUser}.uniq ${ListCrontabUser}
-        cat ${ListCrontabUser} ${UtilsDir}/ext_crontab_list.sh > ${ListCrontabUser}.mix
-        mv ${ListCrontabUser}.mix ${ListCrontabUser}
         crontab $ListCrontabUser
         Detail2=$(echo $Detail | perl -pe "s| |\\\n|g")
         echo -e "$SUCCESS 成功删除失效的定时任务\n"
@@ -351,10 +347,6 @@ function Add_Cron_Notify() {
     local Detail=$(echo $Tmp | perl -pe "s| |\\\n|g")
     local Type=$3
     if [[ $status_code -eq 0 ]]; then
-        cat ${ListCrontabUser} | sort -k2n | uniq > ${ListCrontabUser}.uniq
-        mv ${ListCrontabUser}.uniq ${ListCrontabUser}
-        cat ${ListCrontabUser} ${UtilsDir}/ext_crontab_list.sh > ${ListCrontabUser}.mix
-        mv ${ListCrontabUser}.mix ${ListCrontabUser}
         crontab $ListCrontabUser
         echo -e "$SUCCESS 成功添加新的定时任务\n"
         Notify "新增任务通知" "成功添加新的定时任务（$Type）：\n$Detail"
