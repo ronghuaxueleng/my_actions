@@ -150,7 +150,9 @@ function Gen_ListOwn() {
     local Own_Scripts_Tmp
     ## 导入用户的定时
     local ListCrontabOwnTmp=$LogTmpDir/crontab_own.list
-    grep -vwf $ListOwnScripts $ListCrontabUser | grep -E " $TaskCmd $OwnDir" | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" >$ListCrontabOwnTmp
+    grep -vwf $ListOwnScripts $ListCrontabUser | grep -Eq " $TaskCmd $OwnDir"
+    local ExitStatus=$?
+    [[ $ExitStatus -eq 0 ]] && grep -vwf $ListOwnScripts $ListCrontabUser | grep -E " $TaskCmd $OwnDir" | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" | sort -u >$ListCrontabOwnTmp
 
     rm -rf $LogTmpDir/own*.list
     for ((i = 0; i < ${#array_own_scripts_path[*]}; i++)); do
@@ -186,11 +188,14 @@ function Gen_ListOwn() {
     echo "$Own_Scripts_Tmp" >$ListOwnScripts
 
     cat $ListOwnScripts >$ListOwnPersonal
-    cat $ListCrontabOwnTmp >>$ListOwnPersonal
+    [[ $ExitStatus -eq 0 ]] && cat $ListCrontabOwnTmp >>$ListOwnPersonal
 
-    grep -E " $TaskCmd $OwnDir" $ListCrontabUser | egrep -v "$(cat $ListCrontabOwnTmp)" | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" | sort -u >$ListOwnUser
-    cat $ListCrontabOwnTmp >>$ListOwnUser
-
+    if [[ $ExitStatus -eq 0 ]]; then
+        grep -E " $TaskCmd $OwnDir" $ListCrontabUser | egrep -v "$(cat $ListCrontabOwnTmp)" | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" | sort -u >$ListOwnUser
+        cat $ListCrontabOwnTmp >>$ListOwnUser
+    else
+        grep -E " $TaskCmd $OwnDir" $ListCrontabUser | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" | sort -u >$ListOwnUser
+    fi
     [ -f $ListCrontabOwnTmp ] && rm -f $ListCrontabOwnTmp
     cd $CurrentDir
 }
@@ -463,9 +468,8 @@ function Update_Shell() {
     cd $ShellDir
     echo -e "\n$WORKING 开始更新源码仓库：/jd\n"
     git fetch --all
-    git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')
     git pull
-
+    git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')
     if [[ $ExitStatus -eq 0 ]]; then
         echo -e "\n$COMPLETE 源码仓库更新完成\n"
     else
