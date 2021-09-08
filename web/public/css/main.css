@@ -301,7 +301,9 @@ h4 {
     line-height: 20px;
     text-indent: 5px;
 }
-
+.run-mobile .coco-input{
+    width: 160px;
+}
 
 
 .coco-input::-webkit-input-placeholder {
@@ -431,9 +433,12 @@ h4 {
     align-items: center;
     display: flex;
 }
-.btn[type=submit]{
-    margin-right: 5px;
-}
+/*.run-cmd-btn .btn[type=submit]{*/
+/*    margin-right: 0px;*/
+/*}*/
+/*.run-cmd-btn .btn[type=submit]:last-child{*/
+/*    margin-right: 0;*/
+/*}*/
 .run-mobile .btn.submit{
     /*width: 60px;*/
     height: 30px;
@@ -448,6 +453,7 @@ h4 {
 /*}*/
 .fast-run .btn{
     height: 30px;
+    border-radius: 0px;
 }
 
 .fast-run {
@@ -471,6 +477,7 @@ h4 {
 .run-mobile {
     display: flex;
     /*align-items: center;*/
+    /*justify-content: center;*/
     flex-wrap: wrap;
     margin: 0.6em 0.6em 0.4em 0.6em;
 }

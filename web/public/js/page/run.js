@@ -19,6 +19,14 @@ $(document).ready(function () {
      * @param refreshLog 是否刷新日志 默认不刷新
      */
     function runCmd(jsName, cmd, refreshLog = true) {
+        if(!jsName || !cmd){
+            Swal.fire({
+                title: 'Oops...',
+                text: '请选择您需要执行的脚本！',
+                icon: 'error'
+            });
+            return;
+        }
         if (timer) {
             Swal.fire({
                 title: 'Oops...',
@@ -53,7 +61,7 @@ $(document).ready(function () {
     }
 
     runCmd(curScript.value, curScript.key, curScript.refreshLog);
-
+    curScript = {};
     function initSearch(list) {
         let $jdScript = $(".jdScript");
         $jdScript.MultiFunctionSelect({
@@ -114,6 +122,8 @@ $(document).ready(function () {
 
     $runCmd.click(function () {
         runCmd(curScript.value, `${curScript.key} now`, curScript.refreshLog);
+
+
     });
     $runCmdConc.click(function () {
         runCmd(curScript.value, `${curScript.key} conc`, false);

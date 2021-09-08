@@ -1013,7 +1013,7 @@ function loadFile(loadPath, dirName, keywords, onlyRunJs) {
     let excludeRegExp = /(git)|(node_modules)|(icon)/;
     let fileRegExp = /.*?/g;
     if (onlyRunJs) {
-        excludeRegExp = /(ShareCodes)|(AGENTS)|(index.js)|(validate)|(JDJR)|(Faker)|(tencentscf)|(Notify)|(Cookie)|(cookie)|(Tokens)|(app.)|(main.)|(.json)/
+        excludeRegExp = /(.git)|(node_modules)|(icon)(ShareCodes)|(AGENTS)|(index.js)|(validate)|(JDJR)|(Faker)|(tencentscf)|(Notify)|(Cookie)|(cookie)|(Tokens)|(app.)|(main.)|(.json)|(.jpg)|(.png)|(.gif)|(.jpeg)/
         fileRegExp = /(.js)|(.ts)|(.py)/
     }
     const files = fs.readdirSync(rootPath + "/" + loadPath, {withFileTypes: true})
@@ -1021,19 +1021,21 @@ function loadFile(loadPath, dirName, keywords, onlyRunJs) {
         let name = item.name;
         let dirPath = loadPath + '/' + name;
         let filter = (!excludeRegExp.test(name) && fileRegExp.test(name)) && (keywords === '' || name.indexOf(keywords) > -1);
-        if (filter) {
+        if (filter || item.isDirectory()) {
             const stat = fs.lstatSync(rootPath + '/' + dirPath);
             if (stat.isDirectory()) {
                 let dirPathFiles = loadFile(dirPath, name, keywords, onlyRunJs)
                 //dirPathFiles.reverse();
-                if (onlyRunJs) {
-                    arrFiles = arrFiles.concat(dirPathFiles)
-                } else {
-                    arrDirs.push({
-                        dirName: name,
-                        dirPath: dirPath,
-                        files: dirPathFiles,
-                    })
+                if(keywords === "" || (keywords !== "" && dirPathFiles.length > 0)){
+                    if (onlyRunJs) {
+                        arrFiles = arrFiles.concat(dirPathFiles)
+                    } else {
+                        arrDirs.push({
+                            dirName: name,
+                            dirPath: dirPath,
+                            files: dirPathFiles,
+                        })
+                    }
                 }
             } else if (!stat.isDirectory()) {
                 arrFiles.push({
