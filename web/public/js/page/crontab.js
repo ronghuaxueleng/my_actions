@@ -20,7 +20,7 @@ $(document).ready(function () {
             name: "crontab.list"
         }, function (data) {
             let icon = (data.err === 0) ? "success" : "error"
-            Swal.fire({
+            panelUtils.showAlert({
                 title: data.title,
                 html: data.msg + '<br>定时任务已同步更新',
                 icon: icon

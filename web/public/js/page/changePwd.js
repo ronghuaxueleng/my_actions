@@ -40,10 +40,7 @@ $("#changeBtn").click(function () {
     let $confirmPassword = $("#confirm-password").val();
     if (!$user || !$password || !$confirmPassword) return;
     if($password !== $confirmPassword){
-        Swal.fire({
-            text: "两次密码输入不一致，请重新输入",
-            icon: 'error'
-        })
+        panelUtils.showError("两次密码输入不一致，请重新输入")
         return ;
     }
     $.post(BASE_API_PATH + '/api/changePwd', {
@@ -51,7 +48,7 @@ $("#changeBtn").click(function () {
         password: $password
     }, function (data) {
         let icon = (data.err === 0) ? "success" : "error"
-        Swal.fire({
+        panelUtils.showAlert({
             text: data.msg,
             icon: icon
         })

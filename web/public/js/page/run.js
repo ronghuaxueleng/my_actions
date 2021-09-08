@@ -20,19 +20,11 @@ $(document).ready(function () {
      */
     function runCmd(jsName, cmd, refreshLog = true) {
         if(!jsName || !cmd){
-            Swal.fire({
-                title: 'Oops...',
-                text: '请选择您需要执行的脚本！',
-                icon: 'error'
-            });
+            panelUtils.showError('Oops...','请选择您需要执行的脚本！');
             return;
         }
         if (timer) {
-            Swal.fire({
-                title: 'Oops...',
-                text: '请等待上一条任务执行完毕！',
-                icon: 'error'
-            });
+            panelUtils.showError('Oops...','请等待上一条任务执行完毕！');
             return;
         }
         editor.setValue('');

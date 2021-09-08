@@ -16,7 +16,7 @@ function showLastLoginInfo() {
     lastLoginInfo = JSON.parse(localStorage.getItem("lastLoginInfo") || "{}");
 
     if (lastLoginInfo && lastLoginInfo.loginIp) {
-        Swal.fire({
+        panelUtils.showAlert({
             position: 'top-end',
             //title: '登录成功',
             //icon:'info',
@@ -291,9 +291,9 @@ let MenuTools = {
             )
             menu.children.map((child, index) => {
                 content = content.concat(
-                    `<a href="${child.path || '#'}"><div class="icon-box ${child.customClass} ${child.path === BASE_PATH_NAME  && 'active'}">`,
+                    `<a href="${child.path || '#'}"><div class="icon-box ${child.customClass} ${child.path === BASE_PATH_NAME && 'active'}">`,
                     `<div class="icon"><i class="fa ${child.faIcon}"></i></div>`,
-                    `<div class="text"><div class="title">${child.title} <i class="fa ${child.path === BASE_PATH_NAME && child.titleFaIcon === 'fa-arrow-right' ? 'fa-map-marker': child.titleFaIcon}"></i></div><div class="sub-text">${child.subText}</div></div>`,
+                    `<div class="text"><div class="title">${child.title} <i class="fa ${child.path === BASE_PATH_NAME && child.titleFaIcon === 'fa-arrow-right' ? 'fa-map-marker' : child.titleFaIcon}"></i></div><div class="sub-text">${child.subText}</div></div>`,
                     `${child.customContent || ''}`,
                     `</div></a>`
                 )
@@ -327,6 +327,47 @@ $(document).ready(function () {
     showLastLoginInfo();
     themeChange.loadTheme();
 })
+
+let panelUtils = {
+    showLoading(text) {
+        panelUtils.showAlert({
+            text: text || "加载中...",
+            showConfirmButton: false,
+            imageUrl: "../icon/loading.gif",
+            imageWidth: 160,
+            width: 300,
+            imageHeight: 120,
+            background: "#fbfbfb",
+            showCancelButton: false,
+        });
+    },
+    hideLoading() {
+        Swal.hideLoading();
+    },
+    showAlert(opts) {
+        return Swal.fire(opts)
+    },
+    showError(title, text) {
+        let options = {
+            text: title,
+            icon: 'error'
+        }
+        if (text) {
+            options.text = text;
+            options.title = title
+        }
+        this.showAlert(options)
+    },
+    showWarning(title, text, confirmButtonText) {
+        return panelUtils.showAlert({
+            title: title,
+            text: text,
+            icon: "warning",
+            //confirmButtonColor: "#DD6B55",
+            confirmButtonText: confirmButtonText,
+        })
+    }
+}
 
 // window.onresize = function(){
 //     window.location.reload();

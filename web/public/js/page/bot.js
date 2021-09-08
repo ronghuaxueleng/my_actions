@@ -20,7 +20,7 @@ $(document).ready(function () {
             name: "bot.json"
         }, function (data) {
             let icon = (data.err === 0) ? "success" : "error"
-            Swal.fire({
+            panelUtils.showAlert({
                 title: data.title,
                 html: data.msg,
                 icon: icon

@@ -61,7 +61,7 @@ $(document).ready(function () {
                     loadConfig(() => {
                         if (isAutoReplace) {
                             if (autoReplace(userCookie)) {
-                                Swal.fire({
+                                panelUtils.showAlert({
                                     title: "cookie已获取(2s后自动替换)",
                                     html: '<div class="cookieCon" style="font-size:12px;">' +
                                         userCookie + '</div>',
@@ -73,7 +73,7 @@ $(document).ready(function () {
                                     $('#save').trigger('click');
                                 }, 2000);
                             } else {
-                                Swal.fire({
+                                panelUtils.showAlert({
                                     title: "cookie已获取",
                                     html: '<div class="cookieCon" style="font-size:16px;font-weight: bold;">自动替换失败，请复制Cookie后手动更新。</div>' +
                                         '<div class="cookieCon" style="font-size:12px;">' +
@@ -85,7 +85,7 @@ $(document).ready(function () {
                                 });
                             }
                         } else {
-                            Swal.fire({
+                            panelUtils.showAlert({
                                 title: "cookie已获取",
                                 html: '<div class="cookieCon" style="font-size:12px;">' +
                                     userCookie + '</div>',
@@ -115,10 +115,7 @@ $(document).ready(function () {
                 qrcode.makeCode(data.qrcode);
                 checkLogin();
             } else {
-                Swal.fire({
-                    text: data.msg,
-                    icon: "error"
-                })
+                panelUtils.showError(data.msg)
             }
         });
     }
@@ -139,7 +136,7 @@ $(document).ready(function () {
             name: "config.sh"
         }, function (data) {
             let icon = (data.err === 0) ? "success" : "error"
-            Swal.fire({
+            panelUtils.showAlert({
                 title: data.title,
                 html: data.msg,
                 icon: icon

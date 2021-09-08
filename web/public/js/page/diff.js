@@ -46,7 +46,7 @@ $(document).ready(function () {
             name: "config.sh"
         }, function (data) {
             let icon = (data.err === 0) ? "success" : "error"
-            Swal.fire({
+            panelUtils.showAlert({
                 title: data.title,
                 html: data.msg,
                 icon: icon

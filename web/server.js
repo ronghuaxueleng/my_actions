@@ -1010,10 +1010,10 @@ app.get('/api/logs/:dir/:file', function (request, response) {
 
 function loadFile(loadPath, dirName, keywords, onlyRunJs) {
     let arrFiles = [], arrDirs = [];
-    let excludeRegExp = /(git)|(node_modules)|(icon)/;
+    let excludeRegExp = /(.git)|(.github)|(node_modules)|(icon)/;
     let fileRegExp = /.*?/g;
     if (onlyRunJs) {
-        excludeRegExp = /(.git)|(node_modules)|(icon)(ShareCodes)|(AGENTS)|(index.js)|(validate)|(JDJR)|(Faker)|(tencentscf)|(Notify)|(Cookie)|(cookie)|(Tokens)|(app.)|(main.)|(.json)|(.jpg)|(.png)|(.gif)|(.jpeg)/
+        excludeRegExp = /(.git)|(.github)|(node_modules)|(icon)(ShareCodes)|(AGENTS)|(index.js)|(validate)|(JDJR)|(Faker)|(tencentscf)|(Notify)|(Cookie)|(cookie)|(Tokens)|(app.)|(main.)|(.json)|(.jpg)|(.png)|(.gif)|(.jpeg)/
         fileRegExp = /(.js)|(.ts)|(.py)/
     }
     const files = fs.readdirSync(rootPath + "/" + loadPath, {withFileTypes: true})
@@ -1022,11 +1022,9 @@ function loadFile(loadPath, dirName, keywords, onlyRunJs) {
         let dirPath = loadPath + '/' + name;
         let filter = (!excludeRegExp.test(name) && fileRegExp.test(name)) && (keywords === '' || name.indexOf(keywords) > -1);
         if (filter || item.isDirectory()) {
-            const stat = fs.lstatSync(rootPath + '/' + dirPath);
-            if (stat.isDirectory()) {
+            if (item.isDirectory()) {
                 let dirPathFiles = loadFile(dirPath, name, keywords, onlyRunJs)
-                //dirPathFiles.reverse();
-                if(keywords === "" || (keywords !== "" && dirPathFiles.length > 0)){
+                if(filter || (keywords !== "" && dirPathFiles.length > 0)){
                     if (onlyRunJs) {
                         arrFiles = arrFiles.concat(dirPathFiles)
                     } else {
@@ -1037,7 +1035,7 @@ function loadFile(loadPath, dirName, keywords, onlyRunJs) {
                         })
                     }
                 }
-            } else if (!stat.isDirectory()) {
+            } else if (!item.isDirectory()) {
                 arrFiles.push({
                     fileName: name,
                     filePath: dirPath,

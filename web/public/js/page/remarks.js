@@ -20,18 +20,12 @@ $(document).ready(function () {
             let accountArr = JSON.parse(confContent);
             for (const account of accountArr) {
                 if(account.ws_key && account.ws_key !== "" && new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）|{}【】‘；：”“'。，、？ ]").test(account.ws_key)){
-                    Swal.fire({
-                        text: `${account.pt_pin} ${account.remarks}的 ws_key 格式不正确`,
-                        icon: 'error'
-                    })
+                    panelUtils.showError(`${account.pt_pin} ${account.remarks}的 ws_key 格式不正确`)
                     return;
                 }
             }
         }catch (e) {
-            Swal.fire({
-                text: "格式出现问题，请仔细检查",
-                icon: 'error'
-            })
+            panelUtils.showError("格式出现问题，请仔细检查")
             return;
         }
         $.post(BASE_API_PATH + '/api/save?t=' + timeStamp, {
@@ -39,7 +33,7 @@ $(document).ready(function () {
             name: "account.json"
         }, function (data) {
             let icon = (data.err === 0) ? "success" : "error"
-            Swal.fire({
+            panelUtils.showAlert({
                 title: data.title,
                 html: data.msg,
                 icon: icon

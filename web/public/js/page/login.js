@@ -116,16 +116,7 @@ $(document).ready(function () {
         let $captcha = $("#captcha").val();
         if (!$user || !$password) return;
         if(showCaptcha && !$captcha) return ;
-        Swal.fire({
-            text: "登录中...",
-            showConfirmButton: false,
-            imageUrl: "../icon/loading.gif",
-            imageWidth: 160,
-            width: 300,
-            imageHeight: 120,
-            background:"#fbfbfb",
-            showCancelButton: false,
-        });
+        panelUtils.showLoading("登录中...")
         $.post(BASE_API_PATH + '/api/auth', {
             username: $user,
             password: $password,
@@ -136,13 +127,7 @@ $(document).ready(function () {
                     localStorage.setItem("lastLoginInfo", JSON.stringify(data.lastLoginInfo))
                 }
                 if (data.newPwd) {
-                    Swal.fire({
-                        title: "温馨提示",
-                        text: `系统检测到您的密码为初始密码，已修改为随机密码：${data.newPwd}，请重新登录`,
-                        icon: "warning",
-                        //confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "复制新密码并重新登录",
-                    }).then((isConfirm) => {
+                    panelUtils.showWarning("温馨提示",`系统检测到您的密码为初始密码，已修改为随机密码：${data.newPwd}，请重新登录`,"复制新密码并重新登录").then((isConfirm) => {
                         if (isConfirm.value) {
                             copyToClip(data.newPwd);
                         }
@@ -152,10 +137,7 @@ $(document).ready(function () {
                 }
             } else {
                 checkNeedCaptcha(data.showCaptcha);
-                Swal.fire({
-                    text: data.msg,
-                    icon: 'error'
-                })
+                panelUtils.showError(data.msg)
             }
         });
         return false;
