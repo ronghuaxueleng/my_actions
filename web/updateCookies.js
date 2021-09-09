@@ -226,6 +226,7 @@ async function updateLocalCookie(cookie) {
     const pt_pin = cookie.match(/pt_pin=.+?;/)[0];
     let lastIndex = 0;
     let maxCookieCount = 0;
+    let updateFlag = false;
     let success = false;
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
@@ -239,6 +240,7 @@ async function updateLocalCookie(cookie) {
                 const head = line.split('=')[0];
                 lines[i] = [head, '=', '"', cookie, '"'].join('');
                 let lineNext = lines[i + 1];
+                updateFlag = true;
                 if (
                     lineNext.match(/上次更新：/)
                 ) {
@@ -251,6 +253,22 @@ async function updateLocalCookie(cookie) {
                 success = true;
             }
         }
+    }
+    let CookieCount = Number(maxCookieCount) + 1;
+    if (!updateFlag) {
+        lastIndex++;
+        let newLine = [
+            'Cookie',
+            CookieCount,
+            '=',
+            '"',
+            cookie,
+            '"',
+        ].join('');
+        //提交备注
+        lines.splice(lastIndex + 1, 0, newLine);
+        newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', '暂无备注'].join('');
+        lines.splice(lastIndex + 2, 0, newLine);
     }
     fs.writeFileSync(configShPath,lines.join('\n'));
     return success

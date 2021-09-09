@@ -740,7 +740,7 @@ app.get('/api/runLog', function (request, response) {
                 pathUrl = `log/${jsName}/`;
             } else if (jsName.startsWith("own/")) {
                 jsName = jsName.substring(jsName.indexOf("/") + 1);
-                pathUrl = `log/${jsName.replace(new RegExp('/',"gm"),'_')}/`;
+                pathUrl = `log/${jsName.replace(new RegExp('[/\\-]',"gm"),'_')}/`;
             } else {
                 if (!fs.existsSync(path.join(rootPath, pathUrl))) {
                     pathUrl = `log/jd_${jsName}/`;
