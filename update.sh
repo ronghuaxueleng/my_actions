@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-08
+## Modified: 2021-09-09
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -330,7 +330,7 @@ function Add_Cron_Own() {
             local FileName=$(echo $FilePath | awk -F "/" '{print $NF}')
             if [ -f $FilePath ]; then
                 if [ $FilePath = "$RawDir/$FileName" ]; then
-                    local Tmp1=$(egrep "cron|script-path|tag|\* \*|$FileName" $FilePath | head -1 | perl -pe '{s|[a-zA-Z\"\-\.\=\:\:\_]||g;}')
+                    local Tmp1=$(egrep "cron|script-path|tag|\* \*|$FileName" $FilePath | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\:\_]||g;}')
                     local Tmp2=$(echo "$Tmp1" | awk -F '[0-9]' '{print$1}' | perl -pe '{s| ||g;}')
                     local cron=$(echo "$Tmp1" | perl -pe "{s|${Tmp2}||g;}" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
                     echo "$cron $TaskCmd $FilePath" | sort -u | head -1 >>$ListCrontabOwnTmp

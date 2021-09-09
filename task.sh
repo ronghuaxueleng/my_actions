@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-08
+## Modified: 2021-09-09
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -38,11 +38,11 @@ function Find_Script() {
                 js)
                     FileFormat="JavaScript"
                     ;;
-                ts)
-                    FileFormat="TypeScript"
-                    ;;
                 py)
                     FileFormat="Python"
+                    ;;
+                ts)
+                    FileFormat="TypeScript"
                     ;;
                 *)
                     echo -e "\n$ERROR 不支持运行 ${FileFormatTmp} 类型的脚本，请确认！"
@@ -178,17 +178,19 @@ function Run_Normal() {
     Make_Dir ${LogPath}
     local LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S").log"
     cd ${WhichDir}
+    echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
     case ${FileFormat} in
     JavaScript)
-        node ${FileName}.js 2>&1 | tee ${LogFile}
+        node ${FileName}.js 2>&1 | tee -a ${LogFile}
         ;;
     Python)
-        python3 -u ${FileName}.py 2>&1 | tee ${LogFile}
+        python3 -u ${FileName}.py 2>&1 | tee -a ${LogFile}
         ;;
     TypeScript)
-        ts-node-transpile-only ${FileName}.ts 2>&1 | tee ${LogFile}
+        ts-node-transpile-only ${FileName}.ts 2>&1 | tee -a ${LogFile}
         ;;
     esac
+    echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行结束\n" >>${LogFile}
 }
 
 ## 并发执行
@@ -209,7 +211,6 @@ function Run_Concurrent() {
         Combin_ShareCodes
         Trans_UN_SUBSCRIBES
         Make_Dir ${LogPath}
-        echo -e "\n各账号间已经在后台开始并发执行，前台不显示脚本输出内容而是直接写入到日志文件中。\n"
         for ((UserNum = 1; UserNum <= ${UserSum}; UserNum++)); do
             for num in ${TempBlockCookie}; do
                 [[ $UserNum -eq $num ]] && continue 2
@@ -218,21 +219,20 @@ function Run_Concurrent() {
             export JD_COOKIE=${!AccountNum}
             LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log"
             cd ${WhichDir}
+            echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始，不记录结束时间\n" >>${LogFile}
             case ${FileFormat} in
             JavaScript)
-                node ${FileName}.js &>${LogFile} &
+                node ${FileName}.js 2>&1 &>>${LogFile} &
                 ;;
             Python)
-                python3 -u ${FileName}.py &>${LogFile} &
+                python3 -u ${FileName}.py 2>&1 &>>${LogFile} &
                 ;;
             TypeScript)
-                ts-node-transpile-only ${FileName}.ts &>${LogFile} &
+                ts-node-transpile-only ${FileName}.ts 2>&1 &>>${LogFile} &
                 ;;
             esac
         done
-        echo -e "$WORKING 并发任务正在执行中，请耐心等待所有任务执行完毕...\n"
-        wait
-        echo -e "$COMPLETE 所有并发任务已全部完成，如需查询执行结果，请直接查看相关日志\n"
+        echo -e "\n$COMPLETE 已在后台部署并发任务，如需查询脚本输出内容请直接查看 ${LogPath} 目录下的相关日志\n"
         ;;
     esac
 }
@@ -241,7 +241,6 @@ function Run_Concurrent_Lite() {
     local FileFormat=$2
     local UserNum AccountNum
     Make_Dir "$LogDir/${FileName}"
-    echo -e "\n各账号间已经在后台开始并发执行，前台不显示脚本输出内容而是直接写入到日志文件中。\n"
     for ((UserNum = 1; UserNum <= ${UserSum}; UserNum++)); do
         for num in ${TempBlockCookie}; do
             [[ $UserNum -eq $num ]] && continue 2
@@ -249,21 +248,20 @@ function Run_Concurrent_Lite() {
         AccountNum=Cookie$UserNum
         export JD_COOKIE=${!AccountNum}
         cd $ScriptsDir
+        echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始，不记录结束时间\n" >>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log
         case ${FileFormat} in
         JavaScript)
-            node ${FileName}.js &>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
+            node ${FileName}.js 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
             ;;
         Python)
-            python3 -u ${FileName}.py &>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
+            python3 -u ${FileName}.py 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
             ;;
         TypeScript)
-            ts-node-transpile-only ${FileName}.ts &>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
+            ts-node-transpile-only ${FileName}.ts 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
             ;;
         esac
     done
-    echo -e "$WORKING 并发任务正在执行中，请耐心等待所有任务执行完毕...\n"
-    wait
-    echo -e "$COMPLETE 所有并发任务已全部完成，如需查询执行结果，请直接查看相关日志\n"
+    echo -e "\n$COMPLETE 已在后台部署并发任务，如需查询脚本输出内容请直接查看 $LogDir/${FileName} 目录下的相关日志\n"
 }
 
 ## 指定执行
@@ -286,17 +284,19 @@ function Run_Specify() {
         exit 1
     fi
     cd ${WhichDir}
+    echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
     case ${FileFormat} in
     JavaScript)
-        node ${FileName}.js 2>&1 | tee ${LogFile}
+        node ${FileName}.js 2>&1 | tee -a ${LogFile}
         ;;
     Python)
-        python3 -u ${FileName}.py 2>&1 | tee ${LogFile}
+        python3 -u ${FileName}.py 2>&1 | tee -a ${LogFile}
         ;;
     TypeScript)
-        ts-node-transpile-only ${FileName}.ts 2>&1 | tee ${LogFile}
+        ts-node-transpile-only ${FileName}.ts 2>&1 | tee -a ${LogFile}
         ;;
     esac
+    echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行结束\n" >>${LogFile}
 }
 
 ## 迅速执行
@@ -309,31 +309,46 @@ function Run_Rapidly() {
         export JD_COOKIE=$(Combin_Sub Cookie)
         FileNameTmp1=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
         FileNameTmp2=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
-        cd $ScriptsDir
         if [ -f $ScriptsDir/${FileNameTmp1}.js ]; then
-            Make_Dir "$LogDir/${FileNameTmp1}"
-            node ${FileNameTmp1}.js 2>&1 | tee $LogDir/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
-        elif [ -f $ScriptsDir/${FileNameTmp1}.py ]; then
-            Make_Dir "$LogDir/${FileNameTmp1}"
-            python3 -u ${FileNameTmp1}.py 2>&1 | tee $LogDir/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
+            FileName=${FileNameTmp1}
+            FileFormat="JavaScript"
         elif [ -f $ScriptsDir/${FileNameTmp1}.ts ]; then
-            Make_Dir "$LogDir/${FileNameTmp1}"
-            ts-node-transpile-only ${FileNameTmp1}.ts 2>&1 | tee $LogDir/${FileNameTmp1}/$(date "+%Y-%m-%d-%H-%M-%S").log
+            FileName=${FileNameTmp1}
+            FileFormat="TypeScript"
+        elif [ -f $ScriptsDir/${FileNameTmp1}.py ]; then
+            FileName=${FileNameTmp1}
+            FileFormat="Python"
         elif [ -f $ScriptsDir/${FileNameTmp2}.js ]; then
-            Make_Dir "$LogDir/${FileNameTmp2}"
-            node ${FileNameTmp2}.js 2>&1 | tee $LogDir/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
-        elif [ -f $ScriptsDir/${FileNameTmp2}.py ]; then
-            Make_Dir "$LogDir/${FileNameTmp2}"
-            python3 -u ${FileNameTmp2}.py 2>&1 | tee $LogDir/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
+            FileName=${FileNameTmp2}
+            FileFormat="JavaScript"
         elif [ -f $ScriptsDir/${FileNameTmp2}.ts ]; then
-            Make_Dir "$LogDir/${FileNameTmp2}"
-            ts-node-transpile-only ${FileNameTmp2}.ts 2>&1 | tee $LogDir/${FileNameTmp2}/$(date "+%Y-%m-%d-%H-%M-%S").log
+            FileName=${FileNameTmp2}
+            FileFormat="TypeScript"
+        elif [ -f $ScriptsDir/${FileNameTmp2}.py ]; then
+            FileName=${FileNameTmp2}
+            FileFormat="Python"
         else
             FormatInput=$(echo $p | awk -F "/" '{print $NF}')
             echo -e "\n$ERROR 在 $ScriptsDir 目录下未检测到 $FormatInput 脚本的存在，请确认！"
             Help
             exit 1
         fi
+        Make_Dir "$LogDir/${FileName}"
+        local LogFile="$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S").log"
+        cd $ScriptsDir
+        echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
+        case ${FileFormat} in
+        JavaScript)
+            node ${FileName}.js 2>&1 | tee -a ${LogFile}
+            ;;
+        Python)
+            python3 -u ${FileName}.py 2>&1 | tee -a ${LogFile}
+            ;;
+        TypeScript)
+            ts-node-transpile-only ${FileName}.ts 2>&1 | tee -a ${LogFile}
+            ;;
+        esac
+        echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行结束\n" >>${LogFile}
         ;;
     2)
         if [ $2 = "-c" ]; then
@@ -352,16 +367,16 @@ function Run_Rapidly() {
                 FileNameTmp2=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
                 if [ -f $ScriptsDir/${FileNameTmp1}.js ]; then
                     Run_Concurrent_Lite ${FileNameTmp1} JavaScript
-                elif [ -f $ScriptsDir/${FileNameTmp1}.py ]; then
-                    Run_Concurrent_Lite ${FileNameTmp1} Python
                 elif [ -f $ScriptsDir/${FileNameTmp1}.ts ]; then
                     Run_Concurrent_Lite ${FileNameTmp1} TypeScript
+                elif [ -f $ScriptsDir/${FileNameTmp1}.py ]; then
+                    Run_Concurrent_Lite ${FileNameTmp1} Python
                 elif [ -f $ScriptsDir/${FileNameTmp2}.js ]; then
                     Run_Concurrent_Lite ${FileNameTmp2} JavaScript
-                elif [ -f $ScriptsDir/${FileNameTmp2}.py ]; then
-                    Run_Concurrent_Lite ${FileNameTmp2} Python
                 elif [ -f $ScriptsDir/${FileNameTmp2}.ts ]; then
                     Run_Concurrent_Lite ${FileNameTmp2} TypeScript
+                elif [ -f $ScriptsDir/${FileNameTmp2}.py ]; then
+                    Run_Concurrent_Lite ${FileNameTmp2} Python
                 else
                     FormatInput=$(echo $p | awk -F "/" '{print $NF}')
                     echo -e "\n$ERROR 在 $ScriptsDir 目录下未检测到 $FormatInput 脚本的存在，请确认！"
@@ -585,6 +600,7 @@ function Cookies_Control() {
             git fetch --all >/dev/null
             git reset --hard origin/master >/dev/null
         fi
+        [ -f $FileSendMark ] && rm -rf $FileSendMark
         ## 执行脚本
         if [ -f $FileUpdateCookie ]; then
             local UserNum AccountNum
@@ -599,14 +615,25 @@ function Cookies_Control() {
                     [[ $UserNum -eq $num ]] && continue 2
                 done
                 AccountNum=Cookie$UserNum
-                export JD_COOKIE=${!AccountNum}
+                grep -q "$(echo ${!AccountNum} | grep -o "pt_pin.*;" | awk -F '\;' '{print$1}' | perl -pe '{s|pt_pin=||g}')" $FileAccountConf
+                if [[ $? -eq 0 ]]; then
+                    export JD_COOKIE=${!AccountNum}
+                else
+                    continue
+                fi
                 LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_$UserNum.log"
                 cd $PanelDir
                 node updateCookies.js &>${LogFile} &
                 wait
-                grep "Cookie =>" ${LogFile}
+                grep "Cookie =>" ${LogFile} | tee -a $FileSendMark
             done
             echo -e "\n$COMPLETE 更新完成\n"
+            if [ -f $FileSendMark ]; then
+                [[ $AccountUpdateNotify == true ]] && Notify "账号更新结果通知" "$(cat $FileSendMark)"
+                rm -rf $FileSendMark
+            fi
+        else
+            echo -e "\n$ERROR 账号更新脚本不存在，请确认是否移动！\n"
         fi
         ;;
     esac
@@ -688,7 +715,7 @@ function Process_Monitor() {
         echo -e "\033[34m[释放后]\033[0m  Memory：\033[33m${MemoryUsageNew}\033[0m   剩余可用内存：\033[33m${MemoryFreeNew}MB\033[0m"
     fi
     echo -e "\n\033[34m[运行时长]  [CPU]    [内存]    [脚本名称]\033[0m"
-    ps -axo user,time,pcpu,user,pmem,user,command --sort -pmem | less | egrep ".js\b|.py\b|.ts\b" | egrep -Ev "server.js|pm2|egrep|perl|sed|bash" | perl -pe '{s| root     |% |g; s|\/usr\/bin\/ts-node ||g; s|\/usr\/bin\/node ||g; s|node ||g;  s|root     |#|g; s|#[0-9][0-9]:|#|g;  s|  | |g; s| |     |g; s|#|•  |g; s|/jd/scripts/jd_cfd_loop\.js|jd_cfd_loop\.js|g;}'
+    ps -axo user,time,pcpu,user,pmem,user,command --sort -pmem | less | egrep ".js\b|.py\b|.ts\b" | egrep -Ev "server.js|pm2|egrep|perl|sed|bash" | perl -pe '{s| root     |% |g; s|\/usr\/bin\/ts-node ||g; s|\/usr\/bin\/python3 ||g; s|\/usr\/bin\/python ||g; s|\/usr\/bin\/node ||g; s|node ||g;  s|root     |#|g; s|#[0-9][0-9]:|#|g;  s|  | |g; s| |     |g; s|#|•  |g; s|/jd/scripts/jd_cfd_loop\.js|jd_cfd_loop\.js|g;}'
     echo ''
 }
 
