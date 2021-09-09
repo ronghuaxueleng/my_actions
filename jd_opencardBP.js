@@ -1,25 +1,24 @@
 /*
-9.9-9.19 大聚惠 [jd_opencardBP.js]
+9.9-9.16 大聚惠 [jd_opencardBP.js]
 邀请及被邀请均有机会获得20豆🥔
 ————————————————
-入口：[9.9-9.19 大聚惠 (https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/45670?activityId=f7e4d75f22c84cdeba92bf594b02b910)]
+入口：[9.9-9.16 大聚惠 (https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/45670?activityId=f7e4d75f22c84cdeba92bf594b02b910)]
 ============Quantumultx===============
 [task_local]
 #9.9-9.19 大聚惠
-34 3,18 9-19 9 * https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardBP.js, tag=9.9-9.19 大聚惠, enabled=true
+34 3,18 9-16 9 * https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardBP.js, tag=9.9-9.16 大聚惠, enabled=true
 ================Loon==============
 [Script]
-cron "34 3,18 9-19 9 *" script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardBP.js, tag=9.9-9.19 大聚惠
+cron "34 3,18 9-16 9 *" script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardBP.js, tag=9.9-9.16 大聚惠
 ===============Surge=================
-9.9-9.19 大聚惠 = type=cron,cronexp="34 3,18 9-19 9 *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardBP.js
+9.9-9.16 大聚惠 = type=cron,cronexp="34 3,18 9-16 9 *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardBP.js
 ============小火箭=========
-9.9-9.19 大聚惠 = type=cron,script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardBP.js, cronexpr="34 3,18 9-19 9 *", timeout=3600, enable=true
+9.9-9.16 大聚惠 = type=cron,script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardBP.js, cronexpr="34 3,18 9-16 9 *", timeout=3600, enable=true
 */
-const $ = new Env("9.9-9.19 大聚惠");
+const $ = new Env("9.9-9.16 大聚惠");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
-let ownCode = null;
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -183,8 +182,8 @@ function task(function_id, body, isCommon = 0, own = 0) {
                                         $.log(`开启【${data.data.activityName}】活动`)
                                         $.log("-------------------")
                                         if (own) {
-                                            ownCode = data.data.actorUuid
-                                            console.log(ownCode)
+                                            $.authorCode = data.data.actorUuid
+                                            console.log(data.data.actorUuid)
                                         }
                                         $.actorUuid = data.data.actorUuid;
                                         $.skuTask = data.data.addSku;
