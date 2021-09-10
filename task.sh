@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-09
+## Modified: 2021-09-10
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -151,6 +151,13 @@ function Check_Moudules() {
     [ ! -f $WorkDir/jdCookie.js ] && cp -rf $UtilsDir/jdCookie.js .
     [ ! -f $WorkDir/USER_AGENTS.js ] && cp -rf $UtilsDir/USER_AGENTS.js .
     cp -rf $FileSendNotify .
+    if [[ -z $NODE_PATH ]]; then
+        [ ! -d node_modules/got ] && npm install got
+        [ ! -d node_modules/tough-cookie ] && npm install tough-cookie
+    else
+        [ ! -d /usr/lib/node_modules/got ] && npm install -g got
+        [ ! -d /usr/lib/node_modules/tough-cookie ] && npm install -g tough-cookie
+    fi
     cd $CurrentDir
 }
 
@@ -178,7 +185,7 @@ function Run_Normal() {
     Make_Dir ${LogPath}
     local LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S").log"
     cd ${WhichDir}
-    echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
+    echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
     case ${FileFormat} in
     JavaScript)
         node ${FileName}.js 2>&1 | tee -a ${LogFile}
@@ -190,14 +197,14 @@ function Run_Normal() {
         ts-node-transpile-only ${FileName}.ts 2>&1 | tee -a ${LogFile}
         ;;
     esac
-    echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行结束\n" >>${LogFile}
+    echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行结束" >>${LogFile}
 }
 
 ## 并发执行
 function Run_Concurrent() {
     case $Arch in
     armv7l | armv6l)
-        echo -e "\n$ERROR 您当前使用的是32位处理器，考虑到性能不佳已禁用并发执行功能，建议更换运行环境！"
+        echo -e "\n$ERROR 您当前使用的是32位处理器，考虑到性能不佳已禁用并发执行功能！"
         Help
         exit 1
         ;;
@@ -219,7 +226,7 @@ function Run_Concurrent() {
             export JD_COOKIE=${!AccountNum}
             LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log"
             cd ${WhichDir}
-            echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始，不记录结束时间\n" >>${LogFile}
+            echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始，不记录结束时间\n" >>${LogFile}
             case ${FileFormat} in
             JavaScript)
                 node ${FileName}.js 2>&1 &>>${LogFile} &
@@ -248,7 +255,7 @@ function Run_Concurrent_Lite() {
         AccountNum=Cookie$UserNum
         export JD_COOKIE=${!AccountNum}
         cd $ScriptsDir
-        echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始，不记录结束时间\n" >>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log
+        echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始，不记录结束时间\n" >>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log
         case ${FileFormat} in
         JavaScript)
             node ${FileName}.js 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
@@ -284,7 +291,7 @@ function Run_Specify() {
         exit 1
     fi
     cd ${WhichDir}
-    echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
+    echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
     case ${FileFormat} in
     JavaScript)
         node ${FileName}.js 2>&1 | tee -a ${LogFile}
@@ -296,7 +303,7 @@ function Run_Specify() {
         ts-node-transpile-only ${FileName}.ts 2>&1 | tee -a ${LogFile}
         ;;
     esac
-    echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行结束\n" >>${LogFile}
+    echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行结束" >>${LogFile}
 }
 
 ## 迅速执行
@@ -336,7 +343,7 @@ function Run_Rapidly() {
         Make_Dir "$LogDir/${FileName}"
         local LogFile="$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S").log"
         cd $ScriptsDir
-        echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
+        echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
         case ${FileFormat} in
         JavaScript)
             node ${FileName}.js 2>&1 | tee -a ${LogFile}
@@ -348,13 +355,13 @@ function Run_Rapidly() {
             ts-node-transpile-only ${FileName}.ts 2>&1 | tee -a ${LogFile}
             ;;
         esac
-        echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行结束\n" >>${LogFile}
+        echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行结束" >>${LogFile}
         ;;
     2)
         if [ $2 = "-c" ]; then
             case $Arch in
             armv7l | armv6l)
-                echo -e "\n$ERROR 您当前使用的是32位处理器，考虑到性能不佳已禁用并发执行功能，建议更换运行环境！"
+                echo -e "\n$ERROR 您当前使用的是32位处理器，考虑到性能不佳已禁用并发执行功能！"
                 Help
                 exit 1
                 ;;
@@ -506,7 +513,7 @@ function Run_RawScript() {
         concurrent)
             case $Arch in
             armv7l | armv6l)
-                echo -e "\n$ERROR 您当前使用的是32位处理器，考虑到性能不佳已禁用并发执行功能，建议更换运行环境！"
+                echo -e "\n$ERROR 您当前使用的是32位处理器，考虑到性能不佳已禁用并发执行功能！"
                 Help
                 exit 1
                 ;;
@@ -591,46 +598,56 @@ function Cookies_Control() {
         echo ''
         ;;
     update)
-        ## 更新 sign 签名库
-        Make_Dir $SignDir
-        if [ ! -d $SignDir/.git ]; then
-            git clone -b master git@jd_base_gitee:supermanito/panel_sign_json.git $SignDir >/dev/null
-        else
-            cd $SignDir
-            git fetch --all >/dev/null
-            git reset --hard origin/master >/dev/null
-        fi
         [ -f $FileSendMark ] && rm -rf $FileSendMark
         ## 执行脚本
         if [ -f $FileUpdateCookie ]; then
-            local UserNum AccountNum
-            Import_Config updateCookies
-            Update_Crontab
-            Count_UserSum
-            LogPath="$LogDir/updateCookies"
-            Make_Dir ${LogPath}
-            echo -e "\n$WORKING 正在依次更新中，请耐心等待所有任务执行完毕...\n"
-            for ((UserNum = 1; UserNum <= ${UserSum}; UserNum++)); do
-                for num in ${TempBlockCookie}; do
-                    [[ $UserNum -eq $num ]] && continue 2
-                done
-                AccountNum=Cookie$UserNum
-                grep -q "$(echo ${!AccountNum} | grep -o "pt_pin.*;" | awk -F '\;' '{print$1}' | perl -pe '{s|pt_pin=||g}')" $FileAccountConf
-                if [[ $? -eq 0 ]]; then
-                    export JD_COOKIE=${!AccountNum}
+            if [[ ! -z $(grep "ws_key" $FileAccountConf | head -1 | awk -F '\"' '{print$4}') ]]; then
+                ## 更新 sign 签名库
+                Make_Dir $SignDir
+                if [ ! -d $SignDir/.git ]; then
+                    git clone -b master git@jd_base_gitee:supermanito/panel_sign_json.git $SignDir >/dev/null
+                    local ExitStatus=$?
                 else
-                    continue
+                    cd $SignDir
+                    git fetch --all >/dev/null
+                    local ExitStatus=$?
+                    git reset --hard origin/master >/dev/null
                 fi
-                LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_$UserNum.log"
-                cd $PanelDir
-                node updateCookies.js &>${LogFile} &
-                wait
-                grep "Cookie =>" ${LogFile} | tee -a $FileSendMark
-            done
-            echo -e "\n$COMPLETE 更新完成\n"
-            if [ -f $FileSendMark ]; then
-                [[ $AccountUpdateNotify == true ]] && Notify "账号更新结果通知" "$(cat $FileSendMark)"
-                rm -rf $FileSendMark
+                if [[ $ExitStatus -eq 0 ]]; then
+                    local UserNum AccountNum
+                    Import_Config updateCookies
+                    Count_UserSum
+                    LogPath="$LogDir/updateCookies"
+                    Make_Dir ${LogPath}
+                    echo -e "\n$WORKING 开始更新...\n"
+                    for ((UserNum = 1; UserNum <= ${UserSum}; UserNum++)); do
+                        for num in ${TempBlockCookie}; do
+                            [[ $UserNum -eq $num ]] && continue 2
+                        done
+                        AccountNum=Cookie$UserNum
+                        grep -q "$(echo ${!AccountNum} | grep -o "pt_pin.*;" | awk -F '\;' '{print$1}' | perl -pe '{s|pt_pin=||g}')" $FileAccountConf
+                        if [[ $? -eq 0 ]]; then
+                            export JD_COOKIE=${!AccountNum}
+                        else
+                            continue
+                        fi
+                        LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_$UserNum.log"
+                        cd $PanelDir
+                        node updateCookies.js &>${LogFile} &
+                        wait
+                        grep "Cookie =>" ${LogFile} | tee -a $FileSendMark
+                    done
+                    echo -e "\n$COMPLETE 更新完成\n"
+                    if [ -f $FileSendMark ]; then
+                        [[ $AccountUpdateNotify == true ]] && Notify "账号更新结果通知" "$(cat $FileSendMark)"
+                        rm -rf $FileSendMark
+                    fi
+                else
+
+                    echo -e "\n$ERROR 签名更新失败，请检查您的网络环境！\n"
+                fi
+            else
+                echo -e "\n$ERROR 请先配置好您的 WSKEY ！\n"
             fi
         else
             echo -e "\n$ERROR 账号更新脚本不存在，请确认是否移动！\n"

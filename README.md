@@ -1,11 +1,5 @@
 # 《使用教程》
-- __修订日期：2021 年 9 月 6 日__
-
-## 容器基础教程：
->附：[Docker 容器基础使用教程](https://www.runoob.com/docker/docker-container-usage.html)
-
-***
-
+- __修订日期：2021 年 9 月 10 日__
 ㅤ
 ## 一、基础使用教程
 ### 1. 执行特定脚本：
@@ -16,7 +10,7 @@
 
 
 ### 2. 更新全部脚本：
-    update 或 update all
+    update  或  update all
 > _注意：每次使用前请执行此命令，确保使用最新的项目脚本和活动脚本，此脚本也配置了定时任务可自动执行。_
 
 > _更新仓库时的常见报错：_\
@@ -74,9 +68,9 @@
 > _ㅤㅤㅤ2. 除手动运行活动脚本外该项目还会通过定时的方式自动执行活动脚本，可通过日志查看运行记录。_
 
 
-### 8. 单独更新：
+### 8. 单独更新部分仓库或脚本：
     update <cmd>
-> _注意：项目源码 shell、"Scripts"仓库 scripts、"Own"仓库 own。_
+> _注意：项目源码 shell、"Scripts"仓库 scripts、"Own"仓库 own、自定义脚本 extra。_
 
 
 ### 9. 删除脚本运行日志：
@@ -97,21 +91,15 @@
 
 ### 12. 安装环境：
     taskctl env install
->  _注意：全局安装常用模块便于执行非 Scripts 目录下的脚本，64位处理器还支持安装 Python 和 TypeSciprt 环境。_\
+>  _注意：全局安装常用模块便于执行非 Scripts 目录下的脚本，64位处理器还支持附带安装 Python 和 TypeSciprt 环境。_\
 
 
 ### 13. 安装脚本依赖：
-- 进入容器内脚本目录：
 
-      cd /jd/scripts
-- JavaScript | TypeScript 类脚本安装/修复方法：
+      npm install -g <xxx>       ## 全局安装指定模块
 
-      npm install <xxx>                 ## npm安装指定模块（看报错提示缺什么就尝试装什么）
-- Python 类脚本安装/修复方法：
-
-      pip3 install <xxx>                ## pip通用安装模块命令
-
-> _注意：当新脚本报错提示 `need module xxx` 类似字样说明缺少脚本所需的依赖，看见 `module` 字样应立即联想到安装模块上。_
+> _注意：1. 当脚本报错提示 `need module xxx` 类似字样说明缺少脚本运行所需的依赖，看见 `module` 字样应立即联想到安装模块上。_\
+> _ㅤㅤㅤ2. 特别要注意的是如果缺少的依赖中带有 `/` 则表示本地依赖文件，一般开发者都会提供相关组件，注意与安装模块区分开不要弄混。_
 
 
 ***
@@ -128,7 +116,7 @@
 
 
 ### 3. 自动互助功能：
-    ## 配置文件
+    ## 在配置文件中赋值该变量
     AutoHelpOther="true"
 > _注意：详见配置文件中的相关注释。_
 
@@ -173,7 +161,7 @@
 ***
 
 ㅤ
-## 四、相关功能控制教程
+## 四、项目服务类功能控制教程
 ### 1. 查看所有服务的状态
 
     taskctl server status
@@ -220,9 +208,7 @@
 
 
 ### 4. Telegram Bot
-  - 配置 Bot：
-
-        https://crawling-nectarine-ef2.notion.site/Telegram-Bot-9709bbae7bf8488ab01f3b4867e29b44
+> 关于如何配置 Bot： [点此查看](https://crawling-nectarine-ef2.notion.site/Telegram-Bot-9709bbae7bf8488ab01f3b4867e29b44)
 
   - 启动/重启 Bot 服务：
 
@@ -243,11 +229,11 @@
 ### 1. 更新配置文件：
   - 备份当前配置文件
 
-      mv /jd/config/config.sh /jd/config/bak/config.sh
+        cp -f /jd/config/config.sh /jd/config/bak/config.sh
 
   - 替换新版配置文件
 
-      cp -f /jd/sample/config.sample.sh /jd/config/config.sh
+        cp -f /jd/sample/config.sample.sh /jd/config/config.sh
     > _注意：此操作为直接替换配置文件，您也可以通过控制面板的对比工具自行修改。_
 
 

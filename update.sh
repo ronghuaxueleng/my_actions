@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-09
+## Modified: 2021-09-10
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -628,6 +628,9 @@ function Title() {
     own)
         Mod="  仅Own仓库  "
         ;;
+    extra)
+        Mod="   extra    "
+        ;;
     esac
     echo -e "\n+----------------- 开 始 执 行 更 新 脚 本 -----------------+"
     echo -e ''
@@ -682,6 +685,10 @@ function Combin_Function() {
         own)
             Title $1
             Update_Own
+            ;;
+        extra)
+            Title $1
+            ExtraShell
             ;;
         *)
             echo -e "\n$COMMAND_ERROR"

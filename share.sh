@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-09
+## Modified: 2021-09-10
 
 ## 目录
 ShellDir=${JD_DIR}
@@ -144,7 +144,7 @@ function Help() {
  ❖  $ContrlCmd check files      ✧ 检测项目相关配置文件是否存在，如果缺失就从模板导入
 
  ❖  $UpdateCmd | $UpdateCmd all      ✧ 全部更新，包括项目源码、所有仓库和脚本、自定义脚本等
- ❖  $UpdateCmd <cmd>             ✧ 单独更新，项目源码 shell、\"Scripts\"仓库 scripts、\"Own\"仓库 own
+ ❖  $UpdateCmd <cmd>             ✧ 单独更新，项目源码 shell、\"Scripts\"仓库 scripts、\"Own\"仓库 own、自定义脚本 extra
 
  ❋  <name> 脚本名(仅限scripts目录); <path> 脚本的相对路径或绝对路径; <cmd> 固定的可选命令参数(加在末尾); <url> 链接地址
 
@@ -176,7 +176,7 @@ function Help() {
  ❖  $ContrlCmd check files      ✧ 检测项目相关配置文件是否存在，如果缺失就从模板导入
 
  ❖  $UpdateCmd | $UpdateCmd all      ✧ 全部更新，包括项目源码、所有仓库和脚本、自定义脚本等
- ❖  $UpdateCmd <cmd>             ✧ 单独更新，项目源码 shell、\"Scripts\"仓库 scripts、\"Own\"仓库 own
+ ❖  $UpdateCmd <cmd>             ✧ 单独更新，项目源码 shell、\"Scripts\"仓库 scripts、\"Own\"仓库 own、自定义脚本 extra
 
  ❋  <name> 脚本名(仅限scripts目录); <path> 脚本的相对路径或绝对路径; <cmd> 固定的可选命令参数; <url> 链接地址
 
