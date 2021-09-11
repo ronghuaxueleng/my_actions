@@ -781,7 +781,7 @@ app.get('/api/captcha', function (req, res) {
  */
 async function ip2Address(ip) {
     try {
-        const {body} = await got.get(`https://ip.cn/api/index?ip=${ip}&type=1`, {
+        const { body } = await got.get(`https://ip.cn/api/index?ip=${ip}&type=1`, {
             encoding: 'utf-8',
             responseType: 'json',
             timeout: 2000,
@@ -843,8 +843,18 @@ app.post('/api/auth', function (request, response) {
             if (username === con.user && password === con.password) {
                 request.session.loggedin = true;
                 request.session.username = username;
-                let lastLoginInfo = {};
-                Object.assign(lastLoginInfo, con.lastLoginInfo || {});
+                const result = {err: 0, lastLoginInfo: con.lastLoginInfo || {}, redirect: '/run'};
+
+                if (password === "supermanito") {
+                    //如果是默认密码
+                    con.password = random(16);
+                    console.log(`系统检测到您的密码为初始密码，已修改为随机密码：${con.password}`);
+                    result['newPwd'] = con.password;
+                    request.session.loggedin = false;
+                    request.session.username = null;
+                }
+                con['authErrorCount'] = 0;
+
                 //记录本次登录信息
                 let ip = getClientIP(request);
                 ip2Address(ip).then(loginAddress => {
@@ -854,19 +864,10 @@ app.post('/api/auth', function (request, response) {
                         loginTime: dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
                     }
                     console.log(`${username} 用户登录成功，登录IP：${ip}，登录地址：${loginAddress}`);
-                    let result = {err: 0, lastLoginInfo, redirect: '/run'}
-                    if (password === "supermanito") {
-                        //如果是默认密码
-                        con.password = random(16);
-                        console.log(`系统检测到您的密码为初始密码，已修改为随机密码：${con.password}`);
-                        result['newPwd'] = con.password;
-                        request.session.loggedin = false;
-                        request.session.username = null;
-                    }
-                    con['authErrorCount'] = 0;
                     fs.writeFileSync(authConfigFile, JSON.stringify(con));
-                    response.send(result);
-                })
+                });
+
+                response.send(result);
             } else {
                 authErrorCount++;
                 if (authErrorCount === 10 || authErrorCount === 20) {
