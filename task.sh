@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-10
+## Modified: 2021-09-11
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
 
-## 确定脚本
+## 匹配输入脚本的路径
 function Find_Script() {
     FileName=""
     WhichDir=""
@@ -416,7 +416,7 @@ function Process_Kill() {
             ps -axo pid,pcpu,pmem,command --sort -pmem | less | grep ${FileName} | egrep -v "grep|pkill"
             echo ''
         else
-            echo -e "\n$COMPLETE 已终止进程\n"
+            echo -e "\n$COMPLETE 已终止相关进程\n"
         fi
     else
         echo -e "\n$ERROR 未检测到与 ${FileName} 脚本相关的进程，请重新确认！"
@@ -732,7 +732,8 @@ function Process_Monitor() {
         echo -e "\033[34m[释放后]\033[0m  Memory：\033[33m${MemoryUsageNew}\033[0m   剩余可用内存：\033[33m${MemoryFreeNew}MB\033[0m"
     fi
     echo -e "\n\033[34m[运行时长]  [CPU]    [内存]    [脚本名称]\033[0m"
-    ps -axo user,time,pcpu,user,pmem,user,command --sort -pmem | less | egrep ".js\b|.py\b|.ts\b" | egrep -Ev "server.js|pm2|egrep|perl|sed|bash" | perl -pe '{s| root     |% |g; s|\/usr\/bin\/ts-node ||g; s|\/usr\/bin\/python3 ||g; s|\/usr\/bin\/python ||g; s|\/usr\/bin\/node ||g; s|node ||g;  s|root     |#|g; s|#[0-9][0-9]:|#|g;  s|  | |g; s| |     |g; s|#|•  |g; s|/jd/scripts/jd_cfd_loop\.js|jd_cfd_loop\.js|g;}'
+    ps -axo user,time,pcpu,user,pmem,user,command --sort -pmem | less | egrep ".js\b|.py\b|.ts\b" | egrep -Ev "server.js|pm2|egrep|perl|sed|bash" |
+        perl -pe '{s| root     |% |g; s|\/usr\/bin\/ts-node ||g; s|\/usr\/bin\/python3 ||g; s|\/usr\/bin\/python ||g; s|\/usr\/bin\/node ||g; s|node ||g;  s|root     |#|g; s|#[0-9][0-9]:|#|g;  s|  | |g; s| |     |g; s|#|•  |g; s|/jd/scripts/jd_cfd_loop\.js|jd_cfd_loop\.js|g; s|\./utils/||g;}'
     echo ''
 }
 
@@ -742,20 +743,20 @@ function List_Local_Scripts() {
     local ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|JDJR|validate|ZooFaker|MovementFaker|tencentscf|api_test|app.|main.|jd_update.js|jd_env_copy.js|index.js|.json|ql.js|jdEnv"
     case $Arch in
     armv7l | armv6l)
-        ScriptType=".js\b"
+        ScriptType="\.js\b"
         ;;
     *)
         if [ -x /usr/bin/python3 ]; then
-            Tmp1="|.py\b"
+            Tmp1="|\.py\b"
         else
             Tmp1=""
         fi
         if [ -x /usr/bin/ts-node ]; then
-            Tmp2="|.ts\b"
+            Tmp2="|\.ts\b"
         else
             Tmp2=""
         fi
-        ScriptType=".js\b${Tmp1}${Tmp2}"
+        ScriptType="\.js\b${Tmp1}${Tmp2}"
         ;;
     esac
 

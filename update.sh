@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-10
+## Modified: 2021-09-11
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -369,31 +369,6 @@ function Add_Cron_Notify() {
     fi
 }
 
-## 一键执行所有活动脚本
-function Run_All() {
-    ## 默认将 "jd、jx、jr" 开头的活动脚本加入其中
-    rm -rf $FileRunAll
-    local Tips='echo -e "\n\\033[32m[Tips]\\033[0m 执行期间如果卡住，可按回车键尝试或通过命令 Ctrl + Z 跳过继续执行剩余活动脚本，倒计时 3 秒后开始执行\n" && sleep 1 && echo -e "3..." && sleep 1 && echo -e "2.." && sleep 1 && echo -e "1." && sleep 1'
-
-    ## 调整执行顺序
-    cat $ListTaskUser | egrep -v "jd_bean_change|joy_reward|blueCoin" >>$FileRunAll
-    sed -i "1i\jd_bean_change" $FileRunAll ## 置顶京豆变动通知
-
-    ## 去除不适合的活动脚本
-    sed -i '/jd_delCoupon/d' $FileRunAll ## "删除优惠券"
-    sed -i '/jd_family/d' $FileRunAll    ## "京东家庭号"
-    sed -i '/jd_try/d' $FileRunAll       ## "京东试用"，执行时间过长
-
-    ## 加入命令
-    sed -i "s/^/$TaskCmd &/g" $FileRunAll
-    sed -i 's/$/& now/g' $FileRunAll
-
-    ## 加入说明
-    sed -i "1i $Tips" $FileRunAll
-    sed -i '1i\#!/bin/env bash' $FileRunAll
-    chmod 777 $FileRunAll
-}
-
 ## 更新 own 所有仓库
 function Update_Own_Repo() {
     [[ ${#array_own_repo_url[*]} -gt 0 ]] && echo -e "-------------------------------------------------------------"
@@ -531,8 +506,6 @@ function Update_Scripts() {
             Add_Cron_Scripts $ListTaskAdd
             [[ ${AutoAddCron} == true ]] && Add_Cron_Notify $ExitStatus $ListTaskAdd "Scripts仓库脚本"
         fi
-        ## 全部执行
-        Run_All
         echo -e "\n$COMPLETE Scripts 仓库更新完成\n"
     else
         echo -e "\n$ERROR Scripts 仓库更新失败，请检查原因...\n"
@@ -652,7 +625,7 @@ function Notice() {
     echo -e ""
     echo -e "  我们不会放纵某些行为，不保证不采取非常手段，请勿挑战底线！"
     echo -e ""
-    echo -e "+-----------------------------------------------------------+"
+    echo -e "+-----------------------------------------------------------+\n"
 }
 
 ## 组合函数
@@ -664,6 +637,9 @@ function Combin_Function() {
         Update_Scripts
         Update_Own
         ExtraShell
+        Fix_Crontab
+        Notice
+        exit 0
         ;;
     1)
         case $1 in
@@ -693,17 +669,17 @@ function Combin_Function() {
         *)
             echo -e "\n$COMMAND_ERROR"
             Help
+            exit 0
             ;;
         esac
+        Fix_Crontab
+        Notice
+        exit 0
         ;;
     *)
-        echo -e "\n$COMMAND_ERROR"
+        echo -e "\n$TOO_MANY_COMMANDS"
         Help
         ;;
     esac
-    Fix_Crontab
-    Notice
-    echo ''
-    exit 0
 }
 Combin_Function "$@"
