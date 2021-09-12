@@ -1,7 +1,7 @@
 /*
 店铺签到，各类店铺签到，有新的店铺直接添加token即可
 活动时间：长期
-更新时间：2021-09-12
+更新时间：2021-09-13
 脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
 搬运cui521大佬脚本
 
@@ -38,7 +38,6 @@ const token=[
   '1D9BC39B71C4DF268D034D4DC78B81D3',
   'F06840A438B3C85550A5734639FD64BD',
   'D0091B5128433C41D58F698665048E9F',
-  '730406A803C8CCDE6432590279770BC8',
   '4C3EE43458D3603173B190B3AE67A2F2',
 ]
 //IOS等用户直接用NobyDa的jd cookie
