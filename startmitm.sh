@@ -1,0 +1,1 @@
+mitmdump -p 5900 -s mproxy.py --set block_global=false

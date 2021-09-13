@@ -1,4 +1,6 @@
 import re
+import urllib
+from urllib import parse
 
 import requests
 from hyper import HTTP20Connection
@@ -34,6 +36,14 @@ def request(host, method, path, headers=None, body=None):
 def convert_cookies_to_dict(cookies, delimiter="; |;|, |,"):
     cookies = dict([l.split("=", 1) for l in re.split(delimiter, cookies)])
     return cookies
+
+
+def urldecode(url):
+    return urllib.parse.unquote(url)
+
+
+def url2json(urlparams):
+    return dict(parse.parse_qsl(urlparams))
 
 
 def send_message(content):
