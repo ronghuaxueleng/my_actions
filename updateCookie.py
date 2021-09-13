@@ -8,6 +8,8 @@ from utils.wskey import wstopt
 
 def updateCookie():
     configpath = os.path.join(os.path.split(os.path.realpath(__file__))[0], 'config', 'config.sh')
+    if not os.path.exists(configpath):
+        configpath = os.path.join('/jd', 'config', 'config.sh')
     pinReg = re.compile('Cookie(?P<num>\d+)="pt_key=(?P<pt_key>\S+?);?pt_pin=(?P<pt_pin>\S+?);"')
     tempBlockCookieReg = re.compile('^TempBlockCookie="(?P<tempBlockCookie>.*?)"')
     tempBlockCookies = []
