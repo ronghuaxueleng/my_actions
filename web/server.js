@@ -471,9 +471,10 @@ function shouldCompress(req, res) {
 app.use(
     session({
         secret: 'secret',
-        name: `connect.${Math.random()}`,
-        resave: true,
+        name: `connect-${random(8)}`,
+        resave: false,
         saveUninitialized: true,
+        cookie: { maxAge: 8 * 60 * 60 * 1000 },
     })
 );
 app.use(bodyParser.json({
@@ -519,7 +520,7 @@ app.get('/', function (request, response) {
  * logout
  */
 app.get('/logout', function (request, response) {
-    request.session.destroy();
+    request.session.loggedin = false;
     response.redirect('/auth');
 });
 
