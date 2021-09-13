@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-updateCookie
+python updateCookie
 jtask "$@"
