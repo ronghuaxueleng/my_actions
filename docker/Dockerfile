@@ -50,7 +50,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && ln -sf ${JD_DIR}/control.sh /usr/local/bin/taskctl \
     && ln -sf ${JD_DIR}/code.sh /usr/local/bin/code \
     && ln -sf ${JD_DIR}/update.sh /usr/local/bin/update \
-    && ln -sf ${JD_DIR}/updateCookie.py /usr/local/bin/updateCookie \
     && chmod 777 /usr/local/bin/* \
     && chmod 777 ${JD_DIR}/* \
     && rm -rf /tmp/* \
