@@ -43,13 +43,14 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && rm -rf /root/.npm \
     && touch ${JD_DIR}/runall.sh \
     && ln -sf ${JD_DIR}/runall.sh /usr/local/bin/runall \
-    && ln -sf ${JD_DIR}/task.sh /usr/local/bin/task \
+    && ln -sf ${JD_DIR}/runtask.sh /usr/local/bin/task \
     && ln -sf ${JD_DIR}/task.sh /usr/local/bin/jtask \
     && ln -sf ${JD_DIR}/task.sh /usr/local/bin/mtask \
     && ln -sf ${JD_DIR}/task.sh /usr/local/bin/otask \
     && ln -sf ${JD_DIR}/control.sh /usr/local/bin/taskctl \
     && ln -sf ${JD_DIR}/code.sh /usr/local/bin/code \
     && ln -sf ${JD_DIR}/update.sh /usr/local/bin/update \
+    && ln -sf ${JD_DIR}/updateCookie.py /usr/local/bin/updateCookie \
     && chmod 777 /usr/local/bin/* \
     && chmod 777 ${JD_DIR}/* \
     && rm -rf /tmp/* \
