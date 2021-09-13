@@ -1,7 +1,7 @@
 # 《使用教程》
-- __修订日期：2021 年 9 月 10 日__
+- __修订日期：2021 年 9 月 13 日__
 ㅤ
-## 一、基础使用教程
+## 一、基础教程
 ### 1. 执行特定脚本：
     task <name/path> now
 > _注意：1. `name` 为脚本名（仅限scripts目录）、`path` 脚本的相对路径或绝对路径。_\
@@ -15,8 +15,8 @@
 
 > _更新仓库时的常见报错：_\
 > _提示 `Repository more than 5 connections` 是由于 `Gitee` 限制了每秒同时拉取项目的IP不能超过 `5` 个所导致，此报错为正常现象，重新执行更新命令即可。_\
-> _提示 `ssh: connect to host gitee.com port 22/443: Connection timed out` 是由于您使用平台的 `22/443` 端口不可用所导致，自行解决处理。_\
-> _提示 `Could not resolve hostname gitee.com: Temporary failure in name resolution lost connection` 是由于无法解析到 `Gitee` 服务器，表明网络环境异常，自行解决处理。_
+> _提示 `ssh: connect to host gitee.com port 22/443: Connection timed out` 是由于您使用平台的 `22/443` 端口不可用所导致。_\
+> _提示 `Could not resolve hostname gitee.com: Temporary failure in name resolution lost connection` 是由于无法解析到 `Gitee` 服务器，表明网络环境异常。_
 
 
 ### 3. 查看本地脚本清单：
@@ -31,7 +31,7 @@
 ***
 
 ㅤ
-## 二、高阶使用教程
+## 二、高阶教程
 ### 1. 并发执行：
     task <name/path> conc
 > _注意：并发执行非常消耗资源，不要盲目使用尤其是0点，否则资源占满导致终端连不上后只能物理重启。_
@@ -49,12 +49,12 @@
 
 ### 4. 远程执行：
     task <url> raw
-> _注意：拉取位于远程仓库的脚本后并执行，url为链接地址，可选参数(加在末尾)：-p 使用代理([Ghproxy](https://ghproxy.com))、-c 并发执行。_
+> _注意：拉取位于远程仓库的脚本后并执行，url为链接地址，可选参数(加在末尾)：-p 使用代理([Ghproxy](https://ghproxy.com))、-c 并发。_
 
 
 ### 5. 迅速执行：
     task <name> rapid
-> _注意：此功能不会组合互助码变量，最大化降低脚本执行前耗时，主要适用于抢兑类脚本，可选参数(加在末尾)：-c 并发执行。_
+> _注意：此功能不会组合互助码变量，最大化降低脚本执行前耗时，主要适用于抢兑类脚本，可选参数(加在末尾)：-c 并发。_
 
 
 ### 6. 终止执行：
@@ -64,8 +64,7 @@
 
 ### 7. 全部执行：
     source runall  或  . runall
-> _注意：1. 此脚本的作用为执行所有本地所有的脚本，高达数十个甚至上百，时间较长且与账号数量成正比。_\
-> _ㅤㅤㅤ2. 除手动运行活动脚本外该项目还会通过定时的方式自动执行活动脚本，可通过日志查看运行记录。_
+> _注意：通过交互选择运行模式执行指定范围的脚本，时间较长不要盲目使用。_
 
 
 ### 8. 单独更新部分仓库或脚本：
@@ -91,13 +90,12 @@
 
 ### 12. 安装环境：
     taskctl env install
->  _注意：全局安装常用模块便于执行非 Scripts 目录下的脚本，64位处理器还支持附带安装 Python 和 TypeSciprt 环境。_\
+>  _注意：全局安装常用模块便于执行非 Scripts 目录下的脚本，64位处理器还支持附带安装 Python 和 TypeSciprt 环境。_
 
 
 ### 13. 安装脚本依赖：
-
-      npm install -g <xxx>       ## 全局安装指定模块
-
+    ## 全局安装指定模块
+    npm install -g <xxx>
 > _注意：1. 当脚本报错提示 `need module xxx` 类似字样说明缺少脚本运行所需的依赖，看见 `module` 字样应立即联想到安装模块上。_\
 > _ㅤㅤㅤ2. 特别要注意的是如果缺少的依赖中带有 `/` 则表示本地依赖文件，一般开发者都会提供相关组件，注意与安装模块区分开不要弄混。_
 
@@ -118,13 +116,13 @@
 ### 3. 自动互助功能：
     ## 在配置文件中赋值该变量
     AutoHelpOther="true"
-> _注意：详见配置文件中的相关注释。_
+> _注意：详见配置文件中的相关注释，最好理解该功能的工作原理。_
 
 
 ### 4. 手动定义互助码与相互助力：
     填法示例：
 
-    1. 定义东东农场互助
+    ## 1.定义东东农场互助
     MyFruit1="xxxxxxxxxxxxxxxxxxxxxxxxx"
     MyFruit2="xxxxxxxxxxxxxxxxxxxxxxxxx"
     MyFruitA=""
@@ -132,7 +130,7 @@
     ForOtherFruit1="${MyFruit1}@${MyFruit2}"
     ForOtherFruit2="${MyFruit1}@${MyFruit2}"
     
-    1. 定义东东萌宠互助
+    ## 2.定义东东萌宠互助
     MyPet1="xxxxxxxxxxxxxxxxxxxxxxxxx"
     MyPet2="xxxxxxxxxxxxxxxxxxxxxxxxx"
     MyPet3="xxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -147,7 +145,7 @@
     ForOtherPet4="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
     ForOtherPet5="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
     ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
-> _注意：所有符号需严格使用英文格式！_
+> _注意：所有符号需严格使用英文格式！如果在上一步启用了自动互助功能那么手动定义的互助码变量均会被覆盖，等于无效。_
 
 
 ### 5. 提交您的互助码到公共助力池（Telegram Bot）：
@@ -183,7 +181,7 @@
 
         taskctl hang logs
     > _注意：Ctrl+C 退出，如发现脚本报错可尝试重启。_
-ㅤ
+
 
 ### 3. 控制面板和网页终端
   - 开启/重启控制面板和网页终端：
@@ -200,6 +198,7 @@
   - 查看控制面板的登录信息：
 
         taskctl panel info
+    > _注意：如果忘记了登录密码可以用此方法查看。_
 
   - 重置控制面板的用户名和密码：
 
@@ -208,7 +207,7 @@
 
 
 ### 4. Telegram Bot
-> 关于如何配置 Bot： [点此查看](https://crawling-nectarine-ef2.notion.site/Telegram-Bot-9709bbae7bf8488ab01f3b4867e29b44)
+> 关于如何配置该功能 [点此查看](https://crawling-nectarine-ef2.notion.site/Telegram-Bot-9709bbae7bf8488ab01f3b4867e29b44)
 
   - 启动/重启 Bot 服务：
 
@@ -221,6 +220,7 @@
   - 查看 Bot 的运行日志：
 
         taskctl jbot logs
+
 
 ***
 

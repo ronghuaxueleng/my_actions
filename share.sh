@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-10
+## Modified: 2021-09-13
 
 ## 目录
 ShellDir=${JD_DIR}
@@ -129,7 +129,7 @@ function Help() {
  ❖  $TaskCmd <name/path> pkill   ✧ 终止执行，根据脚本名称搜索对应的进程并立即杀死，当脚本报错死循环时可使用此功能
  ❖  $TaskCmd <name> rapid        ✧ 迅速执行，不组合互助码等步骤最大化降低执行前耗时，主要适用于抢兑类活动脚本
  ❖  $TaskCmd <url> raw           ✧ 远程执行，拉取远程仓库的脚本后依次执行，可选参数(加在末尾): -p 代理
- ❖  source runall            ✧ 全部执行，依次所有活动脚本，非常耗时，Ctrl+Z 跳过执行当前脚本，Ctrl+C 停止执行
+ ❖  source runall            ✧ 全部执行，通过交互选择运行模式执行指定范围的脚本，非常耗时不要盲目使用
 
  ❖  $TaskCmd list                ✧ 查看本地脚本清单
  ❖  $TaskCmd ps                  ✧ 查看资源消耗情况和正在运行的脚本进程，当检测到内存占用较高时自动尝试释放
@@ -160,7 +160,7 @@ function Help() {
  ❖  $TaskCmd <name/path> pkill   ✧ 终止执行，根据脚本名称搜索对应的进程并立即杀死，当脚本报错死循环时可使用此功能
  ❖  $TaskCmd <name> rapid        ✧ 迅速执行，不组合互助码等步骤最大化降低执行前耗时，可选参数(加在末尾): -c 并发
  ❖  $TaskCmd <url> raw           ✧ 远程执行，拉取远程仓库的脚本后依次执行，可选参数(加在末尾): -p 代理、-c 并发
- ❖  source runall            ✧ 全部执行，依次所有活动脚本，非常耗时，Ctrl+Z 跳过执行当前脚本，Ctrl+C 停止执行
+ ❖  source runall            ✧ 全部执行，通过交互选择运行模式执行指定范围的脚本，非常耗时不要盲目使用
 
  ❖  $TaskCmd list                ✧ 查看本地脚本清单
  ❖  $TaskCmd ps                  ✧ 查看资源消耗情况和正在运行的脚本进程，当检测到内存占用较高时自动尝试释放
@@ -351,6 +351,9 @@ function Query_Name() {
         jd_cfd_withdraw.ts)
             Name="京喜财富岛提现"
             ;;
+        jd_checkCookie.ts)
+            Name="检测Cookie是否有效"
+            ;;
         jd_foodRunning.ts)
             Name="零食街"
             ;;
@@ -371,6 +374,9 @@ function Query_Name() {
             ;;
         jd_joy_reward.ts)
             Name="宠汪汪兑换二代目"
+            ;;
+        jd_jxgc.ts)
+            Name="京喜工厂"
             ;;
         jd_jxgc_help.ts)
             Name="京喜工厂助力"

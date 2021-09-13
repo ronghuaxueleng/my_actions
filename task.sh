@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-11
+## Modified: 2021-09-13
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -151,23 +151,18 @@ function Check_Moudules() {
     [ ! -f $WorkDir/jdCookie.js ] && cp -rf $UtilsDir/jdCookie.js .
     [ ! -f $WorkDir/USER_AGENTS.js ] && cp -rf $UtilsDir/USER_AGENTS.js .
     cp -rf $FileSendNotify .
-    if [[ -z $NODE_PATH ]]; then
-        [ ! -d node_modules/got ] && npm install got
-        [ ! -d node_modules/tough-cookie ] && npm install tough-cookie
-    else
-        [ ! -d /usr/lib/node_modules/got ] && npm install -g got
-        [ ! -d /usr/lib/node_modules/tough-cookie ] && npm install -g tough-cookie
-    fi
+    [ ! -d /usr/lib/node_modules/got ] && npm install -g got
+    [ ! -d /usr/lib/node_modules/tough-cookie ] && npm install -g tough-cookie
     cd $CurrentDir
 }
 
 ## 随机时间
 function Random_Delay() {
     if [[ -n ${RandomDelay} ]] && [[ ${RandomDelay} -gt 0 ]]; then
-        CurMin=$(date "+%-M")
+        local CurMin=$(date "+%-M")
         if [[ ${CurMin} -gt 2 && ${CurMin} -lt 30 ]] || [[ ${CurMin} -gt 31 && ${CurMin} -lt 59 ]]; then
             CurDelay=$((${RANDOM} % ${RandomDelay} + 1))
-            echo -e "\n$WORKING 命令未添加 \"now\"，随机延迟 ${CurDelay} 秒后再执行任务，如需立即终止，请按 Ctrl+C...\n"
+            echo -en "\n$WORKING 已随机延迟时间，${CurDelay} 秒后开始执行任务..."
             sleep ${CurDelay}
         fi
     fi
@@ -460,6 +455,7 @@ function Run_RawScript() {
         else
             echo -e "\n$COMMAND_ERROR"
             Help
+            exit 1
         fi
         ;;
     3)
@@ -470,6 +466,7 @@ function Run_RawScript() {
         else
             echo -e "\n$COMMAND_ERROR"
             Help
+            exit 1
         fi
         if [ $3 = "-c" ]; then
             RunMod="concurrent"
@@ -478,6 +475,7 @@ function Run_RawScript() {
         else
             echo -e "\n$COMMAND_ERROR"
             Help
+            exit 1
         fi
         ;;
     *)
@@ -491,8 +489,9 @@ function Run_RawScript() {
     else
         ProxyJudge=""
     fi
-    echo -e "\n$WORKING 开始从${RepositoryJudge}远程仓库${ProxyJudge}下载 ${FileName} 脚本..."
+    echo -en "\n$WORKING 正在从${RepositoryJudge}远程仓库${ProxyJudge}下载 ${FileName} 脚本... "
     wget -q --no-check-certificate "${DownloadJudge}$input_url" -O "$ScriptsDir/${FileName}.new" -T 10
+    echo ''
     if [[ $? -eq 0 ]]; then
         mv -f "$ScriptsDir/${FileName}.new" "$ScriptsDir/${FileName}"
         case ${RunMod} in
@@ -643,7 +642,6 @@ function Cookies_Control() {
                         rm -rf $FileSendMark
                     fi
                 else
-
                     echo -e "\n$ERROR 签名更新失败，请检查您的网络环境！\n"
                 fi
             else

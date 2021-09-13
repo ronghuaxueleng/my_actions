@@ -740,7 +740,7 @@ app.get('/api/runLog', function (request, response) {
                 pathUrl = `log/${jsName}/`;
             } else if (jsName.startsWith("own/")) {
                 jsName = jsName.substring(jsName.indexOf("/") + 1);
-                pathUrl = `log/${jsName.replace(new RegExp('[/\\-]',"gm"),'_')}/`;
+                pathUrl = `log/${jsName.replace(new RegExp('[/\\-]', "gm"), '_')}/`;
             } else {
                 if (!fs.existsSync(path.join(rootPath, pathUrl))) {
                     pathUrl = `log/jd_${jsName}/`;
@@ -781,7 +781,7 @@ app.get('/api/captcha', function (req, res) {
  */
 async function ip2Address(ip) {
     try {
-        const { body } = await got.get(`https://ip.cn/api/index?ip=${ip}&type=1`, {
+        const {body} = await got.get(`https://ip.cn/api/index?ip=${ip}&type=1`, {
             encoding: 'utf-8',
             responseType: 'json',
             timeout: 2000,
@@ -789,107 +789,100 @@ async function ip2Address(ip) {
         if (body.code === 0 && body.address) {
             let address = body.address;
             if (address.indexOf("内网IP") > -1) {
-                return '局域网'
+                return {ip: ip, address: "局域网"};
             }
             let type = address.substring(address.lastIndexOf(" "));
             address = address.replace(type, '').replace(/\s*/g, '');
-            return address + type;
+            return {ip: ip, address: address + type};
         }
     } catch (e) {
         console.error("IP 转为地址失败", e);
     }
-    return '未知';
+    return {ip: ip, address: "未知"};
 }
 
 /**
  * auth
  */
-app.post('/api/auth', function (request, response) {
-    let username = request.body.username;
-    let password = request.body.password;
-    let captcha = request.body.captcha || '';
-
-    fs.readFile(authConfigFile, 'utf8', function (err, data) {
-        if (err) console.log(err);
-        var con = JSON.parse(data);
-        let authErrorCount = con['authErrorCount'] || 0;
-        if (authErrorCount >= 30) {
-            //错误次数超过30次，直接
-            response.send({
-                err: 1,
-                msg: '面板错误登录次数到达30次，已禁止登录!',
-                showCaptcha: true,
-            });
-            return;
-        }
-        let showCaptcha = authErrorCount >= errorCount;
-        if (captcha === '' && showCaptcha) {
-            response.send({
-                err: 1,
-                msg: '请输入验证码!',
-                showCaptcha: true,
-            });
-            return;
-        }
-        if (showCaptcha && captcha !== request.session.captcha) {
-            response.send({
-                err: 1,
-                msg: '验证码不正确!',
-                showCaptcha: showCaptcha,
-            });
-            return;
-        }
-        if (username && password) {
-            if (username === con.user && password === con.password) {
-                request.session.loggedin = true;
-                request.session.username = username;
-                const result = {err: 0, lastLoginInfo: con.lastLoginInfo || {}, redirect: '/run'};
-
-                if (password === "supermanito") {
-                    //如果是默认密码
-                    con.password = random(16);
-                    console.log(`系统检测到您的密码为初始密码，已修改为随机密码：${con.password}`);
-                    result['newPwd'] = con.password;
-                    request.session.loggedin = false;
-                    request.session.username = null;
-                }
-                con['authErrorCount'] = 0;
-
-                //记录本次登录信息
-                let ip = getClientIP(request);
-                ip2Address(ip).then(loginAddress => {
-                    con.lastLoginInfo = {
-                        loginIp: ip,
-                        loginAddress: loginAddress,
-                        loginTime: dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
-                    }
-                    console.log(`${username} 用户登录成功，登录IP：${ip}，登录地址：${loginAddress}`);
-                    fs.writeFileSync(authConfigFile, JSON.stringify(con));
-                });
-
-                response.send(result);
-            } else {
-                authErrorCount++;
-                if (authErrorCount === 10 || authErrorCount === 20) {
-                    panelSendNotify(`异常登录提醒`, `您的面板登录验证错误次数已达到${authErrorCount}次，为了保障您的面板安全，请进行检查！温馨提示：请定期修改账号和密码，并将面板更新至最新版本`);
-                } else if (authErrorCount === 30) {
-                    panelSendNotify(`异常登录提醒`, `您的面板登录验证错误次数已达到${authErrorCount}次，已禁用面板登录。请手动设置/jd/config/auth.json文件里面的“authErrorCount”为0来恢复面板登录！`);
-                }
-                con['authErrorCount'] = authErrorCount;
-                fs.writeFileSync(authConfigFile, JSON.stringify(con));
-                response.send({
-                    err: 1,
-                    msg: authError,
-                    showCaptcha: authErrorCount >= errorCount
-                });
+app.post('/api/auth', async function (request, response) {
+    let {username, password, captcha = ''} = request.body;
+    let data = fs.readFileSync(authConfigFile, 'utf8');
+    let con = JSON.parse(data);
+    let authErrorCount = con['authErrorCount'] || 0;
+    if (authErrorCount >= 30) {
+        //错误次数超过30次，直接
+        response.send({
+            err: 1,
+            msg: '面板错误登录次数到达30次，已禁止登录!',
+            showCaptcha: true,
+        });
+        return;
+    }
+    let showCaptcha = authErrorCount >= errorCount;
+    if (captcha === '' && showCaptcha) {
+        response.send({
+            err: 1,
+            msg: '请输入验证码!',
+            showCaptcha: true,
+        });
+        return;
+    }
+    if (showCaptcha && captcha !== request.session.captcha) {
+        response.send({
+            err: 1,
+            msg: '验证码不正确!',
+            showCaptcha: showCaptcha,
+        });
+        return;
+    }
+    if (username && password) {
+        if (username === con.user && password === con.password) {
+            request.session.loggedin = true;
+            request.session.username = username;
+            const result = {err: 0, lastLoginInfo: {}, redirect: '/run'};
+            Object.assign(result.lastLoginInfo, con.lastLoginInfo || {});
+            if (password === "supermanito") {
+                //如果是默认密码
+                con.password = random(16);
+                console.log(`系统检测到您的密码为初始密码，已修改为随机密码：${con.password}`);
+                result['newPwd'] = con.password;
+                request.session.loggedin = false;
+                request.session.username = null;
             }
+            con['authErrorCount'] = 0;
+            //记录本次登录信息
+            ip2Address(getClientIP(request)).then(({ip, address}) => {
+                con.lastLoginInfo = {
+                    loginIp: ip,
+                    loginAddress: address,
+                    loginTime: dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
+                }
+                console.log(`${username} 用户登录成功，登录IP：${ip}，登录地址：${address}`);
+                fs.writeFileSync(authConfigFile, JSON.stringify(con));
+            });
+            response.send(result);
         } else {
+            authErrorCount++;
+            if (authErrorCount === 10 || authErrorCount === 20) {
+                panelSendNotify(`异常登录提醒`, `您的面板登录验证错误次数已达到${authErrorCount}次，为了保障您的面板安全，请进行检查！温馨提示：请定期修改账号和密码，并将面板更新至最新版本`);
+            } else if (authErrorCount === 30) {
+                panelSendNotify(`异常登录提醒`, `您的面板登录验证错误次数已达到${authErrorCount}次，已禁用面板登录。请手动设置/jd/config/auth.json文件里面的“authErrorCount”为0来恢复面板登录！`);
+            }
+            con['authErrorCount'] = authErrorCount;
+            fs.writeFileSync(authConfigFile, JSON.stringify(con));
             response.send({
                 err: 1,
-                msg: '请输入用户名密码!'
+                msg: authError,
+                showCaptcha: authErrorCount >= errorCount
             });
         }
-    });
+    } else {
+        response.send({
+            err: 1,
+            msg: '请输入用户名密码!'
+        });
+    }
+
 });
 
 
@@ -1025,7 +1018,7 @@ function loadFile(loadPath, dirName, keywords, onlyRunJs) {
         if (filter || item.isDirectory()) {
             if (item.isDirectory()) {
                 let dirPathFiles = loadFile(dirPath, name, keywords, onlyRunJs)
-                if(filter || (keywords !== "" && dirPathFiles.length > 0)){
+                if (filter || (keywords !== "" && dirPathFiles.length > 0)) {
                     if (onlyRunJs) {
                         arrFiles = arrFiles.concat(dirPathFiles)
                     } else {
@@ -1057,7 +1050,7 @@ app.get('/api/scripts', function (request, response) {
         let onlyRunJs = request.query.onlyRunJs || 'false';
         onlyRunJs = onlyRunJs === 'true';
         let rootFiles = [], scriptsDir = 'scripts', ownDir = 'own', dirList = [scriptsDir];
-        if(!onlyRunJs){
+        if (!onlyRunJs) {
             dirList.push(ownDir);
         }
         dirList.forEach((dirName) => {

@@ -46,11 +46,11 @@
 <a id="使用教程" class="anchor" href="#%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B"></a>《使用教程》</h1>
 <ul>
 <li>
-<strong>修订日期：2021 年 9 月 10 日</strong>
+<strong>修订日期：2021 年 9 月 13 日</strong>
 ㅤ</li>
 </ul>
 <h2>
-<a id="一基础使用教程" class="anchor" href="#%E4%B8%80%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B"></a>一、基础使用教程</h2>
+<a id="一基础教程" class="anchor" href="#%E4%B8%80%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B"></a>一、基础教程</h2>
 <h3>
 <a id="1-执行特定脚本" class="anchor" href="#1-%E6%89%A7%E8%A1%8C%E7%89%B9%E5%AE%9A%E8%84%9A%E6%9C%AC"></a>1. 执行特定脚本：</h3>
 <pre><code>task &lt;name/path&gt; now
@@ -70,8 +70,8 @@
 <blockquote>
 <p><em>更新仓库时的常见报错：</em><br>
 <em>提示 <code>Repository more than 5 connections</code> 是由于 <code>Gitee</code> 限制了每秒同时拉取项目的IP不能超过 <code>5</code> 个所导致，此报错为正常现象，重新执行更新命令即可。</em><br>
-<em>提示 <code>ssh: connect to host gitee.com port 22/443: Connection timed out</code> 是由于您使用平台的 <code>22/443</code> 端口不可用所导致，自行解决处理。</em><br>
-<em>提示 <code>Could not resolve hostname gitee.com: Temporary failure in name resolution lost connection</code> 是由于无法解析到 <code>Gitee</code> 服务器，表明网络环境异常，自行解决处理。</em></p>
+<em>提示 <code>ssh: connect to host gitee.com port 22/443: Connection timed out</code> 是由于您使用平台的 <code>22/443</code> 端口不可用所导致。</em><br>
+<em>提示 <code>Could not resolve hostname gitee.com: Temporary failure in name resolution lost connection</code> 是由于无法解析到 <code>Gitee</code> 服务器，表明网络环境异常。</em></p>
 </blockquote>
 <h3>
 <a id="3-查看本地脚本清单" class="anchor" href="#3-%E6%9F%A5%E7%9C%8B%E6%9C%AC%E5%9C%B0%E8%84%9A%E6%9C%AC%E6%B8%85%E5%8D%95"></a>3. 查看本地脚本清单：</h3>
@@ -87,7 +87,7 @@
 <hr>
 <p>ㅤ</p>
 <h2>
-<a id="二高阶使用教程" class="anchor" href="#%E4%BA%8C%E9%AB%98%E9%98%B6%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B"></a>二、高阶使用教程</h2>
+<a id="二高阶教程" class="anchor" href="#%E4%BA%8C%E9%AB%98%E9%98%B6%E6%95%99%E7%A8%8B"></a>二、高阶教程</h2>
 <h3>
 <a id="1-并发执行" class="anchor" href="#1-%E5%B9%B6%E5%8F%91%E6%89%A7%E8%A1%8C"></a>1. 并发执行：</h3>
 <pre><code>task &lt;name/path&gt; conc
@@ -114,14 +114,14 @@
 <pre><code>task &lt;url&gt; raw
 </code></pre>
 <blockquote>
-<p><em>注意：拉取位于远程仓库的脚本后并执行，url为链接地址，可选参数(加在末尾)：-p 使用代理(<a href="https://ghproxy.com">Ghproxy</a>)、-c 并发执行。</em></p>
+<p><em>注意：拉取位于远程仓库的脚本后并执行，url为链接地址，可选参数(加在末尾)：-p 使用代理(<a href="https://ghproxy.com">Ghproxy</a>)、-c 并发。</em></p>
 </blockquote>
 <h3>
 <a id="5-迅速执行" class="anchor" href="#5-%E8%BF%85%E9%80%9F%E6%89%A7%E8%A1%8C"></a>5. 迅速执行：</h3>
 <pre><code>task &lt;name&gt; rapid
 </code></pre>
 <blockquote>
-<p><em>注意：此功能不会组合互助码变量，最大化降低脚本执行前耗时，主要适用于抢兑类脚本，可选参数(加在末尾)：-c 并发执行。</em></p>
+<p><em>注意：此功能不会组合互助码变量，最大化降低脚本执行前耗时，主要适用于抢兑类脚本，可选参数(加在末尾)：-c 并发。</em></p>
 </blockquote>
 <h3>
 <a id="6-终止执行" class="anchor" href="#6-%E7%BB%88%E6%AD%A2%E6%89%A7%E8%A1%8C"></a>6. 终止执行：</h3>
@@ -135,8 +135,7 @@
 <pre><code>source runall  或  . runall
 </code></pre>
 <blockquote>
-<p><em>注意：1. 此脚本的作用为执行所有本地所有的脚本，高达数十个甚至上百，时间较长且与账号数量成正比。</em><br>
-<em>ㅤㅤㅤ2. 除手动运行活动脚本外该项目还会通过定时的方式自动执行活动脚本，可通过日志查看运行记录。</em></p>
+<p><em>注意：通过交互选择运行模式执行指定范围的脚本，时间较长不要盲目使用。</em></p>
 </blockquote>
 <h3>
 <a id="8-单独更新部分仓库或脚本" class="anchor" href="#8-%E5%8D%95%E7%8B%AC%E6%9B%B4%E6%96%B0%E9%83%A8%E5%88%86%E4%BB%93%E5%BA%93%E6%88%96%E8%84%9A%E6%9C%AC"></a>8. 单独更新部分仓库或脚本：</h3>
@@ -172,11 +171,12 @@
 <pre><code>taskctl env install
 </code></pre>
 <blockquote>
-<p><em>注意：全局安装常用模块便于执行非 Scripts 目录下的脚本，64位处理器还支持附带安装 Python 和 TypeSciprt 环境。</em>\</p>
+<p><em>注意：全局安装常用模块便于执行非 Scripts 目录下的脚本，64位处理器还支持附带安装 Python 和 TypeSciprt 环境。</em></p>
 </blockquote>
 <h3>
 <a id="13-安装脚本依赖" class="anchor" href="#13-%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E4%BE%9D%E8%B5%96"></a>13. 安装脚本依赖：</h3>
-<pre><code>  npm install -g &lt;xxx&gt;       ## 全局安装指定模块
+<pre><code>## 全局安装指定模块
+npm install -g &lt;xxx&gt;
 </code></pre>
 <blockquote>
 <p><em>注意：1. 当脚本报错提示 <code>need module xxx</code> 类似字样说明缺少脚本运行所需的依赖，看见 <code>module</code> 字样应立即联想到安装模块上。</em><br>
@@ -203,13 +203,13 @@
 AutoHelpOther="true"
 </code></pre>
 <blockquote>
-<p><em>注意：详见配置文件中的相关注释。</em></p>
+<p><em>注意：详见配置文件中的相关注释，最好理解该功能的工作原理。</em></p>
 </blockquote>
 <h3>
 <a id="4-手动定义互助码与相互助力" class="anchor" href="#4-%E6%89%8B%E5%8A%A8%E5%AE%9A%E4%B9%89%E4%BA%92%E5%8A%A9%E7%A0%81%E4%B8%8E%E7%9B%B8%E4%BA%92%E5%8A%A9%E5%8A%9B"></a>4. 手动定义互助码与相互助力：</h3>
 <pre><code>填法示例：
 
-1. 定义东东农场互助
+## 1.定义东东农场互助
 MyFruit1="xxxxxxxxxxxxxxxxxxxxxxxxx"
 MyFruit2="xxxxxxxxxxxxxxxxxxxxxxxxx"
 MyFruitA=""
@@ -217,7 +217,7 @@ MyFruitB=""
 ForOtherFruit1="${MyFruit1}@${MyFruit2}"
 ForOtherFruit2="${MyFruit1}@${MyFruit2}"
 
-1. 定义东东萌宠互助
+## 2.定义东东萌宠互助
 MyPet1="xxxxxxxxxxxxxxxxxxxxxxxxx"
 MyPet2="xxxxxxxxxxxxxxxxxxxxxxxxx"
 MyPet3="xxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -234,7 +234,7 @@ ForOtherPet5="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 </code></pre>
 <blockquote>
-<p><em>注意：所有符号需严格使用英文格式！</em></p>
+<p><em>注意：所有符号需严格使用英文格式！如果在上一步启用了自动互助功能那么手动定义的互助码变量均会被覆盖，等于无效。</em></p>
 </blockquote>
 <h3>
 <a id="5-提交您的互助码到公共助力池telegram-bot" class="anchor" href="#5-%E6%8F%90%E4%BA%A4%E6%82%A8%E7%9A%84%E4%BA%92%E5%8A%A9%E7%A0%81%E5%88%B0%E5%85%AC%E5%85%B1%E5%8A%A9%E5%8A%9B%E6%B1%A0telegram-bot"></a>5. 提交您的互助码到公共助力池（Telegram Bot）：</h3>
@@ -281,8 +281,7 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <pre><code>taskctl hang logs
 </code></pre>
 <blockquote>
-<p><em>注意：Ctrl+C 退出，如发现脚本报错可尝试重启。</em>
-ㅤ</p>
+<p><em>注意：Ctrl+C 退出，如发现脚本报错可尝试重启。</em></p>
 </blockquote>
 </li>
 </ul>
@@ -308,6 +307,9 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <p>查看控制面板的登录信息：</p>
 <pre><code>taskctl panel info
 </code></pre>
+<blockquote>
+<p><em>注意：如果忘记了登录密码可以用此方法查看。</em></p>
+</blockquote>
 </li>
 <li>
 <p>重置控制面板的用户名和密码：</p>
@@ -321,7 +323,7 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <h3>
 <a id="4-telegram-bot" class="anchor" href="#4-telegram-bot"></a>4. Telegram Bot</h3>
 <blockquote>
-<p>关于如何配置 Bot： <a href="https://crawling-nectarine-ef2.notion.site/Telegram-Bot-9709bbae7bf8488ab01f3b4867e29b44">点此查看</a></p>
+<p>关于如何配置该功能 <a href="https://crawling-nectarine-ef2.notion.site/Telegram-Bot-9709bbae7bf8488ab01f3b4867e29b44">点此查看</a></p>
 </blockquote>
 <ul>
 <li>

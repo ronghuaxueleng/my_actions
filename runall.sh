@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-11
+## Modified: 2021-09-13
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -24,7 +24,7 @@ function ChooseRunMod() {
             ;;
         3)
             while true; do
-                read -p "$(echo -e '\n\033[34m└ 请输入要执行的账号（序号）：\033[0m')" Input2
+                read -p "$(echo -e '\n\033[34m  └ 请输入要执行的账号（序号）：\033[0m')" Input2
                 case $Input2 in
                 [1-9] | [1-9][0-9] | [1-9][0-9][0-9])
                     Import_Config_Not_Check
@@ -124,14 +124,15 @@ function Main() {
         sed -i "s/$/& $RunMode/g" $FileTmp
         sed -i '1i\#!/bin/env bash' $FileTmp
 
-        echo -e "\n[\033[32mTips\033[0m] Ctrl + Z 跳过执行当前脚本，Ctrl + C 停止执行，倒计时 3 秒后开始...\n"
+        echo -e "\n[\033[32mTips\033[0m] Ctrl + Z 跳过执行当前脚本（如果中途卡住可以跳过），Ctrl + C 终止执行全部任务"
+        echo -e "\n$WORKING 倒计时 3 秒后开始...\n"
         sleep 1 && echo -e "3..."
         sleep 1 && echo -e "2.."
         sleep 1 && echo -e "1."
         sleep 1 && echo -e ''
-        echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n"
+        echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 全部执行开始\n"
         . $FileTmp
-        echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行结束\n"
+        echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 全部执行结束\n"
         rm -rf $FileTmp
     else
         echo -e "\n$ERROR 该路径下未检测到任何脚本，请检查原因后重试！\n"
