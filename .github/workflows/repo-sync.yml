@@ -66,9 +66,7 @@ jobs:
           sed -i 's/exec "\$@"/\/usr\/bin\/mitmdump -p 5900 -s mproxy\.py --set block_global=false\nexec "\$@"/' utils/init.sh
           sed -i 's/ScriptsBranch="jd_scripts"/ScriptsBranch="j_scripts"/' update.sh
           sed -i 's/ScriptsUrl="\${GithubProxy}https:\/\/github\.com\/Aaron-lv\/sync\.git"/ScriptsUrl="https:\/\/gitee\.com\/getready\/my_actions\.git"/' update.sh
-
           sed -i 's/crontab \${ListCrontabUser}/cat \${ListCrontabUser} \| sort -k2n \| uniq > \${ListCrontabUser}\.uniq\n        mv \${ListCrontabUser}\.uniq \${ListCrontabUser}\n        cat \${ListCrontabUser} \${UtilsDir}\/ext_crontab_list\.sh > \${ListCrontabUser}\.mix\n        mv \${ListCrontabUser}\.mix \${ListCrontabUser}\n        crontab \${ListCrontabUser}/' update.sh
-
           sed -i 's/crontab \$ListCrontabUser/cat \${ListCrontabUser} \| sort -k2n \| uniq > \${ListCrontabUser}\.uniq\n        mv \${ListCrontabUser}\.uniq \${ListCrontabUser}\n        cat \${ListCrontabUser} \${UtilsDir}\/ext_crontab_list\.sh > \${ListCrontabUser}\.mix\n        mv \${ListCrontabUser}\.mix \${ListCrontabUser}\n        crontab \$ListCrontabUser/' update.sh
 
           cd ../
