@@ -17,3 +17,9 @@ jobs:
           docker login docker.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} 
           docker build -t ronghuaxueleng/jd .
           docker push ronghuaxueleng/jd
+      - name: 删除过多的workflows
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 3
