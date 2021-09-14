@@ -493,8 +493,9 @@ case $# in
     fi
     echo -en "\n$WORKING 正在从${RepositoryJudge}远程仓库${ProxyJudge}下载 ${FileName} 脚本... "
     wget -q --no-check-certificate "${DownloadJudge}$input_url" -O "$ScriptsDir/${FileName}.new" -T 10
+    local ExitStatus=$?
     echo ''
-    if [[ $? -eq 0 ]]; then
+    if [[ $ExitStatus -eq 0 ]]; then
         mv -f "$ScriptsDir/${FileName}.new" "$ScriptsDir/${FileName}"
         case ${RunMod} in
         normal)
@@ -524,6 +525,7 @@ case $# in
             esac
             ;;
         esac
+        [[ $RawFilesAutoDel == true ]] && rm -rf $ScriptsDir/${FileName}
     else
         [ -f "$ScriptsDir/${FileName}.new" ] && rm -rf "$ScriptsDir/${FileName}.new"
         echo -e "\n$ERROR 脚本 ${FileName} 下载失败，请检查 URL 地址是否正确或网络连通性问题..."
