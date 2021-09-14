@@ -9,6 +9,7 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     LANG=zh_CN.UTF-8 \
     SHELL=/bin/bash \
     PS1="\u@\h:\w \$ " \
+    NODE_PATH=/usr/lib/node_modules \
     JD_DIR=/jd \
     ENABLE_HANGUP=true \
     ENABLE_WEB_PANEL=true
@@ -16,21 +17,21 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && apk update -f \
     && apk upgrade \
     && apk --no-cache ca-certificates add -f bash coreutils \
-        moreutils \
-        diffutils \
-        git \
-        wget \
-        curl \
-        nano \
-        vim \
-        make \
-        procps \
-        tzdata \
-        perl \
-        openssh-client \
-        ttyd \
-        nodejs-lts \
-        npm \
+    moreutils \
+    diffutils \
+    git \
+    wget \
+    curl \
+    nano \
+    vim \
+    make \
+    procps \
+    tzdata \
+    perl \
+    openssh-client \
+    ttyd \
+    nodejs-lts \
+    npm \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && git clone -b ${JD_BASE_BRANCH} ${JD_BASE_URL} ${JD_DIR} \
@@ -43,7 +44,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && rm -rf /root/.npm \
     && touch ${JD_DIR}/runall.sh \
     && ln -sf ${JD_DIR}/runall.sh /usr/local/bin/runall \
-    && ln -sf ${JD_DIR}/runtask.sh /usr/local/bin/task \
+    && ln -sf ${JD_DIR}/task.sh /usr/local/bin/task \
     && ln -sf ${JD_DIR}/task.sh /usr/local/bin/jtask \
     && ln -sf ${JD_DIR}/task.sh /usr/local/bin/mtask \
     && ln -sf ${JD_DIR}/task.sh /usr/local/bin/otask \
