@@ -37,7 +37,7 @@ def updateCookie():
                             wskey = query.dicts().get().get("wskey")
                             ws = "pin={};wskey={};".format(pin, wskey)
                             token = wstopt(ws)
-                            file_data += re.sub(pinReg, token, line)
+                            file_data += 'Cookie{}="{}"'.format(num, token)
                         else:
                             file_data += line
                     else:

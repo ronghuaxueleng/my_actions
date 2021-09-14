@@ -303,7 +303,8 @@ function Run_Specify() {
 
 ## 迅速执行
 function Run_Rapidly() {
-    case $# in
+    python /jd/updateCookie.py >> /jd/log/updateCookie.py.log 2>&1
+case $# in
     1)
         local p=$1
         Import_Config $p
@@ -441,7 +442,8 @@ function Run_RawScript() {
         ;;
     esac
 
-    case $# in
+    python /jd/updateCookie.py >> /jd/log/updateCookie.py.log 2>&1
+case $# in
     2)
         if [ $2 = "-p" ]; then
             DownloadJudge=${GithubProxy}
@@ -846,6 +848,7 @@ function List_Local_Scripts() {
 }
 
 ## 判定命令
+python /jd/updateCookie.py >> /jd/log/updateCookie.py.log 2>&1
 case $# in
 0)
     Help
