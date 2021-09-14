@@ -71,6 +71,6 @@ jobs:
       - name: 删除过多的workflows
         uses: Mattraks/delete-workflow-runs@main
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.AUTH_PAT }}
           repository: ${{ github.repository }}
-          retain_days: 3
+          retain_days: 1
