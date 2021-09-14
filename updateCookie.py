@@ -1,5 +1,6 @@
 import os
 import re
+import time
 
 from utils.cookie import sync_check_cookie
 from utils.db import Jd
@@ -7,6 +8,8 @@ from utils.wskey import wstopt
 
 
 def updateCookie():
+    print("===========================开始更新cookie====================================")
+    print("当前时间"  + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
     configpath = os.path.join(os.path.split(os.path.realpath(__file__))[0], 'config', 'config.sh')
     if not os.path.exists(configpath):
         configpath = os.path.join('/jd', 'config', 'config.sh')
@@ -34,10 +37,15 @@ def updateCookie():
                     if isLogin is False:
                         query = Jd.select().where(Jd.pin == pin)
                         if query.exists():
+                            print("=======================原始cookie========================")
+                            print(line)
                             wskey = query.dicts().get().get("wskey")
                             ws = "pin={};wskey={};".format(pin, wskey)
                             token = wstopt(ws)
-                            file_data += 'Cookie{}="{}"'.format(num, token)
+                            cookie = 'Cookie{}="{}"'.format(num, token)
+                            print("=======================更新后cookie========================")
+                            print(cookie)
+                            file_data += cookie
                         else:
                             file_data += line
                     else:
@@ -49,6 +57,9 @@ def updateCookie():
 
     with open(configpath, "w", encoding="utf-8") as f:
         f.write(file_data)
+
+    print("===========================更新cookie结束====================================")
+    print("当前时间" + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
 
 
 if __name__ == '__main__':
