@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import time
 
 from utils.cookie import sync_check_cookie
@@ -7,7 +8,7 @@ from utils.db import Jd
 from utils.wskey import wstopt
 
 
-def updateCookie():
+def updateCookie(savepath):
     print("===========================开始更新cookie====================================")
     print("当前时间"  + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
     configpath = os.path.join(os.path.split(os.path.realpath(__file__))[0], 'config', 'config.sh')
@@ -56,11 +57,11 @@ def updateCookie():
                 file_data += line
 
     with open(configpath, "w", encoding="utf-8") as f:
-        f.write(file_data)
+        f.write(savepath)
 
     print("===========================更新cookie结束====================================")
     print("当前时间" + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
 
 
 if __name__ == '__main__':
-    updateCookie()
+    updateCookie(sys.argv[1])
