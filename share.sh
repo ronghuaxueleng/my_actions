@@ -190,7 +190,10 @@ function Help() {
 ## 导入配置文件
 function Import_Config() {
     if [ -f $FileConfUser ]; then
-        . $FileConfUser
+        timeStamp=`date -d "$current" +%s%N`
+        python updateConfig.py $FileConfUser.$timeStamp
+        . $FileConfUser.$timeStamp
+        rm -rf $FileConfUser.$timeStamp
         if [ -z "${Cookie1}" ]; then
             echo -e "\n$ERROR 请先在 $FileConfUser 配置文件中配置好 Cookie ！\n"
             exit 1
@@ -202,7 +205,10 @@ function Import_Config() {
 }
 function Import_Config_Not_Check() {
     if [ -f $FileConfUser ]; then
-        . $FileConfUser
+        timeStamp=`date -d "$current" +%s%N`
+        python updateConfig.py $FileConfUser.$timeStamp
+        . $FileConfUser.$timeStamp
+        rm -rf $FileConfUser.$timeStamp
     fi
 }
 

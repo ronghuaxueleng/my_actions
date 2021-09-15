@@ -331,8 +331,7 @@ function Run_Rapidly() {
         Help
         exit 1
     fi
-    python /jd/updateCookie.py >> /jd/log/updateCookie.py.log 2>&1
-case $# in
+    case $# in
     1)
         FileNameTmp1=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
         FileNameTmp2=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
@@ -481,8 +480,7 @@ function Run_RawScript() {
         ;;
     esac
 
-    python /jd/updateCookie.py >> /jd/log/updateCookie.py.log 2>&1
-case $# in
+    case $# in
     2)
         if [ $2 = "-p" ]; then
             DownloadJudge=${GithubProxy}
@@ -889,7 +887,6 @@ function List_Local_Scripts() {
 }
 
 ## 判定命令
-python /jd/updateCookie.py >> /jd/log/updateCookie.py.log 2>&1
 case $# in
 0)
     Help

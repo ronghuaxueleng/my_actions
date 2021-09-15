@@ -10,7 +10,9 @@ db = SqliteDatabase(dbpath)
 # 京东账号信息
 class Jd(Model):
     pin = CharField(null=False)
+    ptkey = CharField(null=True)
     wskey = CharField(null=False)
+    remarks = CharField(null=True)
 
     class Meta:
         database = db
