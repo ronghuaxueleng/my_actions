@@ -5,7 +5,7 @@ import time
 
 from utils.cookie import sync_check_cookie
 from utils.db import Jd
-from utils.jd import save_pt_key
+from utils.jd import save_pt_key, get_ptkey_by_pin
 from utils.wskey import wstopt
 
 
@@ -36,6 +36,8 @@ def update_config(savepath=''):
                 pin = pins.get("pt_pin")
                 num = pins.get("num")
                 if num not in tempBlockCookies:
+                    ptkey = get_ptkey_by_pin(pin)
+                    pins.update({'pt_key': ptkey})
                     isLogin = sync_check_cookie(pins)
                     if isLogin is False:
                         query = Jd.select().where(Jd.pin == pin)

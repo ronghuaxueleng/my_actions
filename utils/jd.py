@@ -39,6 +39,16 @@ def save_jd_pin(flow):
             send_message("添加京东用户【{}】信息".format(pin))
 
 
+def get_ptkey_by_pin(pin):
+    result = Jd.select().where(Jd.pin == pin).dicts().get()
+    return result.get('ptkey')
+
+
+def get_wskey_by_pin(pin):
+    result = Jd.select().where(Jd.pin == pin).dicts().get()
+    return result.get('wskey')
+
+
 def save_pt_key(pin, ptkey):
     Jd.update(
         pin=pin,
