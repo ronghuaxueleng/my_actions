@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-13
+## Modified: 2021-09-16
 
 ## 目录
 ShellDir=${JD_DIR}
@@ -128,7 +128,7 @@ function Help() {
  ❖  $TaskCmd <name/path> <num>   ✧ 指定执行，指定某账号单独运行脚本，num 为某 Cookie 账号在配置文件中的具体编号
  ❖  $TaskCmd <name/path> pkill   ✧ 终止执行，根据脚本名称搜索对应的进程并立即杀死，当脚本报错死循环时可使用此功能
  ❖  $TaskCmd <name> rapid        ✧ 迅速执行，不组合互助码等步骤最大化降低执行前耗时，主要适用于抢兑类活动脚本
- ❖  $TaskCmd <url> raw           ✧ 远程执行，拉取远程仓库的脚本后依次执行，可选参数(加在末尾): -p 代理
+ ❖  $TaskCmd <url> raw           ✧ 远程执行，拉取远程仓库的脚本后执行，可选参数(加在末尾): -p 代理
  ❖  source runall            ✧ 全部执行，通过交互选择运行模式执行指定范围的脚本，非常耗时不要盲目使用
 
  ❖  $TaskCmd list                ✧ 查看本地脚本清单
@@ -159,7 +159,7 @@ function Help() {
  ❖  $TaskCmd <name/path> <num>   ✧ 指定执行，指定某账号单独运行脚本，num 为某 Cookie 账号在配置文件中的具体编号
  ❖  $TaskCmd <name/path> pkill   ✧ 终止执行，根据脚本名称搜索对应的进程并立即杀死，当脚本报错死循环时可使用此功能
  ❖  $TaskCmd <name> rapid        ✧ 迅速执行，不组合互助码等步骤最大化降低执行前耗时，可选参数(加在末尾): -c 并发
- ❖  $TaskCmd <url> raw           ✧ 远程执行，拉取远程仓库的脚本后依次执行，可选参数(加在末尾): -p 代理、-c 并发
+ ❖  $TaskCmd <url> raw           ✧ 远程执行，拉取远程仓库的脚本后执行，可选参数(加在末尾): -p 代理、-c 并发
  ❖  source runall            ✧ 全部执行，通过交互选择运行模式执行指定范围的脚本，非常耗时不要盲目使用
 
  ❖  $TaskCmd list                ✧ 查看本地脚本清单
@@ -383,9 +383,6 @@ function Query_Name() {
             ;;
         jd_jxgc.ts)
             Name="京喜工厂"
-            ;;
-        jd_jxgc_help.ts)
-            Name="京喜工厂助力"
             ;;
         jd_jxmc.ts)
             Name="京喜牧场"

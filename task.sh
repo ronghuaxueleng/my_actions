@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-15
+## Modified: 2021-09-16
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -462,8 +462,8 @@ function Process_Kill() {
 ## 远程执行
 function Run_RawScript() {
     local input_url=$1
-    local DownloadJudge RepositoryJudge ProxyJudge FileName FormatFileName RepositoryName RunMod
-    FileName=$(echo $input_url | awk -F "/" '{print $NF}')
+    local DownloadJudge RepositoryJudge ProxyJudge ScriptName FormatFileName RepositoryName RunMod
+    ScriptName=$(echo $input_url | awk -F "/" '{print $NF}')
     RepositoryName=$(echo $input_url | egrep -o "github|gitee|gitlab")
     case ${RepositoryName} in
     github)
@@ -528,12 +528,12 @@ function Run_RawScript() {
     else
         ProxyJudge=""
     fi
-    echo -en "\n$WORKING 正在从${RepositoryJudge}远程仓库${ProxyJudge}下载 ${FileName} 脚本... "
-    wget -q --no-check-certificate "${DownloadJudge}$input_url" -O "$ScriptsDir/${FileName}.new" -T 8
+    echo -en "\n$WORKING 正在从${RepositoryJudge}远程仓库${ProxyJudge}下载 ${ScriptName} 脚本... "
+    wget -q --no-check-certificate "${DownloadJudge}$input_url" -O "$ScriptsDir/${ScriptName}.new" -T 8
     local ExitStatus=$?
     echo ''
     if [[ $ExitStatus -eq 0 ]]; then
-        mv -f "$ScriptsDir/${FileName}.new" "$ScriptsDir/${FileName}"
+        mv -f "$ScriptsDir/${ScriptName}.new" "$ScriptsDir/${ScriptName}"
         case ${RunMod} in
         normal)
             RunModJudge="依次执行"
@@ -544,7 +544,7 @@ function Run_RawScript() {
         esac
         echo -e "\n$COMPLETE 下载完成，倒计时 3 秒后开始${RunModJudge}\n"
         sleep 1 && echo -e "3..." && sleep 1 && echo -e "2.." && sleep 1 && echo -e "1." && sleep 1
-        FormatFileName=$(echo ${FileName} | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
+        FormatFileName=$(echo ${ScriptName} | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
         case ${RunMod} in
         normal)
             Run_Normal ${FormatFileName} now
@@ -562,10 +562,10 @@ function Run_RawScript() {
             esac
             ;;
         esac
-        [[ $RawFilesAutoDel == true ]] && rm -rf $ScriptsDir/${FileName}
+        [[ ${RawFilesAutoDel} == true ]] && rm -rf "$ScriptsDir/${ScriptName}"
     else
-        [ -f "$ScriptsDir/${FileName}.new" ] && rm -rf "$ScriptsDir/${FileName}.new"
-        echo -e "\n$ERROR 脚本 ${FileName} 下载失败，请检查 URL 地址是否正确或网络连通性问题..."
+        [ -f "$ScriptsDir/${ScriptName}.new" ] && rm -rf "$ScriptsDir/${ScriptName}.new"
+        echo -e "\n$ERROR 脚本 ${ScriptName} 下载失败，请检查 URL 地址是否正确或网络连通性问题..."
         Help
         exit 1
     fi
@@ -772,7 +772,7 @@ function Process_Monitor() {
     fi
     echo -e "\n\033[34m[运行时长]  [CPU]    [内存]    [脚本名称]\033[0m"
     ps -axo user,time,pcpu,user,pmem,user,command --sort -pmem | less | egrep ".js\b|.py\b|.ts\b" | egrep -Ev "server.js|pm2|egrep|perl|sed|bash" |
-        perl -pe '{s| root     |% |g; s|\/usr\/bin\/ts-node ||g; s|\/usr\/bin\/python3 ||g; s|\/usr\/bin\/python ||g; s|\/usr\/bin\/node ||g; s|node ||g;  s|root     |#|g; s|#[0-9][0-9]:|#|g;  s|  | |g; s| |     |g; s|#|•  |g; s|/jd/scripts/jd_cfd_loop\.js|jd_cfd_loop\.js|g; s|\./utils/||g;}'
+        perl -pe '{s| root     |% |g; s|\/usr\/bin\/ts-node ||g; s|\/usr\/bin\/python3 ||g; s|\/usr\/bin\/python ||g; s|\/usr\/bin\/node ||g; s|node -r global-agent/bootstrap |(代理)|g; s|node ||g;  s|root     |#|g; s|#[0-9][0-9]:|#|g;  s|  | |g; s| |     |g; s|#|•  |g; s|/jd/scripts/jd_cfd_loop\.js|jd_cfd_loop\.js|g; s|\./utils/||g;}'
     echo ''
 }
 
