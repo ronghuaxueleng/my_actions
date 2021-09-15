@@ -5,6 +5,7 @@ import time
 
 from utils.cookie import sync_check_cookie
 from utils.db import Jd
+from utils.jd import save_pt_key
 from utils.wskey import wstopt
 
 
@@ -43,6 +44,7 @@ def update_config(savepath=''):
                             wskey = query.dicts().get().get("wskey")
                             ws = "pin={};wskey={};".format(pin, wskey)
                             token = wstopt(ws)
+                            save_pt_key(pin, token)
                             cookie = 'Cookie{}="{}"'.format(num, token)
                             print("=======================更新后cookie========================")
                             file_data += cookie + "\n"

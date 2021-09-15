@@ -37,3 +37,11 @@ def save_jd_pin(flow):
             ).execute()
             logger.info("添加京东用户【{}】信息".format(pin))
             send_message("添加京东用户【{}】信息".format(pin))
+
+
+def save_pt_key(pin, ptkey):
+    Jd.update(
+        pin=pin,
+        ptkey=ptkey,
+    ).where(Jd.pin == pin).execute()
+    logger.info("更新京东用户ptkey【{}】信息".format(pin))
