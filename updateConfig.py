@@ -16,6 +16,7 @@ def update_config(savepath=''):
     if not os.path.exists(configpath):
         configpath = os.path.join('/jd', 'config', 'config.sh')
     pinReg = re.compile('Cookie(?P<num>\d+)="pt_key=(?P<pt_key>\S+?);?pt_pin=(?P<pt_pin>\S+?);"')
+    ptReg = re.compile('pt_key=(?P<pt_key>\S+?);?pt_pin=(?P<pt_pin>\S+?);')
     tempBlockCookieReg = re.compile('^TempBlockCookie="(?P<tempBlockCookie>.*?)"')
     tempBlockCookies = []
 
@@ -37,7 +38,8 @@ def update_config(savepath=''):
                 num = pins.get("num")
                 if num not in tempBlockCookies:
                     ptkey = get_ptkey_by_pin(pin)
-                    pins.update({'pt_key': ptkey})
+                    ptRegMatch = ptReg.search(ptkey)
+                    pins = ptRegMatch.groupdict()
                     isLogin = sync_check_cookie(pins)
                     if isLogin is False:
                         query = Jd.select().where(Jd.pin == pin)
