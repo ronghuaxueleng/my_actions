@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-13
+## Modified: 2021-09-15
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -92,14 +92,14 @@ function Main() {
             break
             ;;
         3)
-            if [[ ! -z ${OwnRepoUrl1} ]]; then
+            if [[ ${OwnRepoUrl1} ]]; then
                 echo -e "\n$ScriptsDir"
                 ls $OwnDir | egrep -v "node_modules|package" | perl -pe "{s|^|$OwnDir/|g}"
             fi
             while true; do
                 read -p "$(echo -e '\n\033[34m└ 请输入路径：\033[0m')" Input4
                 local AbsolutePath=$(echo "$Input4" | perl -pe "{s|/jd/||; s|^*|$ShellDir/|;}")
-                if [ ! -z $Input4 ] && [ -d $AbsolutePath ]; then
+                if [[ $Input4 ]] && [ -d $AbsolutePath ]; then
                     break
                 else
                     echo -e "\n$ERROR 目录不存在或输入有误！"

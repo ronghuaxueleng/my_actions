@@ -1,6 +1,6 @@
-## Version: v1.02.1
-## Date: 2021-09-10
-## Update Content: \n移除无用变量，修改部分注释内容
+## Version: v1.03.0
+## Date: 2021-09-15
+## Update Content: \n1. 新增 "定义远程执行下载脚本并执行完毕后是否删除（选填）" 项目功能类环境变量\n2. 新增 "定义执行脚本时是否启用代理（选填）" 项目功能类环境变量
 
 ## 上面版本号中，如果第2位数字有变化，那么代表增加了新的参数，如果只有第3位数字有变化，仅代表更新了注释，没有增加新的参数，可更新可不更新
 
@@ -29,9 +29,9 @@ Cookie2=""
 ## 全局屏蔽 Cookie，举例：TempBlockCookie="2 4" 临时屏蔽掉 Cookie2 和 Cookie4
 TempBlockCookie=""
 
-## 如果只是想要屏蔽某个账号不玩某些小游戏，可以参考下面 case 这个命令的例子来控制，脚本名称请去掉后缀 格式，同时注意代码缩进
+## 如果只是想要屏蔽某个账号不玩某些小游戏，可以参考下面 case 这个命令的例子来控制，脚本名称请去掉后缀格式，同时注意代码缩进
 ## 实际使用时需注意对应脚本的执行方式，例如您 case 例子中填写的是 jd_test，那么执行 task jd_test 才能生效
-## 反之如果执行 task jd_test.js 或者 task test 都是不生效的，建议脚本名称跟定时任务中的名称保持一致
+## 反之如果执行 task jd_test.js 或者 task test 都是不生效的，此语句在指定执行命令中不生效
 # case $1 in
 # jd_fruit)
 #   TempBlockCookie="5"      # 账号5不玩东东农场
@@ -148,6 +148,37 @@ ExtraShellSyncUrl=""
 ################################## 定义更新账号成功后是否推送通知（选填） ##################################
 ## 当使用 WSKEY 成功更新 Cookie 后是否推送通知，默认不推送，如想要接收推送通知提醒请赋值为 "true"
 AccountUpdateNotify=""
+
+################################## 定义远程执行下载脚本并执行完毕后是否删除（选填） ##################################
+## 当远程执行 task <url> raw 任务执行完毕后是否删除脚本（下载的脚本默认存放在 scripts 目录），即是否本地保存执行的脚本
+## 默认不删除，如想要自动删除请赋值为 "true"
+RawFilesAutoDel=""
+
+################################## 定义执行脚本时是否启用代理（选填） ##################################
+## global-agent (仅支持 js 脚本)
+## 官方仓库：https://github.com/gajus/global-agent
+## 官方文档：https://www.npmjs.com/package/global-agent
+## 全局代理，如想全局启用代理请赋值为 "true"
+EnableGlobalProxy=""
+
+## 如果只是想在执行部分脚本时使用代理，可以参考下面 case 这个命令的例子来控制，脚本名称请去掉后缀格式，同时注意代码缩进，此语句在指定执行命令中不生效
+# case $1 in
+# jd_test)
+#   EnableGlobalProxy="true"    ## 在执行 jd_test 脚本时启用代理
+#   ;;
+# jd_abc | jd_123)
+#   EnableGlobalProxy="true"    ## 在执行 jd_abc 和 jd_123 脚本时启用代理
+#   ;;
+# *)
+#   EnableGlobalProxy="false"
+#   ;;
+# esac
+
+## 定义 HTTP 代理地址
+export GLOBAL_AGENT_HTTP_PROXY=""
+## 定义 HTTPS 代理地址，为 HTTPS 请求指定单独的代理
+## 如果未设置此变量那么两种协议的请求均通过 HTTP 代理地址变量设定的地址
+export GLOBAL_AGENT_HTTPS_PROXY=""
 
 
 

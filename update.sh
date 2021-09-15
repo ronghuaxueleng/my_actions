@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-11
+## Modified: 2021-09-15
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -549,7 +549,7 @@ function ExtraShell() {
     if [[ $EnableExtraShell == true ]]; then
         echo -e "-------------------------------------------------------------\n"
         ## 自动同步用户自定义的diy.sh
-        if [[ $EnableExtraShellSync == true ]] && [[ ! -z $ExtraShellSyncUrl ]]; then
+        if [[ $EnableExtraShellSync == true ]] && [[ $ExtraShellSyncUrl ]]; then
             echo -e "$WORKING 开始同步自定义脚本：$ExtraShellSyncUrl\n"
             wget -q --no-check-certificate $ExtraShellSyncUrl -O $FileExtra.new -T 10
             if [ $? -eq 0 ]; then

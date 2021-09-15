@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-13
+## Modified: 2021-09-15
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -11,25 +11,26 @@ function Find_Script() {
     WhichDir=""
     FileFormat=""
     local input=$1
+    local AbsolutePath FileNameTmp FileNameTmp1 FileNameTmp2 WhichDirTmp FormatInputName FormatInputDir
     echo $input | grep "/" -q
     if [[ $? -eq 0 ]]; then
         ## 指定路径：
         ## 判定输入的是绝对路径还是相对路径
         echo $input | grep "$ShellDir/" -q
         if [[ $? -eq 0 ]]; then
-            local AbsolutePath=$input
+            AbsolutePath=$input
         else
             echo $input | grep "\.\./" -q
             if [[ $? -eq 0 ]]; then
                 local PwdTmp=$(pwd | perl -pe "{s|/$(pwd | awk -F '/' '{printf$NF}')||g;}")
-                local AbsolutePath=$(echo "$input" | perl -pe "{s|\.\./|${PwdTmp}/|;}")
+                AbsolutePath=$(echo "$input" | perl -pe "{s|\.\./|${PwdTmp}/|;}")
             else
-                local AbsolutePath=$(echo "$input" | perl -pe "{s|\./||; s|^*|$(pwd)/|;}")
+                AbsolutePath=$(echo "$input" | perl -pe "{s|\./||; s|^*|$(pwd)/|;}")
             fi
         fi
         ## 判定输入是否含有后缀
-        local FileNameTmp=$(echo $AbsolutePath | awk -F "/" '{print $NF}')
-        local WhichDirTmp=$(echo $AbsolutePath | awk -F "$FileNameTmp" '{print$1}')
+        FileNameTmp=$(echo $AbsolutePath | awk -F "/" '{print $NF}')
+        WhichDirTmp=$(echo $AbsolutePath | awk -F "$FileNameTmp" '{print$1}')
         echo $FileNameTmp | grep "\." -q
         if [[ $? -eq 0 ]]; then
             if [ -f $AbsolutePath ]; then
@@ -77,8 +78,8 @@ function Find_Script() {
                 LogPath="$LogDir/${FileName}"
             fi
         else
-            local FormatInputName=$(echo $AbsolutePath | awk -F "/" '{print $NF}')
-            local FormatInputDir=$(echo $AbsolutePath | awk -F "$FormatInputName" '{print$1}')
+            FormatInputName=$(echo $AbsolutePath | awk -F "/" '{print $NF}')
+            FormatInputDir=$(echo $AbsolutePath | awk -F "$FormatInputName" '{print$1}')
             echo -e "\n$ERROR 在 $FormatInputDir 目录未检测到 $FormatInputName 脚本的存在，请确认！"
             Help
             exit 1
@@ -86,8 +87,8 @@ function Find_Script() {
 
     else
         ## 仅 Scripts 目录：
-        local FileNameTmp1=$(echo $input | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
-        local FileNameTmp2=$(echo $input | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
+        FileNameTmp1=$(echo $input | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
+        FileNameTmp2=$(echo $input | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
         local SeekDir="$ScriptsDir $ScriptsDir/tools $ScriptsDir/backUp $ScriptsDir/utils"
         for dir in ${SeekDir}; do
             if [ -f ${dir}/${FileNameTmp1}.js ]; then
@@ -172,7 +173,7 @@ function Random_Delay() {
 function Run_Normal() {
     local p=$1
     Find_Script $p
-    Import_Config $p
+    Import_Config ${FileName}
     Update_Crontab
     Count_UserSum
     Combin_All
@@ -183,7 +184,12 @@ function Run_Normal() {
     echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
     case ${FileFormat} in
     JavaScript)
-        node ${FileName}.js 2>&1 | tee -a ${LogFile}
+        if [[ ${EnableGlobalProxy} == true ]]; then
+            [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
+            node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 | tee -a ${LogFile}
+        else
+            node ${FileName}.js 2>&1 | tee -a ${LogFile}
+        fi
         ;;
     Python)
         python3 -u ${FileName}.py 2>&1 | tee -a ${LogFile}
@@ -207,7 +213,7 @@ function Run_Concurrent() {
         local p=$1
         local UserNum AccountNum
         Find_Script $p
-        Import_Config $p
+        Import_Config ${FileName}
         Update_Crontab
         Count_UserSum
         Combin_ShareCodes
@@ -224,7 +230,12 @@ function Run_Concurrent() {
             echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始，不记录结束时间\n" >>${LogFile}
             case ${FileFormat} in
             JavaScript)
-                node ${FileName}.js 2>&1 &>>${LogFile} &
+                if [[ ${EnableGlobalProxy} == true ]]; then
+                    [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
+                    node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 &>>${LogFile} &
+                else
+                    node ${FileName}.js 2>&1 &>>${LogFile} &
+                fi
                 ;;
             Python)
                 python3 -u ${FileName}.py 2>&1 &>>${LogFile} &
@@ -253,7 +264,12 @@ function Run_Concurrent_Lite() {
         echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始，不记录结束时间\n" >>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log
         case ${FileFormat} in
         JavaScript)
-            node ${FileName}.js 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
+            if [[ ${EnableGlobalProxy} == true ]]; then
+                [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
+                node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
+            else
+                node ${FileName}.js 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
+            fi
             ;;
         Python)
             python3 -u ${FileName}.py 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
@@ -271,7 +287,7 @@ function Run_Specify() {
     local p=$1
     local CookieNum=$2
     Find_Script $p
-    Import_Config
+    Import_Config ${FileName}
     Update_Crontab
     Count_UserSum
     Combin_ShareCodes
@@ -289,7 +305,12 @@ function Run_Specify() {
     echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
     case ${FileFormat} in
     JavaScript)
-        node ${FileName}.js 2>&1 | tee -a ${LogFile}
+        if [[ ${EnableGlobalProxy} == true ]]; then
+            [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
+            node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 | tee -a ${LogFile}
+        else
+            node ${FileName}.js 2>&1 | tee -a ${LogFile}
+        fi
         ;;
     Python)
         python3 -u ${FileName}.py 2>&1 | tee -a ${LogFile}
@@ -303,13 +324,16 @@ function Run_Specify() {
 
 ## 迅速执行
 function Run_Rapidly() {
+    local p=$1
+    echo $p | grep "/" -q
+    if [[ $? -eq 0 ]]; then
+        echo -e "\n$ERROR 不支持执行指定路径的脚本！"
+        Help
+        exit 1
+    fi
     python /jd/updateCookie.py >> /jd/log/updateCookie.py.log 2>&1
 case $# in
     1)
-        local p=$1
-        Import_Config $p
-        Count_UserSum
-        export JD_COOKIE=$(Combin_Sub Cookie)
         FileNameTmp1=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
         FileNameTmp2=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
         if [ -f $ScriptsDir/${FileNameTmp1}.js ]; then
@@ -338,11 +362,19 @@ case $# in
         fi
         Make_Dir "$LogDir/${FileName}"
         local LogFile="$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S").log"
+        Import_Config ${FileName}
+        Count_UserSum
+        export JD_COOKIE=$(Combin_Sub Cookie)
         cd $ScriptsDir
         echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 脚本执行开始\n" >>${LogFile}
         case ${FileFormat} in
         JavaScript)
-            node ${FileName}.js 2>&1 | tee -a ${LogFile}
+            if [[ ${EnableGlobalProxy} == true ]]; then
+                [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
+                node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 | tee -a ${LogFile}
+            else
+                node ${FileName}.js 2>&1 | tee -a ${LogFile}
+            fi
             ;;
         Python)
             python3 -u ${FileName}.py 2>&1 | tee -a ${LogFile}
@@ -363,29 +395,36 @@ case $# in
                 ;;
             *)
                 local p=$1
-                Import_Config $p
-                Count_UserSum
-                export JD_COOKIE=$(Combin_Sub Cookie)
                 FileNameTmp1=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
                 FileNameTmp2=$(echo $p | awk -F "/" '{print $NF}' | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
                 if [ -f $ScriptsDir/${FileNameTmp1}.js ]; then
-                    Run_Concurrent_Lite ${FileNameTmp1} JavaScript
+                    FileName=${FileNameTmp1}
+                    FileFormat="JavaScript"
                 elif [ -f $ScriptsDir/${FileNameTmp1}.ts ]; then
-                    Run_Concurrent_Lite ${FileNameTmp1} TypeScript
+                    FileName=${FileNameTmp1}
+                    FileFormat="TypeScript"
                 elif [ -f $ScriptsDir/${FileNameTmp1}.py ]; then
-                    Run_Concurrent_Lite ${FileNameTmp1} Python
+                    FileName=${FileNameTmp1}
+                    FileFormat="Python"
                 elif [ -f $ScriptsDir/${FileNameTmp2}.js ]; then
-                    Run_Concurrent_Lite ${FileNameTmp2} JavaScript
+                    FileName=${FileNameTmp2}
+                    FileFormat="JavaScript"
                 elif [ -f $ScriptsDir/${FileNameTmp2}.ts ]; then
-                    Run_Concurrent_Lite ${FileNameTmp2} TypeScript
+                    FileName=${FileNameTmp2}
+                    FileFormat="TypeScript"
                 elif [ -f $ScriptsDir/${FileNameTmp2}.py ]; then
-                    Run_Concurrent_Lite ${FileNameTmp2} Python
+                    FileName=${FileNameTmp2}
+                    FileFormat="Python"
                 else
                     FormatInput=$(echo $p | awk -F "/" '{print $NF}')
                     echo -e "\n$ERROR 在 $ScriptsDir 目录下未检测到 $FormatInput 脚本的存在，请确认！"
                     Help
                     exit 1
                 fi
+                Import_Config ${FileName}
+                Count_UserSum
+                export JD_COOKIE=$(Combin_Sub Cookie)
+                Run_Concurrent_Lite ${FileName} ${FileFormat}
                 ;;
             esac
         else
@@ -492,7 +531,7 @@ case $# in
         ProxyJudge=""
     fi
     echo -en "\n$WORKING 正在从${RepositoryJudge}远程仓库${ProxyJudge}下载 ${FileName} 脚本... "
-    wget -q --no-check-certificate "${DownloadJudge}$input_url" -O "$ScriptsDir/${FileName}.new" -T 10
+    wget -q --no-check-certificate "${DownloadJudge}$input_url" -O "$ScriptsDir/${FileName}.new" -T 8
     local ExitStatus=$?
     echo ''
     if [[ $ExitStatus -eq 0 ]]; then
@@ -604,7 +643,7 @@ function Cookies_Control() {
         [ -f $FileSendMark ] && rm -rf $FileSendMark
         ## 执行脚本
         if [ -f $FileUpdateCookie ]; then
-            if [[ ! -z $(grep "ws_key" $FileAccountConf | head -1 | awk -F '\"' '{print$4}') ]]; then
+            if [[ $(grep "ws_key" $FileAccountConf | head -1 | awk -F '\"' '{print$4}') ]]; then
                 ## 更新 sign 签名库
                 Make_Dir $SignDir
                 if [ ! -d $SignDir/.git ]; then
@@ -781,7 +820,7 @@ function List_Local_Scripts() {
         local Name FileName WhichDir Tmp1 Tmp2 Tmp3 repo_num
         Import_Config_Not_Check
 
-        if [ ! -z ${OwnRepoUrl1} ]; then
+        if [[ ${OwnRepoUrl1} ]]; then
             for ((i = 1; i <= 0x64; i++)); do
                 Tmp1=OwnRepoUrl$i
                 Tmp2=${!Tmp1}

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-06
+## Modified: 2021-09-15
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -269,6 +269,7 @@ function Bot_Control() {
                         rm -rf $BotRepositoryDir $BotDir
                         Install_Bot
                         cp -rf $BotRepositoryDir/jbot $ShellDir
+                        [ ! -x /usr/local/bin/jcsv ] && ln -sf $UtilsDir/jcsv.sh /usr/local/bin/jcsv
                         cd $BotDir && pm2 start ecosystem.config.js && sleep 1
                         List_All_Processes
                         local ServiceNewStatus=$(cat $FilePm2List | grep "jbot" -w | awk -F '|' '{print$10}')
@@ -283,6 +284,7 @@ function Bot_Control() {
                     rm -rf $BotRepositoryDir
                     Install_Bot
                     cp -rf $BotRepositoryDir/jbot $ShellDir
+                    [ ! -x /usr/local/bin/jcsv ] && ln -sf $UtilsDir/jcsv.sh /usr/local/bin/jcsv
                     cd $BotDir && pm2 start ecosystem.config.js && sleep 1
                     local ServiceStatus=$(pm2 describe jbot | grep status | awk '{print $4}')
                     if [[ ${ServiceStatus} == "online" ]]; then
@@ -463,11 +465,11 @@ function Environment_Deployment() {
         npm install -g npm npm-install-peers
         case $Arch in
         armv7l | armv6l)
-            npm install -g date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got
+            npm install -g date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got global-agent
             ;;
         *)
+            npm install -g ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got jsdom global-agent
             apk --no-cache add -f python3 py3-pip sudo build-base pkgconfig pixman-dev cairo-dev pango-dev
-            npm install -g ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got jsdom
             pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
             pip3 install --upgrade pip
             pip3 install requests
