@@ -8,7 +8,7 @@ from utils.db import Jd
 from utils.wskey import wstopt
 
 
-def updateCookie(savepath):
+def update_config(savepath=''):
     print("===========================开始更新cookie====================================")
     print("当前时间"  + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
     configpath = os.path.join(os.path.split(os.path.realpath(__file__))[0], 'config', 'config.sh')
@@ -17,17 +17,18 @@ def updateCookie(savepath):
     pinReg = re.compile('Cookie(?P<num>\d+)="pt_key=(?P<pt_key>\S+?);?pt_pin=(?P<pt_pin>\S+?);"')
     tempBlockCookieReg = re.compile('^TempBlockCookie="(?P<tempBlockCookie>.*?)"')
     tempBlockCookies = []
-    with open(configpath, 'r', encoding='UTF-8') as f:
-        for line in f:
+
+    with open(configpath, 'r', encoding='UTF-8') as af:
+        for line in af:
             tempBlockCookieRegMatch = tempBlockCookieReg.search(line)
             if tempBlockCookieRegMatch is not None:
                 blocks = tempBlockCookieRegMatch.groupdict()
                 tempBlockCookie = blocks.get("tempBlockCookie")
                 tempBlockCookies = tempBlockCookie.split(" ")
 
-    with open(configpath, 'r', encoding='UTF-8') as f:
-        file_data = ""
-        for line in f:
+    file_data = ""
+    with open(configpath, 'r', encoding='UTF-8') as bf:
+        for line in bf:
             pinRegMatch = pinReg.search(line)
             if pinRegMatch is not None:
                 pins = pinRegMatch.groupdict()
@@ -39,13 +40,11 @@ def updateCookie(savepath):
                         query = Jd.select().where(Jd.pin == pin)
                         if query.exists():
                             print("=======================原始cookie========================")
-                            print(line)
                             wskey = query.dicts().get().get("wskey")
                             ws = "pin={};wskey={};".format(pin, wskey)
                             token = wstopt(ws)
                             cookie = 'Cookie{}="{}"'.format(num, token)
                             print("=======================更新后cookie========================")
-                            print(cookie)
                             file_data += cookie + "\n"
                         else:
                             file_data += line
@@ -56,12 +55,12 @@ def updateCookie(savepath):
             else:
                 file_data += line
 
-    with open(configpath, "w", encoding="utf-8") as f:
-        f.write(savepath)
+    with open(savepath, 'w', encoding="UTF-8") as cf:
+        cf.write(file_data)
 
     print("===========================更新cookie结束====================================")
     print("当前时间" + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
 
 
 if __name__ == '__main__':
-    updateCookie(sys.argv[1])
+    update_config(sys.argv[1])
