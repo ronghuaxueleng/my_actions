@@ -3,6 +3,7 @@
 function replaceShareCode() {
     if [ ! -f "$1" ]; then
         sed -i 's/const readShareCodeRes = await readShareCode();/const readShareCodeRes = {"code": -1};/g' $1.js
+        sed -i -e '1h;2,$H;$!d;g' -re 's/let shareCodes = \[(.*\n)+?]/let shareCodes = []/g' $1.js
         for file in `ls $1*`; do
             basename=${file%%.*}
             replacename=${basename//$1/$1_$2}
@@ -15,6 +16,7 @@ function replaceShareCode() {
 function replaceShareCodeV1() {
     if [ ! -f "$1" ]; then
         sed -i 's/readShareCodeRes = await readShareCode();/readShareCodeRes = {"code": -1};/g' $1.js
+        sed -i -e '1h;2,$H;$!d;g' -re 's/let shareCodes = \[(.*\n)+?]/let shareCodes = []/g' $1.js
         for file in `ls $1*`; do
             basename=${file%%.*}
             replacename=${basename//$1/$1_$2}
