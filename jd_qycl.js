@@ -1,3 +1,5 @@
+const { stringify } = require('querystring');
+
 /*
 tgchannel：https://t.me/Ariszy8028
 github：https://github.com/Ariszy/Private-Script
@@ -25,7 +27,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 let tz = ($.getval('tz') || '1');//0关闭通知，1默认开启
 const invite=1;//新用户自动邀请，0关闭，1默认开启
-const logs =0;//0为关闭日志，1为开启
+const logs =1;//0为关闭日志，1为开启
 var hour=''
 var minute=''
 if ($.isNode()) {
@@ -118,7 +120,7 @@ async function doTask(){
         if(logs)$.log(data)
         if(result.code == 0){
            console.log("\n"+result.data.bizMsg+"\n")
-   await $.wait(10000)
+   await $.wait(8000)
         }else{
            $.log(result.data.bizMsg+"\n")
         }
