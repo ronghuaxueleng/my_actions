@@ -30,7 +30,7 @@ function Find_Script() {
         fi
         ## 判定输入是否含有后缀
         FileNameTmp=$(echo $AbsolutePath | awk -F "/" '{print $NF}')
-        WhichDirTmp=$(echo $AbsolutePath | awk -F "$FileNameTmp" '{print$1}')
+        WhichDirTmp=$(echo $AbsolutePath | awk -F "/$FileNameTmp" '{print$1}')
         echo $FileNameTmp | grep "\." -q
         if [[ $? -eq 0 ]]; then
             if [ -f $AbsolutePath ]; then
@@ -71,7 +71,7 @@ function Find_Script() {
         fi
         ## 判定变量是否存在否则退出
         if [ -n "${FileName}" ] && [ -n "${WhichDir}" ]; then
-            Check_Moudules $WhichDir
+            [[ ${WhichDir} != $ScriptsDir ]] && Check_Moudules $WhichDir
             if [ $(echo $AbsolutePath | awk -F '/' '{print$3}') = "own" ]; then
                 LogPath="$LogDir/$(echo $AbsolutePath | awk -F '/' '{print$4}')_${FileName}"
             else
@@ -577,7 +577,7 @@ function Cookies_Control() {
     case $1 in
     check)
         Count_UserSum
-        # [ -f $FileSendMark ] && rm -rf $FileSendMark
+        [ -f $FileSendMark ] && rm -rf $FileSendMark
         function Gen_pt_pin_array() {
             local Tmp1 Tmp2 i pt_pin_temp
             for ((user_num = 1; user_num <= $UserSum; user_num++)); do
@@ -618,8 +618,7 @@ function Cookies_Control() {
                     [ -z $CheckCookieDaysAgo ] && local Days="2" || local Days=$(($CheckCookieDaysAgo - 1))
                     if [ $Tmp3 -le $Days ] && [ $Tmp3 -ge 0 ]; then
                         [ $Tmp3 = 0 ] && local TmpTime="今天" || local TmpTime="$Tmp3天后"
-                        echo -e "账号$((m + 1))：$(printf $(echo ${pt_pin[m]} | perl -pe "s|%|\\\x|g;")) 将在$TmpTime过期"
-                        # echo -e "账号$((m + 1))：$(printf $(echo ${pt_pin[m]} | perl -pe "s|%|\\\x|g;")) 将在$TmpTime过期" >>$FileSendMark
+                        echo -e "账号$((m + 1))：$(printf $(echo ${pt_pin[m]} | perl -pe "s|%|\\\x|g;")) 将在$TmpTime过期" >>$FileSendMark
                     fi
                 fi
                 num=$((m + 1))
@@ -628,13 +627,13 @@ function Cookies_Control() {
         }
         Gen_pt_pin_array
         Print_Info
-        # if [ -f $FileSendMark ]; then
-        #     echo -e "\n检测到下面的账号将在近期失效，请注意即时更新！"
-        #     cat $FileSendMark
-        #     sed -i 's/$/&\\n/g' $FileSendMark
-        #     Notify "账号过期提醒" "$(cat $FileSendMark)"
-        #     rm -rf $FileSendMark
-        # fi
+        if [ -f $FileSendMark ]; then
+            echo -e "\n检测到下面的账号将在近期失效，请注意即时更新！"
+            cat $FileSendMark
+            sed -i 's/$/&\\n/g' $FileSendMark
+            Notify "账号过期提醒" "$(cat $FileSendMark)"
+            rm -rf $FileSendMark
+        fi
         echo ''
         ;;
     update)
