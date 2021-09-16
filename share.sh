@@ -191,7 +191,7 @@ function Help() {
 function Import_Config() {
     if [ -f $FileConfUser ]; then
         timeStamp=`date -d "$current" +%s%N`
-        python $ShellDirPdateConfig.py $FileConfUser.$timeStamp
+        python $ShellDir/updateConfig.py $FileConfUser.$timeStamp
         . $FileConfUser.$timeStamp
         rm -rf $FileConfUser.$timeStamp
         if [ -z "${Cookie1}" ]; then
@@ -206,7 +206,7 @@ function Import_Config() {
 function Import_Config_Not_Check() {
     if [ -f $FileConfUser ]; then
         timeStamp=`date -d "$current" +%s%N`
-        python $ShellDirPdateConfig.py $FileConfUser.$timeStamp
+        python $ShellDir/updateConfig.py $FileConfUser.$timeStamp
         . $FileConfUser.$timeStamp
         rm -rf $FileConfUser.$timeStamp
     fi
