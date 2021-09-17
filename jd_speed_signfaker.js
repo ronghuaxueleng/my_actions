@@ -23,7 +23,7 @@ cron "21 3,8 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/
 京东极速版 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_speed_sign.js, cronexpr="21 3,8 * * *", timeout=33600, enable=true
 */
 
-const $ = new Env('京东极速版');
+const $ = new Env('京东极速版任务');
 
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -677,7 +677,7 @@ function invite2() {
   let inviterId = [
     "5V7vHE23qh2EkdBHXRFDuA==",
     "4AVQao+eH8Q8kvmXnWmkG8ef/fNr5fdejnD9+9Ugbec=",
-    "BksRv0UXx/XluHFWxo8yaQ=="
+    "wXX9SjXOdYMWe5Ru/1+x9A=="
   ][Math.floor((Math.random() * 3))]
   let headers = {
     'Host': 'api.m.jd.com',
@@ -707,7 +707,7 @@ function invite() {
   let inviterId = [
     "5V7vHE23qh2EkdBHXRFDuA==",
     "jbGBRBPo5DmwB9ntTCSVOGXuh1YQyccCuZpWwb3PlIc=",
-    "BksRv0UXx/XluHFWxo8yaQ=="
+    "wXX9SjXOdYMWe5Ru/1+x9A=="
   ][Math.floor((Math.random() * 3))]
   var headers = {
     'Host': 'api.m.jd.com',
