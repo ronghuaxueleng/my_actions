@@ -4,7 +4,7 @@ import time
 
 from utils.cookie import sync_check_cookie
 from utils.db import Jd
-from utils.jd import save_pt_key, get_ptkey_by_pin
+from utils.jd import save_pt_key
 from utils.wskey import wstopt
 
 
@@ -15,7 +15,6 @@ def updateCookie():
     if not os.path.exists(configpath):
         configpath = os.path.join('/jd', 'config', 'config.sh')
     pinReg = re.compile('Cookie(?P<num>\d+)="pt_key=(?P<pt_key>\S+?);?pt_pin=(?P<pt_pin>\S+?);"')
-    ptReg = re.compile('pt_key=(?P<pt_key>\S+?);?pt_pin=(?P<pt_pin>\S+?);')
     tempBlockCookieReg = re.compile('^TempBlockCookie="(?P<tempBlockCookie>.*?)"')
     tempBlockCookies = []
     with open(configpath, 'r', encoding='UTF-8') as f:
@@ -35,9 +34,6 @@ def updateCookie():
                 pin = pins.get("pt_pin")
                 num = pins.get("num")
                 if num not in tempBlockCookies:
-                    ptkey = get_ptkey_by_pin(pin)
-                    ptRegMatch = ptReg.search(ptkey)
-                    pins = ptRegMatch.groupdict()
                     isLogin = sync_check_cookie(pins)
                     if isLogin is False:
                         query = Jd.select().where(Jd.pin == pin)
