@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-15
+## Modified: 2021-09-18
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -217,11 +217,7 @@ function Install_WebTerminal() {
     [ ! -x /usr/bin/ttyd ] && apk --no-cache add -f ttyd
     ## 增加环境变量
     export PS1="\u@\h:\w $ "
-    if [[ $(ifdata -p eth0 | awk -F ' ' '{print$1}') = "172.17.0.1" ]]; then
-        pm2 start ttyd --name="ttyd" -- -p 7681 -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
-    else
-        pm2 start ttyd --name="ttyd" -- -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
-    fi
+    pm2 start ttyd --name="ttyd" -- -p 7685 -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
 }
 
 ## Telegram Bot
@@ -468,11 +464,11 @@ function Environment_Deployment() {
             npm install -g date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got global-agent
             ;;
         *)
-            npm install -g ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got jsdom global-agent
             apk --no-cache add -f python3 py3-pip sudo build-base pkgconfig pixman-dev cairo-dev pango-dev
             pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
             pip3 install --upgrade pip
             pip3 install requests
+            npm install -g ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got jsdom global-agent
             ;;
         esac
         echo ''

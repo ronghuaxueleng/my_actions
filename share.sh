@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-16
+## Modified: 2021-09-18
 
 ## 目录
 ShellDir=${JD_DIR}
@@ -20,7 +20,7 @@ RawDir=$OwnDir/raw
 BotDir=$ShellDir/jbot
 BotLogDir=$LogDir/bot
 BotRepositoryDir=$UtilsDir/dockerbot
-ShellDir_NodeModules=$ShellDir/node_modules
+ShellDir_NodeModules=$ShellDir/node_modules 
 ScriptsDir_NodeModules=$ScriptsDir/node_modules
 
 ## 文件
@@ -135,7 +135,7 @@ function Help() {
  ❖  $TaskCmd ps                  ✧ 查看资源消耗情况和正在运行的脚本进程，当检测到内存占用较高时自动尝试释放
  ❖  $TaskCmd exsc                ✧ 导出互助码变量和助力格式，互助码从最后一个日志提取，受日志内容影响
  ❖  $TaskCmd rmlog               ✧ 删除各脚本产生的日志文件，可根据配置文件中的相关变量定义删除日期
- ❖  $TaskCmd cookie <cmd>        ✧ 检测本地账号是否有效 check，使用 WSKEY 更新CK update
+ ❖  $TaskCmd cookie <cmd>        ✧ 检测本地账号是否有效 check、使用 WSKEY 更新COOKIE update，支持指定账号进行更新
 
  ❖  $ContrlCmd server status    ✧ 查看各服务的详细信息，包括运行状态、创建时间、处理器占用、内存占用、运行时长
  ❖  $ContrlCmd hang <cmd>       ✧ 后台挂机程序(后台循环执行活动脚本)功能控制，启动/重启 up、停止 down、查看日志 logs
@@ -166,7 +166,7 @@ function Help() {
  ❖  $TaskCmd ps                  ✧ 查看资源消耗情况和正在运行的脚本进程，当检测到内存占用较高时自动尝试释放
  ❖  $TaskCmd exsc                ✧ 导出互助码变量和助力格式，互助码从最后一个日志提取，受日志内容影响
  ❖  $TaskCmd rmlog               ✧ 删除各脚本产生的日志文件，可根据配置文件中的相关变量定义删除日期
- ❖  $TaskCmd cookie <cmd>        ✧ 检测本地账号是否有效 check，使用 WSKEY 更新CK update
+ ❖  $TaskCmd cookie <cmd>        ✧ 检测本地账号是否有效 check、使用 WSKEY 更新COOKIE update，支持指定账号进行更新
 
  ❖  $ContrlCmd server status    ✧ 查看各服务的详细信息，包括运行状态、创建时间、处理器占用、内存占用、运行时长
  ❖  $ContrlCmd hang <cmd>       ✧ 后台挂机程序(后台循环执行活动脚本)功能控制，启动/重启 up、停止 down、查看日志 logs
@@ -279,7 +279,7 @@ function Combin_ShareCodes() {
     # export JDGLOBAL_SHARECODES=$(combine_sub ForOtherGlobal)
 
     ## 手机狂欢城 (jd_carnivalcity.js)
-    # export JD818_SHARECODES=$(Combin_Sub ForOtherCarni)
+    export JD818_SHARECODES=$(Combin_Sub ForOtherCarni)
 
     ## 城城分现金 (jd_city.js)
     # export CITY_SHARECODES=$(Combin_Sub ForOtherCity)

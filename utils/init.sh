@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-06
+## Modified: 2021-09-18
 
 set -e
 SUCCESS='[\033[32mOK\033[0m]'
@@ -66,11 +66,7 @@ echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➄ 控制面板�
 if [[ ${ENABLE_WEB_PANEL} == true ]]; then
   cd $JD_DIR
   export PS1="\u@\h:\w $ "
-  if [[ $(ifdata -p eth0 | awk -F ' ' '{print$1}') = "172.17.0.1" ]]; then
-    pm2 start ttyd --name="ttyd" -- -p 7681 -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
-  else
-    pm2 start ttyd --name="ttyd" -- -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
-  fi
+  pm2 start ttyd --name="ttyd" -- -p 7685 -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
   echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] 网页终端启动成功 $SUCCESS\n"
 
   cd $JD_DIR/web

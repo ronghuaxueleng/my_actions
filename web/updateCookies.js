@@ -1,24 +1,12 @@
 const fs = require("fs");
 const vm = new Env('更新Cookies');
 
-//Node.js用户请在jdCookie.js处填写京东ck;
-const jdCookieNode = vm.isNode() ? require('../utils/jdCookie.js') : '';
-//IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [];
-if (vm.isNode()) {
-    Object.keys(jdCookieNode).forEach((item) => {
-        cookiesArr.push(jdCookieNode[item])
-    })
-    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
-    };
-} else {
-    cookiesArr = [vm.getdata('CookieJD'), vm.getdata('CookieJD2'), ...jsonParse(vm.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
-}
-if (cookiesArr.length === 0) {
-    vm.msg(vm.name, '未设置cookies,停止更新cookies');
+if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+let JD_PT_PIN = process.env.JD_PT_PIN ? process.env.JD_PT_PIN : "";
+if (!JD_PT_PIN || JD_PT_PIN === "") {
+    vm.msg(vm.name, 'pt_pin为空,停止更新cookies');
     return;
 }
-
 let globalOptions = {
     message: '',
     clientVersion: "10.1.4",
@@ -34,8 +22,6 @@ const globalConfig = {
     signPath: "../utils/sign/",
     UA: `okhttp/3.12.1;jdmall;android;version/${globalOptions.clientVersion};build/89743;screen/1080x2206;os/11;network/wifi;`,
 }
-
-
 
 const loadAccount = () => {
     try {
@@ -86,7 +72,7 @@ const pre = () => {
     }
     loadAccount();
 }
-const updateLocalCookie = (cookie) => {
+const updateLocalCookie = (cookie,remarks) => {
     fs.accessSync(globalConfig.configShPath)
     const content = fs.readFileSync(globalConfig.configShPath, 'utf8').toString();
     const lines = content.split('\n');
@@ -112,9 +98,9 @@ const updateLocalCookie = (cookie) => {
                     lineNext.match(/上次更新：/)
                 ) {
                     const bz = lineNext.split('备注：')[1];
-                    lines[i + 1] = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', bz ? bz : '暂无备注'].join('');
+                    lines[i + 1] = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', bz ? bz : remarks].join('');
                 } else {
-                    const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', "暂无备注"].join('');
+                    const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', remarks].join('');
                     lines.splice(lastIndex + 1, 0, newLine);
                 }
                 success = true;
@@ -134,24 +120,25 @@ const updateLocalCookie = (cookie) => {
         ].join('');
         //提交备注
         lines.splice(lastIndex + 1, 0, newLine);
-        newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', '暂无备注'].join('');
+        newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', remarks].join('');
         lines.splice(lastIndex + 2, 0, newLine);
+        success = true;
     }
     fs.writeFileSync(globalConfig.configShPath, lines.join('\n'));
     return success
 }
-const updateCookies = async (cookie) => {
-    let pt_pin = cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1];
+const updateCookies = async (pt_pin) => {
     for (const account of globalOptions.accountsList) {
         if (pt_pin === account.pt_pin) {
-            let headerMsg = `Cookie => [remarks=${decodeURIComponent(account.remarks)}] `;
+            let remarks = decodeURIComponent(account.remarks);
+            let headerMsg = `Cookie => [${pt_pin}] `;
             if (account.ws_key && account.ws_key !== "") {
                 let success = false;
                 let ck = await getCkByWsKey(account);
-                if (ck !== '') {
+                if (ck !== '' && ck.indexOf("fake_") === -1 && ck.indexOf("pt_key=;") === -1) {
                     let checkResult = await checkCookie(ck);
                     if (checkResult) {
-                        success = updateLocalCookie(ck);
+                        success = updateLocalCookie(ck,remarks);
                         globalOptions.successCount++;
                         globalOptions.message += `${headerMsg} ${success ? '更新成功' : '更新失败'}\n`;
                     } else if (!checkResult) {
@@ -170,9 +157,7 @@ const updateCookies = async (cookie) => {
 
 !(async () => {
     pre()
-    for (const cookie of cookiesArr) {
-        await updateCookies(cookie)
-    }
+    await updateCookies(JD_PT_PIN)
     vm.msg(vm.name, 'Cookies更新结果:', globalOptions.message);
 
 
@@ -183,6 +168,7 @@ const updateCookies = async (cookie) => {
     .finally(() => {
         vm.done();
     })
+
 
 
 

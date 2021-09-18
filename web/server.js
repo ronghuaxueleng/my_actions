@@ -490,7 +490,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(
     '/shell',
     createProxyMiddleware({
-        target: 'http://localhost:7681',
+        target: 'http://127.0.0.1:7685',
         ws: true,
         changeOrigin: true,
         pathRewrite: {
@@ -729,7 +729,7 @@ app.get('/api/runLog', function (request, response) {
     if (request.session.loggedin) {
         let jsName = request.query.jsName;
         let logFile;
-        if (jsName === 'update' || jsName === 'ttyd' || jsName === 'rmlog' || jsName === 'hangup' || jsName === 'cfd_loop' || jsName === 'exsc') {
+        if (['update', 'rmlog', 'exsc', 'tasklist'].includes(jsName)) {
             logFile = path.join(rootPath, `log/${jsName}.log`);
         } else {
             if (jsName.indexOf(".") > -1) {

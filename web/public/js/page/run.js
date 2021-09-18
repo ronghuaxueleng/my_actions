@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var timer = 0, curScript = {key: "task list", value: "list", refreshLog: false}, $runCmd = $('#runCmd'),
+    var timer = 0, curScript = {key: "task list 2>&1 | tee log/tasklist.log", value: "tasklist"}, $runCmd = $('#runCmd'),
         $runCmdConc = $('#runCmdConc');
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
@@ -44,10 +44,11 @@ $(document).ready(function () {
 
         timer = 1;
         if (refreshLog) {
+            const timeout = jsName === 'tasklist' ? 100 : 1000;
             // 1s后开始查日志
             setTimeout(() => {
                 jsName && getLogInterval(jsName);
-            }, 1000);
+            }, timeout);
         }
 
     }
@@ -128,7 +129,7 @@ $(document).ready(function () {
         getLog(jsName);
         timer = setInterval(() => {
             getLog(jsName);
-        }, 1500);
+        }, 1000);
     }
 
     function getLog(jsName) {

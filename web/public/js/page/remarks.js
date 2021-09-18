@@ -18,11 +18,17 @@ $(document).ready(function () {
         let timeStamp = (new Date()).getTime()
         try {
             let accountArr = JSON.parse(confContent);
+            let pt_pins = [];
             for (const account of accountArr) {
                 if(account.ws_key && account.ws_key !== "" && new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）|{}【】‘；：”“'。，、？ ]").test(account.ws_key)){
                     panelUtils.showError(`${account.pt_pin} ${account.remarks}的 ws_key 格式不正确`)
                     return;
                 }
+                if(pt_pins.indexOf(account.pt_pin) > -1){
+                    panelUtils.showError(`${account.pt_pin} 存在重复`)
+                    return;
+                }
+                pt_pins.push(account.pt_pin);
             }
         }catch (e) {
             panelUtils.showError("格式出现问题，请仔细检查")

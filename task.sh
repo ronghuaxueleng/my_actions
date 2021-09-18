@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-16
+## Modified: 2021-09-18
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -600,7 +600,7 @@ function Cookies_Control() {
                     echo -e "\033[31m[X]\033[0m"
                 fi
             else
-                echo -e "\033[31m[API请求失败]\033[0m"
+                echo -e "\033[31m[ API 请求失败 ]\033[0m"
             fi
         }
 
@@ -622,7 +622,7 @@ function Cookies_Control() {
                     fi
                 fi
                 num=$((m + 1))
-                echo -e "$num：$(printf $(echo ${pt_pin[m]} | perl -pe "s|%|\\\x|g;")) $(CheckCookie $(grep -E "Cookie[1-9]" $FileConfUser | grep ${pt_pin[m]} | awk -F '\"' '{print$2}'))    $UpdateTime"
+                echo -e "$num：$(printf $(echo ${pt_pin[m]} | perl -pe "s|%|\\\x|g;")) $(CheckCookie $(grep -E "Cookie[1-9]" $FileConfUser | grep ${pt_pin[m]} | awk -F "[\"\']" '{print$2}'))    $UpdateTime"
             done
         }
         Gen_pt_pin_array
@@ -637,55 +637,141 @@ function Cookies_Control() {
         echo ''
         ;;
     update)
+        local ExitStatus LogPath LogFile
         [ -f $FileSendMark ] && rm -rf $FileSendMark
+
+        ## 更新 sign 签名库
+        function UpdateSign() {
+            Make_Dir $SignDir
+            if [ ! -d $SignDir/.git ]; then
+                git clone -b master git@jd_base_gitee:supermanito/panel_sign_json.git $SignDir >/dev/null
+                ExitStatus=$?
+            else
+                cd $SignDir
+                git fetch --all >/dev/null
+                ExitStatus=$?
+                git reset --hard origin/master >/dev/null
+            fi
+        }
+
+        ## 全部更新
+        function UpdateNormal() {
+            local pt_pin_array=(
+                $(grep -F "\"pt_pin\":" $FileAccountConf | perl -pe '{s|^.*\"pt_pin\": \"||g; s|[\",;]||g;}' | sed '/^$/d')
+            )
+            if [[ ${#pt_pin_array[@]} -ge 1 ]]; then
+                LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_$UserNum.log"
+                echo -e "\n$WORKING 检测到 \033[34m${#pt_pin_array[@]}\033[0m 个账号，开始更新...\n"
+                for ((i = 1; i <= ${#pt_pin_array[@]}; i++)); do
+                    local UserNum=$((i - 1))
+                    export JD_PT_PIN=${pt_pin_array[$UserNum]}
+                    node updateCookies.js &>>${LogFile} &
+                    wait
+                    local Tmp=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|\-|\.\*|g;}')
+                    grep "Cookie => \[$Tmp\]" ${LogFile} | tee -a $FileSendMark
+                done
+                echo -e ''
+
+                ## 更新后检测是否有效
+                for ((i = 1; i <= ${#pt_pin_array[@]}; i++)); do
+                    local UserNum=$((i - 1))
+                    local Tmp=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|\-|\.\*|g;}')
+                    if [[ $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser) ]]; then
+                        if [ "$(curl -I -s --connect-timeout 5 https://bean.m.jd.com/bean/signIndex.action -w %{http_code} | tail -n1)" -eq "302" ]; then
+                            if [[ $(curl -s --noproxy "*" "https://bean.m.jd.com/bean/signIndex.action" -H "cookie: $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')") ]]; then
+                                echo -e "$(printf $(echo ${pt_pin_array[$UserNum]} | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 有效 \033[32m[✔]\033[0m"
+                                echo -e "$(printf $(echo ${pt_pin_array[$UserNum]} | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 有效 [✔]" >>$FileSendMark
+                            else
+                                echo -e "$(printf $(echo ${pt_pin_array[$UserNum]} | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 无效 \033[31m[X]\033[0m"
+                                echo -e "$(printf $(echo ${pt_pin_array[$UserNum]} | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 无效 [X]" >>$FileSendMark
+                            fi
+                        else
+                            echo -e "$(printf $(echo ${pt_pin_array[$UserNum]} | perl -pe "s|%|\\\x|g;")) 检测出错 \033[31m[ API 请求失败 ]\033[0m"
+                            echo -e "$(printf $(echo ${pt_pin_array[$UserNum]} | perl -pe "s|%|\\\x|g;")) 检测出错 [ API 请求失败 ]" >>$FileSendMark
+                        fi
+                    else
+                        echo -e "$(printf $(echo ${pt_pin_array[$UserNum]} | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 无效 \033[31m[X]\033[0m"
+                        echo -e "$(printf $(echo ${pt_pin_array[$UserNum]} | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 无效 [X]" >>$FileSendMark
+                    fi
+                    ## 打印 Cookie
+                    # echo "$(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')"
+                done
+                echo -e "\n$COMPLETE 更新完成\n"
+            else
+                echo -e "\n$ERROR 请先配置好您的 pt_pin ！\n"
+            fi
+        }
+
+        ## 指定账号更新
+        function UpdateSpecify() {
+            local UserNum=$1
+            local AccountNum=Cookie$UserNum
+            if [[ -z ${!AccountNum} ]]; then
+                echo -e "\n$ERROR 请确认账号是否存在！"
+                Help
+                exit 1
+            fi
+            grep -q "$(echo ${!AccountNum} | grep -o "pt_pin.*;" | awk -F '\;' '{print$1}' | perl -pe '{s|pt_pin=||g}')" $FileAccountConf
+            if [[ $? -eq 0 ]]; then
+                echo -e "\n$WORKING 开始更新...\n"
+                export JD_PT_PIN=$(echo ${!AccountNum} | grep -o "pt_pin.*;" | awk -F '\;' '{print$1}' | perl -pe '{s|pt_pin=||g}')
+                LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_$UserNum.log"
+                node updateCookies.js &>>${LogFile} &
+                wait
+                local Tmp=$(echo $JD_PT_PIN | perl -pe '{s|\-|\.\*|g;}')
+                grep "Cookie => \[$Tmp\]" ${LogFile} | tee -a $FileSendMark
+                echo -e ''
+
+                ## 更新后检测是否有效
+                if [[ $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser) ]]; then
+                    if [ "$(curl -I -s --connect-timeout 5 https://bean.m.jd.com/bean/signIndex.action -w %{http_code} | tail -n1)" -eq "302" ]; then
+                        if [[ $(curl -s --noproxy "*" "https://bean.m.jd.com/bean/signIndex.action" -H "cookie: $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')") ]]; then
+                            echo -e "$(printf $(echo $JD_PT_PIN | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 有效 \033[32m[✔]\033[0m"
+                            echo -e "$(printf $(echo $JD_PT_PIN | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 有效 [✔]" >>$FileSendMark
+                        else
+                            echo -e "$(printf $(echo $JD_PT_PIN | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 无效 \033[31m[X]\033[0m"
+                            echo -e "$(printf $(echo $JD_PT_PIN | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 无效 [X]" >>$FileSendMark
+                        fi
+                    else
+                        echo -e "$(printf $(echo $JD_PT_PIN | perl -pe "s|%|\\\x|g;")) 检测出错 \033[31m[ API 请求失败 ]\033[0m"
+                        echo -e "$(printf $(echo $JD_PT_PIN | perl -pe "s|%|\\\x|g;")) 检测出错 [ API 请求失败 ]" >>$FileSendMark
+                    fi
+                else
+                    echo -e "$(printf $(echo $JD_PT_PIN | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 无效 \033[31m[X]\033[0m"
+                    echo -e "$(printf $(echo $JD_PT_PIN | perl -pe "s|%|\\\x|g;")) 经过检测该 Cookie 无效 [X]" >>$FileSendMark
+                fi
+                echo -e "\n$COMPLETE 更新完成\n"
+            else
+                echo -e "\n$ERROR 该账号没有配置 ws_key ！\n"
+            fi
+        }
+
         ## 执行脚本
         if [ -f $FileUpdateCookie ]; then
             if [[ $(grep "ws_key" $FileAccountConf | head -1 | awk -F '\"' '{print$4}') ]]; then
-                ## 更新 sign 签名库
-                Make_Dir $SignDir
-                if [ ! -d $SignDir/.git ]; then
-                    git clone -b master git@jd_base_gitee:supermanito/panel_sign_json.git $SignDir >/dev/null
-                    local ExitStatus=$?
-                else
-                    cd $SignDir
-                    git fetch --all >/dev/null
-                    local ExitStatus=$?
-                    git reset --hard origin/master >/dev/null
-                fi
+                UpdateSign
                 if [[ $ExitStatus -eq 0 ]]; then
-                    local UserNum AccountNum
-                    Import_Config updateCookies
-                    Count_UserSum
                     LogPath="$LogDir/updateCookies"
                     Make_Dir ${LogPath}
-                    echo -e "\n$WORKING 开始更新...\n"
-                    for ((UserNum = 1; UserNum <= ${UserSum}; UserNum++)); do
-                        for num in ${TempBlockCookie}; do
-                            [[ $UserNum -eq $num ]] && continue 2
-                        done
-                        AccountNum=Cookie$UserNum
-                        grep -q "$(echo ${!AccountNum} | grep -o "pt_pin.*;" | awk -F '\;' '{print$1}' | perl -pe '{s|pt_pin=||g}')" $FileAccountConf
-                        if [[ $? -eq 0 ]]; then
-                            export JD_COOKIE=${!AccountNum}
-                        else
-                            continue
-                        fi
-                        LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_$UserNum.log"
-                        cd $PanelDir
-                        node updateCookies.js &>${LogFile} &
-                        wait
-                        grep "Cookie =>" ${LogFile} | tee -a $FileSendMark
-                    done
-                    echo -e "\n$COMPLETE 更新完成\n"
+                    cd $PanelDir
+                    case $# in
+                    1)
+                        UpdateNormal
+                        ;;
+                    2)
+                        UpdateSpecify $2
+                        ;;
+                    esac
+                    ## 推送通知
                     if [ -f $FileSendMark ]; then
-                        [[ $AccountUpdateNotify == true ]] && Notify "账号更新结果通知" "$(cat $FileSendMark)"
+                        [[ ${AccountUpdateNotify} == true ]] && Notify "账号更新结果通知" "$(cat $FileSendMark)"
                         rm -rf $FileSendMark
                     fi
                 else
-                    echo -e "\n$ERROR 签名更新失败，请检查您的网络环境！\n"
+                    echo -e "\n$ERROR 签名更新失败，请检查您的网络环境后重试！\n"
                 fi
             else
-                echo -e "\n$ERROR 请先配置好您的 WSKEY ！\n"
+                echo -e "\n$ERROR 请先配置好您的 ws_key ！\n"
             fi
         else
             echo -e "\n$ERROR 账号更新脚本不存在，请确认是否移动！\n"
@@ -770,15 +856,15 @@ function Process_Monitor() {
         echo -e "\033[34m[释放后]\033[0m  Memory：\033[33m${MemoryUsageNew}\033[0m   剩余可用内存：\033[33m${MemoryFreeNew}MB\033[0m"
     fi
     echo -e "\n\033[34m[运行时长]  [CPU]    [内存]    [脚本名称]\033[0m"
-    ps -axo user,time,pcpu,user,pmem,user,command --sort -pmem | less | egrep ".js\b|.py\b|.ts\b" | egrep -Ev "server.js|pm2|egrep|perl|sed|bash" |
-        perl -pe '{s| root     |% |g; s|\/usr\/bin\/ts-node ||g; s|\/usr\/bin\/python3 ||g; s|\/usr\/bin\/python ||g; s|\/usr\/bin\/node ||g; s|node -r global-agent/bootstrap |(代理)|g; s|node ||g;  s|root     |#|g; s|#[0-9][0-9]:|#|g;  s|  | |g; s| |     |g; s|#|•  |g; s|/jd/scripts/jd_cfd_loop\.js|jd_cfd_loop\.js|g; s|\./utils/||g;}'
+    ps -axo user,time,pcpu,user,pmem,user,command --sort -pmem | less | egrep "\.js\b|\.py\b|\.ts\b" | egrep -Ev "server.js|pm2|egrep|perl|sed|bash" |
+        perl -pe '{s| root     |% |g; s|\/usr\/bin\/ts-node ||g; s|\/usr\/bin\/python3 ||g; s|python3 -u ||g; s|\/usr\/bin\/python ||g; s|\/usr\/bin\/node ||g; s|node -r global-agent/bootstrap |(代理)|g; s|node ||g;  s|root     |#|g; s|#[0-9][0-9]:|#|g;  s|  | |g; s| |     |g; s|#|•  |g; s|/jd/scripts/jd_cfd_loop\.js|jd_cfd_loop\.js|g; s|\./utils/||g;}'
     echo ''
 }
 
 ## 列出本地脚本清单
 function List_Local_Scripts() {
     local ScriptType Tmp1 Tmp2
-    local ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|JDJR|validate|ZooFaker|MovementFaker|tencentscf|api_test|app.|main.|jd_update.js|jd_env_copy.js|index.js|.json|ql.js|jdEnv"
+    local ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|JDJR|validate|ZooFaker|MovementFaker|tencentscf|api_test|app\.|main\.|jd_update\.js|jd_env_copy\.js|index\.js|\.json\b|ql\.js|jdEnv|jd_enen\.js"
     case $Arch in
     armv7l | armv6l)
         ScriptType="\.js\b"
@@ -962,9 +1048,28 @@ case $# in
     rapid)
         Run_Rapidly $1 $3
         ;;
-    now | conc | pkill | update | check | [1-9] | [1-9][0-9] | [1-9][0-9][0-9])
+    now | conc | pkill | check | [1-9] | [1-9][0-9] | [1-9][0-9][0-9])
         echo -e "\n$TOO_MANY_COMMANDS"
         Help
+        ;;
+    update)
+        case $1 in
+        cookie)
+            case $3 in
+            [1-9] | [1-9][0-9] | [1-9][0-9][0-9])
+                Cookies_Control $2 $3
+                ;;
+            *)
+                echo -e "\n$COMMAND_ERROR"
+                Help
+                ;;
+            esac
+            ;;
+        *)
+            echo -e "\n$COMMAND_ERROR"
+            Help
+            ;;
+        esac
         ;;
     *)
         case $1 in

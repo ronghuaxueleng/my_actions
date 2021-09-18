@@ -1,5 +1,5 @@
 # 《使用教程》
-- __修订日期：2021 年 9 月 13 日__
+- __修订日期：2021 年 9 月 18 日__
 ㅤ
 ## 一、基础教程
 ### 1. 执行特定脚本：
@@ -85,7 +85,8 @@
 ### 11. 账号功能：
     task cookie <cmd>
 > _注意：1. 检测账号是否有效 check，更新日期从配置文件中的备注获取，同时判断账号过期时间。_\
-> _ㅤㅤㅤ2. 使用 `WSKEY` 更新CK update，需要在 account.json 中正确配置您的信息，注意格式。_
+> _ㅤㅤㅤ2. 使用 `WSKEY` 更新CK update，需要在 account.json 中正确配置您的信息，注意格式。_\
+> _ㅤㅤㅤ3. 支持指定账号进行更新，后面跟上某 Cookie 账号在配置文件中的具体编号即可，与指定执行类似。_
 
 
 ### 12. 安装环境：
@@ -129,7 +130,7 @@
     MyFruitB=""
     ForOtherFruit1="${MyFruit1}@${MyFruit2}"
     ForOtherFruit2="${MyFruit1}@${MyFruit2}"
-    
+
     ## 2.定义东东萌宠互助
     MyPet1="xxxxxxxxxxxxxxxxxxxxxxxxx"
     MyPet2="xxxxxxxxxxxxxxxxxxxxxxxxx"

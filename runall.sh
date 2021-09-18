@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-15
+## Modified: 2021-09-17
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -51,7 +51,7 @@ function ChooseRunMod() {
 function Main() {
     local Input3 Input4 ScriptType Tmp1 Tmp2
     local FileTmp=$ShellDir/.runall_tmp.sh
-    local ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|JDJR|validate|ZooFaker|MovementFaker|tencentscf|api_test|app.|main.|jd_update.js|jd_env_copy.js|index.js|.json|ql.js|jdEnv"
+    local ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|JDJR|validate|ZooFaker|MovementFaker|tencentscf|api_test|app\.|main\.|jd_update\.js|jd_env_copy\.js|index\.js|\.json\b|ql\.js|jdEnv|jd_enen\.js"
     case $Arch in
     armv7l | armv6l)
         ScriptType=".js\b"
