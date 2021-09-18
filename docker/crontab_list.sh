@@ -61,14 +61,8 @@
 30 0,9,18 * * * node /scripts/jd_opencard20.js >> /scripts/logs/jd_opencard20.log 2>&1
 # jd_opencard17
 30 1,10,19 * * * node /scripts/jd_opencard17.js >> /scripts/logs/jd_opencard17.log 2>&1
-# jd_opencard18
-30 2,8,17 * * * node /scripts/jd_opencard18.js >> /scripts/logs/jd_opencard18.log 2>&1
 # jd_opencard19
 30 3,11,20 * * * node /scripts/jd_opencard19.js >> /scripts/logs/jd_opencard19.log 2>&1
-# jd_Task2
-45 0,16 * * * node /scripts/jd_Task2.js >> /scripts/logs/jd_Task2.log 2>&1
-# jd_Task3
-30 0,12 * * * node /scripts/jd_Task3.js >> /scripts/logs/jd_Task3.log 2>&1
 # 内容鉴赏官
 15 2,5 * * * node /scripts/jd_connoisseur.js >> /scripts/logs/jd_connoisseur.log 2>&1
 # 京喜财富岛合成月饼
@@ -79,8 +73,6 @@
 12 9,19 10-17 9 * node /scripts/jd_star_shop.js >> /scripts/logs/jd_star_shop.log 2>&1
 # 送豆得豆
 24 0,12 * * * node /scripts/jd_sendBeans.js >> /scripts/logs/jd_sendBeans.log 2>&1
-# 企有此礼
-30 0,8 * * * node /scripts/jd_qycl.js >> /scripts/logs/jd_qycl.log 2>&1
 ##############长期活动##############
 # 签到
 0 0,18 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
@@ -468,6 +460,8 @@
 15 2,5 * * * node /scripts/jd_connoisseur.js >> /scripts/logs/jd_connoisseur.log 2>&1
 # 母婴-跳跳乐
 1 0,11,21 * * * node /scripts/jd_jump.js >> /scripts/logs/jd_jump.log 2>&1
+# 手机狂欢城(2021-9-16至2021-10-1)
+0 0-18/6 * * * node /scripts/jd_carnivalcity.js >> /scripts/logs/jd_carnivalcity.log 2>&1
 ##############长期活动##############
 # 签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
