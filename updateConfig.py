@@ -37,9 +37,9 @@ def update_config(savepath=''):
                 pin = pins.get("pt_pin")
                 num = pins.get("num")
                 if num not in tempBlockCookies:
-                    ptkey = get_ptkey_by_pin(pin)
-                    ptRegMatch = ptReg.search(ptkey)
-                    pins = ptRegMatch.groupdict()
+                    # ptkey = get_ptkey_by_pin(pin)
+                    # ptRegMatch = ptReg.search(ptkey)
+                    # pins = ptRegMatch.groupdict()
                     isLogin = sync_check_cookie(pins)
                     if isLogin is False:
                         query = Jd.select().where(Jd.pin == pin)
