@@ -21,6 +21,7 @@ const {
     createProxyMiddleware
 } = require('http-proxy-middleware');
 const random = require('string-random');
+const util = require('./util');
 
 var rootPath = path.resolve(__dirname, '..')
 // config.sh 文件所在目录
@@ -410,32 +411,6 @@ function getClientIP(req) {
     }
     return ip.substr(ip.lastIndexOf(':') + 1, ip.length);
 };
-
-/**
- * 格式化时间
- * @param fmt
- * @param date
- * @returns {*}
- */
-function dateFormat(fmt, date) {
-    let ret;
-    const opt = {
-        "Y+": date.getFullYear().toString(),        // 年
-        "m+": (date.getMonth() + 1).toString(),     // 月
-        "d+": date.getDate().toString(),            // 日
-        "H+": date.getHours().toString(),           // 时
-        "M+": date.getMinutes().toString(),         // 分
-        "S+": date.getSeconds().toString()          // 秒
-        // 有其他格式化字符需求可以继续添加，必须转化成字符串
-    };
-    for (let k in opt) {
-        ret = new RegExp("(" + k + ")").exec(fmt);
-        if (ret) {
-            fmt = fmt.replace(ret[1], (ret[1].length === 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-        }
-    }
-    return fmt;
-}
 
 var app = express();
 // gzip压缩
@@ -856,7 +831,7 @@ app.post('/api/auth', async function (request, response) {
                 con.lastLoginInfo = {
                     loginIp: ip,
                     loginAddress: address,
-                    loginTime: dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
+                    loginTime: util.dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
                 }
                 console.log(`${username} 用户登录成功，登录IP：${ip}，登录地址：${address}`);
                 fs.writeFileSync(authConfigFile, JSON.stringify(con));

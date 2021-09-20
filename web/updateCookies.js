@@ -1,4 +1,5 @@
-const fs = require("fs");
+const fs = require('fs');
+const util = require('./util');
 const vm = new Env('更新Cookies');
 
 if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
@@ -97,9 +98,9 @@ const updateLocalCookie = (cookie,remarks) => {
                 if (
                     lineNext.match(/上次更新：/)
                 ) {
-                    lines[i + 1] = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', remarks].join('');
+                    lines[i + 1] = ['## ', pt_pin, '  上次更新：', util.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()), '  备注：', remarks].join('');
                 } else {
-                    const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', remarks].join('');
+                    const newLine = ['## ', pt_pin, '  上次更新：', util.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()), '  备注：', remarks].join('');
                     lines.splice(lastIndex + 1, 0, newLine);
                 }
                 success = true;
@@ -119,7 +120,7 @@ const updateLocalCookie = (cookie,remarks) => {
         ].join('');
         //提交备注
         lines.splice(lastIndex + 1, 0, newLine);
-        newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', remarks].join('');
+        newLine = ['## ', pt_pin, '  上次更新：', util.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()), '  备注：', remarks].join('');
         lines.splice(lastIndex + 2, 0, newLine);
         success = true;
     }
