@@ -3,7 +3,7 @@
 # 更新代理配置
 * 3 * * * cd /root/.config/clash && /bin/bash refresh.sh
 # 向机器人提交助力码
-0 21 * * 6 bash -x /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
+0 9,21 * * * bash -x /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
 # 提交助力码
 0 1 * * * bash /jd/submitme.sh >> /jd/log/submitme.log 2>&1
 # 更新cookie
