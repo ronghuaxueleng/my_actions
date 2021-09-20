@@ -9,4 +9,4 @@
 # 更新cookie
 2 * * * * python /jd/updateCookie.py >> /jd/log/updateCookie.py.log 2>&1
 # 自动更新Cookie(需要配置wskey)
-3 7,8,9,10 * * * task cookie update >/dev/null 2>&1
+3 7 * * * task cookie update >/dev/null 2>&1
