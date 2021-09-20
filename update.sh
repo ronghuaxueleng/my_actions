@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-15
+## Modified: 2021-09-20
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -8,13 +8,6 @@ ShellDir=${JD_DIR}
 ## 定义 Scripts 仓库
 ScriptsBranch="j_scripts"
 ScriptsUrl="https://gitee.com/getready/my_actions.git"
-
-## Aaron-lv（当前默认）
-# ScriptsUrl="https://gitee.com/getready/my_actions.git"
-## Facker
-# ScriptsUrl="${GithubProxy}https://github.com/shufflewzc/faker2.git"
-## JDHelloWorld
-# ScriptsUrl="${GithubProxy}https://github.com/JDHelloWorld/jd_scripts.git"
 
 ## 创建日志文件夹
 Make_Dir $LogDir
@@ -607,7 +600,7 @@ function Title() {
     esac
     echo -e "\n+----------------- 开 始 执 行 更 新 脚 本 -----------------+"
     echo -e ''
-    echo -e "                系统时间：$(date "+%Y-%m-%d %H:%M:%S")"
+    echo -e "                系统时间：$(date "${TIME}")"
     echo -e ''
     echo -e "         更新模式：$Mod     脚本根目录：$ShellDir"
     echo -e ''
@@ -669,7 +662,7 @@ function Combin_Function() {
         *)
             echo -e "\n$COMMAND_ERROR"
             Help
-            exit 0
+            exit 1
             ;;
         esac
         Fix_Crontab

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-18
+## Modified: 2021-09-20
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -119,7 +119,7 @@ function Panel_Control() {
                 echo -e "\n$COMPLETE 控制面板已启动\n"
                 ;;
             errored)
-                echo -e "\n$WORKING 检测到服务状态异常，开始尝试修复...\n"
+                echo -e "\n$WARN 检测到服务状态异常，开始尝试修复...\n"
                 pm2 delete server
                 Update_Shell
                 cd $PanelDir
@@ -158,7 +158,7 @@ function Panel_Control() {
                 echo -e "\n$COMPLETE 网页终端已启动\n"
                 ;;
             errored)
-                echo -e "\n$WORKING 检测到服务状态异常，开始尝试修复...\n"
+                echo -e "\n$WARN 检测到服务状态异常，开始尝试修复...\n"
                 pm2 delete ttyd
                 Update_Shell && cd $ShellDir
                 Install_WebTerminal && sleep 3
@@ -201,7 +201,7 @@ function Panel_Control() {
             cp -f $FileAuthSample $FileAuth
         fi
         echo ''
-        cat $FileAuth | perl -pe '{s|\,|\n|g; s|["{}]||g; s|user:|[用户名]：|g; s|password:|[密码]：|g; s|cookieApiToken:|[更新接口Token]：|g; s|lastLoginInfo:|\n最后一次登录信息:\n|g; s|loginIp:|[IP地址]：|g; s|loginAddress:|[地理位置]：|g; s|loginTime:|[登录时间]：|g; s|authErrorCount:|[认证失败次数]：|g;}'
+        cat $FileAuth | perl -pe '{s|\,|\n|g; s|["{}]||g; s|user:|[用户名]：|g; s|password:|[密码]：|g; s|cookieApiToken:|[更新接口Token]：|g; s|lastLoginInfo:|\n最后一次登录信息:\n|g; s|loginIp:|[ IP 地址]：|g; s|loginAddress:|[地理位置]：|g; s|loginTime:|[登录时间]：|g; s|authErrorCount:|[认证失败次数]：|g;}'
         echo -e '\n'
         ;;
     respwd)
@@ -260,7 +260,7 @@ function Bot_Control() {
                         fi
                         ;;
                     errored)
-                        echo -e "\n$WORKING 检测到服务状态异常，开始尝试修复...\n"
+                        echo -e "\n$WARN 检测到服务状态异常，开始尝试修复...\n"
                         pm2 delete jbot
                         rm -rf $BotRepositoryDir $BotDir
                         Install_Bot
@@ -309,7 +309,7 @@ function Bot_Control() {
             esac
             [ -f $FilePm2List ] && rm -rf $FilePm2List
         else
-            echo -e "\n$ERROR 请先在配置文件中配置好您的 BOT !"
+            echo -e "\n$ERROR 请先在 $FileConfUser 配置文件中配置好您的 Bot ！"
             Help
             exit 1
         fi
@@ -373,12 +373,12 @@ function Check_Files() {
         crontab $ListCrontabUser
     else
         cp -fv $ListCrontabSample $ListCrontabUser
-        echo -e "检测到 $ConfigDir 目录下不存在 crontab.list 或存在但且为空，已生成...\n"
+        echo -e "检测到 $ConfigDir 配置文件目录下不存在 crontab.list 或存在但且为空，已生成...\n"
         crontab $ListCrontabUser
     fi
     if [ ! -s $FileConfUser ]; then
         cp -fv $FileConfSample $FileConfUser
-        echo -e "检测到 $ConfigDir 目录下不存在 config.sh 配置文件，已生成...\n"
+        echo -e "检测到 $ConfigDir 配置文件目录下不存在 config.sh 配置文件，已生成...\n"
     fi
     JsonFiles="auth.json bot.json account.json account.db"
     for file in $JsonFiles; do

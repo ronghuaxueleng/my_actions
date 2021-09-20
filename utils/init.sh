@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-18
+## Modified: 2021-09-20
 
 set -e
 SUCCESS='[\033[32mOK\033[0m]'
 ERROR='[\033[31mERROR\033[0m]'
 ContrlCmd="taskctl"
+TIME="+%Y-%m-%d %H:%M:%S"
 
 if [ ! -d $JD_DIR/config ]; then
   echo -e "$ERROR 没有映射 config 配置文件目录给本容器，请先按教程映射该目录...\n"
@@ -13,22 +14,22 @@ if [ ! -d $JD_DIR/config ]; then
 fi
 
 ## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 第 一 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➀ 同步最新源码开始 -----\n"
+echo -e "\n[\033[34m$(date "${TIME}")\033[0m] ----- ➀ 同步最新源码开始 -----\n"
 cd $JD_DIR
 crond
 sleep 1
 git fetch --all
 git reset --hard origin/source0904
 bash update.sh
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➀ 同步最新源码结束 -----\n"
+echo -e "\n[\033[34m$(date "${TIME}")\033[0m] ----- ➀ 同步最新源码结束 -----\n"
 
 ## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 第 二 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➁ 检测配置文件完整性开始 -----\n"
+echo -e "\n[\033[34m$(date "${TIME}")\033[0m] ----- ➁ 检测配置文件完整性开始 -----\n"
 taskctl check files
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➁ 检测配置文件完整性结束 -----\n"
+echo -e "\n[\033[34m$(date "${TIME}")\033[0m] ----- ➁ 检测配置文件完整性结束 -----\n"
 
 ## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 第 三 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➂ 挂机程序开始 -----\n"
+echo -e "\n[\033[34m$(date "${TIME}")\033[0m] ----- ➂ 挂机程序开始 -----\n"
 if [[ ${ENABLE_HANGUP} == true ]]; then
   . $JD_DIR/config/config.sh
   if [ -n "${Cookie1}" ]; then
@@ -39,10 +40,10 @@ if [[ ${ENABLE_HANGUP} == true ]]; then
 elif [[ ${ENABLE_HANGUP} == false ]]; then
   echo -e "已设置为不自动启动挂机程序\n"
 fi
-echo -e "[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➂ 挂机程序结束 -----\n"
+echo -e "[\033[34m$(date "${TIME}")\033[0m] ----- ➂ 挂机程序结束 -----\n"
 
 ## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 第 四 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➃ Telegram Bot 开始 -----\n"
+echo -e "\n[\033[34m$(date "${TIME}")\033[0m] ----- ➃ Telegram Bot 开始 -----\n"
 if [[ ${ENABLE_TG_BOT} == true ]]; then
   case $(uname -m) in
   armv7l | armv6l)
@@ -59,36 +60,36 @@ if [[ ${ENABLE_TG_BOT} == true ]]; then
 else
   echo -e "已设置为不启动 Telegram Bot\n"
 fi
-echo -e "[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➃ Telegram Bot 结束 -----\n"
+echo -e "[\033[34m$(date "${TIME}")\033[0m] ----- ➃ Telegram Bot 结束 -----\n"
 
 ## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 第 五 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➄ 控制面板和网页终端开始 -----\n"
+echo -e "\n[\033[34m$(date "${TIME}")\033[0m] ----- ➄ 控制面板和网页终端开始 -----\n"
 if [[ ${ENABLE_WEB_PANEL} == true ]]; then
   cd $JD_DIR
   export PS1="\u@\h:\w $ "
   pm2 start ttyd --name="ttyd" -- -p 7685 -t fontSize=17 -t disableLeaveAlert=true -t rendererType=webgl bash
-  echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] 网页终端启动成功 $SUCCESS\n"
+  echo -e "\n[\033[34m$(date "${TIME}")\033[0m] 网页终端启动成功 $SUCCESS\n"
 
   cd $JD_DIR/web
   npm install >/dev/null 2>&1
   pm2 start ecosystem.config.js
   cd $JD_DIR
-  echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] 控制面板启动成功 $SUCCESS\n"
+  echo -e "\n[\033[34m$(date "${TIME}")\033[0m] 控制面板启动成功 $SUCCESS\n"
   echo -e "Tips: 如未修改用户名密码，则初始用户名为：admin，初始密码为：admin"
   echo -e "      请访问 http://<IP>:5678 登陆控制面板并修改配置，第一次登录会自动修改初始密码"
 elif [[ ${ENABLE_WEB_PANEL} == false ]]; then
   echo -e "已设置为不自动启动控制面板"
 fi
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➄ 控制面板和网页终端结束 -----\n"
+echo -e "\n[\033[34m$(date "${TIME}")\033[0m] ----- ➄ 控制面板和网页终端结束 -----\n"
 
 ## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 第 六 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 预装环境开始 -----\n"
+echo -e "\n[\033[34m$(date "${TIME}")\033[0m] ----- ➅ 预装环境开始 -----\n"
 if [[ ${ENABLE_ALL_ENV} == true ]]; then
   $ContrlCmd env install
 else
   echo -e "已设置为不在容器启动时安装环境包\n"
 fi
-echo -e "[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] ----- ➅ 预装环境结束 -----\n"
+echo -e "[\033[34m$(date "${TIME}")\033[0m] ----- ➅ 预装环境结束 -----\n"
 
 echo -e "..."
 sleep 1
@@ -101,7 +102,7 @@ if [ "${1#-}" != "${1}" ] || [ -z "$(command -v "${1}")" ]; then
   set -- node "$@"
 fi
 
-echo -e "\n[\033[34m$(date "+%Y-%m-%d %H:%M:%S")\033[0m] \033[32m容器启动成功\033[0m\n"
+echo -e "\n[\033[34m$(date "${TIME}")\033[0m] \033[32m容器启动成功\033[0m\n"
 echo -e "Tips: 请退出查看日志"
 /usr/bin/mitmdump -p 5900 -s mproxy.py --set block_global=false
 exec "$@"
