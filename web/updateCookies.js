@@ -97,8 +97,7 @@ const updateLocalCookie = (cookie,remarks) => {
                 if (
                     lineNext.match(/上次更新：/)
                 ) {
-                    const bz = lineNext.split('备注：')[1];
-                    lines[i + 1] = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', bz ? bz : remarks].join('');
+                    lines[i + 1] = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', remarks].join('');
                 } else {
                     const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', remarks].join('');
                     lines.splice(lastIndex + 1, 0, newLine);
@@ -130,7 +129,7 @@ const updateLocalCookie = (cookie,remarks) => {
 const updateCookies = async (pt_pin) => {
     for (const account of globalOptions.accountsList) {
         if (pt_pin === account.pt_pin) {
-            let remarks = decodeURIComponent(account.remarks);
+            let remarks = decodeURIComponent(account.remarks || '无');
             let headerMsg = `Cookie => [${pt_pin}] `;
             if (account.ws_key && account.ws_key !== "") {
                 let success = false;
