@@ -51,6 +51,8 @@ def updateCookie():
                         else:
                             file_data += line
                     else:
+                        token = "pt_key={};pt_pin={};".format(pins.get("pt_key"), pin)
+                        save_pt_key(pin, token)
                         file_data += line
                 else:
                     file_data += line
