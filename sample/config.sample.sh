@@ -1,6 +1,6 @@
-## Version: v1.03.1
-## Date: 2021-09-17
-## Update Content: \n修正部分注释内容
+## Version: v1.04.0
+## Date: 2021-09-22
+## Update Content: \n修改部分推送通知类和项目功能类环境变量
 
 ## 上面版本号中，如果第2位数字有变化，那么代表增加了新的参数，如果只有第3位数字有变化，仅代表更新了注释，没有增加新的参数，可更新可不更新
 
@@ -120,7 +120,6 @@ OwnRepoPath2=""
 ##     https://ghproxy.com/https://github.com/sunsem/qx/raw/main/z_dida.js
 ## )
 OwnRawFile=(
-
 )
 
 ################################## 定义是否自动增加或自动删除其他开发者仓库脚本的定时任务（选填） ##################################
@@ -147,12 +146,12 @@ ExtraShellSyncUrl=""
 
 ################################## 定义更新账号成功后是否推送通知（选填） ##################################
 ## 当使用 WSKEY 成功更新 Cookie 后是否推送通知，默认不推送，如想要接收推送通知提醒请赋值为 "true"
-AccountUpdateNotify=""
+EnableCookieUpdateNotify=""
 
 ################################## 定义远程执行下载脚本并执行完毕后是否删除（选填） ##################################
 ## 当远程执行 task <url> raw 任务执行完毕后是否删除脚本（下载的脚本默认存放在 scripts 目录），即是否本地保存执行的脚本
 ## 默认不删除，如想要自动删除请赋值为 "true"
-RawFilesAutoDel=""
+AutoDelRawFiles=""
 
 ################################## 定义执行脚本时是否启用代理（选填） ##################################
 ## global-agent (仅支持 js 脚本)
@@ -207,7 +206,7 @@ export SCKEY_WECOM_URL=""
 export BARK_PUSH=""
 ## 下方填写推送声音设置，例如choo，具体值请在bark-推送铃声-查看所有铃声
 export BARK_SOUND=""
-## 下方填写推送消息分组，默认为 "JDHelloWorld"，推送成功后可以在bark-历史消息-右上角文件夹图标查看
+## 下方填写推送消息分组，默认为 "HelloWorld"，推送成功后可以在bark-历史消息-右上角文件夹图标查看
 export BARK_GROUP=""
 
 
@@ -280,11 +279,16 @@ export PUSH_PLUS_USER=""
 ## 官方教程：https://docs.go-cqhttp.org/api/
 ## 官方搭建教程：https://docs.go-cqhttp.org/guide/quick_start.html
 ## 需要自建服务，默认监听地址：127.0.0.1:5700，下方填写您服务的监听地址
-export go_cqhttp_url=""
+export GO_CQHTTP_URL=""
 ## 下方填写接收消息的QQ或QQ群
-export go_cqhttp_qq=""
+export GO_CQHTTP_QQ=""
 ## 下方填写 "send_private_msg" 或 "send_group_msg" 的值
-export go_cqhttp_method=""
+export GO_CQHTTP_METHOD=""
+## 下方填写分开推送的脚本名，如需使用请赋值并自行解除下一行的注释
+export GO_CQHTTP_SCRIPTS=""
+## 下方填写外网扫码地址，如需使用请赋值并自行解除下一行的注释
+export GO_CQHTTP_LINK=""
+
 
 
 

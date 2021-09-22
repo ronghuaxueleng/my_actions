@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-20
+## Modified: 2021-09-22
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -242,7 +242,7 @@ function Npm_Install_1() {
     local CurrentDir=$(pwd)
     local WorkDir=$1
     cd $WorkDir
-    echo -e "$WORKING 运行 npm install ...\n"
+    echo -e "\n$WORKING 运行 npm install ...\n"
     npm install
     [[ $? -ne 0 ]] && echo -e "\n$ERROR 依赖安装失败，请进入 $WorkDir 目录后手动运行 npm install ...\n"
     cd $CurrentDir

@@ -7,6 +7,7 @@
 
 var express = require('express');
 var session = require('express-session');
+var FileStore = require('session-file-store')(session);
 var compression = require('compression');
 var bodyParser = require('body-parser');
 var got = require('got');
@@ -442,14 +443,20 @@ function shouldCompress(req, res) {
     // fallback to standard filter function
     return compression.filter(req, res);
 }
+let fileStoreOptions = {
+    path: "./sessions",
+    fileExtension: ".json",
+    ttl: 24*60*60
+};
 
 app.use(
     session({
+        store: new FileStore(fileStoreOptions),
         secret: 'secret',
-        name: `connect-${random(8)}`,
-        resave: false,
+        name: `panel-connect-name`,
+        resave: true,
         saveUninitialized: true,
-        cookie: { maxAge: 8 * 60 * 60 * 1000 },
+        cookie: { maxAge: fileStoreOptions.ttl * 1000 },
     })
 );
 app.use(bodyParser.json({
@@ -827,7 +834,7 @@ app.post('/api/auth', async function (request, response) {
             }
             con['authErrorCount'] = 0;
             //记录本次登录信息
-            ip2Address(getClientIP(request)).then(({ip, address}) => {
+            await ip2Address(getClientIP(request)).then(({ip, address}) => {
                 con.lastLoginInfo = {
                     loginIp: ip,
                     loginAddress: address,
@@ -932,8 +939,9 @@ app.get('/api/logs', function (request, response) {
         var fileList = fs.readdirSync(logPath, 'utf-8');
         var dirs = [];
         var rootFiles = [];
+        let excludeRegExp = /(.tmp)/;
         fileList.map((name, index) => {
-            if (keywords === '' || name.indexOf(keywords) > -1) {
+            if ((keywords === '' || name.indexOf(keywords) > -1) && !excludeRegExp.test(name)) {
                 let stat = fs.lstatSync(logPath + name);
                 // 是目录，需要继续
                 if (stat.isDirectory()) {

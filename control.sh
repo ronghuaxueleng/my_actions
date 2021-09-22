@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-20
+## Modified: 2021-09-22
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -244,7 +244,7 @@ function Bot_Control() {
                         List_All_Processes
                         local ServiceNewStatus=$(cat $FilePm2List | grep "jbot" -w | awk -F '|' '{print$10}')
                         if [[ ${ServiceNewStatus} == "online" ]]; then
-                            echo -e "\n$COMPLETE 已重启\n"
+                            echo -e "\n$COMPLETE Telegram Bot 已重启\n"
                         else
                             echo -e "\n$ERROR 重启失败，请检查原因后重试！\n"
                         fi
@@ -254,7 +254,7 @@ function Bot_Control() {
                         List_All_Processes
                         local ServiceNewStatus=$(cat $FilePm2List | grep "jbot" -w | awk -F '|' '{print$10}')
                         if [[ ${ServiceNewStatus} == "online" ]]; then
-                            echo -e "\n$COMPLETE 已启动\n"
+                            echo -e "\n$COMPLETE Telegram Bot 已启动\n"
                         else
                             echo -e "\n$ERROR 启动失败，请检查原因后重试！\n"
                         fi

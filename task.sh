@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-20
+## Modified: 2021-09-22
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -562,7 +562,7 @@ function Run_RawScript() {
             esac
             ;;
         esac
-        [[ ${RawFilesAutoDel} == true ]] && rm -rf "$ScriptsDir/${ScriptName}"
+        [[ ${AutoDelRawFiles} == true ]] && rm -rf "$ScriptsDir/${ScriptName}"
     else
         [ -f "$ScriptsDir/${ScriptName}.new" ] && rm -rf "$ScriptsDir/${ScriptName}.new"
         echo -e "\n$ERROR 脚本 ${ScriptName} 下载失败，请检查 URL 地址是否正确或网络连通性问题..."
@@ -776,7 +776,7 @@ function Cookies_Control() {
                     esac
                     ## 推送通知
                     if [ -f $FileSendMark ]; then
-                        [[ ${AccountUpdateNotify} == true ]] && Notify "账号更新结果通知" "$(cat $FileSendMark)"
+                        [[ ${EnableCookieUpdateNotify} == true ]] && Notify "账号更新结果通知" "$(cat $FileSendMark)"
                         rm -rf $FileSendMark
                     fi
                 else
