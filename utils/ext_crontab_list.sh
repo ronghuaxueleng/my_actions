@@ -8,5 +8,5 @@
 0 1 * * * bash /jd/submitme.sh >> /jd/log/submitme.log 2>&1
 # 更新cookie
 2 7 * * * python updateConfig.py /jd/config/config.sh >> /jd/log/updateCookie.py.log 2>&1
-# 自动更新Cookie(需要配置wskey)
-#3 7 * * * task cookie update >/dev/null 2>&1
+#获取助力码
+58 20 * * * task jd_get_share_code_4_bot >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
