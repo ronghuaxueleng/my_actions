@@ -1,25 +1,25 @@
 /*
- 9.22~9.30 女神狂欢 大牌盛典 [jd_opencardWG.js]
+ 女神狂欢 大牌盛典 [jd_opencardWG.js]
  邀请一人20豆 被邀请也有20豆(有可能没有豆
  开卡 抽奖可能获得30京豆(有可能有抽到空气💨
  关注10京豆 (有可能是空气💨
  第一个账号助力作者 其他依次助力CK1
- 入口：https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/6531736?activityId=fids98g8f798sd787f7gf0g9d8sd9f8s&shareUuid=90ba0f4937e74181a134a75acfad5758
+ 入口：(https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/6531736?activityId=fids98g8f798sd787f7gf0g9d8sd9f8s&shareUuid=90ba0f4937e74181a134a75acfad5758)
  IOS等用户直接用NobyDa的jd cookie
  ============Quantumultx===============
  [task_local]
- #9.22~9.30 女神狂欢 大牌盛典
- 40 5,21 22-30 9 * https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardWG.js, tag=9.22~9.30 女神狂欢 大牌盛典, enabled=true
+ #女神狂欢 大牌盛典
+ 40 5,21 * 9 * https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardWG.js, tag=女神狂欢 大牌盛典, enabled=true
  ================Loon==============
  [Script]
- cron "40 5,21 22-30 9 *" script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardWG.js,tag=9.22~30 女神狂欢 大牌盛典
+ cron "40 5,21 * 9 *" script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardWG.js,tag=女神狂欢 大牌盛典
  ===============Surge=================
- 9.22~9.30 女神狂欢 大牌盛典 = type=cron,cronexp="40 5,21 22-30 9 *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardWG.js
+ 女神狂欢 大牌盛典 = type=cron,cronexp="40 5,21 * 9 *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardWG.js
  ============小火箭=========
- 9.22~9.30 女神狂欢 大牌盛典 = type=cron,script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardWG.js, cronexpr="40 5,21 22-30 9 *", timeout=3600, enable=true
+ 女神狂欢 大牌盛典 = type=cron,script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardWG.js, cronexpr="40 5,21 * 9 *", timeout=3600, enable=true
 
 */
-const $ = new Env("9.22~30 女神狂欢 大牌盛典");
+const $ = new Env('女神狂欢 大牌盛典 9.22-30');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
@@ -43,7 +43,7 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    $.log(`入口：\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/6531736?activityId=fids98g8f798sd787f7gf0g9d8sd9f8s&shareUuid=90ba0f4937e74181a134a75acfad5758`);
+    $.log(`9.22-9.30 女神狂欢 大牌盛典 入口：\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/6531736?activityId=fids98g8f798sd787f7gf0g9d8sd9f8s&shareUuid=90ba0f4937e74181a134a75acfad5758`);
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
