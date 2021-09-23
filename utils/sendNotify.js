@@ -188,12 +188,11 @@
    try {
      fs.accessSync('/jd/config/account.json')
      remarks = JSON.parse(fs.readFileSync('/jd/config/account.json').toString())
-     qqnumber = JSON.parse(fs.readFileSync('/jd/config/account.json').toString())
    } catch (e) {
    }
    if (remarks) {
      for (let account of remarks) {
-       if (account['pt_pin'] && account['qqnumber'] && account['remarks'] ){
+       if (account['pt_pin'] && account['remarks'] ){
          text = text.replace(new RegExp(account['pt_pin'], 'gm'), account['remarks'])
          desp = desp.replace(new RegExp(account['pt_pin'], 'gm'), account['remarks'])    
        }
@@ -285,12 +284,11 @@
      try {
        fs.accessSync('/jd/config/account.json')
        remarks = JSON.parse(fs.readFileSync('/jd/config/account.json').toString())
-       qqnumber = JSON.parse(fs.readFileSync('/jd/config/account.json').toString())
      } catch (e) {
      }
      if (remarks) {
        for (let account of remarks) {
-         if (desp.indexOf(account['remarks']) !=-1) {qqnumber = account['qqnumber']}      
+         if (desp.indexOf(account['remarks']) !=-1) {qqnumber = account['qqnumber']}
        }
      }
      let expire = RegExp ("重新登录");
