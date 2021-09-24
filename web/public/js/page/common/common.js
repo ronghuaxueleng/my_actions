@@ -159,10 +159,10 @@ let MenuTools = {
             customClass: 'gb i',
             path: "/run"
         }, {
-            title: "终端",
+            title: "命令行",
             faIcon: "fa-terminal",
             titleFaIcon: "fa-arrow-right",
-            subText: "WebSSH 命令行",
+            subText: "网页共享终端",
             customClass: 'gb b',
             path: "/terminal"
         }, {

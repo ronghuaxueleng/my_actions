@@ -373,6 +373,7 @@
      console.log('您未提供go-cqhttp所需的 GO_CQHTTP_URL 、GO_CQHTTP_QQ 、GO_CQHTTP_METHOD，取消go-cqhttp推送消息通知🚫');
      // resolve()
    }
+  console.log('')
  }
  
  function CoolPush(text, desp) {
@@ -427,13 +428,13 @@
            } else {
              data = JSON.parse(data);
              if (data.code === 200) {
-               console.log(`\n酷推发送${pushMode(QQ_MODE)}通知消息成功🎉\n`)
+               console.log(`\nQQ酷推发送${pushMode(QQ_MODE)}通知消息成功🎉\n`)
              } else if (data.code === 400) {
                console.log(`\nQQ酷推(Cool Push)发送${pushMode(QQ_MODE)}推送失败：${data.msg}\n`)
              } else if (data.code === 503) {
                console.log(`\nQQ酷推出错，${data.message}：${data.data}\n`)
              }else{
-               console.log(`\n酷推推送异常: ${JSON.stringify(data)}`);
+               console.log(`\nQQ酷推推送异常: ${JSON.stringify(data)}`);
              }
            }
          } catch (e) {
@@ -453,7 +454,7 @@
    return new Promise(resolve => {
      if (BARK_PUSH) {
        const options = {
-         url: `${BARK_PUSH}/${encodeURIComponent(text)}/${encodeURIComponent(desp)}?sound=${BARK_SOUND}&${querystring.stringify(params)}`,
+         url: `${BARK_PUSH}/${encodeURIComponent(text)}/${encodeURIComponent(desp)}?sound=${BARK_SOUND}&group=${BARK_GROUP}&${querystring.stringify(params)}`,
          headers: {
            'Content-Type': 'application/x-www-form-urlencoded'
          },

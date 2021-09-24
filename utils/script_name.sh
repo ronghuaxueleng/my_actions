@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-## Update: 2021-09-19
+## Update: 2021-09-24
 
 case $1 in
 jd_IndustryLottery.ts)
@@ -61,6 +61,9 @@ jd_jxmc.ts)
     ;;
 jd_jxmc_stock.ts)
     Name="京喜牧场兑换新品通知"
+    ;;
+jd_mofang.ts)
+    Name="京东小魔方"
     ;;
 jd_moneyTree.ts)
     Name="京东摇钱树"

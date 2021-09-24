@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-22
+## Modified: 2021-09-24
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -649,6 +649,12 @@ function Cookies_Control() {
                 ExitStatus=$?
             else
                 cd $SignDir
+                if [ $(date "+%H") -eq 9 -o $(date "+%H") -eq 21 ] && [ $(date "+%S") -eq 00 ]; then
+                    local Tmp=$((${RANDOM} % 10))
+                    echo -en "\n检测到当前处于整点，已随机延迟，$Tmp 秒后开始执行..."
+                    sleep $Tmp
+                    echo ''
+                fi
                 git fetch --all >/dev/null
                 ExitStatus=$?
                 git reset --hard origin/master >/dev/null
@@ -657,6 +663,7 @@ function Cookies_Control() {
 
         ## 全部更新
         function UpdateNormal() {
+            local UserNum Tmp LogFile
             local pt_pin_array=(
                 $(cat $FileAccountConf | perl -pe '{s|\}\,|\n|g; s|\"\,|\"\,\n|g}' | grep -F "\"pt_pin\":" | awk -F '\"' '{print$4}' | sed '/^$/d')
             )
@@ -665,12 +672,12 @@ function Cookies_Control() {
                 echo -e "\n$WORKING 检测到 \033[34m${#pt_pin_array[@]}\033[0m 个账号，开始更新...\n"
                 echo -e "[$(date "${TIME}")] 脚本执行开始\n" >>${LogFile}
                 for ((i = 1; i <= ${#pt_pin_array[@]}; i++)); do
-                    local UserNum=$((i - 1))
+                    UserNum=$((i - 1))
                     export JD_PT_PIN=${pt_pin_array[$UserNum]}
                     node updateCookies.js &>>${LogFile} &
                     wait
                     ## 写入至推送通知文件
-                    local Tmp=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|\-|\.\*|g;}')
+                    Tmp=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|\-|\.\*|g;}')
                     grep "Cookie => \[$Tmp\]" ${LogFile} | tee -a $FileSendMark
                 done
                 echo -e "\n[$(date "${TIME}")] 脚本执行结束" >>${LogFile}
@@ -680,8 +687,9 @@ function Cookies_Control() {
                 ## 更新后检测
                 echo -e "\n$WORKING 更新后检测：\n"
                 for ((i = 1; i <= ${#pt_pin_array[@]}; i++)); do
-                    local UserNum=$((i - 1))
-                    local Tmp=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|\-|\.\*|g;}')
+                    UserNum=$((i - 1))
+                    Tmp=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|\-|\.\*|g;}')
+                    [ $(grep "Cookie => \[$Tmp\]" ${LogFile} | awk -F ' ' '{print$NF}') = "未设置ws_key不更新" ] && continue
                     if [[ $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser) ]]; then
                         if [ "$(curl -I -s --connect-timeout 5 https://bean.m.jd.com/bean/signIndex.action -w %{http_code} | tail -n1)" -eq "302" ]; then
                             if [[ $(curl -s --noproxy "*" "https://bean.m.jd.com/bean/signIndex.action" -H "cookie: $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')") ]]; then
@@ -696,8 +704,8 @@ function Cookies_Control() {
                             echo -e "${pt_pin_array[$UserNum]} 更新后检测出错 [ API 请求失败 ]" >>$FileSendMark
                         fi
                     else
-                        echo -e "${pt_pin_array[$UserNum]} 的 Cookie 无效 \033[31m[X]\033[0m"
-                        echo -e "${pt_pin_array[$UserNum]} 更新后的 Cookie 无效 [X]" >>$FileSendMark
+                        echo -e "${pt_pin_array[$UserNum]} 的 Cookie 不存在 \033[31m[X]\033[0m"
+                        echo -e "${pt_pin_array[$UserNum]} 更新后的 Cookie 不存在 [X]" >>$FileSendMark
                     fi
                     ## 打印 Cookie
                     # echo "$(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')"
@@ -711,6 +719,7 @@ function Cookies_Control() {
         ## 指定账号更新
         function UpdateSpecify() {
             local UserNum=$1
+            local Tmp LogFile
             local AccountNum=Cookie$UserNum
             if [[ -z ${!AccountNum} ]]; then
                 echo -e "\n$ERROR 请确认账号是否存在！"
@@ -729,29 +738,31 @@ function Cookies_Control() {
                 ## 优化日志排版
                 sed -i '/更新Cookies,.*\!/d' ${LogFile}
                 ## 写入至推送通知文件
-                local Tmp=$(echo $JD_PT_PIN | perl -pe '{s|\-|\.\*|g;}')
+                Tmp=$(echo $JD_PT_PIN | perl -pe '{s|\-|\.\*|g;}')
                 grep "Cookie => \[$Tmp\]" ${LogFile} | tee -a $FileSendMark
                 ## 更新后检测
-                echo -e "\n$WORKING 更新后检测：\n"
-                if [[ $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser) ]]; then
-                    if [ "$(curl -I -s --connect-timeout 5 https://bean.m.jd.com/bean/signIndex.action -w %{http_code} | tail -n1)" -eq "302" ]; then
-                        if [[ $(curl -s --noproxy "*" "https://bean.m.jd.com/bean/signIndex.action" -H "cookie: $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')") ]]; then
-                            echo -e "$JD_PT_PIN 的 Cookie 有效 \033[32m[✔]\033[0m"
-                            echo -e "$JD_PT_PIN 更新后的 Cookie 有效 [✔]" >>$FileSendMark
+                if [ $(grep "Cookie => \[$Tmp\]" ${LogFile} | awk -F ' ' '{print$NF}') != "未设置ws_key不更新" ]; then
+                    echo -e "\n$WORKING 更新后检测：\n"
+                    if [[ $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser) ]]; then
+                        if [ "$(curl -I -s --connect-timeout 5 https://bean.m.jd.com/bean/signIndex.action -w %{http_code} | tail -n1)" -eq "302" ]; then
+                            if [[ $(curl -s --noproxy "*" "https://bean.m.jd.com/bean/signIndex.action" -H "cookie: $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')") ]]; then
+                                echo -e "$JD_PT_PIN 的 Cookie 有效 \033[32m[✔]\033[0m"
+                                echo -e "$JD_PT_PIN 更新后的 Cookie 有效 [✔]" >>$FileSendMark
+                            else
+                                echo -e "$JD_PT_PIN 的 Cookie 无效 \033[31m[X]\033[0m"
+                                echo -e "$JD_PT_PIN 更新后的 Cookie 无效 [X]" >>$FileSendMark
+                            fi
                         else
-                            echo -e "$JD_PT_PIN 的 Cookie 无效 \033[31m[X]\033[0m"
-                            echo -e "$JD_PT_PIN 更新后的 Cookie 无效 [X]" >>$FileSendMark
+                            echo -e "$JD_PT_PIN 检测出错 \033[31m[ API 请求失败 ]\033[0m"
+                            echo -e "$JD_PT_PIN 更新后检测出错 [ API 请求失败 ]" >>$FileSendMark
                         fi
                     else
-                        echo -e "$JD_PT_PIN 检测出错 \033[31m[ API 请求失败 ]\033[0m"
-                        echo -e "$JD_PT_PIN 更新后检测出错 [ API 请求失败 ]" >>$FileSendMark
+                        echo -e "$JD_PT_PIN 的 Cookie 不存在 \033[31m[X]\033[0m"
+                        echo -e "$JD_PT_PIN 更新后的 Cookie 不存在 [X]" >>$FileSendMark
                     fi
-                else
-                    echo -e "$JD_PT_PIN 的 Cookie 无效 \033[31m[X]\033[0m"
-                    echo -e "$JD_PT_PIN 更新后的 Cookie 无效 [X]" >>$FileSendMark
-                fi
                 ## 打印 Cookie
                 # echo "$(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')"
+                fi
                 echo -e "\n$COMPLETE 更新完成\n"
             else
                 echo -e "\n$ERROR 该账号没有配置 ws_key ！\n"
@@ -775,10 +786,11 @@ function Cookies_Control() {
                         ;;
                     esac
                     ## 推送通知
-                    if [ -f $FileSendMark ]; then
+                    [ -f $FileSendMark ] && sed -i "/未设置ws_key不更新/d" $FileSendMark
+                    if [ -s $FileSendMark ]; then
                         [[ ${EnableCookieUpdateNotify} == true ]] && Notify "账号更新结果通知" "$(cat $FileSendMark)"
-                        rm -rf $FileSendMark
                     fi
+                    [ -f $FileSendMark ] && rm -rf $FileSendMark
                 else
                     echo -e "\n$ERROR 签名更新失败，请检查您的网络环境后重试！\n"
                 fi
@@ -875,7 +887,6 @@ function Process_Monitor() {
 ## 列出本地脚本清单
 function List_Local_Scripts() {
     local ScriptType Tmp1 Tmp2
-    local ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|JDJR|validate|ZooFaker|MovementFaker|tencentscf|api_test|app\.|main\.|jd_update\.js|jd_env_copy\.js|index\.js|\.json\b|ql\.js|jdEnv|jd_enen\.js|jd_disable\.py"
     case $Arch in
     armv7l | armv6l)
         ScriptType="\.js\b"

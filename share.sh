@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-20
+## Modified: 2021-09-24
 
 ## 目录
 ShellDir=${JD_DIR}
@@ -68,6 +68,8 @@ ERROR='[\033[31mERROR\033[0m]'
 WORKING='[\033[34m*\033[0m]'
 COMMAND_ERROR="$ERROR 命令错误，请确认后重新输入！"
 TOO_MANY_COMMANDS="$ERROR 输入命令过多，请确认后重新输入！"
+ShieldingScripts="jd_update\.js|jd_env_copy\.js|index\.js|\.json\b|ql\.js|jd_enen\.js|jd_disable\.py|jd_updateCron\.ts"
+ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|JDJR|validate|ZooFaker|MovementFaker|tencentscf|api_test|app\.|main\.|jdEnv|${ShieldingScripts}"
 
 ## URL
 GithubProxy="https://ghproxy.com/"
