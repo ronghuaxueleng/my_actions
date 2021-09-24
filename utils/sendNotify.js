@@ -193,8 +193,19 @@
    if (remarks) {
      for (let account of remarks) {
        if (account['pt_pin'] && account['remarks'] ){
-         text = text.replace(new RegExp(account['pt_pin'], 'gm'), account['remarks'])
-         desp = desp.replace(new RegExp(account['pt_pin'], 'gm'), account['remarks'])    
+        text = text.replace(new RegExp(account['pt_pin'], 'gm'), account['remarks'])
+        desp = desp.replace(new RegExp(account['pt_pin'], 'gm'), account['remarks'])
+
+         // 适配中文转码的pt_pin
+         try {
+          const decode = decodeURI(account['pt_pin']);
+          if (decode !== account['pt_pin']) {
+            text = text.replace(new RegExp(decode, 'gm'), account['remarks'])
+            desp = desp.replace(new RegExp(decode, 'gm'), account['remarks'])
+          }
+         } catch (error) {
+          console.error(`pt_pin：${account['pt_pin']} 解码报错!`)
+         }
        }
        
      }
