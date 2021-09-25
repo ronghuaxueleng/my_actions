@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-22
+## Modified: 2021-09-25
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -200,8 +200,9 @@ function Panel_Control() {
         if [ ! -f $FileAuth ]; then
             cp -f $FileAuthSample $FileAuth
         fi
+        [ ! -x /usr/bin/jq ] && apk --no-cache add -f jq ## 安装 jq 指令，暂时命令后期删除
         echo ''
-        cat $FileAuth | perl -pe '{s|\,|\n|g; s|["{}]||g; s|user:|[用户名]：|g; s|password:|[密码]：|g; s|cookieApiToken:|[更新接口Token]：|g; s|lastLoginInfo:|\n最后一次登录信息:\n|g; s|loginIp:|[ IP 地址]：|g; s|loginAddress:|[地理位置]：|g; s|loginTime:|[登录时间]：|g; s|authErrorCount:|[认证失败次数]：|g;}'
+        cat $FileAuth | jq '.' | perl -pe '{s|\"user\"|[用户名]|g; s|\"password\"|[密码]|g; s|\"cookieApiToken\"|[更新接口Token]|g; s|\"lastLoginInfo\"|\n    最后一次登录信息|g; s|\"loginIp\"|[ IP 地址]|g; s|\"loginAddress\"|[地理位置]|g; s|\"loginTime\"|[登录时间]|g; s|\"authErrorCount\"|[认证失败次数]|g; s|[{},"]||g;}'
         echo -e '\n'
         ;;
     respwd)
@@ -464,7 +465,7 @@ function Environment_Deployment() {
             npm install -g date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got global-agent
             ;;
         *)
-            apk --no-cache add -f python3 py3-pip sudo build-base pkgconfig pixman-dev cairo-dev pango-dev
+            apk --no-cache add -f python3 py3-pip sudo build-base pkgconfig pixman-dev cairo-dev pango-dev jq
             pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
             pip3 install --upgrade pip
             pip3 install requests
