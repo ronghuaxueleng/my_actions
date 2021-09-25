@@ -369,6 +369,45 @@ let panelUtils = {
     }
 }
 
+var userAgentTools = {
+    Android: function (userAgent) {
+        return (/android/i.test(userAgent.toLowerCase()));
+    },
+    BlackBerry: function (userAgent) {
+        return (/blackberry/i.test(userAgent.toLowerCase()));
+    },
+    iOS: function (userAgent) {
+        return (/iphone|ipad|ipod/i.test(userAgent.toLowerCase()));
+    },
+    iPhone: function (userAgent) {
+        return (/iphone/i.test(userAgent.toLowerCase()));
+    },
+    iPad: function (userAgent) {
+        return (/ipad/i.test(userAgent.toLowerCase()));
+    },
+    iPod: function (userAgent) {
+        return (/ipod/i.test(userAgent.toLowerCase()));
+    },
+    Opera: function (userAgent) {
+        return (/opera mini/i.test(userAgent.toLowerCase()));
+    },
+    Windows: function (userAgent) {
+        return (/iemobile/i.test(userAgent.toLowerCase()));
+    },
+    Pad: function (userAgent) {
+        return (/pad|m2105k81ac/i.test(userAgent.toLowerCase()));
+    },
+    mobile: function (userAgent) {
+        if (userAgentTools.Pad(userAgent)) {
+            return false;
+        }
+        return (userAgentTools.Android(userAgent) || userAgentTools.iPhone(userAgent) || userAgentTools.BlackBerry(userAgent));
+    }
+};
+
+// codeMirror指定当前滚动到视图中内容上方和下方要渲染的行数，pc端适当调大，便于文本搜索
+var viewportMargin = userAgentTools.mobile(navigator.userAgent) ? 10 : 1000;
+
 // window.onresize = function(){
 //     window.location.reload();
 // }

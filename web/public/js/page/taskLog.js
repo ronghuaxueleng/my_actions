@@ -7,7 +7,7 @@ $(document).ready(function () {
         lineWrapping: false,
         styleActiveLine: true,
         matchBrackets: true,
-        viewportMargin: Infinity,
+        viewportMargin: viewportMargin,
         readOnly: true,
         mode: 'shell',
         theme: themeChange.getAndUpdateEditorTheme(),
