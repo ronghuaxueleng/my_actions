@@ -1,25 +1,10 @@
 
 /**
-集魔方[jd_mofang.js]
-入口：首页搜索：京东小魔方
-
-============Quantumultx===============
-[task_local]
-#集魔方9.24~29
-5 1 * 9 * https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_mofang.js, tag=集魔方9.24~29, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
-
-================Loon==============
-[Script]
-cron "5 1 * 9 *" script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_mofang.js,tag=集魔方9.24~29
-
-===============Surge=================
-集魔方9.24~29 = type=cron,cronexp="5 1 * 9 *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_mofang.js
-
-============小火箭=========
-集魔方9.24~29 = type=cron,script-path=https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_mofang.js, cronexpr="5 1 * 9 *", timeout=3600, enable=true
- 
+集魔方
+cron 11 10 * * * jd_mofang.js
+TG:https://t.me/sheeplost
 */
-const $ = new Env('集魔方9.24~29');
+const $ = new Env('集魔方');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -40,8 +25,9 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
     return;
   }
+  UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
   for (let i = 0; i < cookiesArr.length; i++) {
-    UA = `jdapp;iPhone;10.0.8;14.6;${getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')};network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214222493;appBuild/168841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16E158;supportJDSHWK/1`;
+    UA = `jdapp;iPhone;10.0.8;14.6;${UUID};network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214222493;appBuild/168841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16E158;supportJDSHWK/1`;
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
