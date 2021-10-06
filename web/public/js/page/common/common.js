@@ -96,14 +96,14 @@ let themeChange = {
 let MenuTools = {
     menuList: [{
         title: "编辑配置",
-        faIcon: "fa-home",
+        faIcon: "fa-pencil-square-o",
         path: "#",
         customClass: "highlight",
         subMenuCustomClass: "double",
         bottomContent: '<i class="fa fa-comments"></i> 你知道我们有 Telegram 频道吗? <a href="https://t.me/jdhelloworld">立即关注</a>',
         children: [{
             title: "配置文件",
-            faIcon: "fa-pencil-square-o",
+            faIcon: "fa-home",
             titleFaIcon: "fa-arrow-right",
             subText: "编辑环境变量",
             customClass: 'gb a',
@@ -124,7 +124,7 @@ let MenuTools = {
             path: "/crontab"
         }, {
             title: "自定义脚本",
-            faIcon: "fa-send-o",
+            faIcon: "fa-file-text-o",
             titleFaIcon: "fa-arrow-right",
             subText: "编辑 Extra 脚本",
             customClass: 'gb h',
@@ -133,7 +133,7 @@ let MenuTools = {
             title: "机器人配置",
             faIcon: "fa-telegram",
             titleFaIcon: "fa-arrow-right",
-            subText: "编辑 Telegram Bot 配置文件",
+            subText: "编辑 Bot 配置文件",
             customClass: 'gb',
             path: "/bot"
         }, {
@@ -146,7 +146,7 @@ let MenuTools = {
         }]
     }, {
         title: "执行工具",
-        faIcon: "fa-list-ul",
+        faIcon: "fa-list-alt",
         path: "#",
         customClass: "",
         subMenuCustomClass: "",
@@ -155,7 +155,7 @@ let MenuTools = {
             title: "快速执行",
             faIcon: "fa-play-circle",
             titleFaIcon: "fa-arrow-right",
-            subText: "一键执行部分命令和特定活动脚本",
+            subText: "一键执行相关命令和特定脚本",
             customClass: 'gb i',
             path: "/run"
         }, {
@@ -184,7 +184,7 @@ let MenuTools = {
             title: "查询日志",
             faIcon: "fa-history",
             titleFaIcon: "fa-arrow-right",
-            subText: "查看详细的活动脚本运行日志",
+            subText: "查看脚本运行日志",
             customClass: 'gb d',
             path: "/taskLog"
         }, {
@@ -198,7 +198,7 @@ let MenuTools = {
             title: "查看仓库",
             faIcon: "fa-github",
             titleFaIcon: "fa-external-link",
-            subText: "浏览 Scripts 仓库代码托管网站",
+            subText: "浏览 Scripts 仓库的代码托管网站",
             customClass: '',
             path: "javascript:window.open('https://github.com/Aaron-lv/sync')"
         }]

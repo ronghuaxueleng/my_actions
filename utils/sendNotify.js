@@ -177,12 +177,16 @@
    GO_CQHTTP_LINK = process.env.GO_CQHTTP_LINK;
  }
 
+ let end_txt = "本通知 By：https://hub.docker.com/r/supermanito/helloworld";
+ if (process.env.END_TXT) {
+   end_txt = process.env.END_TXT;
+ }
  let tg_only = false;
  if (process.env.TG_ONLY) {
    tg_only = process.env.TG_ONLY;
  }
  
- async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By：https://hub.docker.com/r/supermanito/helloworld') {
+ async function sendNotify(text, desp, params = {}, author = '\n\n' + end_txt) {
    //提供6种通知
    desp += author;//增加作者信息，防止被贩卖等
    try {
@@ -384,7 +388,6 @@
      console.log('您未提供go-cqhttp所需的 GO_CQHTTP_URL 、GO_CQHTTP_QQ 、GO_CQHTTP_METHOD，取消go-cqhttp推送消息通知🚫');
      // resolve()
    }
-  console.log('')
  }
  
  function CoolPush(text, desp) {
@@ -441,11 +444,11 @@
              if (data.code === 200) {
                console.log(`\nQQ酷推发送${pushMode(QQ_MODE)}通知消息成功🎉\n`)
              } else if (data.code === 400) {
-               console.log(`\nQQ酷推(Cool Push)发送${pushMode(QQ_MODE)}推送失败：${data.msg}\n`)
+               console.log(`\nQQ酷推(Cool Push)发送${pushMode(QQ_MODE)}推送失败：${data.msg}！\n`)
              } else if (data.code === 503) {
                console.log(`\nQQ酷推出错，${data.message}：${data.data}\n`)
              }else{
-               console.log(`\nQQ酷推推送异常: ${JSON.stringify(data)}`);
+               console.log(`\nQQ酷推推送异常: ${JSON.stringify(data)}\n`);
              }
            }
          } catch (e) {
@@ -792,7 +795,7 @@
        // 校验传入的IGOT_PUSH_KEY是否有效
        const IGOT_PUSH_KEY_REGX = new RegExp("^[a-zA-Z0-9]{24}$")
        if(!IGOT_PUSH_KEY_REGX.test(IGOT_PUSH_KEY)) {
-         console.log('\n您所提供的IGOT_PUSH_KEY无效\n')
+         console.log('\n您所提供的 IGOT_PUSH_KEY 无效！\n')
          resolve()
          return
        }
@@ -856,7 +859,7 @@
            } else {
              data = JSON.parse(data);
              if (data.code === 200) {
-               console.log(`\npush+发送${PUSH_PLUS_USER ? '一对多' : '一对一'}通知消息完成。\n`)
+               console.log(`\npush+发送${PUSH_PLUS_USER ? '一对多' : '一对一'}通知消息成功🎉\n`)
              } else {
                console.log(`\npush+发送${PUSH_PLUS_USER ? '一对多' : '一对一'}通知消息失败：${data.msg}\n`)
              }

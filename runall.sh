@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-24
+## Modified: 2021-10-05
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -12,7 +12,7 @@ function ChooseRunMod() {
     echo -e '2)   迅速执行'
     echo -e '3)   指定执行'
     while true; do
-        read -p "$(echo -e '\n\033[34m└ 请选择执行类型 [ 1-3 ]：\033[0m')" Input1
+        read -p "$(echo -e '\n\033[1m└ 请选择执行类型 [ 1-3 ]：\033[0m')" Input1
         case $Input1 in
         1)
             RunMode="now"
@@ -24,7 +24,7 @@ function ChooseRunMod() {
             ;;
         3)
             while true; do
-                read -p "$(echo -e '\n\033[34m  └ 请输入要执行的账号（序号）：\033[0m')" Input2
+                read -p "$(echo -e '\n\033[1m  └ 请输入要执行的账号（序号）：\033[0m')" Input2
                 case $Input2 in
                 [1-9] | [1-9][0-9] | [1-9][0-9][0-9])
                     Import_Config_Not_Check
@@ -77,7 +77,7 @@ function Main() {
     echo -e '2)   Scripts 目录下的所有脚本'
     echo -e '3)   指定路径下的所有脚本（非递归）'
     while true; do
-        read -p "$(echo -e '\n\033[34m└ 请选择需要执行的脚本范围 [ 1-3 ]：\033[0m')" Input3
+        read -p "$(echo -e '\n\033[1m└ 请选择需要执行的脚本范围 [ 1-3 ]：\033[0m')" Input3
         case $Input3 in
         1)
             [ -d "$ScriptsDir/.git" ] && cd $ScriptsDir && git ls-files | egrep "${ScriptType}" | grep -E "j[drx]_" | grep -Ev "/|${ShieldingKeywords}" >$FileTmp
@@ -99,7 +99,7 @@ function Main() {
             fi
             echo -e "\nTips：可以选择任何一个目录并非仅限于上面检测到的仓库。"
             while true; do
-                read -p "$(echo -e '\n\033[34m└ 请输入绝对路径：\033[0m')" Input4
+                read -p "$(echo -e '\n\033[1m└ 请输入绝对路径：\033[0m')" Input4
                 local AbsolutePath=$(echo "$Input4" | perl -pe "{s|/jd/||; s|^*|$ShellDir/|;}")
                 if [[ $Input4 ]] && [ -d $AbsolutePath ]; then
                     break
@@ -133,10 +133,10 @@ function Main() {
         done
         cd $CurrentDir
 
-        read -p "$(echo -e '\n\033[34m└ 请确认是否继续 [ Y/n ]：\033[0m')" Input5
+        read -p "$(echo -e '\n\033[1m└ 请确认是否继续 [ Y/n ]：\033[0m')" Input5
         [ -z ${Input5} ] && Input5=Y
         case $Input5 in
-        [Yy]*)
+        [Yy] | [Yy][Ee][Ss])
             ## 补全命令
             sed -i "s/^/$TaskCmd &/g" $FileTmp
             sed -i "s/$/& $RunMode/g" $FileTmp
@@ -155,7 +155,7 @@ function Main() {
             . $FileTmp
             echo -e "\n[$(date "+%Y-%m-%d %H:%M:%S")] 全部执行结束\n"
             ;;
-        [Nn]*)
+        [Nn] | [Nn][Oo])
             echo -e "\n$ERROR 中途退出！\n"
             ;;
         *)

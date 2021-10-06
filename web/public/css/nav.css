@@ -335,7 +335,7 @@ nav .menu-item:nth-of-type(3).highlight:hover~#sub-menu-container #sub-menu-hold
 }
 
 .bottom-container {
-    margin-top: 0.5em;
+    margin-top: 1.1em;
     grid-area: 4 / -3 / 4 / 3;
     color: #517285;
     font-weight: 550;

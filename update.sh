@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-22
+## Modified: 2021-10-05
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -146,7 +146,6 @@ function Gen_ListOwn() {
     grep -vwf $ListOwnScripts $ListCrontabUser | grep -Eq " $TaskCmd $OwnDir"
     local ExitStatus=$?
     [[ $ExitStatus -eq 0 ]] && grep -vwf $ListOwnScripts $ListCrontabUser | grep -E " $TaskCmd $OwnDir" | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" | sort -u >$ListCrontabOwnTmp
-
     rm -rf $LogTmpDir/own*.list
     for ((i = 0; i < ${#array_own_scripts_path[*]}; i++)); do
         cd ${array_own_scripts_path[i]}
@@ -179,9 +178,9 @@ function Gen_ListOwn() {
     ## 汇总去重
     Own_Scripts_Tmp=$(sort -u $ListOwnScripts)
     echo "$Own_Scripts_Tmp" >$ListOwnScripts
-
-    cat $ListOwnScripts >$ListOwnPersonal
-    [[ $ExitStatus -eq 0 ]] && cat $ListCrontabOwnTmp >>$ListOwnPersonal
+    ## 导入用户的定时
+    cat $ListOwnScripts >$ListOwnAll
+    [[ $ExitStatus -eq 0 ]] && cat $ListCrontabOwnTmp >>$ListOwnAll
 
     if [[ $ExitStatus -eq 0 ]]; then
         grep -E " $TaskCmd $OwnDir" $ListCrontabUser | egrep -v "$(cat $ListCrontabOwnTmp)" | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" | sort -u >$ListOwnUser
@@ -215,19 +214,16 @@ function Detect_Config_Version() {
     ## 识别出两个文件的版本号
     VerConfSample=$(grep " Version: " $FileConfSample | perl -pe "s|.+v((\d+\.?){3})|\1|")
     [ -f $FileConfUser ] && VerConfUser=$(grep " Version: " $FileConfUser | perl -pe "s|.+v((\d+\.?){3})|\1|")
-
     ## 删除旧的发送记录文件
     [ -f $FileSendMark ] && [[ $(cat $FileSendMark) != $VerConfSample ]] && rm -f $FileSendMark
-
     ## 识别出更新日期和更新内容
     UpdateDate=$(grep " Date: " $FileConfSample | awk -F ": " '{print $2}')
     UpdateContent=$(grep " Update Content: " $FileConfSample | awk -F ": " '{print $2}')
-
     ## 如果是今天，并且版本号不一致，则发送通知
     if [ -f $FileConfUser ] && [[ $VerConfUser != $VerConfSample ]] && [[ $UpdateDate == $(date "+%Y-%m-%d") ]]; then
         if [ ! -f $FileSendMark ]; then
             local NotifyTitle="配置文件更新通知"
-            local NotifyContent="更新日期: $UpdateDate\n用户版本: $VerConfUser\n新的版本: $VerConfSample\n更新内容: $UpdateContent\n"
+            local NotifyContent="更新日期: $UpdateDate\n当前版本: $VerConfUser\n新的版本: $VerConfSample\n更新内容: $UpdateContent\n"
             echo -e $NotifyContent
             Notify "$NotifyTitle" "$NotifyContent"
             [[ $? -eq 0 ]] && echo $VerConfSample >$FileSendMark
@@ -288,7 +284,7 @@ function Del_Cron() {
         crontab $ListCrontabUser
         Detail2=$(echo $Detail | perl -pe "s| |\\\n|g")
         echo -e "$SUCCESS 成功删除失效的定时任务\n"
-        Notify "删除失效任务通知" "成功删除以下失效的定时任务：\n$Detail2"
+        Notify "删除失效任务通知" "成功删除以下失效的定时任务：\n\n$Detail2"
     fi
 }
 
@@ -323,9 +319,9 @@ function Add_Cron_Own() {
             local FileName=$(echo $FilePath | awk -F "/" '{print $NF}')
             if [ -f $FilePath ]; then
                 if [ $FilePath = "$RawDir/$FileName" ]; then
-                    local Tmp1=$(egrep "cron|script-path|tag|\* \*|$FileName" $FilePath | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\:\_]||g;}')
+                    local Tmp1=$(grep -E "cron|script-path|tag|\* \*|$FileName" $FilePath | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\:\_]||g;}')
                     local Tmp2=$(echo "$Tmp1" | awk -F '[0-9]' '{print$1}' | perl -pe '{s| ||g;}')
-                    local cron=$(echo "$Tmp1" | perl -pe "{s|${Tmp2}||g;}" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
+                    local cron=$(echo "$Tmp1" | perl -pe "{s|${Tmp2}||g;}" | awk '{if($1~/^[0-9]{1,2}/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
                     echo "$cron $TaskCmd $FilePath" | sort -u | head -1 >>$ListCrontabOwnTmp
                 else
                     perl -ne "print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*$FileName/" $FilePath |
@@ -355,10 +351,10 @@ function Add_Cron_Notify() {
         mv ${ListCrontabUser}.mix ${ListCrontabUser}
         crontab $ListCrontabUser
         echo -e "$SUCCESS 成功添加新的定时任务\n"
-        Notify "新增任务通知" "成功添加新的定时任务（$Type）：\n$Detail"
+        Notify "新增任务通知" "成功添加新的定时任务（$Type）：\n\n$Detail"
     else
         echo -e "添加新的定时任务出错，请手动添加...\n"
-        Notify "新任务添加失败通知" "尝试自动添加以下新的定时任务出错，请手动添加（$Type）：\n$Detail"
+        Notify "新任务添加失败通知" "尝试自动添加以下新的定时任务出错，请手动添加（$Type）：\n\n$Detail"
     fi
 }
 
@@ -413,7 +409,7 @@ function Update_Own_Raw() {
             [ -f "$RawDir/${raw_file_name[$i]}.new" ] && rm -f "$RawDir/${raw_file_name[$i]}.new"
         fi
     done
-    for file in $(ls $RawDir | egrep -v "jdCookie.js|USER_AGENTS.js|sendNotify.js|node_modules|package"); do
+    for file in $(ls $RawDir | egrep -v "jdCookie\.js|USER_AGENTS|sendNotify\.js|node_modules|\.json\b"); do
         rm_mark="yes"
         for ((i = 0; i < ${#raw_file_name[*]}; i++)); do
             if [[ $file == ${raw_file_name[$i]} ]]; then
@@ -428,22 +424,22 @@ function Update_Own_Raw() {
 ## 更新项目源码
 function Update_Shell() {
     echo -e "-------------------------------------------------------------"
+    ## 更新前先存储package.json
     [ -f $PanelDir/package.json ] && local PanelDependOld=$(cat $PanelDir/package.json)
-
-    ## 随机定义更新任务的定时
+    ## 随机更新任务的定时
     Random_Update_Cron
-
+    ## 更新仓库
     cd $ShellDir
     echo -e "\n$WORKING 开始更新源码仓库：/jd\n"
     git fetch --all
     git pull
-    git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')
+    git reset --hard origin/$(git branch | head -n 1 | awk -F ' ' '{print$NF}')
     if [[ $ExitStatus -eq 0 ]]; then
         echo -e "\n$COMPLETE 源码仓库更新完成\n"
     else
         echo -e "\n$ERROR 源码仓库更新失败，请检查原因...\n"
     fi
-
+    ## 检测面板模块变动
     [ -f $PanelDir/package.json ] && local PanelDependNew=$(cat $PanelDir/package.json)
     if [[ "$PanelDependOld" != "$PanelDependNew" ]]; then
         if [[ $ENABLE_WEB_PANEL = true ]]; then
@@ -462,37 +458,31 @@ function Update_Scripts() {
     echo -e "-------------------------------------------------------------"
     ## 更新前先存储package.json
     [ -f $ScriptsDir/package.json ] && local ScriptsDependOld=$(cat $ScriptsDir/package.json)
-
-    ## 更新或克隆scripts
+    ## 更新仓库
     if [ -d $ScriptsDir/.git ]; then
         Git_Pull $ScriptsDir $ScriptsBranch
     else
         Git_Clone $ScriptsUrl $ScriptsDir $ScriptsBranch
     fi
-
-    if [[ ! -f $ScriptsDir/docker/crontab_list.sh ]] && [[ $ScriptsUrl == "${GithubProxy}https://github.com/JDHelloWorld/jd_scripts.git" ]]; then
-        cp -rf $UtilsDir/crontab_list_public.sh $ScriptsDir/docker
-    fi
-
     if [[ $ExitStatus -eq 0 ]]; then
         ## 安装模块
         [ ! -d $ScriptsDir/node_modules ] && Npm_Install_1 $ScriptsDir
         [ -f $ScriptsDir/package.json ] && local ScriptsDependNew=$(cat $ScriptsDir/package.json)
         [[ "$ScriptsDependOld" != "$ScriptsDependNew" ]] && Npm_Install_2 $ScriptsDir
-
+        ## 检测定时清单
+        if [[ ! -f $ScriptsDir/docker/crontab_list.sh ]]; then
+            cp -rf $UtilsDir/crontab_list_public.sh $ScriptsDir/docker
+        fi
         ## 更换 sendNotify
-        [ -f $FileSendNotifyScripts ] && cp -rf $FileSendNotify $ScriptsDir
-
+        [ -f $FileSendNotify ] && cp -rf $FileSendNotify $ScriptsDir
         ## 比较定时任务
         Gen_ListTask
         Diff_Cron $ListTaskScripts $ListTaskUser $ListTaskAdd $ListTaskDrop
-
         ## 失效任务通知
         if [ -s $ListTaskDrop ]; then
             Output_List_Add_Drop $ListTaskDrop "失效"
             [[ ${AutoDelCron} == true ]] && Del_Cron $ListTaskDrop $TaskCmd
         fi
-
         ## 新增任务通知
         if [ -s $ListTaskAdd ]; then
             Output_List_Add_Drop $ListTaskAdd "新"
@@ -505,7 +495,7 @@ function Update_Scripts() {
     fi
 }
 
-## 更新 own 仓库
+## 更新 Own 仓库
 function Update_Own() {
     Count_OwnRepoSum
     Gen_own_dir_and_path
@@ -516,14 +506,12 @@ function Update_Own() {
         Update_Own_Raw
         ## 比较定时任务
         Gen_ListOwn
-        Diff_Cron $ListOwnPersonal $ListOwnUser $ListOwnAdd $ListOwnDrop
-
+        Diff_Cron $ListOwnAll $ListOwnUser $ListOwnAdd $ListOwnDrop
         ## 失效任务通知
         if [[ ${AutoDelOwnCron} == true ]] && [ -s $ListOwnDrop ]; then
             Output_List_Add_Drop $ListOwnDrop "失效"
             Del_Cron $ListOwnDrop $TaskCmd
         fi
-
         ## 新增任务通知
         if [[ ${AutoAddOwnCron} == true ]] && [ -s $ListOwnAdd ]; then
             Output_List_Add_Drop $ListOwnAdd "新"
@@ -538,27 +526,28 @@ function Update_Own() {
 
 ## 自定义脚本
 function ExtraShell() {
-    ## 调用用户自定义的diy.sh
+    ## 同步用户的 extra.sh
+    if [[ $EnableExtraShellSync == true ]] && [[ $ExtraShellSyncUrl ]]; then
+        [[ $EnableExtraShell != true ]] && echo -e "-------------------------------------------------------------\n"
+        echo -e "$WORKING 开始同步自定义脚本：$ExtraShellSyncUrl\n"
+        wget -q --no-check-certificate $ExtraShellSyncUrl -O $FileExtra.new -T 10
+        if [ $? -eq 0 ]; then
+            mv -f "$FileExtra.new" "$FileExtra"
+            echo -e "$COMPLETE 自定义脚本同步完成\n"
+            sleep 1s
+        else
+            if [ -f $FileExtra ]; then
+                echo -e "$ERROR 自定义脚本同步失败，保留之前的版本...\n"
+            else
+                echo -e "$ERROR 自定义脚本同步失败，请检查原因...\n"
+            fi
+            sleep 2s
+        fi
+        [ -f "$FileExtra.new" ] && rm -rf "$FileExtra.new"
+    fi
+    ## 执行用户的 extra.sh
     if [[ $EnableExtraShell == true ]]; then
         echo -e "-------------------------------------------------------------\n"
-        ## 自动同步用户自定义的diy.sh
-        if [[ $EnableExtraShellSync == true ]] && [[ $ExtraShellSyncUrl ]]; then
-            echo -e "$WORKING 开始同步自定义脚本：$ExtraShellSyncUrl\n"
-            wget -q --no-check-certificate $ExtraShellSyncUrl -O $FileExtra.new -T 10
-            if [ $? -eq 0 ]; then
-                mv -f "$FileExtra.new" "$FileExtra"
-                echo -e "$COMPLETE 自定义脚本同步完成\n"
-                sleep 1s
-            else
-                if [ -f $FileExtra ]; then
-                    echo -e "$ERROR 自定义脚本同步失败，保留之前的版本...\n"
-                else
-                    echo -e "$ERROR 自定义脚本同步失败，请检查原因...\n"
-                fi
-                sleep 2s
-            fi
-            [ -f "$FileExtra.new" ] && rm -rf "$FileExtra.new"
-        fi
         ## 执行
         if [ -f $FileExtra ]; then
             echo -e "$WORKING 开始执行自定义脚本：$FileExtra\n"
@@ -656,8 +645,13 @@ function Combin_Function() {
             Update_Own
             ;;
         extra)
-            Title $1
-            ExtraShell
+            if [[ $EnableExtraShellSync == true ]] || [[ $EnableExtraShell == true ]]; then
+                Title $1
+                ExtraShell
+            else
+                echo -e "\n$ERROR 请先在配置文件中启用 extra.sh 自定义脚本的相关变量！"
+                Help
+            fi
             ;;
         *)
             echo -e "\n$COMMAND_ERROR"

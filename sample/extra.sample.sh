@@ -49,18 +49,18 @@ for author in $author_list; do
 
   ## 判断脚本来源仓库
   format_url=$(echo $url_list | awk -F '.com' '{print$NF}' | sed 's/.$//')
-  if [[ $(echo $url_list | egrep -o "github|gitee") == "github" ]]; then
+  if [[ $(echo $url_list | grep -Eo "github|gitee") == "github" ]]; then
     repository_platform="https://github.com"
     repository_branch=$(echo $format_url | awk -F '/' '{print$4}')
     reformat_url=$(echo $format_url | sed "s|$repository_branch|tree/$repository_branch|g")
     [[ ${EnableExtraShellProxy} == true ]] && DownloadJudgment="(已使用代理)" || DownloadJudgment=""
-  elif [[ $(echo $url_list | egrep -o "github|gitee") == "gitee" ]]; then
+  elif [[ $(echo $url_list | grep -Eo "github|gitee") == "gitee" ]]; then
     repository_platform="https://gitee.com"
     reformat_url=$(echo $format_url | sed "s|/raw/|/tree/|g")
     DownloadJudgment=""
   fi
   repository_url="$repository_platform$reformat_url"
-  echo -e "[\033[33m更新\033[0m] $author的活动脚本${DownloadJudgment}:"
+  echo -e "[\033[33m更新\033[0m] ${!author} ${DownloadJudgment}"
   echo -e "[\033[33m仓库\033[0m] $repository_url"
 
   for js in $scripts_list; do
@@ -81,15 +81,15 @@ for author in $author_list; do
       croname=$(echo "$name" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")
       script_cron_standard=$(cat $ScriptsDir/$name | grep "https" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
       if [[ -z ${script_cron_standard} ]]; then
-        tmp1=$(egrep "cron|script-path|tag|\* \*|$name" $ScriptsDir/$name | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\:\_]||g;}')
+        tmp1=$(grep -E "cron|script-path|tag|\* \*|$name" $ScriptsDir/$name | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\:\_]||g;}')
         tmp2=$(echo "$tmp1" | awk -F '[0-9]' '{print$1}' | perl -pe '{s| ||g;}')
-        script_cron=$(echo "$tmp1" | perl -pe "{s|${tmp2}||g;}" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
+        script_cron=$(echo "$tmp1" | perl -pe "{s|${tmp2}||g;}" | awk '{if($1~/^[0-9]{1,2}/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
       else
         script_cron=${script_cron_standard}
       fi
       if [ -z "${script_cron}" ]; then
         cron_min=$(rand 1 59)
-        cron_hour=$(rand 7 9)
+        cron_hour=$(rand 1 23)
         [ $(grep -c "$croname" $ListCrontabUser) -eq 0 ] && sed -i "/hang up/a${cron_min} ${cron_hour} * * * $TaskCmd $croname" $ListCrontabUser
       else
         [ $(grep -c "$croname" $ListCrontabUser) -eq 0 ] && sed -i "/hang up/a${script_cron} $TaskCmd $croname" $ListCrontabUser

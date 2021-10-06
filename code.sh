@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-01
+## Modified: 2021-10-05
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -12,7 +12,12 @@ fi
 ## 生成 pt_pin 清单
 function Gen_pt_pin_array() {
     local Tmp1 Tmp2 i pt_pin_temp
-    for ((user_num = 1; user_num <= $UserSum; user_num++)); do
+    if [[ $UserSum -le 50 ]]; then
+        local Num=$UserSum
+    elif [[ $UserSum -gt 50 ]]; then
+        local Num=50
+    fi
+    for ((user_num = 1; user_num <= $Num; user_num++)); do
         Tmp1=Cookie$user_num
         Tmp2=${!Tmp1}
         i=$(($user_num - 1))

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-## Update: 2021-09-24
+## Update: 2021-10-05
 
 case $1 in
 jd_IndustryLottery.ts)
@@ -15,7 +15,7 @@ jd_cfd.ts)
     Name="京喜财富岛"
     ;;
 jd_cfd_hb.ts)
-    Name="京喜财富岛兑换红包"
+    Name="京喜财富岛红包库存"
     ;;
 jd_cfd_loop.ts)
     Name="京喜财富岛热气球挂机"
@@ -56,6 +56,9 @@ jd_joy_reward.ts)
 jd_jxgc.ts)
     Name="京喜工厂"
     ;;
+jd_jxgc_stock.ts)
+    Name="京喜工厂可生产商品"
+    ;;
 jd_jxmc.ts)
     Name="京喜牧场"
     ;;
@@ -76,6 +79,9 @@ jd_speed_redEnvelope.ts)
     ;;
 jd_yili_cow.ts)
     Name="伊利养牛记"
+    ;;
+jd_88hb.ts)
+    Name="京喜88红包"
     ;;
 jx_sign.ts)
     Name="京喜签到"
@@ -102,6 +108,6 @@ jd_zjd.py)
     Name="赚京豆"
     ;;
 *)
-    Name=""
+    Name="<未知>"
     ;;
 esac

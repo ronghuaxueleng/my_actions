@@ -1,6 +1,6 @@
-## Version: v1.04.0
-## Date: 2021-09-22
-## Update Content: \n修改部分推送通知类和项目功能类环境变量
+## Version: v1.05.0
+## Date: 2021-09-29
+## Update Content: \n修改 "定义取关商品和店铺数量参数（选填）" 控制脚本功能类环境变量，修改部分备注内容
 
 ## 上面版本号中，如果第2位数字有变化，那么代表增加了新的参数，如果只有第3位数字有变化，仅代表更新了注释，没有增加新的参数，可更新可不更新
 
@@ -87,7 +87,8 @@ RandomDelay="300"
 
 ## OwnRepoUrl：仓库地址清单，必须从1开始依次编号
 ## OwnRepoBranch：您想使用的分支清单，不能为 "空" 必须指定分支的名称，编号必须和 OwnRepoUrl 对应。
-## OwnRepoPath：要使用的脚本在仓库哪个路径下，请输入仓库下的相对路径，默认空值""代表仓库根目录，编号必须和 OwnRepoUrl 对应，同一个仓库下不同文件夹之间使用空格分开。如果既包括根目录又包括子目录，填写请见示例中OwnRepoPath3。
+## OwnRepoPath：要使用的脚本在仓库哪个路径下，请输入仓库下的相对路径，默认空值""代表仓库根目录，编号必须和 OwnRepoUrl 对应。
+##              同一个仓库下不同文件夹之间使用空格分开，如果既包括根目录又包括子目录，填写请见示例中OwnRepoPath3。
 ## 所有脚本存放在 own 目录下，三个清单必须一一对应，示例如下：
 ## OwnRepoUrl1="https://gitee.com/abc/jdtsa.git"
 ## OwnRepoUrl2="https://ghproxy.com/https://github.com/nedcd/jxddfsa.git"
@@ -96,7 +97,7 @@ RandomDelay="300"
 ## OwnRepoBranch2="main"     # 代表第2个仓库 https://ghproxy.com/https://github.com/nedcd/jxddfsa.git 使用 "main" 分支
 ## OwnRepoBranch3="master"   # 代表第3个仓库 git@github.com:eject/poex.git 使用 "master" 分支
 ## OwnRepoPath1=""                   # 代表第1个仓库https://gitee.com/abc/jdtsa.git，您想使用的脚本就在仓库根目录下。
-## OwnRepoPath2="scripts/jd normal"  # 代表第2个仓库https://github.com/nedcd/jxddfsa.git，您想使用的脚本在仓库的 scripts/jd 和 normal文件夹下，必须输入相对路径
+## OwnRepoPath2="scripts/jd normal"  # 代表第2个仓库https://ghproxy.com/https://github.com/nedcd/jxddfsa.git，您想使用的脚本在仓库的 scripts/jd 和 normal文件夹下，必须输入相对路径
 ## OwnRepoPath3="'' cron"            # 代表第3个仓库git@github.com:eject/poex.git，您想使用的脚本在仓库的 根目录 和 cron 文件夹下，必须输入相对路径
 
 OwnRepoUrl1=""
@@ -112,7 +113,7 @@ OwnRepoPath2=""
 ## 请先确认您能正常下载该 raw 脚本才列在下方，无论是 Github 还是 Gitee 的仓库需填入 raw 原始文件链接。
 
 ## 如果启用了 "自动增加定时" 那么通过此方式导入的脚本始装自动增加定时任务，支持导入 js、py、ts 类型的脚本
-## 请确认对应脚本中是否含有crontab表达式，否则导入定时任务的定时为空
+## 请确认对应脚本中是否含有 crontab 表达式，否则导入定时任务的定时为空
 ## 注意缩进和格式，每行开头四个空格，一行一个脚本链接，首尾一对半角括号，示例：
 ## OwnRawFile=(
 ##     https://gitee.com/wabdwdd/scipts/raw/master/jd_abc.js
@@ -173,16 +174,17 @@ EnableGlobalProxy=""
 #   ;;
 # esac
 
-## 定义 HTTP 代理地址
+## 定义 HTTP 代理地址（必填）
 export GLOBAL_AGENT_HTTP_PROXY=""
-## 定义 HTTPS 代理地址，为 HTTPS 请求指定单独的代理
+## 定义 HTTPS 代理地址，为 HTTPS 请求指定单独的代理（选填）
 ## 如果未设置此变量那么两种协议的请求均通过 HTTP 代理地址变量设定的地址
-export GLOBAL_AGENT_HTTPS_PROXY=""
+## 如需使用，请自行解除下一行的注释并赋值并赋值
+# export GLOBAL_AGENT_HTTPS_PROXY=""
 
 
 
 
-## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 推 送 通 知 环 境 变 量 设 置 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 推 送 通 知 设 置 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
 ################################## 定义推送通知方式（选填） ##################################
 ## 想通过什么渠道收取通知，就填入对应渠道的值，您也可以同时使用多个渠道获取通知
@@ -190,9 +192,7 @@ export GLOBAL_AGENT_HTTPS_PROXY=""
 ## 具体教程请查看环境变量说明文档：https://github.com/chinnkarahoi/jd_scripts/blob/master/githubAction.md
 
 ## ✩ 1. Server酱
-## 官方网站：https://sc.ftqq.com/3.version （旧版，4月停止支持）
-##          https://sct.ftqq.com          （Turbo新版，支持更多渠道）
-## 已兼容 Server酱·Turbo版
+## 官方网站：https://sct.ftqq.com
 ## 下方填写 SCHKEY 值或 SendKey 值
 export PUSH_KEY=""
 ## 自建Server酱
@@ -212,18 +212,18 @@ export BARK_GROUP=""
 
 ## ✩ 3. Telegram 
 ## 具体教程：https://github.com/chinnkarahoi/jd_scripts/blob/master/backUp/TG_PUSH.md
-## 需设备可连接外网，"TG_BOT_TOKEN"和"TG_USER_ID"必须同时赋值！
-## 下方填写自己申请@BotFather的Token，如10xxx4:AAFcqxxxxgER5uw
+## 需设备可连接外网，"TG_BOT_TOKEN" 和 "TG_USER_ID" 必须同时赋值
+## 下方填写自己申请 @BotFather 的 Token，如 10xxx4:AAFcqxxxxgER5uw
 export TG_BOT_TOKEN=""
 ## 下方填写 @getuseridbot 中获取到的纯数字ID
 export TG_USER_ID=""
 ## Telegram 代理IP（选填）
 ## 下方填写代理IP地址，代理类型为 http，比如您代理是 http://127.0.0.1:1080，则填写 "127.0.0.1"
-## 如需使用，请自行解除下一行的注释
+## 如需使用，请自行解除下一行的注释并赋值
 # export TG_PROXY_HOST=""
 ## Telegram 代理端口（选填）
 ## 下方填写代理端口号，代理类型为 http，比如您代理是 http://127.0.0.1:1080，则填写 "1080"
-## 如需使用，请自行解除下一行的注释
+## 如需使用，请自行解除下一行的注释并赋值
 # export TG_PROXY_PORT=""
 ## Telegram 代理的认证参数（选填）
 # export TG_PROXY_AUTH=""
@@ -237,10 +237,10 @@ export TG_USER_ID=""
 ## ✩ 4. 钉钉 
 ## 官方文档：https://developers.dingtalk.com/document/app/custom-robot-access
 ## 参考图片：https://github.com/chinnkarahoi/jd_scripts/blob/master/icon/DD_bot.png
-## "DD_BOT_TOKEN"和"DD_BOT_SECRET"必须同时赋值！
+## "DD_BOT_TOKEN" 和 "DD_BOT_SECRET" 必须同时赋值
 ## 下方填写token后面的内容，只需 https://oapi.dingtalk.com/robot/send?access_token=XXX 等于=符号后面的XXX即可
 export DD_BOT_TOKEN=""
-## 下方填写密钥，机器人安全设置页面，加签一栏下面显示的SEC开头的SECXXXXXXXXXX等字符
+## 下方填写密钥，机器人安全设置页面，加签一栏下面显示的 SEC 开头的 SECXXXXXXXXXX 等字符
 ## 注:钉钉机器人安全设置只需勾选加签即可，其他选项不要勾选
 export DD_BOT_SECRET=""
 
@@ -266,7 +266,7 @@ export IGOT_PUSH_KEY=""
 
 ## ✩ 8. Push Plus
 ## 官方网站：http://www.pushplus.plus
-## 下方填写您的Token，微信扫码登录后一对一推送或一对多推送下面的token，只填 PUSH_PLUS_TOKEN 默认为一对一推送
+## 下方填写您的Token，微信扫码登录后一对一推送或一对多推送下面的 token，只填 "PUSH_PLUS_TOKEN" 默认为一对一推送
 export PUSH_PLUS_TOKEN=""
 ## 一对一多推送（选填）
 ## 下方填写您的一对多推送的 "群组编码" ，（一对多推送下面->您的群组(如无则新建)->群组编码）
@@ -295,7 +295,7 @@ export GO_CQHTTP_LINK=""
 
 # ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 控 制 脚 本 功 能 环 境 变 量 设 置 区 域 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
-################################## 定义User-Agent（选填） ##################################
+################################## 定义 User-Agent（选填） ##################################
 ## 自定义仓库里京东脚本的USER_AGENTS，不懂不知不会User-Agent的请不要随意填写内容，随意填写了出错概不负责
 ## 如需使用，请自行解除下一行注释
 # export JD_USER_AGENT=""
@@ -443,15 +443,16 @@ export FRUIT_BEAN_CARD=""
 
 ################################## 22. 定义取关商品和店铺数量参数（选填） ##################################
 ## 具体教程：https://github.com/chinnkarahoi/jd_scripts/blob/master/githubAction.md#%E5%8F%96%E5%85%B3%E5%BA%97%E9%93%BA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84%E8%AF%B4%E6%98%8E
-## jd_unsubscribe这个任务是用来取关每天做任务关注的商品和店铺，默认在每次运行时取关所有商品和店铺，不填为取关所有，填 "0" 为不取关
+## 默认在每次运行时取关所有商品和店铺，不填为取关所有，填 "0" 为不取关
 ## 商品取关数量
 goodPageSize=""
 ## 店铺取关数量
 shopPageSize=""
 ## 遇到此商品不再取关此商品以及它后面的商品，需去商品详情页长按拷贝商品信息
-jdUnsubscribeStopGoods=""
+stopGoods=""
 ## 遇到此店铺不再取关此店铺以及它后面的店铺，请从头开始输入店铺名称
-jdUnsubscribeStopShop=""
+stopShop=""
+export UN_SUBSCRIBES="${goodPageSize}&${shopPageSize}&${stopGoods}&${stopGoods}"
 
 
 ################################## 23. 定义摇钱树是否自动将金果卖出变成金币（选填） ##################################
@@ -496,7 +497,7 @@ export CFD_LOOP_SLEEPTIME=""
 
 
 
-## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 互 助 码 类 环 境 变 量 设 置 区 域  ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 互 助 码 类 设 置 区 域  ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
 ################################## 定义自动互助功能（选填） ##################################
 ## 如想在运行互助类活动脚本时直接从 task exsc 中自动获取互助码并进行互助，请将该变量赋值为 true

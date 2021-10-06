@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-20
+## Modified: 2021-09-27
 
 set -e
 SUCCESS='[\033[32mOK\033[0m]'
 ERROR='[\033[31mERROR\033[0m]'
 ContrlCmd="taskctl"
-TIME="+%Y-%m-%d %H:%M:%S"
+TIME="+%Y-%m-%d %T"
 
 if [ ! -d $JD_DIR/config ]; then
   echo -e "$ERROR 没有映射 config 配置文件目录给本容器，请先按教程映射该目录...\n"

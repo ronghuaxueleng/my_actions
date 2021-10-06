@@ -46,7 +46,7 @@
 <a id="使用教程" class="anchor" href="#%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B"></a>《使用教程》</h1>
 <ul>
 <li>
-<strong>修订日期：2021 年 9 月 18 日</strong>
+<strong>修订日期：2021 年 10 月 6 日</strong>
 ㅤ</li>
 </ul>
 <h2>
@@ -56,16 +56,16 @@
 <pre><code>task &lt;name/path&gt; now
 </code></pre>
 <blockquote>
-<p><em>注意：1. <code>name</code> 为脚本名（仅限scripts目录）、<code>path</code> 脚本的相对路径或绝对路径。</em><br>
-<em>ㅤㅤㅤ2. 依次执行，无论是否设置了随机延迟，均立即运行，前台会输出日志，同时记录在日志文件中。</em><br>
-<em>ㅤㅤㅤ3. 可通过下面教程中的 <code>task list</code> 命令具体查看本地有哪些可以执行的活动脚本。</em></p>
+<p><em>注：1. <code>name</code> 为脚本名（仅限 scripts 目录）、<code>path</code> 为脚本的相对路径或绝对路径。</em><br>
+<em>ㅤㅤ2. 依次执行，无论是否设置了随机延迟，均立即运行，前台会输出日志，同时记录在日志文件中。</em><br>
+<em>ㅤㅤ3. 可通过下面教程中的 <code>task list</code> 命令具体查看本地有哪些可以执行的活动脚本。</em></p>
 </blockquote>
 <h3>
 <a id="2-更新全部脚本" class="anchor" href="#2-%E6%9B%B4%E6%96%B0%E5%85%A8%E9%83%A8%E8%84%9A%E6%9C%AC"></a>2. 更新全部脚本：</h3>
 <pre><code>update  或  update all
 </code></pre>
 <blockquote>
-<p><em>注意：每次使用前请执行此命令，确保使用最新的项目脚本和活动脚本，此脚本也配置了定时任务可自动执行。</em></p>
+<p><em>注：每次使用前请执行此命令，确保使用最新的项目脚本和活动脚本，此脚本也配置了定时任务可自动执行。</em></p>
 </blockquote>
 <blockquote>
 <p><em>更新仓库时的常见报错：</em><br>
@@ -82,7 +82,7 @@
 <pre><code>task
 </code></pre>
 <blockquote>
-<p><em>注意：所有的使用命令都在其中，并且针对不同架构的设备做了特殊处理。</em></p>
+<p><em>注：所有的使用命令都在其中，并且针对不同架构的设备做了特殊处理。</em></p>
 </blockquote>
 <hr>
 <p>ㅤ</p>
@@ -93,95 +93,134 @@
 <pre><code>task &lt;name/path&gt; conc
 </code></pre>
 <blockquote>
-<p><em>注意：并发执行非常消耗资源，不要盲目使用尤其是0点，否则资源占满导致终端连不上后只能物理重启。</em></p>
+<p><em>注：并发执行非常消耗资源，不要盲目使用尤其是0点，否则资源占满导致终端连不上后只能强制关机重启。</em></p>
 </blockquote>
 <h3>
 <a id="2-延迟执行" class="anchor" href="#2-%E5%BB%B6%E8%BF%9F%E6%89%A7%E8%A1%8C"></a>2. 延迟执行</h3>
 <pre><code>task &lt;name/path&gt;
 </code></pre>
 <blockquote>
-<p><em>注意：如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数。</em></p>
+<p><em>注：如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数。</em></p>
 </blockquote>
 <h3>
 <a id="3-指定执行" class="anchor" href="#3-%E6%8C%87%E5%AE%9A%E6%89%A7%E8%A1%8C"></a>3. 指定执行：</h3>
 <pre><code>task &lt;name/path&gt; &lt;num&gt;
 </code></pre>
 <blockquote>
-<p><em>注意：指定某账号单独运行脚本，num为某 Cookie 账号在配置文件中的具体编号。</em></p>
+<p><em>注：指定某账号单独运行脚本，num为某 Cookie 账号在配置文件中的具体编号。</em></p>
 </blockquote>
 <h3>
 <a id="4-远程执行" class="anchor" href="#4-%E8%BF%9C%E7%A8%8B%E6%89%A7%E8%A1%8C"></a>4. 远程执行：</h3>
 <pre><code>task &lt;url&gt; raw
 </code></pre>
 <blockquote>
-<p><em>注意：拉取位于远程仓库的脚本后并执行，url为链接地址，可选参数(加在末尾)：-p 使用代理(<a href="https://ghproxy.com">Ghproxy</a>)、-c 并发。</em></p>
+<p><em>注：拉取位于远程仓库的脚本后并执行，url为链接地址，可选参数(加在末尾)：-p 使用代理(<a href="https://ghproxy.com">Ghproxy</a>)、-c 并发。</em></p>
 </blockquote>
 <h3>
 <a id="5-迅速执行" class="anchor" href="#5-%E8%BF%85%E9%80%9F%E6%89%A7%E8%A1%8C"></a>5. 迅速执行：</h3>
 <pre><code>task &lt;name&gt; rapid
 </code></pre>
 <blockquote>
-<p><em>注意：此功能不会组合互助码变量，最大化降低脚本执行前耗时，主要适用于抢兑类脚本，可选参数(加在末尾)：-c 并发。</em></p>
+<p><em>注：此功能不会组合互助码变量，最大化降低脚本执行前耗时，主要适用于抢兑类脚本，可选参数(加在末尾)：-c 并发。</em></p>
 </blockquote>
 <h3>
 <a id="6-终止执行" class="anchor" href="#6-%E7%BB%88%E6%AD%A2%E6%89%A7%E8%A1%8C"></a>6. 终止执行：</h3>
 <pre><code>task &lt;name/path&gt; pkill
 </code></pre>
 <blockquote>
-<p><em>注意：根据脚本名称搜索对应的进程并立即杀死，当脚本报错死循环时可使用此功能。</em></p>
+<p><em>注：根据脚本名称搜索对应的进程并立即杀死，当脚本报错死循环时可使用此功能。</em></p>
 </blockquote>
 <h3>
 <a id="7-全部执行" class="anchor" href="#7-%E5%85%A8%E9%83%A8%E6%89%A7%E8%A1%8C"></a>7. 全部执行：</h3>
 <pre><code>source runall  或  . runall
 </code></pre>
 <blockquote>
-<p><em>注意：通过交互选择运行模式执行指定范围的脚本，时间较长不要盲目使用。</em></p>
+<p><em>注：通过交互选择运行模式执行指定范围的脚本，时间较长不要盲目使用。</em></p>
 </blockquote>
 <h3>
 <a id="8-单独更新部分仓库或脚本" class="anchor" href="#8-%E5%8D%95%E7%8B%AC%E6%9B%B4%E6%96%B0%E9%83%A8%E5%88%86%E4%BB%93%E5%BA%93%E6%88%96%E8%84%9A%E6%9C%AC"></a>8. 单独更新部分仓库或脚本：</h3>
 <pre><code>update &lt;cmd&gt;
 </code></pre>
 <blockquote>
-<p><em>注意：项目源码 shell、"Scripts"仓库 scripts、"Own"仓库 own、自定义脚本 extra。</em></p>
+<p><em>注：项目源码 shell、"Scripts"仓库 scripts、"Own"仓库 own、自定义脚本 extra。</em></p>
 </blockquote>
 <h3>
 <a id="9-删除脚本运行日志" class="anchor" href="#9-%E5%88%A0%E9%99%A4%E8%84%9A%E6%9C%AC%E8%BF%90%E8%A1%8C%E6%97%A5%E5%BF%97"></a>9. 删除脚本运行日志：</h3>
 <pre><code>task rmlog
 </code></pre>
 <blockquote>
-<p><em>注意：删除活动脚本与更新脚本的日志文件，默认删除 <code>7天</code> 以上的日志文件，可以通过配置文件中的相关变量更改默认时间值。</em></p>
+<p><em>注：删除活动脚本与更新脚本的日志文件，默认删除 <code>7天</code> 以上的日志文件，可以通过配置文件中的相关变量更改默认时间值。</em></p>
 </blockquote>
 <h3>
 <a id="10-进程监控" class="anchor" href="#10-%E8%BF%9B%E7%A8%8B%E7%9B%91%E6%8E%A7"></a>10. 进程监控：</h3>
 <pre><code>task ps
 </code></pre>
 <blockquote>
-<p><em>注意：查看资源消耗情况和正在运行的脚本进程。</em></p>
+<p><em>注：查看资源消耗情况和正在运行的脚本进程。</em></p>
 </blockquote>
 <h3>
 <a id="11-账号功能" class="anchor" href="#11-%E8%B4%A6%E5%8F%B7%E5%8A%9F%E8%83%BD"></a>11. 账号功能：</h3>
 <pre><code>task cookie &lt;cmd&gt;
 </code></pre>
 <blockquote>
-<p><em>注意：1. 检测账号是否有效 check，更新日期从配置文件中的备注获取，同时判断账号过期时间。</em><br>
-<em>ㅤㅤㅤ2. 使用 <code>WSKEY</code> 更新CK update，需要在 account.json 中正确配置您的信息，注意格式。</em><br>
-<em>ㅤㅤㅤ3. 支持指定账号进行更新，后面跟上某 Cookie 账号在配置文件中的具体编号即可，与指定执行类似。</em></p>
+<p><em>注：1. 检测账号是否有效 check，更新日期从配置文件中的备注获取，同时判断账号过期时间。</em><br>
+<em>ㅤㅤ2. 使用 <code>WSKEY</code> 更新CK update，需要在 account.json 中正确配置您的信息，注意格式。</em><br>
+<em>ㅤㅤ3. 支持指定账号进行更新，后面跟上某 Cookie 账号在配置文件中的具体编号即可，与指定执行类似。</em></p>
 </blockquote>
 <h3>
-<a id="12-安装环境" class="anchor" href="#12-%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83"></a>12. 安装环境：</h3>
+<a id="12-管理全局环境变量功能" class="anchor" href="#12-%E7%AE%A1%E7%90%86%E5%85%A8%E5%B1%80%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8A%9F%E8%83%BD"></a>12. 管理全局环境变量功能：</h3>
+<pre><code>task cookie &lt;cmd&gt;
+</code></pre>
+<blockquote>
+<p><em>注：通过交互管理全局环境变量，添加 add、删除 del、修改 edit、查询 search，支持快捷命令。</em></p>
+</blockquote>
+<ul>
+<li>
+<p>增加环境变量快捷命令：</p>
+<pre><code>task env add &lt;变量名称&gt; &lt;变量的值&gt;
+</code></pre>
+</li>
+<li>
+<p>修改环境变量快捷命令：</p>
+<pre><code>task env edit &lt;变量名称&gt; &lt;变量新的值&gt;
+</code></pre>
+</li>
+<li>
+<p>删除环境变量快捷命令：</p>
+<pre><code>task env del &lt;变量名称&gt;
+</code></pre>
+</li>
+<li>
+<p>启用环境变量快捷命令：</p>
+<pre><code>task env enable &lt;变量名称&gt;
+</code></pre>
+</li>
+<li>
+<p>禁用环境变量快捷命令：</p>
+<pre><code>task env disable &lt;变量名称&gt;
+</code></pre>
+</li>
+<li>
+<p>查询环境变量快捷命令：</p>
+<pre><code>task env search &lt;查询关键词&gt;
+</code></pre>
+</li>
+</ul>
+<h3>
+<a id="13-安装环境" class="anchor" href="#13-%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83"></a>13. 安装环境：</h3>
 <pre><code>taskctl env install
 </code></pre>
 <blockquote>
-<p><em>注意：全局安装常用模块便于执行非 Scripts 目录下的脚本，64位处理器还支持附带安装 Python 和 TypeSciprt 环境。</em></p>
+<p><em>注：全局安装常用模块便于执行非 Scripts 目录下的脚本，64位处理器还支持附带安装 Python 和 TypeSciprt 环境。</em></p>
 </blockquote>
 <h3>
-<a id="13-安装脚本依赖" class="anchor" href="#13-%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E4%BE%9D%E8%B5%96"></a>13. 安装脚本依赖：</h3>
+<a id="14-安装脚本依赖" class="anchor" href="#14-%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E4%BE%9D%E8%B5%96"></a>14. 安装脚本依赖：</h3>
 <pre><code>## 全局安装指定模块
 npm install -g &lt;xxx&gt;
 </code></pre>
 <blockquote>
-<p><em>注意：1. 当脚本报错提示 <code>need module xxx</code> 类似字样说明缺少脚本运行所需的依赖，看见 <code>module</code> 字样应立即联想到安装模块上。</em><br>
-<em>ㅤㅤㅤ2. 特别要注意的是如果缺少的依赖中带有 <code>/</code> 则表示本地依赖文件，一般开发者都会提供相关组件，注意与安装模块区分开不要弄混。</em></p>
+<p><em>注：1. 当脚本报错提示 <code>need module xxx</code> 类似字样说明缺少脚本运行所需的依赖，看见 <code>module</code> 字样应立即联想到安装模块上。</em><br>
+<em>ㅤㅤ2. 特别要注意的是如果缺少的依赖中带有 <code>/</code> 则表示本地依赖文件，一般开发者都会提供相关组件，注意与安装模块区分开不要弄混。</em></p>
 </blockquote>
 <hr>
 <p>ㅤ</p>
@@ -196,7 +235,7 @@ npm install -g &lt;xxx&gt;
 <pre><code>task exsc
 </code></pre>
 <blockquote>
-<p><em>注意：输出可直接应用在配置文件中的代码，其原理是从各个活动脚本的日志中获取，所以当新装环境运行完相关活动脚本后才能正常使用。</em></p>
+<p><em>注：输出可直接应用在配置文件中的代码，其原理是从各个活动脚本的日志中获取，所以当新装环境运行完相关活动脚本后才能正常使用。</em></p>
 </blockquote>
 <h3>
 <a id="3-自动互助功能" class="anchor" href="#3-%E8%87%AA%E5%8A%A8%E4%BA%92%E5%8A%A9%E5%8A%9F%E8%83%BD"></a>3. 自动互助功能：</h3>
@@ -204,7 +243,7 @@ npm install -g &lt;xxx&gt;
 AutoHelpOther="true"
 </code></pre>
 <blockquote>
-<p><em>注意：详见配置文件中的相关注释，最好理解该功能的工作原理。</em></p>
+<p><em>注：详见配置文件中的相关注释，最好理解该功能的工作原理。</em></p>
 </blockquote>
 <h3>
 <a id="4-手动定义互助码与相互助力" class="anchor" href="#4-%E6%89%8B%E5%8A%A8%E5%AE%9A%E4%B9%89%E4%BA%92%E5%8A%A9%E7%A0%81%E4%B8%8E%E7%9B%B8%E4%BA%92%E5%8A%A9%E5%8A%9B"></a>4. 手动定义互助码与相互助力：</h3>
@@ -235,7 +274,7 @@ ForOtherPet5="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 </code></pre>
 <blockquote>
-<p><em>注意：所有符号需严格使用英文格式！如果在上一步启用了自动互助功能那么手动定义的互助码变量均会被覆盖，等于无效。</em></p>
+<p><em>注：所有符号需严格使用英文格式！如果在上一步启用了自动互助功能那么手动定义的互助码变量均会被覆盖，等于无效。</em></p>
 </blockquote>
 <h3>
 <a id="5-提交您的互助码到公共助力池telegram-bot" class="anchor" href="#5-%E6%8F%90%E4%BA%A4%E6%82%A8%E7%9A%84%E4%BA%92%E5%8A%A9%E7%A0%81%E5%88%B0%E5%85%AC%E5%85%B1%E5%8A%A9%E5%8A%9B%E6%B1%A0telegram-bot"></a>5. 提交您的互助码到公共助力池（Telegram Bot）：</h3>
@@ -256,7 +295,7 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <pre><code>taskctl server status
 </code></pre>
 <blockquote>
-<p><em>注意：如遇相关服务没有启动或状态异常，在容器初始成功的前提下请先尝试手动启动。</em></p>
+<p><em>注：如遇相关服务没有启动或状态异常，在容器初始成功的前提下请先尝试手动启动。</em></p>
 </blockquote>
 <h3>
 <a id="2-后台挂机程序" class="anchor" href="#2-%E5%90%8E%E5%8F%B0%E6%8C%82%E6%9C%BA%E7%A8%8B%E5%BA%8F"></a>2. 后台挂机程序</h3>
@@ -269,7 +308,7 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <pre><code>taskctl hang up
 </code></pre>
 <blockquote>
-<p><em>注意：当有新的账号添加或账号变动时须重启此程序，否则仍加载之前配置文件中的变量执行挂机活动脚本。</em></p>
+<p><em>注：当有新的账号添加或账号变动时须重启此程序，否则仍加载之前配置文件中的变量执行挂机活动脚本。</em></p>
 </blockquote>
 </li>
 <li>
@@ -282,7 +321,7 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <pre><code>taskctl hang logs
 </code></pre>
 <blockquote>
-<p><em>注意：Ctrl+C 退出，如发现脚本报错可尝试重启。</em></p>
+<p><em>注：Ctrl+C 退出，如发现脚本报错可尝试重启。</em></p>
 </blockquote>
 </li>
 </ul>
@@ -290,17 +329,17 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <a id="3-控制面板和网页终端" class="anchor" href="#3-%E6%8E%A7%E5%88%B6%E9%9D%A2%E6%9D%BF%E5%92%8C%E7%BD%91%E9%A1%B5%E7%BB%88%E7%AB%AF"></a>3. 控制面板和网页终端</h3>
 <ul>
 <li>
-<p>开启/重启控制面板和网页终端：</p>
+<p>开启/重启控制面板和网页终端服务：</p>
 <pre><code>taskctl panel on
 </code></pre>
 <blockquote>
-<p><em>注意：1. 容器第一次启动时如果启用了该功能变量后会自动启动相关服务无需手动执行此命令。</em><br>
-<em>ㅤㅤㅤ2. 在某些环境下当系统重启导致控制面板没有在容器启动时自启可用此命令手动启动。</em><br>
-<em>ㅤㅤㅤ3. 当控制面板或网页终端服务进程异常时还可尝试修复，如果仍然无法访问请检查容器是否初始化成功。</em></p>
+<p><em>注：1. 容器第一次启动时如果启用了该功能变量后会自动启动相关服务无需手动执行此命令。</em><br>
+<em>ㅤㅤ2. 在某些环境下当系统重启导致控制面板没有在容器启动时自启可用此命令手动启动。</em><br>
+<em>ㅤㅤ3. 当控制面板或网页终端服务进程异常时还可尝试修复，如果仍然无法访问请检查容器是否初始化成功。</em></p>
 </blockquote>
 </li>
 <li>
-<p>关闭控制面板和网页终端：</p>
+<p>关闭控制面板和网页终端服务：</p>
 <pre><code>taskctl panel off
 </code></pre>
 </li>
@@ -309,15 +348,15 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <pre><code>taskctl panel info
 </code></pre>
 <blockquote>
-<p><em>注意：如果忘记了登录密码可以用此方法查看。</em></p>
+<p><em>注：如果忘记了登录密码可以用此方法查看。</em></p>
 </blockquote>
 </li>
 <li>
-<p>重置控制面板的用户名和密码：</p>
+<p>重置控制面板用于登录的用户名和密码：</p>
 <pre><code>taskctl respwd
 </code></pre>
 <blockquote>
-<p><em>注意：重置后的用户名和密码均为初始信息。</em></p>
+<p><em>注：重置后的用户名和密码均为初始信息。</em></p>
 </blockquote>
 </li>
 </ul>
@@ -360,7 +399,7 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <pre><code>cp -f /jd/sample/config.sample.sh /jd/config/config.sh
 </code></pre>
 <blockquote>
-<p><em>注意：此操作为直接替换配置文件，您也可以通过控制面板的对比工具自行修改。</em></p>
+<p><em>注：此操作为直接替换配置文件，您也可以通过控制面板的对比工具自行修改。</em></p>
 </blockquote>
 </li>
 </ul>
@@ -369,14 +408,14 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <pre><code>taskctl env repairs
 </code></pre>
 <blockquote>
-<p><em>注意：当 npm 程序崩溃时可执行此命令进行修复。</em></p>
+<p><em>注：当 npm 程序崩溃时可执行此命令进行修复。</em></p>
 </blockquote>
 <h3>
 <a id="3-检测配置文件完整性" class="anchor" href="#3-%E6%A3%80%E6%B5%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%AE%8C%E6%95%B4%E6%80%A7"></a>3. 检测配置文件完整性：</h3>
 <pre><code>taskctl check files
 </code></pre>
 <blockquote>
-<p><em>注意：检测项目相关配置文件是否存在，如果缺失就从模板导入。</em></p>
+<p><em>注：检测项目相关配置文件是否存在，如果缺失就从模板导入。</em></p>
 </blockquote>
 <hr></div>
           </div>

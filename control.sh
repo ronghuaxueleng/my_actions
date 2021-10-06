@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-09-25
+## Modified: 2021-10-05
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
 
-## 生成 pm2 list 日志，以此判断各服务状态
+## 生成 pm2 list 日志清单，以此判断各服务状态
 function List_All_Processes() {
     pm2 list | sed "/─/d" | perl -pe "{s| ||g; s#│#|#g}" | sed "1d" >$FilePm2List
 }
@@ -23,17 +23,21 @@ function Update_Shell() {
 ## 后台挂机功能
 function Hang_Control() {
     local HangUpScripts="jd_cfd_loop.js"
-    local ServiceName LastRunTime ExitStatus
+    local ScriptFiles ServiceName ScriptFormt LastRunTime ExitStatus
     case $1 in
+    ## 开启/重启服务
     up)
         for ScriptFiles in ${HangUpScripts}; do
-            ExitStatus=""
             ServiceName=$(echo $ScriptFiles | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
             ScriptFormt=$(echo $ScriptFiles | awk -F '\.' '{print$NF}')
+            Import_Config $ServiceName
+            Count_UserSum
+            Combin_All
             List_All_Processes
             cat $FilePm2List | awk -F '|' '{print$3}' | grep $ServiceName -wq
             ExitStatus=$?
             cd $ScriptsDir
+            ## 判断脚本是否存在
             case $ScriptFiles in
             jd_cfd_loop.js)
                 if [ -d "$ScriptsDir/.git" ]; then
@@ -49,14 +53,11 @@ function Hang_Control() {
                 echo -e "\n$ERROR $ScriptFiles 脚本不存在！\n"
                 exit 1
             fi
-
-            cat $FilePm2List | awk -F '|' '{print$3}' | grep "$ServiceName" -wq
-            Import_Config $ScriptFiles
-            Count_UserSum
-            Combin_All
+            ## 删除原有
             pm2 stop $ServiceName >/dev/null 2>&1
             pm2 flush >/dev/null 2>&1
             pm2 delete $ScriptFiles >/dev/null 2>&1
+            ## 启用
             case $ScriptFormt in
             js)
                 pm2 start -a $ScriptFiles --watch "$ScriptFiles" --name="$ServiceName"
@@ -73,6 +74,7 @@ function Hang_Control() {
         done
         [ -f $FilePm2List ] && rm -rf $FilePm2List
         ;;
+    ## 关闭服务
     down)
         for ScriptFiles in ${HangUpScripts}; do
             ServiceName=$(echo $ScriptFiles | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
@@ -89,6 +91,7 @@ function Hang_Control() {
         done
         [ -f $FilePm2List ] && rm -rf $FilePm2List
         ;;
+    ## 查看日志
     logs)
         echo -e "\n\033[32mTips\033[0m: 默认查看日志倒数 50 行的内容，日志会持续输出，Ctrl + C 退出查看，若想查看更多请执行 pm2 logs jd_cfd_loop --lines <行数> \n" && sleep 2
         pm2 logs jd_cfd_loop --lines 50
@@ -104,8 +107,8 @@ function Panel_Control() {
     local ExitStatusSERVER=$?
     cat $FilePm2List | awk -F '|' '{print$3}' | grep "ttyd" -wq
     local ExitStatusTTYD=$?
-    ## 开启/重启服务
     case $1 in
+    ## 开启/重启服务
     on)
         if [[ ${ExitStatusSERVER} -eq 0 ]]; then
             local ServiceStatus=$(cat $FilePm2List | grep "server" -w | awk -F '|' '{print$10}')
@@ -196,6 +199,7 @@ function Panel_Control() {
             echo -e "\n$ERROR 服务不存在！\n"
         fi
         ;;
+    ## 登录信息
     info)
         if [ ! -f $FileAuth ]; then
             cp -f $FileAuthSample $FileAuth
@@ -205,6 +209,7 @@ function Panel_Control() {
         cat $FileAuth | jq '.' | perl -pe '{s|\"user\"|[用户名]|g; s|\"password\"|[密码]|g; s|\"cookieApiToken\"|[更新接口Token]|g; s|\"lastLoginInfo\"|\n    最后一次登录信息|g; s|\"loginIp\"|[ IP 地址]|g; s|\"loginAddress\"|[地理位置]|g; s|\"loginTime\"|[登录时间]|g; s|\"authErrorCount\"|[认证失败次数]|g; s|[{},"]||g;}'
         echo -e '\n'
         ;;
+    ## 重置密码
     respwd)
         cp -f $FileAuthSample $FileAuth
         echo -e "\n$COMPLETE 已重置控制面板的用户名和登录密码\n\n[用户名]： admin\n[密  码]： admin\n"
@@ -235,6 +240,7 @@ function Bot_Control() {
             cat $FilePm2List | awk -F '|' '{print$3}' | grep "jbot" -wq
             local ExitStatusJbot=$?
             case $1 in
+            ## 开启/重启服务
             start)
                 if [[ ${ExitStatusJbot} -eq 0 ]]; then
                     local ServiceStatus=$(cat $FilePm2List | grep "jbot" -w | awk -F '|' '{print$10}')
@@ -291,6 +297,7 @@ function Bot_Control() {
                     fi
                 fi
                 ;;
+                ## 关闭服务
             stop)
                 if [[ ${ExitStatusJbot} -eq 0 ]]; then
                     pm2 stop jbot >/dev/null 2>&1
@@ -300,6 +307,7 @@ function Bot_Control() {
                     echo -e "\n$ERROR 服务不存在！\n"
                 fi
                 ;;
+                ## 查看日志
             logs)
                 if [[ -f $BotLogDir/run.log ]]; then
                     cat $BotLogDir/run.log | tail -n 100
@@ -469,7 +477,7 @@ function Environment_Deployment() {
             pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
             pip3 install --upgrade pip
             pip3 install requests
-            npm install -g ts-node typescript @types/node ts-md5 tslib date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got jsdom global-agent
+            npm install -g date-fns axios require request fs crypto-js crypto dotenv png-js tough-cookie got global-agent ts-node typescript @types/node ts-md5 tslib jsdom prettytable
             ;;
         esac
         echo ''

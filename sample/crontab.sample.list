@@ -1,5 +1,5 @@
 ## 更新 Scripts 仓库的脚本，日志为 log/update.log
-35 */2 * * * update >> /jd/log/update.log 2>&1
+35 */2 * * * sleep $((${RANDOM} % 56)) && update >> /jd/log/update.log 2>&1
 
 ## 自动更新账号，需要配置ws_key
 # 30 9,21 * * * sleep $((${RANDOM} % 56)) && task cookie update >/dev/null 2>&1
