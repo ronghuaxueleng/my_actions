@@ -1,5 +1,5 @@
 ## 此定时清单仅适配 https://github.com/JDHelloWorld/jd_scripts
-## 更新日期 2021-09-16
+## 更新日期 2021-10-08
 
 # 每3天的23:50分清理一次日志(互助码不清理，proc_file.sh对该文件进行了去重)
 50 23 */3 * * find /scripts/logs -name '*.log' | grep -v 'sharecodeCollection' | xargs rm -rf
@@ -13,6 +13,8 @@
 0 1,22 * * * node /scripts/jd_gold_creator.js >> /scripts/logs/jd_gold_creator.log 2>&1
 # 发财大赢家
 20 * * * * node /scripts/jd_big_winner.js >> /scripts/logs/jd_big_winner.log 2>&1
+# 京东小魔方
+31 2,8 * * * node /scripts/jd_mofang.js >> /scripts/logs/jd_mofang.log 2>&1
 ##############长期活动##############
 # 签到
 7 0,17 * * * node /scripts/jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
@@ -43,7 +45,7 @@
 # 金融养猪
 32 0-23/6 * * * node /scripts/jd_pigPet.js >> /scripts/logs/jd_pigPet.log 2>&1
 # 京喜工厂
-50 * * * * node /scripts/jd_dreamFactory.js >> /scripts/logs/jd_dreamFactory.log 2>&1
+30 * * * * node /scripts/jd_jxgc.js >> /scripts/logs/jd_jxgc.log 2>&1
 # 东东工厂
 26 * * * * node /scripts/jd_jdfactory.js >> /scripts/logs/jd_jdfactory.log 2>&1
 # 赚京豆(微信小程序)
@@ -120,3 +122,5 @@
 35 1,23 * * * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1
 # 京喜工厂助力
 50 * * * * node /scripts/jd_dreamFactory_help.js >> /scripts/logs/jd_dreamFactory_help.log 2>&1
+# 京喜领88元红包
+4 2,10 * * * node /scripts/jd_88hb.js >> /scripts/logs/jd_88hb.log 2>&1

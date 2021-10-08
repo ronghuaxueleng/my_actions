@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-06
+## Modified: 2021-10-08
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -881,7 +881,7 @@ function Manage_Env() {
                     sed -i "s/.*export ${VariableTmp}=/export ${VariableTmp}=/g" $FileConfUser
                     ;;
                 disable)
-                    echo -e "\n$ERROR 该变量已禁用，无需操作\n"
+                    echo -e "\n$ERROR 该变量已经禁用，无需任何操作！\n"
                     exit
                     ;;
                 *)
@@ -891,10 +891,9 @@ function Manage_Env() {
                     ;;
                 esac
             else
-
                 case ${Mod} in
                 enable)
-                    echo -e "\n$ERROR 该变量已启用，无需操作\n"
+                    echo -e "\n$ERROR 该变量已经启用，无需任何操作！\n"
                     exit
                     ;;
                 disable)
@@ -1031,9 +1030,19 @@ function Manage_Env() {
         3)
             local Variable=$2
             local Value=$3
-            FullContent="export ${Variable}=\"${Value}\""
-            sed -i "9 i ${FullContent}" $FileConfUser
-            echo -e "\n$COMPLETE ${FullContent} -> 添加完成\n"
+
+            ## 检测是否已存在该变量
+            grep ".*export.*=" $FileConfUser | grep "^export ${Variable}=" -q
+            local ExitStatus=$?
+            if [[ $ExitStatus -eq 0 ]]; then
+                echo -e "\n\033[34m检测到已存在该环境变量：\033[0m\n$(grep -n "^export ${Variable}=" $FileConfUser | perl -pe '{s|^|第|g; s|:|行：|g;}')"
+                echo -e "\n$ERROR 该变量已经存在，无需任何操作！\n"
+                exit
+            else
+                FullContent="export ${Variable}=\"${Value}\""
+                sed -i "9 i ${FullContent}" $FileConfUser
+                echo -e "\n$COMPLETE ${FullContent} -> 添加完成\n"
+            fi
             ;;
         esac
         ;;
@@ -1074,9 +1083,18 @@ function Manage_Env() {
             ;;
         2)
             local Variable=$2
-            echo -e "\n\033[34m检测到环境变量：\033[0m\n$(grep -n ".*export ${Variable}=" $FileConfUser | perl -pe '{s|^|第|g; s|:|行: |g;}')"
-            sed -i "/export ${Variable}=/d" $FileConfUser
-            echo -e "\n$COMPLETE 删除完毕\n"
+
+            ## 检测是否已存在该变量
+            grep ".*export.*=" $FileConfUser | grep "^export ${Variable}=" -q
+            local ExitStatus=$?
+            if [[ $ExitStatus -eq 0 ]]; then
+                echo -e "\n\033[34m检测到环境变量：\033[0m\n$(grep -n ".*export ${Variable}=" $FileConfUser | perl -pe '{s|^|第|g; s|:|行: |g;}')"
+                sed -i "/export ${Variable}=/d" $FileConfUser
+                echo -e "\n$COMPLETE 删除完毕\n"
+            else
+                echo -e "\n$ERROR 未查询到相关环境变量！\n"
+            fi
+
             ;;
         esac
         ;;
@@ -1190,7 +1208,8 @@ function Remove_LogFiles() {
         LogFileList=$(ls -l $LogDir/*/*.log | awk '{print $9}' | grep -v "log/bot")
         for log in ${LogFileList}; do
             ## 文件名比文件属性获得的日期要可靠
-            LogDate=$(echo ${log} | awk -F '/' '{print $NF}' | cut -c1-10)
+            LogDate=$(echo ${log} | awk -F '/' '{print $NF}' | grep -Eo "20[2-9][0-9]-[0-1][0-9]-[0-3][0-9]")
+            [[ -z ${LogDate} ]] && continue
             DiffTime=$(($(date +%s) - $(date +%s -d "${LogDate}")))
             [ ${DiffTime} -gt $((${RmLogDaysAgo} * 86400)) ] && rm -vf ${log}
         done
