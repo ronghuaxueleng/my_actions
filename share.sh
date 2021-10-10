@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-05
+## Modified: 2021-10-10
 
 ## 目录
 ShellDir=${JD_DIR}
@@ -262,7 +262,7 @@ function Help() {
  ❖  $TaskCmd <name/path> pkill   ✧ 终止执行，根据脚本名称搜索对应的进程并立即杀死，当脚本报错死循环时可使用此功能
  ❖  $TaskCmd <name> rapid        ✧ 迅速执行，不组合互助码等步骤最大化降低执行前耗时，主要适用于抢兑类活动脚本
  ❖  $TaskCmd <url> raw           ✧ 远程执行，拉取远程仓库的脚本后执行，可选参数(加在末尾): -p 代理
- ❖  source runall            ✧ 全部执行，通过交互选择运行模式执行指定范围的脚本，非常耗时不要盲目使用
+ ❖  source runall            ✧ 全部执行，在选择运行模式后执行指定范围的脚本(交互)，非常耗时不要盲目使用
 
  ❖  $TaskCmd list                ✧ 查看本地脚本清单
  ❖  $TaskCmd ps                  ✧ 查看资源消耗情况和正在运行的脚本进程，当检测到内存占用较高时自动尝试释放
@@ -294,7 +294,7 @@ function Help() {
  ❖  $TaskCmd <name/path> pkill   ✧ 终止执行，根据脚本名称搜索对应的进程并立即杀死，当脚本报错死循环时可使用此功能
  ❖  $TaskCmd <name> rapid        ✧ 迅速执行，不组合互助码等步骤最大化降低执行前耗时，可选参数(加在末尾): -c 并发
  ❖  $TaskCmd <url> raw           ✧ 远程执行，拉取远程仓库的脚本后执行，可选参数(加在末尾): -p 代理、-c 并发
- ❖  source runall            ✧ 全部执行，通过交互选择运行模式执行指定范围的脚本，非常耗时不要盲目使用
+ ❖  source runall            ✧ 全部执行，在选择运行模式后执行指定范围的脚本(交互)，非常耗时不要盲目使用
 
  ❖  $TaskCmd list                ✧ 查看本地脚本清单
  ❖  $TaskCmd ps                  ✧ 查看资源消耗情况和正在运行的脚本进程，当检测到内存占用较高时自动尝试释放

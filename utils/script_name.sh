@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-## Update: 2021-10-05
+## Update: 2021-10-09
 
 case $1 in
 jd_IndustryLottery.ts)
@@ -76,6 +76,9 @@ jd_qq_pasture.ts)
     ;;
 jd_speed_redEnvelope.ts)
     Name="极速版-发财大赢家"
+    ;;
+jd_track.ts)
+    Name="京东快递更新通知"
     ;;
 jd_yili_cow.ts)
     Name="伊利养牛记"

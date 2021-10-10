@@ -90,7 +90,7 @@
 
 
 ### 12. 管理全局环境变量功能：
-    task cookie <cmd>
+    task env <cmd>
 > _注：通过交互管理全局环境变量，添加 add、删除 del、修改 edit、查询 search，支持快捷命令。_
   - 增加环境变量快捷命令：
 

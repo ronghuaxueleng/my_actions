@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-05
+## Modified: 2021-10-10
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -284,7 +284,7 @@ function Del_Cron() {
         crontab $ListCrontabUser
         Detail2=$(echo $Detail | perl -pe "s| |\\\n|g")
         echo -e "$SUCCESS 成功删除失效的定时任务\n"
-        Notify "删除失效任务通知" "成功删除以下失效的定时任务：\n\n$Detail2"
+        Notify "失效定时任务通知" "已删除以下失效的定时任务：\n\n$Detail2"
     fi
 }
 
@@ -319,9 +319,18 @@ function Add_Cron_Own() {
             local FileName=$(echo $FilePath | awk -F "/" '{print $NF}')
             if [ -f $FilePath ]; then
                 if [ $FilePath = "$RawDir/$FileName" ]; then
+                    ## 判断表达式所在行
                     local Tmp1=$(grep -E "cron|script-path|tag|\* \*|$FileName" $FilePath | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\:\_]||g;}')
-                    local Tmp2=$(echo "$Tmp1" | awk -F '[0-9]' '{print$1}' | perl -pe '{s| ||g;}')
-                    local cron=$(echo "$Tmp1" | perl -pe "{s|${Tmp2}||g;}" | awk '{if($1~/^[0-9]{1,2}/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
+                    ## 判断开头
+                    local Tmp2=$(echo "${Tmp1}" | awk -F '[0-9]' '{print$1}' | sed 's/\*/\\*/g; s/\./\\./g')
+                    ## 判断表达式的第一个数字（分钟）
+                    local Tmp3=$(echo "${Tmp1}" | grep -Eo "[0-9]" | head -1)
+                    ## 判定开头是否为空值
+                    if [[ $(echo "${Tmp2}" | perl -pe '{s| ||g;}') = "" ]]; then
+                        cron=$(echo "${Tmp1}" | awk '{if($1~/^[0-9]{1,2}/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
+                    else
+                        cron=$(echo "${Tmp1}" | perl -pe "{s|${Tmp2}${Tmp3}|${Tmp3}|g;}" | awk '{if($1~/^[0-9]{1,2}/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
+                    fi
                     echo "$cron $TaskCmd $FilePath" | sort -u | head -1 >>$ListCrontabOwnTmp
                 else
                     perl -ne "print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*$FileName/" $FilePath |
@@ -339,22 +348,22 @@ function Add_Cron_Own() {
 
 ## 向系统添加定时任务以及通知，$1：写入crontab.list时的exit状态，$2：新增清单文件路径，$3：Scripts仓库脚本/own脚本
 function Add_Cron_Notify() {
-    local status_code=$1
+    local Status_Code=$1
     local ListAdd=$2
     local Tmp=$(echo $(cat $ListAdd))
     local Detail=$(echo $Tmp | perl -pe "s| |\\\n|g")
     local Type=$3
-    if [[ $status_code -eq 0 ]]; then
+    if [[ $Status_Code -eq 0 ]]; then
         cat ${ListCrontabUser} | sort -k2n | uniq > ${ListCrontabUser}.uniq
         mv ${ListCrontabUser}.uniq ${ListCrontabUser}
         cat ${ListCrontabUser} ${UtilsDir}/ext_crontab_list.sh > ${ListCrontabUser}.mix
         mv ${ListCrontabUser}.mix ${ListCrontabUser}
         crontab $ListCrontabUser
         echo -e "$SUCCESS 成功添加新的定时任务\n"
-        Notify "新增任务通知" "成功添加新的定时任务（$Type）：\n\n$Detail"
+        Notify "新增定时任务通知" "已添加新的定时任务（$Type）：\n\n$Detail"
     else
         echo -e "添加新的定时任务出错，请手动添加...\n"
-        Notify "新任务添加失败通知" "尝试自动添加以下新的定时任务出错，请手动添加（$Type）：\n\n$Detail"
+        Notify "新任务添加失败通知" "尝试自动添加以下新的定时任务出错，请尝试手动添加（$Type）：\n\n$Detail"
     fi
 }
 
@@ -433,7 +442,7 @@ function Update_Shell() {
     echo -e "\n$WORKING 开始更新源码仓库：/jd\n"
     git fetch --all
     git pull
-    git reset --hard origin/$(git branch | head -n 1 | awk -F ' ' '{print$NF}')
+    git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')
     if [[ $ExitStatus -eq 0 ]]; then
         echo -e "\n$COMPLETE 源码仓库更新完成\n"
     else
@@ -487,7 +496,7 @@ function Update_Scripts() {
         if [ -s $ListTaskAdd ]; then
             Output_List_Add_Drop $ListTaskAdd "新"
             Add_Cron_Scripts $ListTaskAdd
-            [[ ${AutoAddCron} == true ]] && Add_Cron_Notify $ExitStatus $ListTaskAdd "Scripts仓库脚本"
+            [[ ${AutoAddCron} == true ]] && Add_Cron_Notify $ExitStatus $ListTaskAdd " Scripts 仓库脚本"
         fi
         echo -e "\n$COMPLETE Scripts 仓库更新完成\n"
     else
@@ -516,7 +525,7 @@ function Update_Own() {
         if [[ ${AutoAddOwnCron} == true ]] && [ -s $ListOwnAdd ]; then
             Output_List_Add_Drop $ListOwnAdd "新"
             Add_Cron_Own $ListOwnAdd
-            Add_Cron_Notify $ExitStatus $ListOwnAdd "Own仓库脚本"
+            Add_Cron_Notify $ExitStatus $ListOwnAdd " Own 仓库脚本"
         fi
         echo ''
     else
@@ -526,9 +535,11 @@ function Update_Own() {
 
 ## 自定义脚本
 function ExtraShell() {
+    if [[ ${EnableExtraShell} = true || ${EnableExtraShellSync} = true ]]; then
+        echo -e "-------------------------------------------------------------\n"
+    fi
     ## 同步用户的 extra.sh
     if [[ $EnableExtraShellSync == true ]] && [[ $ExtraShellSyncUrl ]]; then
-        [[ $EnableExtraShell != true ]] && echo -e "-------------------------------------------------------------\n"
         echo -e "$WORKING 开始同步自定义脚本：$ExtraShellSyncUrl\n"
         wget -q --no-check-certificate $ExtraShellSyncUrl -O $FileExtra.new -T 10
         if [ $? -eq 0 ]; then
@@ -547,7 +558,6 @@ function ExtraShell() {
     fi
     ## 执行用户的 extra.sh
     if [[ $EnableExtraShell == true ]]; then
-        echo -e "-------------------------------------------------------------\n"
         ## 执行
         if [ -f $FileExtra ]; then
             echo -e "$WORKING 开始执行自定义脚本：$FileExtra\n"

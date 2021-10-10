@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-08
+## Modified: 2021-10-10
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -45,13 +45,16 @@ function Find_Script() {
                 ts)
                     FileFormat="TypeScript"
                     ;;
+                sh)
+                    FileFormat="Shell"
+                    ;;
                 *)
                     echo -e "\n$ERROR 项目不支持运行 .${FileFormatTmp} 类型的脚本！"
                     Help
                     exit 1
                     ;;
                 esac
-                FileName=$(echo ${FileNameTmp} | perl -pe "{s|\.js||; s|\.py||; s|\.ts||;}")
+                FileName=$(echo ${FileNameTmp} | perl -pe "{s|\.js||; s|\.py||; s|\.ts||; s|\.sh||}")
                 WhichDir=${WhichDirTmp}
             fi
         else
@@ -59,13 +62,17 @@ function Find_Script() {
                 FileName=${FileNameTmp}
                 FileFormat="JavaScript"
                 WhichDir=${WhichDirTmp}
+            elif [ -f ${WhichDirTmp}/${FileNameTmp}.py ]; then
+                FileName=${FileNameTmp}
+                FileFormat="Python"
+                WhichDir=${WhichDirTmp}
             elif [ -f ${WhichDirTmp}/${FileNameTmp}.ts ]; then
                 FileName=${FileNameTmp}
                 FileFormat="TypeScript"
                 WhichDir=${WhichDirTmp}
-            elif [ -f ${WhichDirTmp}/${FileNameTmp}.py ]; then
+            elif [ -f ${WhichDirTmp}/${FileNameTmp}.sh ]; then
                 FileName=${FileNameTmp}
-                FileFormat="Python"
+                FileFormat="Shell"
                 WhichDir=${WhichDirTmp}
             fi
         fi
@@ -86,8 +93,8 @@ function Find_Script() {
         fi
     else
         ## 仅 Scripts 目录：
-        FileNameTmp1=$(echo $input | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
-        FileNameTmp2=$(echo $input | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|^|jd_|}")
+        FileNameTmp1=$(echo $input | perl -pe "{s|\.js||; s|\.py||; s|\.ts||; s|\.sh||}")
+        FileNameTmp2=$(echo $input | perl -pe "{s|jd_||; s|\.js||; s|\.py||; s|\.ts||; s|\.sh||; s|^|jd_|}")
         local SeekDir="$ScriptsDir $ScriptsDir/activity $ScriptsDir/backUp $ScriptsDir/utils"
         for dir in ${SeekDir}; do
             if [ -f ${dir}/${FileNameTmp1}.js ]; then
@@ -95,14 +102,19 @@ function Find_Script() {
                 FileFormat="JavaScript"
                 WhichDir=${dir}
                 break
+            elif [ -f ${dir}/${FileNameTmp1}.py ]; then
+                FileName=${FileNameTmp1}
+                FileFormat="Python"
+                WhichDir=${dir}
+                break
             elif [ -f ${dir}/${FileNameTmp1}.ts ]; then
                 FileName=${FileNameTmp1}
                 FileFormat="TypeScript"
                 WhichDir=${dir}
                 break
-            elif [ -f ${dir}/${FileNameTmp1}.py ]; then
+            elif [ -f ${dir}/${FileNameTmp1}.sh ]; then
                 FileName=${FileNameTmp1}
-                FileFormat="Python"
+                FileFormat="Shell"
                 WhichDir=${dir}
                 break
             elif [ -f ${dir}/${FileNameTmp2}.js ]; then
@@ -110,14 +122,19 @@ function Find_Script() {
                 FileFormat="JavaScript"
                 WhichDir=${dir}
                 break
+            elif [ -f ${dir}/${FileNameTmp2}.py ]; then
+                FileName=${FileNameTmp2}
+                FileFormat="Python"
+                WhichDir=${dir}
+                break
             elif [ -f ${dir}/${FileNameTmp2}.ts ]; then
                 FileName=${FileNameTmp2}
                 FileFormat="TypeScript"
                 WhichDir=${dir}
                 break
-            elif [ -f ${dir}/${FileNameTmp2}.py ]; then
+            elif [ -f ${dir}/${FileNameTmp2}.sh ]; then
                 FileName=${FileNameTmp2}
-                FileFormat="Python"
+                FileFormat="Shell"
                 WhichDir=${dir}
                 break
             fi
@@ -195,6 +212,9 @@ function Run_Normal() {
     TypeScript)
         ts-node-transpile-only ${FileName}.ts 2>&1 | tee -a ${LogFile}
         ;;
+    Shell)
+        bash ${FileName}.sh 2>&1 | tee -a ${LogFile}
+        ;;
     esac
     echo -e "\n[$(date "${TIME}:%N" | cut -c1-23)] 执行结束" >>${LogFile}
 }
@@ -239,6 +259,9 @@ function Run_Concurrent() {
             TypeScript)
                 ts-node-transpile-only ${FileName}.ts 2>&1 &>>${LogFile} &
                 ;;
+            Shell)
+                bash ${FileName}.sh 2>&1 &>>${LogFile} &
+                ;;
             esac
         done
         echo -e "\n$COMPLETE 已在后台部署并发任务，如需查询脚本输出内容请直接查看 ${LogPath} 目录下的相关日志\n"
@@ -271,6 +294,9 @@ function Run_Concurrent_Lite() {
             ;;
         TypeScript)
             ts-node-transpile-only ${FileName}.ts 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
+            ;;
+        Shell)
+            bash ${FileName}.sh 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
             ;;
         esac
     done
@@ -310,6 +336,9 @@ function Run_Specify() {
         ;;
     TypeScript)
         ts-node-transpile-only ${FileName}.ts 2>&1 | tee -a ${LogFile}
+        ;;
+    Shell)
+        bash ${FileName}.sh 2>&1 | tee -a ${LogFile}
         ;;
     esac
     echo -e "\n[$(date "${TIME}:%N" | cut -c1-23)] 执行结束" >>${LogFile}
@@ -371,6 +400,9 @@ function Run_Rapidly() {
             ;;
         TypeScript)
             ts-node-transpile-only ${FileName}.ts 2>&1 | tee -a ${LogFile}
+            ;;
+        Shell)
+            bash ${FileName}.sh 2>&1 | tee -a ${LogFile}
             ;;
         esac
         echo -e "\n[$(date "${TIME}:%N" | cut -c1-23)] 执行结束" >>${LogFile}
@@ -684,9 +716,9 @@ function Cookies_Control() {
                     Tmp=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|\-|\.\*|g;}')
                     grep "Cookie => \[$Tmp\]" ${LogFile} | tee -a $FileSendMark
                 done
-                echo -e "\n[$(date "${TIME}:%N" | cut -c1-23)] 执行结束" >>${LogFile}
                 ## 优化日志排版
-                sed -i '/更新Cookies,.*\!/d' ${LogFile}
+                sed -i '/更新Cookies,.*\!/d; /^$/d; s/===.*//g' ${LogFile}
+                echo -e "\n[$(date "${TIME}:%N" | cut -c1-23)] 执行结束" >>${LogFile}
                 echo "" >>$FileSendMark
                 ## 更新后检测 Cookie 是否有效
                 echo -e "\n$WORKING 更新后检测：\n"
@@ -744,9 +776,9 @@ function Cookies_Control() {
                 echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 开始执行\n" >>${LogFile}
                 node updateCookies.js &>>${LogFile} &
                 wait
-                echo -e "\n[$(date "${TIME}:%N" | cut -c1-23)] 执行结束" >>${LogFile}
                 ## 优化日志排版
-                sed -i '/更新Cookies,.*\!/d' ${LogFile}
+                sed -i '/更新Cookies,.*\!/d; /^$/d; s/===.*//g' ${LogFile}
+                echo -e "\n[$(date "${TIME}:%N" | cut -c1-23)] 执行结束" >>${LogFile}
                 ## 写入至推送通知文件
                 grep "Cookie => \[$Tmp\]" ${LogFile} | tee -a $FileSendMark
                 ## 更新后检测 Cookie 是否有效
@@ -779,6 +811,8 @@ function Cookies_Control() {
         }
         ## 汇总
         if [ -f $FileUpdateCookie ]; then
+            ## 安装 jq 指令，暂时命令后期删除
+            [ ! -x /usr/bin/jq ] && apk --no-cache add -f jq
             if [[ $(cat $FileAccountConf | jq '.[] | {ws_key:.ws_key,}' | grep -F "\"ws_key\"" | grep -v "wskey的值" | awk -F '\"' '{print$4}' | sed '/^$/d') ]]; then
                 UpdateSign
                 if [[ $ExitStatus -eq 0 ]]; then
@@ -1310,7 +1344,7 @@ function List_Local_Scripts() {
         echo -e "\n❖ Scripts 仓库的脚本："
         for ((i = 0; i < ${#ListFiles[*]}; i++)); do
             Query_Name ${ListFiles[i]}
-            echo -e "$(($i + 1)).${Name}：${ListFiles[i]}"
+            echo -e "[$(($i + 1))] ${Name} - ${ListFiles[i]}"
         done
     }
 
@@ -1357,7 +1391,7 @@ function List_Local_Scripts() {
                 WhichDir=$(echo ${ListFiles[i]} | awk -F "$FileName" '{print$1}')
                 cd $WhichDir
                 Query_Name $FileName
-                echo -e "$(($i + 1)).${Name}：${ListFiles[i]}"
+                echo -e "[$(($i + 1))] ${Name} - ${ListFiles[i]}"
             done
         fi
     }
@@ -1373,7 +1407,7 @@ function List_Local_Scripts() {
             echo -e "\n❖ 第三方脚本："
             for ((i = 0; i < ${#ListFiles[*]}; i++)); do
                 Query_Name ${ListFiles[i]}
-                echo -e "$(($i + 1)).${Name}：${ListFiles[i]}"
+                echo -e "[$(($i + 1))] ${Name} - ${ListFiles[i]}"
             done
         fi
     }
