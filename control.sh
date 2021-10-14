@@ -257,7 +257,7 @@ function Bot_Control() {
                         fi
                         ;;
                     stopped)
-                        pm2 stop jbot
+                        pm2 start jbot
                         List_All_Processes
                         local ServiceNewStatus=$(cat $FilePm2List | grep "jbot" -w | awk -F '|' '{print$10}')
                         if [[ ${ServiceNewStatus} == "online" ]]; then
