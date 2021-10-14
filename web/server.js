@@ -453,7 +453,7 @@ app.use(
     session({
         store: new FileStore(fileStoreOptions),
         secret: 'secret',
-        name: `panel-connect-name`,
+        name: `panel-connect-name-${random(8)}`,
         resave: true,
         saveUninitialized: true,
         cookie: { maxAge: fileStoreOptions.ttl * 1000 },
