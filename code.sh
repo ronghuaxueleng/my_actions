@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-05
+## Modified: 2021-10-16
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -148,6 +148,30 @@ function Export_Codes_Sub() {
     fi
 }
 
+## 输出用于提交到 Bot 的助力码格式
+function Export_Bot_Submit_Format() {
+    local CombinAll Tmp1 Tmp2
+    if [[ -d $CodeDir ]]; then
+        if [[ $(ls $CodeDir) ]]; then
+            local LatestLog=$(ls -r $CodeDir | head -1)
+            . $CodeDir/$LatestLog
+        fi
+    fi
+    echo -e "\n\n## 用于 Bot 提交的助力码格式："
+    for ((i = 1; i <= ${#name_config[@]}; i++)); do
+        local j=$((i - 1))
+        CombinAll=""
+        for ((m = 1; m <= ${#BotSubmit[@]}; m++)); do
+            local n=$(($m - 1))
+            Tmp1="My${name_config[j]}${BotSubmit[n]}"
+            Tmp2=${!Tmp1}
+            CombinAll="${CombinAll}&${Tmp2}"
+        done
+        echo -e "\n## ${name_chinese[j]}：\n# /${bot_command[j]} $(echo $CombinAll | perl -pe "{s|^&||; s|&&&&|&&&|; s|&&&|&&|; s|&&|&|; s|&$||;}")"
+    done
+    echo ''
+}
+
 ## 汇总输出
 function Export_Codes_All() {
     echo -e "\n## 从每个活动脚本的日志中提取互助码，如果 MyXxx变量 的值为空说明对应日志中的对应账号没有输出互助码，原因包括账号失效、不满足活动条件、脚本报错等。"
@@ -186,3 +210,4 @@ LogTime=$(date "+%Y-%m-%d-%H-%M-%S")
 LogPath="$CodeDir/$LogTime.log"
 Make_Dir ${CodeDir}
 Export_Codes_All | perl -pe "{s|京东种豆|种豆|; s|crazyJoy任务|疯狂的JOY|}" | tee ${LogPath}
+Export_Bot_Submit_Format

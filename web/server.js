@@ -1071,6 +1071,29 @@ app.get('/api/scripts', function (request, response) {
 });
 
 /**
+ * save scripts
+ */
+
+app.post('/api/scripts/save', function (request, response) {
+    if (request.session.loggedin) {
+        let postContent = request.body.content;
+        let postFile = request.body.name;
+        fs.writeFileSync(path.join(rootPath, postFile), postContent);
+        response.send({
+            err: 0,
+            title: '保存成功! ',
+            msg: '注意：脚本库更新可能会导致修改的内容丢失',
+        });
+    } else {
+        response.send({
+            err: 1,
+            title: '保存失败! ',
+            msg: loginFaild
+        });
+    }
+});
+
+/**
  * 脚本文件
  */
 app.get('/api/scripts/content', function (request, response) {

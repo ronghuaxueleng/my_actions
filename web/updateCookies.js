@@ -20,7 +20,7 @@ let globalOptions = {
 const globalConfig = {
     configShPath: "../config/config.sh",
     accountPath: "../config/account.json",
-    signPath: "../utils/sign/",
+    signPath: "../utils/.sign/",
     UA: `okhttp/3.12.1;jdmall;android;version/${globalOptions.clientVersion};build/89743;screen/1080x2206;os/11;network/wifi;`,
 }
 

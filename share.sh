@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-10
+## Modified: 2021-10-16
 
 ## 目录
 ShellDir=${JD_DIR}
@@ -13,7 +13,7 @@ LogDir=$ShellDir/log
 logDir=$ShellDir/log
 logdir=$ShellDir/log
 LogTmpDir=$LogDir/.tmp
-SignDir=$UtilsDir/sign
+SignDir=$UtilsDir/.sign
 CodeDir=$LogDir/ShareCodes
 OwnDir=$ShellDir/own
 RawDir=$OwnDir/raw
@@ -37,7 +37,8 @@ FileNotify=$UtilsDir/notify.js
 FileSendNotify=$UtilsDir/sendNotify.js
 FileSendNotifyScripts=$ScriptsDir/sendNotify.js
 FileSendMark=$ShellDir/send_mark
-FilePm2List=$ShellDir/pm2_list.log
+FilePm2List=$ShellDir/.pm2_list.log
+FileProcessList=$ShellDir/.process_list.log
 FileUpdateCookie=$PanelDir/updateCookies.js
 FileScriptDictionary=$UtilsDir/script_name.sh
 
@@ -52,7 +53,11 @@ ListTaskDrop=$LogTmpDir/task_drop.list
 ListOwnScripts=$LogTmpDir/own_scripts.list
 ListOwnUser=$LogTmpDir/own_user.list
 ListOwnAdd=$LogTmpDir/own_add.list
+ListOwnRepoAdd=$LogTmpDir/own_repo_add.list
+ListOwnRawAdd=$LogTmpDir/own_raw_add.list
 ListOwnDrop=$LogTmpDir/own_drop.list
+ListOwnRepoDrop=$LogTmpDir/own_repo_drop.list
+ListOwnRawDrop=$LogTmpDir/own_raw_drop.list
 ListOwnAll=$LogTmpDir/own_all.list
 
 ## 字符串
@@ -84,11 +89,12 @@ name_script=(
     jd_plantBean
     jd_dreamFactory
     jd_jdfactory
-    jd_jxnc
     jd_bookshop
     jd_cash
     jd_sgmh
+    jd_cfd
     jd_health
+    jd_jxnc
     jd_global
     jd_carnivalcity
     jd_city
@@ -100,11 +106,12 @@ name_config=(
     Bean
     DreamFactory
     JdFactory
-    Jxnc
     BookShop
     Cash
     Sgmh
+    Cfd
     Health
+    Jxnc
     Global
     Carni
     City
@@ -116,14 +123,32 @@ name_chinese=(
     京东种豆得豆
     京喜工厂
     东东工厂
-    京喜农场
     口袋书店
     签到领现金
     闪购盲盒
+    京喜财富岛
     东东健康社区
+    京喜农场
     环球挑战赛
     京东手机狂欢城
     城城领现金
+)
+## 用于 Bot 提交的命令前缀
+bot_command=(
+    farm
+    pet
+    bean
+    jxfactory
+    ddfactory
+    bookshop
+    sign
+    sgmh
+    cfd
+    health
+    jxnc
+    global
+    carni
+    city
 )
 
 ## 导入配置文件
@@ -267,18 +292,20 @@ function Help() {
  ❖  $TaskCmd list                ✧ 查看本地脚本清单
  ❖  $TaskCmd ps                  ✧ 查看资源消耗情况和正在运行的脚本进程，当检测到内存占用较高时自动尝试释放
  ❖  $TaskCmd exsc                ✧ 导出互助码变量和助力格式，互助码从最后一个日志提取，受日志内容影响
- ❖  $TaskCmd rmlog               ✧ 删除各脚本产生的日志文件，可根据配置文件中的相关变量定义删除日期
+ ❖  $TaskCmd rmlog               ✧ 删除项目产生的日志文件，默认检测7天以前的日志，可选参数(加在末尾): <days> 指定天数
+ ❖  $TaskCmd cleanup             ✧ 检测并终止卡死的脚本进程以此释放内存占用，可选参数(加在末尾): <hours> 指定时间
  ❖  $TaskCmd cookie <cmd>        ✧ 检测本地账号是否有效 check、使用 WSKEY 更新COOKIE update，支持指定账号进行更新
  ❖  $TaskCmd env <cmd>           ✧ 管理全局环境变量功能(交互)，添加 add、删除 del、修改 edit、查询 search，支持快捷命令
 
  ❖  $ContrlCmd server status    ✧ 查看各服务的详细信息，包括运行状态、创建时间、处理器占用、内存占用、运行时长
- ❖  $ContrlCmd hang <cmd>       ✧ 后台挂机程序(后台循环执行活动脚本)功能控制，启动/重启 up、停止 down、查看日志 logs
- ❖  $ContrlCmd panel <cmd>      ✧ 控制面板和网页终端功能控制，开启/重启 on、关闭 off、登录信息 info、重置密码 respwd
+ ❖  $ContrlCmd hang <cmd>       ✧ 后台挂机程序(后台循环执行活动脚本)功能控制，启动或重启 up、停止 down、查看日志 logs
+ ❖  $ContrlCmd panel <cmd>      ✧ 控制面板和网页终端功能控制，开启或重启 on、关闭 off、登录信息 info、重置密码 respwd
  ❖  $ContrlCmd env <cmd>        ✧ 执行环境软件包相关命令(不支持 TypeSciprt 和 Python )，修复 repairs
  ❖  $ContrlCmd check files      ✧ 检测项目相关配置文件是否存在，如果缺失就从模板导入
 
  ❖  $UpdateCmd | $UpdateCmd all      ✧ 全部更新，包括项目源码、所有仓库和脚本、自定义脚本等
- ❖  $UpdateCmd <cmd>             ✧ 单独更新，项目源码 shell、\"Scripts\"仓库 scripts、\"Own\"仓库 own、自定义脚本 extra
+ ❖  $UpdateCmd <cmd>             ✧ 单独更新，项目源码 shell、\"Scripts\" 仓库 scripts、\"Own\" 仓库 own、所有仓库 repo
+                                         \"Raw\" 脚本 raw、自定义脚本 extra
 
  ❋  <name> 脚本名(仅限scripts目录); <path> 脚本的相对路径或绝对路径; <cmd> 固定的可选命令参数(加在末尾); <url> 链接地址
 
@@ -299,19 +326,21 @@ function Help() {
  ❖  $TaskCmd list                ✧ 查看本地脚本清单
  ❖  $TaskCmd ps                  ✧ 查看资源消耗情况和正在运行的脚本进程，当检测到内存占用较高时自动尝试释放
  ❖  $TaskCmd exsc                ✧ 导出互助码变量和助力格式，互助码从最后一个日志提取，受日志内容影响
- ❖  $TaskCmd rmlog               ✧ 删除各脚本产生的日志文件，可根据配置文件中的相关变量定义删除日期
+ ❖  $TaskCmd rmlog               ✧ 删除项目产生的日志文件，默认检测7天以前的日志，可选参数(加在末尾): <days> 指定天数
+ ❖  $TaskCmd cleanup             ✧ 检测并终止卡死的脚本进程以此释放内存占用，可选参数(加在末尾): <hours> 指定时间
  ❖  $TaskCmd cookie <cmd>        ✧ 检测本地账号是否有效 check、使用 WSKEY 更新COOKIE update，支持指定账号进行更新
  ❖  $TaskCmd env <cmd>           ✧ 管理全局环境变量功能(交互)，添加 add、删除 del、修改 edit、查询 search，支持快捷命令
 
  ❖  $ContrlCmd server status    ✧ 查看各服务的详细信息，包括运行状态、创建时间、处理器占用、内存占用、运行时长
- ❖  $ContrlCmd hang <cmd>       ✧ 后台挂机程序(后台循环执行活动脚本)功能控制，启动/重启 up、停止 down、查看日志 logs
- ❖  $ContrlCmd panel <cmd>      ✧ 控制面板和网页终端功能控制，开启/重启 on、关闭 off、登录信息 info、重置密码 respwd
- ❖  $ContrlCmd jbot <cmd>       ✧ Telegram Bot 功能控制，启动/重启 start、停止 stop、查看日志 logs
+ ❖  $ContrlCmd hang <cmd>       ✧ 后台挂机程序(后台循环执行活动脚本)功能控制，启动或重启 up、停止 down、查看日志 logs
+ ❖  $ContrlCmd panel <cmd>      ✧ 控制面板和网页终端功能控制，开启或重启 on、关闭 off、登录信息 info、重置密码 respwd
+ ❖  $ContrlCmd jbot <cmd>       ✧ Telegram Bot 功能控制，启动或重启 start、停止 stop、查看日志 logs
  ❖  $ContrlCmd env <cmd>        ✧ 执行环境软件包相关命令(支持 TypeSciprt 和 Python )，安装 install、修复 repairs
  ❖  $ContrlCmd check files      ✧ 检测项目相关配置文件是否存在，如果缺失就从模板导入
 
  ❖  $UpdateCmd | $UpdateCmd all      ✧ 全部更新，包括项目源码、所有仓库和脚本、自定义脚本等
- ❖  $UpdateCmd <cmd>             ✧ 单独更新，项目源码 shell、\"Scripts\"仓库 scripts、\"Own\"仓库 own、自定义脚本 extra
+ ❖  $UpdateCmd <cmd>             ✧ 单独更新，项目源码 shell、\"Scripts\" 仓库 scripts、\"Own\" 仓库 own、所有仓库 repo
+                                         \"Raw\" 脚本 raw、自定义脚本 extra
 
  ❋  <name> 脚本名(仅限scripts目录); <path> 脚本的相对路径或绝对路径; <cmd> 固定的可选命令参数; <url> 链接地址
 

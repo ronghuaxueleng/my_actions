@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-10
+## Modified: 2021-10-16
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -78,7 +78,7 @@ function Find_Script() {
         fi
         ## 判定变量是否存在否则退出
         if [ -n "${FileName}" ] && [ -n "${WhichDir}" ]; then
-            [[ ${WhichDir} != $ScriptsDir ]] && Check_Moudules $WhichDir
+            [[ ${FileFormat} = "JavaScript" && ${WhichDir} != $ScriptsDir ]] && Check_Moudules $WhichDir
             if [ $(echo $AbsolutePath | awk -F '/' '{print$3}') = "own" ]; then
                 LogPath="$LogDir/$(echo $AbsolutePath | awk -F '/' '{print$4}')_${FileName}"
             else
@@ -197,7 +197,7 @@ function Run_Normal() {
     Make_Dir ${LogPath}
     local LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S").log"
     cd ${WhichDir}
-    echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 开始执行\n" >>${LogFile}
+    echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 执行开始\n" >>${LogFile}
     case ${FileFormat} in
     JavaScript)
         if [[ ${EnableGlobalProxy} == true ]]; then
@@ -244,7 +244,7 @@ function Run_Concurrent() {
             export JD_COOKIE=${!AccountNum}
             LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log"
             cd ${WhichDir}
-            echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 开始执行，不记录结束时间\n" >>${LogFile}
+            echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 执行开始，不记录结束时间\n" >>${LogFile}
             case ${FileFormat} in
             JavaScript)
                 if [[ ${EnableGlobalProxy} == true ]]; then
@@ -280,7 +280,7 @@ function Run_Concurrent_Lite() {
         AccountNum=Cookie$UserNum
         export JD_COOKIE=${!AccountNum}
         cd $ScriptsDir
-        echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 开始执行，不记录结束时间\n" >>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log
+        echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 执行开始，不记录结束时间\n" >>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log
         case ${FileFormat} in
         JavaScript)
             if [[ ${EnableGlobalProxy} == true ]]; then
@@ -322,7 +322,7 @@ function Run_Specify() {
         exit 1
     fi
     cd ${WhichDir}
-    echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 开始执行\n" >>${LogFile}
+    echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 执行开始\n" >>${LogFile}
     case ${FileFormat} in
     JavaScript)
         if [[ ${EnableGlobalProxy} == true ]]; then
@@ -386,7 +386,7 @@ function Run_Rapidly() {
         Count_UserSum
         export JD_COOKIE=$(Combin_Sub Cookie)
         cd $ScriptsDir
-        echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 开始执行\n" >>${LogFile}
+        echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 执行开始\n" >>${LogFile}
         case ${FileFormat} in
         JavaScript)
             if [[ ${EnableGlobalProxy} == true ]]; then
@@ -456,33 +456,8 @@ function Run_Rapidly() {
     esac
 }
 
-## 终止执行
-function Process_Kill() {
-    local p=$1
-    Find_Script $p
-    ps -ef | grep -Ev "grep|pkill" | grep "${FileName}" -wq
-    local ExitSearchProcess=$?
-    if [[ ${ExitSearchProcess} == 0 ]]; then
-        kill -9 $(ps -ef | grep "${FileName}" | grep -v "pkill" | awk '$0 !~/grep/ {print $2}' | tr -s '\n' ' ') >/dev/null 2>&1
-        sleep 1
-        kill -9 $(ps -ef | grep "${FileName}" | grep -v "pkill" | awk '$0 !~/grep/ {print $2}' | tr -s '\n' ' ') >/dev/null 2>&1
-        ps -ef | grep -Ev "grep|pkill" | grep "${FileName}" -wq
-        if [ $? -eq 0 ]; then
-            echo -e "\n$ERROR 进程终止失败，请尝试手动终止 kill -9 <pid>\n"
-            ps -axo pid,pcpu,pmem,command --sort -pmem | less | grep ${FileName} | grep -Ev "grep|pkill"
-            echo ''
-        else
-            echo -e "\n$COMPLETE 已终止相关进程\n"
-        fi
-    else
-        echo -e "\n$ERROR 未检测到与 ${FileName} 脚本相关的进程，请重新确认！"
-        Help
-        exit 1
-    fi
-}
-
 ## 远程执行
-function Run_RawScript() {
+function Run_Remote() {
     local Input_Url=$1
     local DownloadJudge RepositoryJudge ProxyJudge ScriptName FormatFileName RepositoryName RunMod
     ScriptName=${Input_Url##*/}
@@ -546,7 +521,6 @@ function Run_RawScript() {
         RunMod="normal"
         ;;
     esac
-
     if [[ ${DownloadJudge} == ${GithubProxy} ]]; then
         ProxyJudge="使用代理"
     else
@@ -597,6 +571,97 @@ function Run_RawScript() {
     fi
 }
 
+## 终止执行
+function Process_Kill() {
+    local p=$1
+    Find_Script $p
+    case ${FileFormat} in
+    JavaScript)
+        local Tmp=".js\b"
+        ;;
+    Python)
+        local Tmp=".py\b"
+        ;;
+    TypeScript)
+        local Tmp=".ts\b"
+        ;;
+    Shell)
+        local Tmp=".sh\b"
+        ;;
+    esac
+    ps -ef | grep -Ev "grep|pkill" | grep "${FileName}${Tmp}" -wq
+    local ExitSearchProcess=$?
+    if [[ ${ExitSearchProcess} == 0 ]]; then
+        kill -9 $(ps -ef | grep "${FileName}${Tmp}" | grep -v "pkill" | awk '$0 !~/grep/ {print $2}' | tr -s '\n' ' ') >/dev/null 2>&1
+        sleep 1
+        kill -9 $(ps -ef | grep "${FileName}${Tmp}" | grep -v "pkill" | awk '$0 !~/grep/ {print $2}' | tr -s '\n' ' ') >/dev/null 2>&1
+        ps -ef | grep -Ev "grep|pkill" | grep "${FileName}" -wq
+        if [ $? -eq 0 ]; then
+            echo -e "\n$ERROR 进程终止失败，请尝试手动终止 kill -9 <pid>\n"
+            ps -axo pid,pcpu,pmem,command --sort -pmem | less | grep ${FileName} | grep -Ev "grep|pkill"
+            echo ''
+        else
+            echo -e "\n$COMPLETE 已终止相关进程\n"
+        fi
+    else
+        echo -e "\n$ERROR 未检测到与 ${FileName} 脚本相关的进程，请重新确认！"
+        Help
+        exit 1
+    fi
+}
+
+## 终止卡死进程释放内存
+function Process_CleanUp() {
+    ## 判断检测小时
+    case $# in
+    0)
+        local CheckHour=6
+        ;;
+    1)
+        local CheckHour=$1
+        ;;
+    esac
+    ## 生成进程清单
+    ps -axo pid,time,user,start,command | egrep "\.js\b|\.py\b|\.ts\b" | egrep -v "server\.js|pm2|egrep|perl|sed|bash" | grep -E "00:00:[0-1][0-9] root" >${FileProcessList}
+    if [ -s ${FileProcessList} ]; then
+        echo -e "\n$WORKING 开始清理进程\n"
+        ## 生成进程 PID 数组
+        local ProcessArray=($(
+            cat ${FileProcessList} | awk -F ' ' '{print$1}'
+        ))
+        ## 定义当前时间戳
+        local FormatCurrentTime=$(date +%s)
+        for ((i = 1; i <= ${#ProcessArray[@]}; i++)); do
+            local Num=$((i - 1))
+            ## 定义启动时间戳
+            local StartTime=$(grep "${ProcessArray[$Num]}" ${FileProcessList} | awk -F ' ' '{print$4}')
+            ## 判断启动时间的类型（距离启动超过1天会显示为日期）
+            if [[ ${StartTime} = [0-9][0-9]:[0-9][0-9]:[0-9][0-9] ]]; then
+                ## 判断实际时间戳
+                local Tmp=$(date +%s -d "$(date "+%Y-%m-%d") ${StartTime}")
+                if [[ ${Tmp} -gt ${FormatCurrentTime} ]]; then
+                    FormatStartTime=$((${Tmp} - 86400))
+                else
+                    FormatStartTime=${Tmp}
+                fi
+                ## 比较时间
+                local FormatDiffTime=$((${FormatCurrentTime} - 3600 * ${CheckHour}))
+                if [[ ${FormatDiffTime} -gt ${FormatStartTime} ]]; then
+                    kill -9 ${ProcessArray[$Num]}
+                else
+                    continue
+                fi
+            elif [[ ${StartTime} = [ADFJMNOS][a-z]* ]]; then
+                kill -9 ${ProcessArray[$Num]}
+            fi
+        done
+        echo -e "\n$COMPLETE 运行结束\n"
+        [ -f ${FileProcessList} ] && rm -rf ${FileProcessList}
+    else
+        echo -e "\n$COMPLETE 未查询到需要清理的进程\n"
+    fi
+}
+
 ## 账号控制功能
 function Cookies_Control() {
     local TRUE="[✔]"
@@ -607,6 +672,7 @@ function Cookies_Control() {
         Import_Config
         Count_UserSum
         [ -f $FileSendMark ] && rm -rf $FileSendMark
+
         ## 生成 pt_pin 数组
         function Gen_pt_pin_array() {
             local Tmp1 Tmp2 i pt_pin_temp
@@ -618,6 +684,7 @@ function Cookies_Control() {
                 pt_pin[i]=$pt_pin_temp
             done
         }
+
         ## 检测
         function CheckCookie() {
             local p=$1
@@ -633,6 +700,7 @@ function Cookies_Control() {
                 echo -e "\033[31m[ API 请求失败 ]\033[0m"
             fi
         }
+
         ## 汇总输出以及计算时间
         function Print_Info() {
             echo -e "\n检测到本地共有 \033[34m$UserSum\033[0m 个账号，当前状态信息如下（${TRUE}为有效，${FALSE}为无效）："
@@ -656,8 +724,10 @@ function Cookies_Control() {
                 echo -e "$num：$(printf $(echo ${pt_pin[m]} | perl -pe "s|%|\\\x|g;")) $(CheckCookie $(grep -E "Cookie[1-9]" $FileConfUser | grep ${pt_pin[m]} | awk -F "[\"\']" '{print$2}'))    $UpdateTime"
             done
         }
+
         Gen_pt_pin_array
         Print_Info
+
         ## 过期提醒推送通知
         if [ -f $FileSendMark ]; then
             echo -e "\n检测到下面的账号将在近期失效，请注意即时更新！"
@@ -669,7 +739,7 @@ function Cookies_Control() {
         echo ''
         ;;
     update)
-        Import_Config_Not_Check
+        Import_Config_Not_Check "updateCookies"
         local ExitStatus LogPath LogFile
         [ -f $FileSendMark ] && rm -rf $FileSendMark
 
@@ -695,59 +765,71 @@ function Cookies_Control() {
 
         ## 全部更新
         function UpdateNormal() {
-            local UserNum Tmp CookieTmp LogFile
+            local UserNum FormatPin CookieTmp LogFile
             ## 生成 pt_pin 数组
             local pt_pin_array=(
                 $(cat $FileAccountConf | jq '.[] | {pt_pin:.pt_pin,}' | grep -F "\"pt_pin\":" | grep -v "ptpin的值" | awk -F '\"' '{print$4}' | sed '/^$/d')
             )
 
             if [[ ${#pt_pin_array[@]} -ge 1 ]]; then
-                LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_$UserNum.log"
+                LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S").log"
                 echo -e "\n$WORKING 检测到 \033[34m${#pt_pin_array[@]}\033[0m 个账号，开始更新...\n"
-                echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 开始执行\n" >>${LogFile}
+                echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 执行开始\n" >>${LogFile}
                 for ((i = 1; i <= ${#pt_pin_array[@]}; i++)); do
                     UserNum=$((i - 1))
                     ## 声明变量
                     export JD_PT_PIN=${pt_pin_array[$UserNum]}
                     ## 执行脚本
-                    node updateCookies.js &>>${LogFile} &
+                    if [[ ${EnableGlobalProxy} == true ]]; then
+                        node -r 'global-agent/bootstrap' ${FileUpdateCookie##*/} &>>${LogFile} &
+                    else
+                        node ${FileUpdateCookie##*/} &>>${LogFile} &
+                    fi
                     wait
-                    ## 写入至推送通知文件
-                    Tmp=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|\-|\.\*|g;}')
-                    grep "Cookie => \[$Tmp\]" ${LogFile} | tee -a $FileSendMark
+                    ## 判断结果并写入至推送通知
+                    FormatPin=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|[\.\/\[\]\!\@\#\$\%\^\&\*\(\)]|\\$&|g;}')
+                    if [[ $(grep "Cookie => \[${FormatPin}\]" ${LogFile}) ]]; then
+                        grep "Cookie => \[${FormatPin}\]" ${LogFile} | tee -a $FileSendMark
+                    else
+                        echo "Cookie => [${pt_pin_array[$UserNum]}]  更新异常" | tee -a $FileSendMark
+                    fi
                 done
                 ## 优化日志排版
                 sed -i '/更新Cookies,.*\!/d; /^$/d; s/===.*//g' ${LogFile}
                 echo -e "\n[$(date "${TIME}:%N" | cut -c1-23)] 执行结束" >>${LogFile}
                 echo "" >>$FileSendMark
                 ## 更新后检测 Cookie 是否有效
-                echo -e "\n$WORKING 更新后检测：\n"
-                for ((i = 1; i <= ${#pt_pin_array[@]}; i++)); do
-                    UserNum=$((i - 1))
-                    Tmp=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|\-|\.\*|g;}')
-                    CookieTmp="$(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')"
-                    [ $(grep "Cookie => \[$Tmp\]" ${LogFile} | awk -F ' ' '{print$NF}') != "更新成功" ] && continue
-                    if [[ $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser) ]]; then
-                        if [ "$(curl -I -s --connect-timeout 5 ${Interface} -w %{http_code} | tail -n1)" -eq "302" ]; then
-                            if [[ $(curl -s --noproxy "*" "${Interface}" -H "cookie: ${CookieTmp}") ]]; then
-                                echo -e "${pt_pin_array[$UserNum]} 的 Cookie 有效 \033[32m${TRUE}\033[0m"
-                                echo -e "${pt_pin_array[$UserNum]} 更新后的 Cookie 有效 ${TRUE}" >>$FileSendMark
+                if [[ $(grep "Cookie =>" ${LogFile}) ]]; then
+                    echo -e "\n$WORKING 更新后 Cookie 检测：\n"
+                    for ((i = 1; i <= ${#pt_pin_array[@]}; i++)); do
+                        UserNum=$((i - 1))
+                        FormatPin=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|[\.\/\[\]\!\@\#\$\%\^\&\*\(\)]|\\$&|g;}')
+                        CookieTmp="$(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}')"
+                        [ $(grep "Cookie => \[${FormatPin}\]" ${LogFile} | awk -F ' ' '{print$NF}') != "更新成功" ] && continue
+                        if [[ $(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser) ]]; then
+                            if [ "$(curl -I -s --connect-timeout 5 ${Interface} -w %{http_code} | tail -n1)" -eq "302" ]; then
+                                if [[ $(curl -s --noproxy "*" "${Interface}" -H "cookie: ${CookieTmp}") ]]; then
+                                    echo -e "${pt_pin_array[$UserNum]} 有效 \033[32m${TRUE}\033[0m"
+                                    echo -e "${pt_pin_array[$UserNum]} 更新后的 Cookie 有效 ${TRUE}" >>$FileSendMark
+                                else
+                                    echo -e "${pt_pin_array[$UserNum]} 无效 \033[31m${FALSE}\033[0m"
+                                    echo -e "${pt_pin_array[$UserNum]} 更新后的 Cookie 无效 ${FALSE}" >>$FileSendMark
+                                fi
                             else
-                                echo -e "${pt_pin_array[$UserNum]} 的 Cookie 无效 \033[31m${FALSE}\033[0m"
-                                echo -e "${pt_pin_array[$UserNum]} 更新后的 Cookie 无效 ${FALSE}" >>$FileSendMark
+                                echo -e "${pt_pin_array[$UserNum]} 检测出错 \033[31m[ API 请求失败 ]\033[0m"
+                                echo -e "${pt_pin_array[$UserNum]} 更新后检测出错 [ API 请求失败 ]" >>$FileSendMark
                             fi
                         else
-                            echo -e "${pt_pin_array[$UserNum]} 检测出错 \033[31m[ API 请求失败 ]\033[0m"
-                            echo -e "${pt_pin_array[$UserNum]} 更新后检测出错 [ API 请求失败 ]" >>$FileSendMark
+                            echo -e "${pt_pin_array[$UserNum]} 的 Cookie 不存在 \033[31m${FALSE}\033[0m"
+                            echo -e "${pt_pin_array[$UserNum]} 更新后的 Cookie 不存在 ${FALSE}" >>$FileSendMark
                         fi
-                    else
-                        echo -e "${pt_pin_array[$UserNum]} 的 Cookie 不存在 \033[31m${FALSE}\033[0m"
-                        echo -e "${pt_pin_array[$UserNum]} 更新后的 Cookie 不存在 ${FALSE}" >>$FileSendMark
-                    fi
-                    ## 打印 Cookie
-                    # echo -e "Cookie：$(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')\n"
-                done
-                echo -e "\n$COMPLETE 更新完成\n"
+                        ## 打印 Cookie
+                        # echo -e "Cookie：$(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}')\n"
+                    done
+                    echo -e "\n$COMPLETE 更新完成\n"
+                else
+                    echo -e "\n$ERROR 更新异常，请检查您的网络环境！\n"
+                fi
             else
                 echo -e "\n$ERROR 请先在 $FileAccountConf 中配置好您的 pt_pin ！\n"
             fi
@@ -756,59 +838,74 @@ function Cookies_Control() {
         ## 指定账号更新
         function UpdateSpecify() {
             local UserNum=$1
-            local Tmp CookieTmp LogFile
+            local pt_pin FormatPin CookieTmp LogFile
             local AccountNum=Cookie$UserNum
             if [[ -z ${!AccountNum} ]]; then
                 echo -e "\n$ERROR 账号不存在！"
                 Help
                 exit 1
             fi
-            Tmp="$(echo ${!AccountNum} | grep -o "pt_pin.*;" | awk -F '\;' '{print$1}' | perl -pe '{s|pt_pin=||g; s|;||g; s|\-|\.\*|g;}')"
-            CookieTmp="$(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')"
+            pt_pin=$(echo ${!AccountNum} | grep -o "pt_pin.*;" | perl -pe '{s|pt_pin=||g; s|pt_pin=||g; s|;||g;}')
+            FormatPin="$(echo ${pt_pin} | perl -pe '{s|[\.\/\[\]\!\@\#\$\%\^\&\*\(\)]|\\$&|g;}')"
+            CookieTmp="$(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}')"
             ## 判定是否存在包含该 pt_pin 的 Cookie
-            grep -q $Tmp $FileAccountConf
+            grep ${FormatPin} -q $FileAccountConf
             if [[ $? -eq 0 ]]; then
                 LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_$UserNum.log"
                 echo -e "\n$WORKING 开始更新...\n"
                 ## 声明变量
-                export JD_PT_PIN=$(echo ${!AccountNum} | grep -o "pt_pin.*;" | perl -pe '{s|pt_pin=||g; s|pt_pin=||g; s|;||g;}')
+                export JD_PT_PIN=${pt_pin}
                 ## 执行脚本
-                echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 开始执行\n" >>${LogFile}
-                node updateCookies.js &>>${LogFile} &
+                echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 执行开始\n" >>${LogFile}
+                ## 执行脚本
+                if [[ ${EnableGlobalProxy} == true ]]; then
+                    node -r 'global-agent/bootstrap' ${FileUpdateCookie##*/} &>>${LogFile} &
+                else
+                    node ${FileUpdateCookie##*/} &>>${LogFile} &
+                fi
                 wait
                 ## 优化日志排版
                 sed -i '/更新Cookies,.*\!/d; /^$/d; s/===.*//g' ${LogFile}
                 echo -e "\n[$(date "${TIME}:%N" | cut -c1-23)] 执行结束" >>${LogFile}
-                ## 写入至推送通知文件
-                grep "Cookie => \[$Tmp\]" ${LogFile} | tee -a $FileSendMark
+                ## 判断结果并写入至推送通知
+                if [[ $(grep "Cookie => \[${FormatPin}\]" ${LogFile}) ]]; then
+                    grep "Cookie => \[${FormatPin}\]" ${LogFile} | tee -a $FileSendMark
+                else
+                    echo "Cookie => [${pt_pin}]  更新异常" | tee -a $FileSendMark
+                fi
                 ## 更新后检测 Cookie 是否有效
-                if [ $(grep "Cookie => \[$Tmp\]" ${LogFile} | awk -F ' ' '{print$NF}') = "更新成功" ]; then
-                    echo -e "\n$WORKING 更新后检测：\n"
-                    if [[ $(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser) ]]; then
-                        if [ "$(curl -I -s --connect-timeout 5 ${Interface} -w %{http_code} | tail -n1)" -eq "302" ]; then
-                            if [[ $(curl -s --noproxy "*" "${Interface}" -H "cookie: ${CookieTmp}") ]]; then
-                                echo -e "$JD_PT_PIN 的 Cookie 有效 \033[32m${TRUE}\033[0m"
-                                echo -e "$JD_PT_PIN 更新后的 Cookie 有效 ${TRUE}" >>$FileSendMark
+                if [[ $(grep "Cookie =>" ${LogFile}) ]]; then
+                    if [ $(grep "Cookie => \[${FormatPin}\]" ${LogFile} | awk -F ' ' '{print$NF}') = "更新成功" ]; then
+                        echo -e "\n$WORKING 更新后 Cookie 检测：\n"
+                        if [[ $(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser) ]]; then
+                            if [ "$(curl -I -s --connect-timeout 5 ${Interface} -w %{http_code} | tail -n1)" -eq "302" ]; then
+                                if [[ $(curl -s --noproxy "*" "${Interface}" -H "cookie: ${CookieTmp}") ]]; then
+                                    echo -e "$JD_PT_PIN 有效 \033[32m${TRUE}\033[0m"
+                                    echo -e "$JD_PT_PIN 更新后的 Cookie 有效 ${TRUE}" >>$FileSendMark
+                                else
+                                    echo -e "$JD_PT_PIN 无效 \033[31m${FALSE}\033[0m"
+                                    echo -e "$JD_PT_PIN 更新后的 Cookie 无效 ${FALSE}" >>$FileSendMark
+                                fi
                             else
-                                echo -e "$JD_PT_PIN 的 Cookie 无效 \033[31m${FALSE}\033[0m"
-                                echo -e "$JD_PT_PIN 更新后的 Cookie 无效 ${FALSE}" >>$FileSendMark
+                                echo -e "$JD_PT_PIN 检测出错 \033[31m[ API 请求失败 ]\033[0m"
+                                echo -e "$JD_PT_PIN 更新后检测出错 [ API 请求失败 ]" >>$FileSendMark
                             fi
                         else
-                            echo -e "$JD_PT_PIN 检测出错 \033[31m[ API 请求失败 ]\033[0m"
-                            echo -e "$JD_PT_PIN 更新后检测出错 [ API 请求失败 ]" >>$FileSendMark
+                            echo -e "$JD_PT_PIN 的 Cookie 不存在 \033[31m${FALSE}\033[0m"
+                            echo -e "$JD_PT_PIN 更新后的 Cookie 不存在 ${FALSE}" >>$FileSendMark
                         fi
-                    else
-                        echo -e "$JD_PT_PIN 的 Cookie 不存在 \033[31m${FALSE}\033[0m"
-                        echo -e "$JD_PT_PIN 更新后的 Cookie 不存在 ${FALSE}" >>$FileSendMark
+                    ## 打印 Cookie
+                    # echo -e "Cookie：$(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}')\n"
                     fi
-                ## 打印 Cookie
-                # echo -e "Cookie：$(grep "^Cookie.*pt_pin=$Tmp" $FileConfUser | awk -F "[\"\']" '{print$2}')\n"
+                    echo -e "\n$COMPLETE 更新完成\n"
+                else
+                    echo -e "\n$ERROR 更新异常，请检查您的网络环境！\n"
                 fi
-                echo -e "\n$COMPLETE 更新完成\n"
             else
                 echo -e "\n$ERROR 请先在 $FileAccountConf 中配置好该账号的 pt_pin ！\n"
             fi
         }
+
         ## 汇总
         if [ -f $FileUpdateCookie ]; then
             ## 安装 jq 指令，暂时命令后期删除
@@ -848,7 +945,7 @@ function Cookies_Control() {
 
 ## 管理全局环境变量功能
 function Manage_Env() {
-    local Variable Value VariableTmp ValueTmp Remarks FullContent OldContent NewContent InputA InputB Input1 Input2 Keys
+    local Variable Value VariableTmp ValueTmp Remarks FullContent OldContent NewContent InputA InputB InputC Input1 Input2 Keys
 
     ## 控制变量启用与禁用
     function ControlEnv() {
@@ -954,23 +1051,24 @@ function Manage_Env() {
         fi
     }
 
-    ## 修改变量的值
+    ## 修改变量
     function ModifyValue() {
         local VariableTmp=$1
         OldContent=$(grep ".*export ${VariableTmp}=" $FileConfUser | head -1)
         Remarks=$(grep ".*export ${VariableTmp}=" $FileConfUser | head -n 1 | awk -F "[\"\']" '{print$NF}')
         case $# in
         1)
-            read -p "$(echo -e "\n\033[1m└ 请输入环境变量 \033[34m${VariableTmp}\033[0m \033[1m新的值：\033[0m")" ValueTmp
+            read -p "$(echo -e "\n\033[1m└ 请输入环境变量 \033[34m${VariableTmp}\033[0m \033[1m新的值：\033[0m")" InputA
+            local ValueTmp=$(echo ${InputA} | perl -pe '{s|[\.\/\[\]\!\@\#\$\%\^\&\*\(\)]|\\$&|g;}')
             ## 判断变量备注内容
             if [[ ${Remarks} != "" ]]; then
                 while true; do
-                    read -p "$(echo -e '\n\033[1m└ 检测到该变量存在备注内容，是否修改 [ Y/n ]：\033[0m')" InputA
-                    [ -z ${InputA} ] && InputA=Y
-                    case ${InputA} in
+                    read -p "$(echo -e '\n\033[1m└ 检测到该变量存在备注内容，是否修改 [ Y/n ]：\033[0m')" InputB
+                    [ -z ${InputB} ] && InputB=B
+                    case ${InputB} in
                     [Yy] | [Yy][Ee][Ss])
-                        read -p "$(echo -e "\n\033[1m└ 请输入环境变量 \033[34m${Variable}\033[0m \033[1m新的备注内容：\033[0m")" InputB
-                        Remarks=" # ${InputB}"
+                        read -p "$(echo -e "\n\033[1m└ 请输入环境变量 \033[34m${Variable}\033[0m \033[1m新的备注内容：\033[0m")" InputC
+                        Remarks=" # ${InputC}"
                         break
                         ;;
                     [Nn] | [Nn][Oo])
@@ -984,7 +1082,7 @@ function Manage_Env() {
             fi
             ;;
         2)
-            local ValueTmp=$2
+            local ValueTmp=$(echo $2 | perl -pe '{s|[\.\/\[\]\!\@\#\$\%\^\&\*\(\)]|\\$&|g;}')
             ;;
         *)
             echo -e "\n$COMMAND_ERROR"
@@ -1015,7 +1113,7 @@ function Manage_Env() {
         1)
             read -p "$(echo -e '\n\033[1m└ 请输入需要添加的环境变量名称：\033[0m')" Variable
             ## 检测是否已存在该变量
-            grep ".*export.*=" $FileConfUser | grep "^export ${Variable}=" -q
+            grep ".*export ${Variable}=" $FileConfUser -q
             local ExitStatus=$?
             if [[ $ExitStatus -eq 0 ]]; then
                 echo -e "\n\033[34m检测到已存在该环境变量：\033[0m\n$(grep -n "^export ${Variable}=" $FileConfUser | perl -pe '{s|^|第|g; s|:|行：|g;}')"
@@ -1058,15 +1156,15 @@ function Manage_Env() {
                     esac
                 done
                 sed -i "9 i ${FullContent}" $FileConfUser
-                echo -e "\n$COMPLETE ${FullContent} -> 添加完成\n"
+                echo -e "\n\033[42m${FullContent}\033[0m \033[32m+\033[0m"
+                echo -e "\n$COMPLETE 已添加\n"
             fi
             ;;
         3)
             local Variable=$2
             local Value=$3
-
             ## 检测是否已存在该变量
-            grep ".*export.*=" $FileConfUser | grep "^export ${Variable}=" -q
+            grep ".*export ${Variable}=" $FileConfUser -q
             local ExitStatus=$?
             if [[ $ExitStatus -eq 0 ]]; then
                 echo -e "\n\033[34m检测到已存在该环境变量：\033[0m\n$(grep -n "^export ${Variable}=" $FileConfUser | perl -pe '{s|^|第|g; s|:|行：|g;}')"
@@ -1075,7 +1173,8 @@ function Manage_Env() {
             else
                 FullContent="export ${Variable}=\"${Value}\""
                 sed -i "9 i ${FullContent}" $FileConfUser
-                echo -e "\n$COMPLETE ${FullContent} -> 添加完成\n"
+                echo -e "\n\033[42m${FullContent}\033[0m \033[32m+\033[0m"
+                echo -e "\n$COMPLETE 已添加\n"
             fi
             ;;
         esac
@@ -1085,7 +1184,7 @@ function Manage_Env() {
         case $# in
         1)
             read -p "$(echo -e '\n\033[1m└ 请输入需要删除的环境变量名称：\033[0m')" Input1
-            VariableNums=$(grep ".*export.*=" $FileConfUser | grep -c ".*export ${Input1}=" | head -n 1)
+            VariableNums=$(grep -c ".*export ${Input1}=" $FileConfUser | head -n 1)
             Variable=$(grep -n ".*export ${Input1}=" $FileConfUser | perl -pe '{s|^|第|g; s|:|行: |g;}')
             if [[ ${VariableNums} -ne "0" ]]; then
                 if [[ ${VariableNums} -gt "1" ]]; then
@@ -1098,8 +1197,14 @@ function Manage_Env() {
                     [ -z ${Input2} ] && Input2=Y
                     case ${Input2} in
                     [Yy] | [Yy][Ee][Ss])
+                        FullContent="$(grep ".*export ${Input1}=" $FileConfUser)"
                         sed -i "/export ${Input1}=/d" $FileConfUser
-                        echo -e "\n$COMPLETE 删除完毕\n"
+                        if [[ ${VariableNums} -gt "1" ]]; then
+                            echo -e "\n$(echo -e "${FullContent}" | perl -pe '{s|^|\033[41;37m|g; s|$|\033[0m|g;}' | sed '$d')"
+                        elif [[ ${VariableNums} -eq "1" ]]; then
+                            echo -e "\n\033[41;37m${FullContent}\033[0m \033[31m-\033[0m"
+                        fi
+                        echo -e "\n$COMPLETE 已删除\n"
                         break
                         ;;
                     [Nn] | [Nn][Oo])
@@ -1117,14 +1222,17 @@ function Manage_Env() {
             ;;
         2)
             local Variable=$2
-
             ## 检测是否已存在该变量
-            grep ".*export.*=" $FileConfUser | grep "^export ${Variable}=" -q
-            local ExitStatus=$?
-            if [[ $ExitStatus -eq 0 ]]; then
-                echo -e "\n\033[34m检测到环境变量：\033[0m\n$(grep -n ".*export ${Variable}=" $FileConfUser | perl -pe '{s|^|第|g; s|:|行: |g;}')"
+            VariableNums=$(grep -c ".*export ${Variable}=" $FileConfUser | head -n 1)
+            if [[ ${VariableNums} -ne "0" ]]; then
+                FullContent="$(grep ".*export ${Variable}=" $FileConfUser)"
                 sed -i "/export ${Variable}=/d" $FileConfUser
-                echo -e "\n$COMPLETE 删除完毕\n"
+                if [[ ${VariableNums} -gt "1" ]]; then
+                    echo -e "\n$(echo -e "${FullContent}" | perl -pe '{s|^|\033[41;37m|g; s|$|\033[0m|g;}' | sed '$d')"
+                elif [[ ${VariableNums} -eq "1" ]]; then
+                    echo -e "\n\033[41;37m${FullContent}\033[0m \033[31m-\033[0m"
+                fi
+                echo -e "\n$COMPLETE 已删除\n"
             else
                 echo -e "\n$ERROR 未查询到相关环境变量！\n"
             fi
@@ -1206,7 +1314,7 @@ function Manage_Env() {
             grep -n ".*export.*=" $FileConfUser | grep "${Keys}" | perl -pe "{s|^|第|g; s|:|行：|g; s|${Keys}|\033[31m${Keys}\033[0m|g;}"
             echo -e "\n$COMPLETE 查询完毕\n"
         else
-            echo -e "\n$ERROR 未查询到相关环境变量！\n"
+            echo -e "\n$ERROR 未查询到包含 ${Keys} 的相关环境变量！\n"
         fi
         ;;
     esac
@@ -1220,12 +1328,12 @@ function SendNotify() {
 
 ## 调试模式
 function Debug() {
-    local CurrentBranch=$(git branch | head -n 1 | awk -F ' ' '{print$NF}')
+    local CurrentBranch=$(git status | head -n 1 | awk -F ' ' '{print$NF}')
     if [[ ${CurrentBranch} == "main" ]]; then
         echo ''
         git reset --hard
         git checkout dev
-        echo -e "\n$COMPLETE 你好开发者，已为您切换至开发分支\n"
+        echo -e "\n$COMPLETE 已为您切换至开发分支，感谢参与测试\n"
     elif [[ ${CurrentBranch} == "dev" ]]; then
         echo ''
         git reset --hard
@@ -1238,6 +1346,14 @@ function Debug() {
 function Remove_LogFiles() {
     local LogFileList LogDate DiffTime Stmp DateDelLog LineEndGitPull LineEndBotRun
     Import_Config
+    case $# in
+    0)
+        local RmDays=${RmLogDaysAgo}
+        ;;
+    1)
+        local RmDays=$1
+        ;;
+    esac
     function Rm_JsLog() {
         LogFileList=$(ls -l $LogDir/*/*.log | awk '{print $9}' | grep -v "log/bot")
         for log in ${LogFileList}; do
@@ -1245,13 +1361,13 @@ function Remove_LogFiles() {
             LogDate=$(echo ${log} | awk -F '/' '{print $NF}' | grep -Eo "20[2-9][0-9]-[0-1][0-9]-[0-3][0-9]")
             [[ -z ${LogDate} ]] && continue
             DiffTime=$(($(date +%s) - $(date +%s -d "${LogDate}")))
-            [ ${DiffTime} -gt $((${RmLogDaysAgo} * 86400)) ] && rm -vf ${log}
+            [ ${DiffTime} -gt $((${RmDays} * 86400)) ] && rm -vf ${log}
         done
     }
     ## 删除 update 的运行日志
     function Rm_UpdateLog() {
         if [ -f $LogDir/update.log ]; then
-            Stmp=$(($(date "+%s") - 86400 * ${RmLogDaysAgo}))
+            Stmp=$(($(date "+%s") - 86400 * ${RmDays}))
             DateDelLog=$(date -d "@${Stmp}" "+%Y-%m-%d")
             LineEndGitPull=$(($(cat $LogDir/update.log | grep -n "${DateDelLog}" | head -1 | awk -F ":" '{print $1}') - 3))
             [ ${LineEndGitPull} -gt 0 ] && perl -i -ne "{print unless 1 .. ${LineEndGitPull} }" $LogDir/update.log
@@ -1260,7 +1376,7 @@ function Remove_LogFiles() {
     ## 删除 Bot 的运行日志
     function Rm_BotLog() {
         if [ -f $BotLogDir/run.log ]; then
-            Stmp=$(($(date "+%s") - 86400 * ${RmLogDaysAgo}))
+            Stmp=$(($(date "+%s") - 86400 * ${RmDays}))
             DateDelLog=$(date -d "@${Stmp}" "+%Y-%m-%d")
             LineEndBotRun=$(($(cat $BotLogDir/run.log | grep -n "${DateDelLog}" | tail -n 1 | awk -F ":" '{print $1}') - 3))
             [ ${LineEndBotRun} -gt 0 ] && perl -i -ne "{print unless 1 .. ${LineEndBotRun} }" $BotLogDir/run.log
@@ -1275,14 +1391,14 @@ function Remove_LogFiles() {
             fi
         done
     }
-    ## 运行
-    if [ -n "${RmLogDaysAgo}" ]; then
-        echo -e "\n$WORKING 开始检索日志文件...\n"
+    ## 汇总
+    if [ -n "${RmDays}" ]; then
+        echo -e "\n$WORKING 开始检索并删除超过 ${RmDays} 天的日志文件...\n"
         Rm_JsLog
         Rm_UpdateLog
         Rm_BotLog
         Rm_EmptyDir
-        echo -e "\n$COMPLETE 删除完毕\n"
+        echo -e "\n$COMPLETE 运行结束\n"
     fi
 }
 
@@ -1446,6 +1562,9 @@ case $# in
     ps)
         Process_Monitor
         ;;
+    cleanup)
+        Process_CleanUp
+        ;;
     debug)
         Debug
         ;;
@@ -1463,13 +1582,20 @@ case $# in
         Run_Concurrent $1
         ;;
     [1-9] | [1-9][0-9] | [1-9][0-9][0-9])
-        Run_Specify $1 $2
+        case $1 in
+        rmlog)
+            Remove_LogFiles $2
+            ;;
+        *)
+            Run_Specify $1 $2
+            ;;
+        esac
         ;;
     rapid)
         Run_Rapidly $1
         ;;
     raw)
-        Run_RawScript $1
+        Run_Remote $1
         ;;
     pkill)
         Process_Kill $1
@@ -1513,7 +1639,7 @@ case $# in
 3)
     case $2 in
     raw)
-        Run_RawScript $1 $3
+        Run_Remote $1 $3
         ;;
     rapid)
         Run_Rapidly $1 $3
@@ -1563,7 +1689,7 @@ case $# in
 4)
     case $2 in
     raw)
-        Run_RawScript $1 $3 $4
+        Run_Remote $1 $3 $4
         ;;
     add | edit)
         Manage_Env $2 $3 "$4"

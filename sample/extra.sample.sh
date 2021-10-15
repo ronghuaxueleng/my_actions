@@ -53,7 +53,7 @@ for author in $author_list; do
     repository_platform="https://github.com"
     repository_branch=$(echo $format_url | awk -F '/' '{print$4}')
     reformat_url=$(echo $format_url | sed "s|$repository_branch|tree/$repository_branch|g")
-    [[ ${EnableExtraShellProxy} == true ]] && DownloadJudgment="(已使用代理)" || DownloadJudgment=""
+    [[ ${EnableExtraShellProxy} == true ]] && DownloadJudgment="(代理)" || DownloadJudgment=""
   elif [[ $(echo $url_list | grep -Eo "github|gitee") == "gitee" ]]; then
     repository_platform="https://gitee.com"
     reformat_url=$(echo $format_url | sed "s|/raw/|/tree/|g")
@@ -79,11 +79,19 @@ for author in $author_list; do
       ## [[ $name == "jd_test.js" ]] && continue
 
       croname=$(echo "$name" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")
-      script_cron_standard=$(cat $ScriptsDir/$name | grep "https" | awk '{if($1~/^[0-59]/) print $1,$2,$3,$4,$5}' | sort | uniq | head -n 1)
+      script_cron_standard=$(cat $ScriptsDir/$name | grep "https" | awk '{if($1~/^[0-9]{1,2}/) print $1,$2,$3,$4,$5}' | sort -u | head -n 1)
       if [[ -z ${script_cron_standard} ]]; then
         tmp1=$(grep -E "cron|script-path|tag|\* \*|$name" $ScriptsDir/$name | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\:\_]||g;}')
-        tmp2=$(echo "$tmp1" | awk -F '[0-9]' '{print$1}' | perl -pe '{s| ||g;}')
-        script_cron=$(echo "$tmp1" | perl -pe "{s|${tmp2}||g;}" | awk '{if($1~/^[0-9]{1,2}/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
+        ## 判断开头
+        tmp2=$(echo "${tmp1}" | awk -F '[0-9]' '{print$1}' | sed 's/\*/\\*/g; s/\./\\./g')
+        ## 判断表达式的第一个数字（分钟）
+        tmp3=$(echo "${tmp1}" | grep -Eo "[0-9]" | head -1)
+        ## 判定开头是否为空值
+        if [[ $(echo "${tmp2}" | perl -pe '{s| ||g;}') = "" ]]; then
+          script_cron=$(echo "${tmp1}" | awk '{if($1~/^[0-9]{1,2}/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
+        else
+          script_cron=$(echo "${tmp1}" | perl -pe "{s|${tmp2}${tmp3}|${tmp3}|g;}" | awk '{if($1~/^[0-9]{1,2}/) print $1,$2,$3,$4,$5; else if ($1~/^[*]/) print $2,$3,$4,$5,$6}')
+        fi
       else
         script_cron=${script_cron_standard}
       fi

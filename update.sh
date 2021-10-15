@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-10
+## Modified: 2021-10-14
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -94,7 +94,7 @@ function Count_OwnRepoSum() {
 
 ## 形成 own 仓库的文件夹名清单，依赖于 Import_Conf 或 Import_Config_Not_Check
 ## array_own_repo_path：repo存放的绝对路径组成的数组；array_own_scripts_path：所有要使用的脚本所在的绝对路径组成的数组
-function Gen_own_dir_and_path() {
+function Gen_Own_Dir_And_Path() {
     local scripts_path_num="-1"
     local repo_num Tmp1 Tmp2 Tmp3 Tmp4 Tmp5 dir
 
@@ -272,7 +272,7 @@ function Del_Cron() {
     local Detail Detail2
     if [ -s $ListDrop ] && [ -s $ListCrontabUser ]; then
         Detail=$(cat $ListDrop)
-        echo -e "$WORKING 开始尝试自动删除的定时任务...\n"
+        echo -e "$WORKING 开始删除定时任务...\n"
         for cron in $Detail; do
             local Tmp=$(echo $cron | perl -pe "s|/|\.|g")
             perl -i -ne "{print unless / $Type $Tmp( |$)/}" $ListCrontabUser
@@ -313,7 +313,7 @@ function Add_Cron_Own() {
     local ListCrontabOwnTmp=$LogTmpDir/crontab_own.list
     [ -f $ListCrontabOwnTmp ] && rm -f $ListCrontabOwnTmp
     if [ -s $ListAdd ] && [ -s $ListCrontabUser ]; then
-        echo -e "$WORKING 开始尝试自动添加 own 脚本的定时任务...\n"
+        echo -e "$WORKING 开始添加 own 脚本的定时任务...\n"
         local Detail=$(cat $ListAdd)
         for FilePath in $Detail; do
             local FileName=$(echo $FilePath | awk -F "/" '{print $NF}')
@@ -367,9 +367,8 @@ function Add_Cron_Notify() {
     fi
 }
 
-## 更新 own 所有仓库
-function Update_Own_Repo() {
-    [[ ${#array_own_repo_url[*]} -gt 0 ]] && echo -e "-------------------------------------------------------------"
+## 更新所有 own 仓库
+function Update_OwnRepo() {
     for ((i = 0; i < ${#array_own_repo_url[*]}; i++)); do
         if [ -d ${array_own_repo_path[i]}/.git ]; then
             Reset_Romote_Url ${array_own_repo_path[i]} ${array_own_repo_url[i]} ${array_own_repo_branch[i]}
@@ -385,12 +384,9 @@ function Update_Own_Repo() {
     done
 }
 
-## 更新 own 的所有 raw 脚本
-function Update_Own_Raw() {
+## 更新所有 raw 脚本
+function Update_OwnRaw() {
     local rm_mark format_url repository_platform repository_branch reformat_url repository_url repository_url_tmp
-    if [[ ${#array_own_repo_url[*]} -eq 0 ]] && [[ ${#OwnRawFile[*]} -gt 0 ]]; then
-        echo -e "-------------------------------------------------------------"
-    fi
     for ((i = 0; i < ${#OwnRawFile[*]}; i++)); do
         raw_file_name[$i]=$(echo ${OwnRawFile[i]} | awk -F "/" '{print $NF}')
         ## 判断脚本来源仓库
@@ -487,12 +483,12 @@ function Update_Scripts() {
         ## 比较定时任务
         Gen_ListTask
         Diff_Cron $ListTaskScripts $ListTaskUser $ListTaskAdd $ListTaskDrop
-        ## 失效任务通知
+        ## 删除定时任务 & 通知
         if [ -s $ListTaskDrop ]; then
             Output_List_Add_Drop $ListTaskDrop "失效"
             [[ ${AutoDelCron} == true ]] && Del_Cron $ListTaskDrop $TaskCmd
         fi
-        ## 新增任务通知
+        ## 新增定时任务 & 通知
         if [ -s $ListTaskAdd ]; then
             Output_List_Add_Drop $ListTaskAdd "新"
             Add_Cron_Scripts $ListTaskAdd
@@ -504,28 +500,80 @@ function Update_Scripts() {
     fi
 }
 
-## 更新 Own 仓库
+## 更新 Own 仓库和 Raw 脚本
 function Update_Own() {
     Count_OwnRepoSum
-    Gen_own_dir_and_path
+    Gen_Own_Dir_And_Path
+    Make_Dir $RawDir
+    local EnableRepoUpdate EnableRawUpdate
+    case $1 in
+    all)
+        EnableRepoUpdate="true"
+        EnableRawUpdate="true"
+        ;;
+    repo)
+        EnableRepoUpdate="true"
+        EnableRawUpdate="true"
+        if [[ $OwnRepoSum -eq 0 ]]; then
+            exit
+        fi
+        ;;
+    raw)
+        EnableRepoUpdate="false"
+        EnableRawUpdate="true"
+        if [[ ${#OwnRawFile[*]} -eq 0 ]]; then
+            clear
+            echo -e "\n$ERROR 请先在 $FileConfUser 中配置好您的 Raw 脚本！"
+            Help
+            exit 1
+        fi
+        ;;
+    esac
     if [[ ${#array_own_scripts_path[*]} -gt 0 ]]; then
-        Make_Dir $RawDir
+        echo -e "-------------------------------------------------------------"
         ## 更新仓库
-        Update_Own_Repo
-        Update_Own_Raw
+        if [[ ${EnableRepoUpdate} == true ]]; then
+            Update_OwnRepo
+        fi
+        if [[ ${EnableRawUpdate} == true ]]; then
+            Update_OwnRaw
+        fi
         ## 比较定时任务
         Gen_ListOwn
         Diff_Cron $ListOwnAll $ListOwnUser $ListOwnAdd $ListOwnDrop
-        ## 失效任务通知
-        if [[ ${AutoDelOwnCron} == true ]] && [ -s $ListOwnDrop ]; then
-            Output_List_Add_Drop $ListOwnDrop "失效"
-            Del_Cron $ListOwnDrop $TaskCmd
+        ## Own Repo 仓库
+        if [[ ${EnableRepoUpdate} == true ]]; then
+            ## 比对清单
+            grep -v "$RawDir/" $ListOwnAdd >$ListOwnRepoAdd
+            grep -v "$RawDir/" $ListOwnDrop >$ListOwnRepoDrop
+            ## 删除定时任务 & 通知
+            if [[ ${AutoDelOwnCron} == true || ${AutoDelOwnRepoCron} == true ]] && [ -s $ListOwnRepoDrop ]; then
+                Output_List_Add_Drop $ListOwnRepoDrop "失效"
+                Del_Cron $ListOwnRepoDrop $TaskCmd
+            fi
+            ## 新增定时任务 & 通知
+            if [[ ${AutoAddOwnCron} == true || ${AutoAddOwnRepoCron} == true ]] && [ -s $ListOwnRepoAdd ]; then
+                Output_List_Add_Drop $ListOwnRepoAdd "新"
+                Add_Cron_Own $ListOwnRepoAdd
+                Add_Cron_Notify $ExitStatus $ListOwnRepoAdd " Own 仓库脚本"
+            fi
         fi
-        ## 新增任务通知
-        if [[ ${AutoAddOwnCron} == true ]] && [ -s $ListOwnAdd ]; then
-            Output_List_Add_Drop $ListOwnAdd "新"
-            Add_Cron_Own $ListOwnAdd
-            Add_Cron_Notify $ExitStatus $ListOwnAdd " Own 仓库脚本"
+        ## Own Raw 脚本
+        if [[ ${EnableRawUpdate} == true ]]; then
+            ## 比对清单
+            grep "$RawDir/" $ListOwnAdd >$ListOwnRawAdd
+            grep "$RawDir/" $ListOwnDrop >$ListOwnRawDrop
+            ## 删除定时任务 & 通知
+            if [[ ${AutoDelOwnCron} == true || ${AutoDelOwnRawCron} == true ]] && [ -s $ListOwnRawDrop ]; then
+                Output_List_Add_Drop $ListOwnRawDrop "失效"
+                Del_Cron $ListOwnRawDrop $TaskCmd
+            fi
+            ## 新增定时任务 & 通知
+            if [[ ${AutoAddOwnCron} == true || ${AutoAddOwnRawCron} == true ]] && [ -s $ListOwnRawAdd ]; then
+                Output_List_Add_Drop $ListOwnRawAdd "新"
+                Add_Cron_Own $ListOwnRawAdd
+                Add_Cron_Notify $ExitStatus $ListOwnRawAdd " Raw 脚本"
+            fi
         fi
         echo ''
     else
@@ -593,8 +641,14 @@ function Title() {
     own)
         Mod="  仅Own仓库  "
         ;;
+    repo)
+        Mod=" 所 有 仓 库 "
+        ;;
+    raw)
+        Mod="  仅raw脚本  "
+        ;;
     extra)
-        Mod="   extra    "
+        Mod=" 仅extra脚本 "
         ;;
     esac
     echo -e "\n+----------------- 开 始 执 行 更 新 脚 本 -----------------+"
@@ -639,7 +693,7 @@ function Combin_Function() {
             Title $1
             Update_Shell
             Update_Scripts
-            Update_Own
+            Update_Own "all"
             ExtraShell
             ;;
         shell)
@@ -652,14 +706,23 @@ function Combin_Function() {
             ;;
         own)
             Title $1
-            Update_Own
+            Update_Own "all"
+            ;;
+        repo)
+            Title $1
+            Update_Scripts
+            Update_Own "repo"
+            ;;
+        raw)
+            Title $1
+            Update_Own "raw"
             ;;
         extra)
             if [[ $EnableExtraShellSync == true ]] || [[ $EnableExtraShell == true ]]; then
                 Title $1
                 ExtraShell
             else
-                echo -e "\n$ERROR 请先在配置文件中启用 extra.sh 自定义脚本的相关变量！"
+                echo -e "\n$ERROR 请先在 $FileConfUser 中启用关于 Extra 自定义脚本的相关变量！"
                 Help
             fi
             ;;

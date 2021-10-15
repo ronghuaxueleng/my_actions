@@ -1,4 +1,4 @@
-var qrcode, userCookie;
+var qrcode, userCookie, curPath;
 $(document).ready(function () {
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
@@ -6,62 +6,33 @@ $(document).ready(function () {
         styleActiveLine: true,
         matchBrackets: true,
         viewportMargin: viewportMargin,
-        readOnly: true,
+        readOnly: false,
         mode: 'javascript',
         theme: themeChange.getAndUpdateEditorTheme(),
     });
-    let metisMenu, $menuTree = $('#menuTree');
+    let metisMenu, $menuTree = $('#menuTree'), $scriptsSaveBtn = $('#save');
+    $scriptsSaveBtn.hide();
 
-    function createFileTree(dirs){
+    function createFileTree(dirs) {
         let navHtml = ``
-        dirs.map((item,index)=>{
-            if(typeof item === 'object' && item.dirName){
-                navHtml += `<li class="nav-item ${item.dirPath === 'scripts' ? 'mm-active':''}">`
+        dirs.map((item, index) => {
+            if (typeof item === 'object' && item.dirName) {
+                navHtml += `<li class="nav-item ${item.dirPath === 'scripts' ? 'mm-active' : ''}">`
                 navHtml += `<a class="nav-link text-dark has-arrow" href="#">${item.dirName}</a>`
                 navHtml += `<ul class="nav flex-column pl-1">${createFileTree(item.files)}</ul>`
-            }else {
+            } else {
                 navHtml += `<li class="nav-item">`
                 navHtml += `<a class="nav-link" href="javascript:viewScript('${item.filePath}');">${item.fileName}</a>`
             }
-            navHtml +=`</li>`;
+            navHtml += `</li>`;
         })
 
         return navHtml;
     }
 
     function loadData(keywords = '') {
-        $.get(BASE_API_PATH + '/api/scripts',{keywords}, function (data) {
+        $.get(BASE_API_PATH + '/api/scripts', {keywords}, function (data) {
             let navHtml = createFileTree(data);
-            // var dirs = data.dirs;
-            // var navHtml = "";
-            // for (let index in dirs) {
-            //     var dirName = dirs[index].dirName;
-            //     // 文件在scripts/目录时
-            //     if (dirName === '@') {
-            //         var row = `<li class="nav-item">`;
-            //         for (let filesKey in dirs[index].files) {
-            //             var fileName = dirs[index].files[filesKey];
-            //             row +=
-            //                 `<a class="nav-link" href="javascript:viewScript('${dirName}', '${fileName}');">${fileName}</a>`
-            //         }
-            //         row += `</li>`;
-            //     } else {
-            //         var row = `<li class="nav-item">
-            //                     <a class="nav-link text-dark has-arrow" href="#">${dirName}</a>
-            //                     <ul class="nav flex-column pl-1">
-            //                         <li class="nav-item">`;
-            //         for (let filesKey in dirs[index].files) {
-            //             var fileName = dirs[index].files[filesKey];
-            //             row +=
-            //                 `<a class="nav-link" href="javascript:viewScript('${dirName}', '${fileName}');">${fileName}</a>`
-            //         }
-            //         row += `</li>
-            //                         </ul>
-            //                     </li>`;
-            //     }
-            //
-            //     navHtml += row;
-            // }
             $menuTree.metisMenu('dispose')
             $menuTree.html(navHtml);
             metisMenu = $menuTree.metisMenu();
@@ -82,11 +53,25 @@ $(document).ready(function () {
             dispatch(document.getElementById('toggleIcon'), 'click');
         }
 
-        $.get(BASE_API_PATH + `/api/scripts/content`, {path:path}, function (data) {
+        $.get(BASE_API_PATH + `/api/scripts/content`, {path: path}, function (data) {
             editor.setValue(data);
+            curPath = path;
+            $scriptsSaveBtn.show();
         });
     }
-
+    $scriptsSaveBtn.click(function () {
+        $.post(BASE_API_PATH + '/api/scripts/save', {
+            content: editor.getValue(),
+            name: curPath
+        }, function (data) {
+            let icon = data.err === 0 ? "success" : "error";
+            panelUtils.showAlert({
+                title: data.title,
+                html: data.msg,
+                icon: icon
+            });
+        });
+    });
     $('#wrap').click(function () {
         var lineWrapping = editor.getOption('lineWrapping');
         editor.setOption('lineWrapping', !lineWrapping);

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-05
+## Modified: 2021-10-14
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
 
 ## 生成 pm2 list 日志清单，以此判断各服务状态
-function List_All_Processes() {
+function PM2_List_All_Services() {
     pm2 list | sed "/─/d" | perl -pe "{s| ||g; s#│#|#g}" | sed "1d" >$FilePm2List
 }
 
@@ -33,7 +33,7 @@ function Hang_Control() {
             Import_Config $ServiceName
             Count_UserSum
             Combin_All
-            List_All_Processes
+            PM2_List_All_Services
             cat $FilePm2List | awk -F '|' '{print$3}' | grep $ServiceName -wq
             ExitStatus=$?
             cd $ScriptsDir
@@ -78,7 +78,7 @@ function Hang_Control() {
     down)
         for ScriptFiles in ${HangUpScripts}; do
             ServiceName=$(echo $ScriptFiles | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
-            List_All_Processes
+            PM2_List_All_Services
             cat $FilePm2List | awk -F '|' '{print$3}' | grep $ServiceName -wq
             ExitStatus=$?
             if [[ $ExitStatus -eq 0 ]]; then
@@ -102,7 +102,7 @@ function Hang_Control() {
 ## 控制面板和网页终端
 function Panel_Control() {
     local ServiceStatus
-    List_All_Processes
+    PM2_List_All_Services
     cat $FilePm2List | awk -F '|' '{print$3}' | grep "server" -wq
     local ExitStatusSERVER=$?
     cat $FilePm2List | awk -F '|' '{print$3}' | grep "ttyd" -wq
@@ -119,7 +119,7 @@ function Panel_Control() {
                 ;;
             stopped)
                 pm2 start server
-                echo -e "\n$COMPLETE 控制面板已启动\n"
+                echo -e "\n$COMPLETE 控制面板已重新启动\n"
                 ;;
             errored)
                 echo -e "\n$WARN 检测到服务状态异常，开始尝试修复...\n"
@@ -128,7 +128,7 @@ function Panel_Control() {
                 cd $PanelDir
                 npm install
                 pm2 start ecosystem.config.js && sleep 3
-                List_All_Processes
+                PM2_List_All_Services
                 local ServiceNewStatus=$(cat $FilePm2List | grep "server" -w | awk -F '|' '{print$10}')
                 if [[ ${ServiceNewStatus} == "online" ]]; then
                     echo -e "\n$SUCCESS 修复成功！\n"
@@ -141,7 +141,7 @@ function Panel_Control() {
             Update_Shell && cd $PanelDir
             npm install
             pm2 start ecosystem.config.js && sleep 1
-            List_All_Processes
+            PM2_List_All_Services
             local ServiceStatus=$(cat $FilePm2List | grep "server" -w | awk -F '|' '{print$10}')
             if [[ ${ServiceStatus} == "online" ]]; then
                 echo -e "\n$SUCCESS 控制面板启动成功\n"
@@ -158,14 +158,14 @@ function Panel_Control() {
                 ;;
             stopped)
                 pm2 start ttyd
-                echo -e "\n$COMPLETE 网页终端已启动\n"
+                echo -e "\n$COMPLETE 网页终端已重新启动\n"
                 ;;
             errored)
                 echo -e "\n$WARN 检测到服务状态异常，开始尝试修复...\n"
                 pm2 delete ttyd
                 Update_Shell && cd $ShellDir
                 Install_WebTerminal && sleep 3
-                List_All_Processes
+                PM2_List_All_Services
                 local ServiceNewStatus=$(cat $FilePm2List | grep "ttyd" -w | awk -F '|' '{print$10}')
                 if [[ ${ServiceNewStatus} == "online" ]]; then
                     echo -e "\n$SUCCESS 修复成功！\n"
@@ -177,7 +177,7 @@ function Panel_Control() {
         else
             Update_Shell && cd $ShellDir
             Install_WebTerminal && sleep 1
-            List_All_Processes
+            PM2_List_All_Services
             local ServiceStatus=$(cat $FilePm2List | grep "ttyd" -w | awk -F '|' '{print$10}')
             if [[ ${ServiceStatus} == "online" ]]; then
                 echo -e "\n$SUCCESS 网页终端启动成功\n"
@@ -236,7 +236,7 @@ function Bot_Control() {
         ;;
     *)
         if [[ -z $(grep -E "123456789" $ConfigDir/bot.json) ]]; then
-            List_All_Processes
+            PM2_List_All_Services
             cat $FilePm2List | awk -F '|' '{print$3}' | grep "jbot" -wq
             local ExitStatusJbot=$?
             case $1 in
@@ -248,7 +248,7 @@ function Bot_Control() {
                     online)
                         pm2 delete jbot >/dev/null 2>&1
                         cd $BotDir && pm2 start ecosystem.config.js && sleep 1
-                        List_All_Processes
+                        PM2_List_All_Services
                         local ServiceNewStatus=$(cat $FilePm2List | grep "jbot" -w | awk -F '|' '{print$10}')
                         if [[ ${ServiceNewStatus} == "online" ]]; then
                             echo -e "\n$COMPLETE Telegram Bot 已重启\n"
@@ -258,23 +258,23 @@ function Bot_Control() {
                         ;;
                     stopped)
                         pm2 start jbot
-                        List_All_Processes
+                        PM2_List_All_Services
                         local ServiceNewStatus=$(cat $FilePm2List | grep "jbot" -w | awk -F '|' '{print$10}')
                         if [[ ${ServiceNewStatus} == "online" ]]; then
-                            echo -e "\n$COMPLETE Telegram Bot 已启动\n"
+                            echo -e "\n$COMPLETE Telegram Bot 已重新启动\n"
                         else
                             echo -e "\n$ERROR 启动失败，请检查原因后重试！\n"
                         fi
                         ;;
                     errored)
                         echo -e "\n$WARN 检测到服务状态异常，开始尝试修复...\n"
-                        pm2 delete jbot
+                        pm2 delete jbot >/dev/null 2>&1
                         rm -rf $BotRepositoryDir $BotDir
                         Install_Bot
                         cp -rf $BotRepositoryDir/jbot $ShellDir
                         [ ! -x /usr/local/bin/jcsv ] && ln -sf $UtilsDir/jcsv.sh /usr/local/bin/jcsv
                         cd $BotDir && pm2 start ecosystem.config.js && sleep 1
-                        List_All_Processes
+                        PM2_List_All_Services
                         local ServiceNewStatus=$(cat $FilePm2List | grep "jbot" -w | awk -F '|' '{print$10}')
                         if [[ ${ServiceNewStatus} == "online" ]]; then
                             echo -e "\n$SUCCESS 修复成功！\n"
@@ -318,7 +318,7 @@ function Bot_Control() {
             esac
             [ -f $FilePm2List ] && rm -rf $FilePm2List
         else
-            echo -e "\n$ERROR 请先在 $FileConfUser 配置文件中配置好您的 Bot ！"
+            echo -e "\n$ERROR 请先在 $FileConfUser 中配置好您的 Bot ！"
             Help
             exit 1
         fi
@@ -407,7 +407,7 @@ function Server_Status() {
     echo ''
     pm2 list
     echo ''
-    List_All_Processes
+    PM2_List_All_Services
     Services="server ttyd jd_cfd_loop jbot"
     for p in $Services; do
         ServiceName=''
