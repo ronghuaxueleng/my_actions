@@ -453,7 +453,7 @@ app.use(
     session({
         store: new FileStore(fileStoreOptions),
         secret: 'secret',
-        name: `panel-connect-name-${random(8)}`,
+        name: `panel-connect-name-${getLocalIp().replace(/\./g, '_')}`,
         resave: true,
         saveUninitialized: true,
         cookie: { maxAge: fileStoreOptions.ttl * 1000 },
@@ -486,6 +486,13 @@ app.use(
     })
 );
 
+// 获取本机内网ip
+function getLocalIp() {
+    const res = execSync(`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`, {encoding: 'utf8'});
+    const ipArr = res.split('\n');
+    console.log(ipArr);
+    return ipArr[0] || '';
+}
 
 /**
  * 登录页面
