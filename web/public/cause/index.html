@@ -46,7 +46,7 @@
 <a id="使用教程" class="anchor" href="#%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B"></a>《使用教程》</h1>
 <ul>
 <li>
-<strong>修订日期：2021 年 10 月 6 日</strong>
+<strong>修订日期：2021 年 10 月 16 日</strong>
 ㅤ</li>
 </ul>
 <h2>
@@ -114,14 +114,14 @@
 <pre><code>task &lt;url&gt; raw
 </code></pre>
 <blockquote>
-<p><em>注：拉取位于远程仓库的脚本后并执行，url为链接地址，可选参数(加在末尾)：-p 使用代理(<a href="https://ghproxy.com">Ghproxy</a>)、-c 并发。</em></p>
+<p><em>注：拉取位于远程仓库的脚本后并执行，url为链接地址，可选参数(加在末尾)：<code>-p</code> 使用代理(<a href="https://ghproxy.com">Ghproxy</a>)、<code>-c</code> 并发。</em></p>
 </blockquote>
 <h3>
 <a id="5-迅速执行" class="anchor" href="#5-%E8%BF%85%E9%80%9F%E6%89%A7%E8%A1%8C"></a>5. 迅速执行：</h3>
 <pre><code>task &lt;name&gt; rapid
 </code></pre>
 <blockquote>
-<p><em>注：此功能不会组合互助码变量，最大化降低脚本执行前耗时，主要适用于抢兑类脚本，可选参数(加在末尾)：-c 并发。</em></p>
+<p><em>注：此功能不会组合互助码变量，最大化降低脚本执行前耗时，主要适用于抢兑类脚本，可选参数(加在末尾)：<code>-c</code> 并发。</em></p>
 </blockquote>
 <h3>
 <a id="6-终止执行" class="anchor" href="#6-%E7%BB%88%E6%AD%A2%E6%89%A7%E8%A1%8C"></a>6. 终止执行：</h3>
@@ -138,18 +138,18 @@
 <p><em>注：通过交互选择运行模式执行指定范围的脚本，时间较长不要盲目使用。</em></p>
 </blockquote>
 <h3>
-<a id="8-单独更新部分仓库或脚本" class="anchor" href="#8-%E5%8D%95%E7%8B%AC%E6%9B%B4%E6%96%B0%E9%83%A8%E5%88%86%E4%BB%93%E5%BA%93%E6%88%96%E8%84%9A%E6%9C%AC"></a>8. 单独更新部分仓库或脚本：</h3>
+<a id="8-单独更新" class="anchor" href="#8-%E5%8D%95%E7%8B%AC%E6%9B%B4%E6%96%B0"></a>8. 单独更新：</h3>
 <pre><code>update &lt;cmd&gt;
 </code></pre>
 <blockquote>
-<p><em>注：项目源码 shell、"Scripts"仓库 scripts、"Own"仓库 own、自定义脚本 extra。</em></p>
+<p><em>注：项目源码 shell、"Scripts"仓库 scripts、"Own" 仓库 own、所有仓库 repo、"Raw" 脚本 raw、自定义脚本 extra。</em></p>
 </blockquote>
 <h3>
 <a id="9-删除脚本运行日志" class="anchor" href="#9-%E5%88%A0%E9%99%A4%E8%84%9A%E6%9C%AC%E8%BF%90%E8%A1%8C%E6%97%A5%E5%BF%97"></a>9. 删除脚本运行日志：</h3>
 <pre><code>task rmlog
 </code></pre>
 <blockquote>
-<p><em>注：删除活动脚本与更新脚本的日志文件，默认删除 <code>7天</code> 以上的日志文件，可以通过配置文件中的相关变量更改默认时间值。</em></p>
+<p><em>注：删除活动脚本与更新脚本的日志文件，默认删除 <code>7天</code> 以上的日志文件，可以通过配置文件中的相关变量更改默认时间值，可选参数(加在末尾): <code>&lt;days&gt;</code> 指定天数。</em></p>
 </blockquote>
 <h3>
 <a id="10-进程监控" class="anchor" href="#10-%E8%BF%9B%E7%A8%8B%E7%9B%91%E6%8E%A7"></a>10. 进程监控：</h3>
@@ -159,7 +159,14 @@
 <p><em>注：查看资源消耗情况和正在运行的脚本进程。</em></p>
 </blockquote>
 <h3>
-<a id="11-账号功能" class="anchor" href="#11-%E8%B4%A6%E5%8F%B7%E5%8A%9F%E8%83%BD"></a>11. 账号功能：</h3>
+<a id="11-清理内存" class="anchor" href="#11-%E6%B8%85%E7%90%86%E5%86%85%E5%AD%98"></a>11. 清理内存：</h3>
+<pre><code>task cleanup
+</code></pre>
+<blockquote>
+<p><em>注：检测并终止卡死的脚本进程以此释放内存占用，默认杀死距离启动超过6个小时的卡死进程，可选参数(加在末尾): <code>&lt;hours&gt;</code> 指定时间。</em></p>
+</blockquote>
+<h3>
+<a id="12-账号功能" class="anchor" href="#12-%E8%B4%A6%E5%8F%B7%E5%8A%9F%E8%83%BD"></a>12. 账号功能：</h3>
 <pre><code>task cookie &lt;cmd&gt;
 </code></pre>
 <blockquote>
@@ -168,7 +175,7 @@
 <em>ㅤㅤ3. 支持指定账号进行更新，后面跟上某 Cookie 账号在配置文件中的具体编号即可，与指定执行类似。</em></p>
 </blockquote>
 <h3>
-<a id="12-管理全局环境变量功能" class="anchor" href="#12-%E7%AE%A1%E7%90%86%E5%85%A8%E5%B1%80%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8A%9F%E8%83%BD"></a>12. 管理全局环境变量功能：</h3>
+<a id="13-管理全局环境变量功能" class="anchor" href="#13-%E7%AE%A1%E7%90%86%E5%85%A8%E5%B1%80%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8A%9F%E8%83%BD"></a>13. 管理全局环境变量功能：</h3>
 <pre><code>task env &lt;cmd&gt;
 </code></pre>
 <blockquote>
@@ -207,14 +214,14 @@
 </li>
 </ul>
 <h3>
-<a id="13-安装环境" class="anchor" href="#13-%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83"></a>13. 安装环境：</h3>
+<a id="14-安装环境" class="anchor" href="#14-%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83"></a>14. 安装环境：</h3>
 <pre><code>taskctl env install
 </code></pre>
 <blockquote>
 <p><em>注：全局安装常用模块便于执行非 Scripts 目录下的脚本，64位处理器还支持附带安装 Python 和 TypeSciprt 环境。</em></p>
 </blockquote>
 <h3>
-<a id="14-安装脚本依赖" class="anchor" href="#14-%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E4%BE%9D%E8%B5%96"></a>14. 安装脚本依赖：</h3>
+<a id="15-安装脚本依赖" class="anchor" href="#15-%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E4%BE%9D%E8%B5%96"></a>15. 安装脚本依赖：</h3>
 <pre><code>## 全局安装指定模块
 npm install -g &lt;xxx&gt;
 </code></pre>
@@ -280,11 +287,25 @@ ForOtherPet6="${MyPet1}@${MyPet2}@${MyPet3}@${MyPet4}@${MyPet5}@${MyPet6}"
 <a id="5-提交您的互助码到公共助力池telegram-bot" class="anchor" href="#5-%E6%8F%90%E4%BA%A4%E6%82%A8%E7%9A%84%E4%BA%92%E5%8A%A9%E7%A0%81%E5%88%B0%E5%85%AC%E5%85%B1%E5%8A%A9%E5%8A%9B%E6%B1%A0telegram-bot"></a>5. 提交您的互助码到公共助力池（Telegram Bot）：</h3>
 <blockquote>
 <p>Telegram Bot：<br>
-<a href="https://t.me/JD_ShareCode_Bot">@JD_ShareCode_Bot</a> <br>
-每周六晚 9 点清空助力池，同时开放提交，需要加官方群才可以提交</p>
+<a href="https://t.me/JDShareCodebot">@JDShareCodebot</a> <br>
+每周末清空助力池，同时开放提交</p>
 </blockquote>
 <blockquote>
 <p>输入 /help 查看使用帮助</p>
+</blockquote>
+<h3>
+<a id="6-定义导出用于提交到-bot-的互助码格式的账号排序" class="anchor" href="#6-%E5%AE%9A%E4%B9%89%E5%AF%BC%E5%87%BA%E7%94%A8%E4%BA%8E%E6%8F%90%E4%BA%A4%E5%88%B0-bot-%E7%9A%84%E4%BA%92%E5%8A%A9%E7%A0%81%E6%A0%BC%E5%BC%8F%E7%9A%84%E8%B4%A6%E5%8F%B7%E6%8E%92%E5%BA%8F"></a>6. 定义导出用于提交到 Bot 的互助码格式的账号排序</h3>
+<pre><code>## 在配置文件中编辑该变量
+BotSubmit=(
+  1
+  2
+  3
+  4
+  5
+)
+</code></pre>
+<blockquote>
+<p><em>注：数字为某 Cookie 账号在配置文件中的具体编号，注意缩进和格式，每行开头四个或两个空格，默认导出前5个账号。</em></p>
 </blockquote>
 <hr>
 <p>ㅤ</p>

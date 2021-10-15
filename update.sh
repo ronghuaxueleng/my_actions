@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-14
+## Modified: 2021-10-16
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -513,7 +513,7 @@ function Update_Own() {
         ;;
     repo)
         EnableRepoUpdate="true"
-        EnableRawUpdate="true"
+        EnableRawUpdate="false"
         if [[ $OwnRepoSum -eq 0 ]]; then
             exit
         fi
