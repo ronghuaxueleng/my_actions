@@ -191,7 +191,7 @@ let MenuTools = {
             title: "查阅脚本",
             faIcon: "fa-file-code-o",
             titleFaIcon: "fa-arrow-right",
-            subText: "浏览脚本内容",
+            subText: "浏览或编辑脚本内容",
             customClass: 'gb e',
             path: "/viewScripts"
         }, {

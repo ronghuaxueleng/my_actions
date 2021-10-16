@@ -681,7 +681,7 @@ function Combin_Function() {
         Title "all"
         Update_Shell
         Update_Scripts
-        Update_Own
+        Update_Own "all"
         ExtraShell
         Fix_Crontab
         Notice

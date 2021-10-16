@@ -210,4 +210,4 @@ LogTime=$(date "+%Y-%m-%d-%H-%M-%S")
 LogPath="$CodeDir/$LogTime.log"
 Make_Dir ${CodeDir}
 Export_Codes_All | perl -pe "{s|京东种豆|种豆|; s|crazyJoy任务|疯狂的JOY|}" | tee ${LogPath}
-Export_Bot_Submit_Format
+Export_Bot_Submit_Format | tee -a ${LogPath}

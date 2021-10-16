@@ -201,6 +201,7 @@ function Run_Normal() {
     case ${FileFormat} in
     JavaScript)
         if [[ ${EnableGlobalProxy} == true ]]; then
+            [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
             node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 | tee -a ${LogFile}
         else
             node ${FileName}.js 2>&1 | tee -a ${LogFile}
@@ -248,6 +249,7 @@ function Run_Concurrent() {
             case ${FileFormat} in
             JavaScript)
                 if [[ ${EnableGlobalProxy} == true ]]; then
+                    [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
                     node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 &>>${LogFile} &
                 else
                     node ${FileName}.js 2>&1 &>>${LogFile} &
@@ -284,6 +286,7 @@ function Run_Concurrent_Lite() {
         case ${FileFormat} in
         JavaScript)
             if [[ ${EnableGlobalProxy} == true ]]; then
+                [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
                 node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
             else
                 node ${FileName}.js 2>&1 &>>$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S")_${UserNum}.log &
@@ -326,6 +329,7 @@ function Run_Specify() {
     case ${FileFormat} in
     JavaScript)
         if [[ ${EnableGlobalProxy} == true ]]; then
+            [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
             node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 | tee -a ${LogFile}
         else
             node ${FileName}.js 2>&1 | tee -a ${LogFile}
@@ -390,6 +394,7 @@ function Run_Rapidly() {
         case ${FileFormat} in
         JavaScript)
             if [[ ${EnableGlobalProxy} == true ]]; then
+                [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
                 node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 | tee -a ${LogFile}
             else
                 node ${FileName}.js 2>&1 | tee -a ${LogFile}
@@ -781,6 +786,7 @@ function Cookies_Control() {
                     export JD_PT_PIN=${pt_pin_array[$UserNum]}
                     ## 执行脚本
                     if [[ ${EnableGlobalProxy} == true ]]; then
+                        [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
                         node -r 'global-agent/bootstrap' ${FileUpdateCookie##*/} &>>${LogFile} &
                     else
                         node ${FileUpdateCookie##*/} &>>${LogFile} &
@@ -859,6 +865,7 @@ function Cookies_Control() {
                 echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 执行开始\n" >>${LogFile}
                 ## 执行脚本
                 if [[ ${EnableGlobalProxy} == true ]]; then
+                    [ ! -d /usr/lib/node_modules/global-agent ] && npm install -g global-agent
                     node -r 'global-agent/bootstrap' ${FileUpdateCookie##*/} &>>${LogFile} &
                 else
                     node ${FileUpdateCookie##*/} &>>${LogFile} &
@@ -1585,6 +1592,9 @@ case $# in
         case $1 in
         rmlog)
             Remove_LogFiles $2
+            ;;
+        cleanup)
+            Process_CleanUp $2
             ;;
         *)
             Run_Specify $1 $2
