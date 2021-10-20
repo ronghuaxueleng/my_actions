@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-## Update: 2021-10-09
+## Update: 2021-10-19
 
 case $1 in
 jd_IndustryLottery.ts)
@@ -14,11 +14,14 @@ jd_bean_sign.ts)
 jd_cfd.ts)
     Name="京喜财富岛"
     ;;
+jd_cfd_balloon.ts)
+    Name="京喜财富岛热气球挂机"
+    ;;
 jd_cfd_hb.ts)
     Name="京喜财富岛红包库存"
     ;;
-jd_cfd_loop.ts)
-    Name="京喜财富岛热气球挂机"
+jd_cfd_shell.ts)
+    Name="京喜财富岛捡贝壳挂机"
     ;;
 jd_cfd_stock.ts)
     Name="京喜财富岛库存监控"

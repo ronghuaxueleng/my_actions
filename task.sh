@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-16
+## Modified: 2021-10-20
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -78,8 +78,8 @@ function Find_Script() {
         fi
         ## 判定变量是否存在否则退出
         if [ -n "${FileName}" ] && [ -n "${WhichDir}" ]; then
-            [[ ${FileFormat} = "JavaScript" && ${WhichDir} != $ScriptsDir ]] && Check_Moudules $WhichDir
-            if [ $(echo $AbsolutePath | awk -F '/' '{print$3}') = "own" ]; then
+            [[ ${FileFormat} == "JavaScript" && ${WhichDir} != $ScriptsDir ]] && Check_Moudules $WhichDir
+            if [[ $(echo $AbsolutePath | awk -F '/' '{print$3}') == "own" ]]; then
                 LogPath="$LogDir/$(echo $AbsolutePath | awk -F '/' '{print$4}')_${FileName}"
             else
                 LogPath="$LogDir/${FileName}"
@@ -177,7 +177,8 @@ function Check_Moudules() {
 function Random_Delay() {
     if [[ -n ${RandomDelay} ]] && [[ ${RandomDelay} -gt 0 ]]; then
         local CurMin=$(date "+%-M")
-        if [[ ${CurMin} -gt 2 && ${CurMin} -lt 30 ]] || [[ ${CurMin} -gt 31 && ${CurMin} -lt 59 ]]; then
+        ## 58、59、0、1、2、3分时不延迟
+        if [[ ${CurMin} -gt 3 && ${CurMin} -lt 30 ]] || [[ ${CurMin} -gt 31 && ${CurMin} -lt 58 ]]; then
             CurDelay=$((${RANDOM} % ${RandomDelay} + 1))
             echo -en "\n$WORKING 已随机延迟时间，${CurDelay} 秒后开始执行任务..."
             sleep ${CurDelay}
@@ -195,8 +196,8 @@ function Run_Normal() {
     Combin_All
     [ $# -eq 1 ] && Random_Delay
     Make_Dir ${LogPath}
-    local LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S").log"
     cd ${WhichDir}
+    local LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S").log"
     echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 执行开始\n" >>${LogFile}
     case ${FileFormat} in
     JavaScript)
@@ -316,7 +317,6 @@ function Run_Specify() {
     Count_UserSum
     Combin_ShareCodes
     Make_Dir ${LogPath}
-    local LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_${CookieNum}.log"
     local AccountNum=Cookie$CookieNum
     export JD_COOKIE=${!AccountNum}
     if [[ -z $JD_COOKIE ]]; then
@@ -325,6 +325,7 @@ function Run_Specify() {
         exit 1
     fi
     cd ${WhichDir}
+    local LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_${CookieNum}.log"
     echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 执行开始\n" >>${LogFile}
     case ${FileFormat} in
     JavaScript)
@@ -385,11 +386,11 @@ function Run_Rapidly() {
             exit 1
         fi
         Make_Dir "$LogDir/${FileName}"
-        local LogFile="$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S").log"
         Import_Config ${FileName}
         Count_UserSum
         export JD_COOKIE=$(Combin_Sub Cookie)
         cd $ScriptsDir
+        local LogFile="$LogDir/${FileName}/$(date "+%Y-%m-%d-%H-%M-%S").log"
         echo -e "[$(date "${TIME}:%N" | cut -c1-23)] 执行开始\n" >>${LogFile}
         case ${FileFormat} in
         JavaScript)
@@ -629,7 +630,7 @@ function Process_CleanUp() {
     ## 生成进程清单
     ps -axo pid,time,user,start,command | egrep "\.js\b|\.py\b|\.ts\b" | egrep -v "server\.js|pm2|egrep|perl|sed|bash" | grep -E "00:00:[0-1][0-9] root" >${FileProcessList}
     if [ -s ${FileProcessList} ]; then
-        echo -e "\n$WORKING 开始清理进程\n"
+        echo -e "\n$WORKING 开始匹配并清理启动超过 \033[34m${CheckHour}\033[0m 小时的卡死进程...\n"
         ## 生成进程 PID 数组
         local ProcessArray=($(
             cat ${FileProcessList} | awk -F ' ' '{print$1}'
@@ -637,12 +638,11 @@ function Process_CleanUp() {
         ## 定义当前时间戳
         local FormatCurrentTime=$(date +%s)
         for ((i = 1; i <= ${#ProcessArray[@]}; i++)); do
-            local Num=$((i - 1))
-            ## 定义启动时间戳
-            local StartTime=$(grep "${ProcessArray[$Num]}" ${FileProcessList} | awk -F ' ' '{print$4}')
+            local n=$((i - 1))
             ## 判断启动时间的类型（距离启动超过1天会显示为日期）
+            local StartTime=$(grep "${ProcessArray[n]}" ${FileProcessList} | awk -F ' ' '{print$4}')
             if [[ ${StartTime} = [0-9][0-9]:[0-9][0-9]:[0-9][0-9] ]]; then
-                ## 判断实际时间戳
+                ## 定义实际时间戳
                 local Tmp=$(date +%s -d "$(date "+%Y-%m-%d") ${StartTime}")
                 if [[ ${Tmp} -gt ${FormatCurrentTime} ]]; then
                     FormatStartTime=$((${Tmp} - 86400))
@@ -652,18 +652,20 @@ function Process_CleanUp() {
                 ## 比较时间
                 local FormatDiffTime=$((${FormatCurrentTime} - 3600 * ${CheckHour}))
                 if [[ ${FormatDiffTime} -gt ${FormatStartTime} ]]; then
-                    kill -9 ${ProcessArray[$Num]}
+                    echo -e "已终止进程：${ProcessArray[n]} 脚本名称：$(grep ${ProcessArray[n]} ${FileProcessList} | awk -F ' ' '{print$NF}')"
+                    kill -9 ${ProcessArray[n]} >/dev/null 2>&1
                 else
                     continue
                 fi
             elif [[ ${StartTime} = [ADFJMNOS][a-z]* ]]; then
-                kill -9 ${ProcessArray[$Num]}
+                echo -e "已终止进程：${ProcessArray[n]} 脚本名称：$(grep ${ProcessArray[n]} ${FileProcessList} | awk -F ' ' '{print$NF}')"
+                kill -9 ${ProcessArray[n]} >/dev/null 2>&1
             fi
         done
         echo -e "\n$COMPLETE 运行结束\n"
         [ -f ${FileProcessList} ] && rm -rf ${FileProcessList}
     else
-        echo -e "\n$COMPLETE 未查询到需要清理的进程\n"
+        echo -e "\n$COMPLETE 未查询到正在运行中的进程\n"
     fi
 }
 
@@ -713,8 +715,8 @@ function Cookies_Control() {
                 ## 查询上次更新时间
                 local CookieUpdatedDate=$(grep "上次更新：" $FileConfUser | grep ${pt_pin[m]} | head -1 | perl -pe "{s|pt_pin=.*;||g; s|.*上次更新：||g; s|备注：.*||g; s|[ ]*$||g;}")
                 if [[ ${CookieUpdatedDate} ]]; then
-                    local UpdateTime="更新日期：[\033[34m${CookieUpdatedDate}\033[0m]"
-                    local Tmp1=$(($(date -d $(date "+%Y-%m-%d") +%s) - $(date -d "${CookieUpdatedDate}" +%s)))
+                    local UpdateTimes="更新日期：[\033[34m${CookieUpdatedDate}\033[0m]"
+                    local Tmp1=$(($(date -d $(date "+%Y-%m-%d") +%s) - $(date -d "$(echo ${CookieUpdatedDate} | grep -Eo "20[2-9][0-9]-[0-9]{1,2}-[0-9]{1,2}")" +%s)))
                     local Tmp2=$(($Tmp1 / 86400))
                     local Tmp3=$((30 - $Tmp2))
                     [ -z $CheckCookieDaysAgo ] && local Days="2" || local Days=$(($CheckCookieDaysAgo - 1))
@@ -723,10 +725,10 @@ function Cookies_Control() {
                         echo -e "账号$((m + 1))：$(printf $(echo ${pt_pin[m]} | perl -pe "s|%|\\\x|g;")) 将在$TmpTime过期" >>$FileSendMark
                     fi
                 else
-                    local UpdateTime="更新日期：[\033[34mUnknow\033[0m]"
+                    local UpdateTimes="更新日期：[\033[34mUnknow\033[0m]"
                 fi
                 num=$((m + 1))
-                echo -e "$num：$(printf $(echo ${pt_pin[m]} | perl -pe "s|%|\\\x|g;")) $(CheckCookie $(grep -E "Cookie[1-9]" $FileConfUser | grep ${pt_pin[m]} | awk -F "[\"\']" '{print$2}'))    $UpdateTime"
+                echo -e "$num：$(printf $(echo ${pt_pin[m]} | perl -pe "s|%|\\\x|g;")) $(CheckCookie $(grep -E "Cookie[1-9]" $FileConfUser | grep ${pt_pin[m]} | awk -F "[\"\']" '{print$2}'))    ${UpdateTimes}"
             done
         }
 
@@ -1352,9 +1354,9 @@ function Debug() {
 ## 删除日志
 function Remove_LogFiles() {
     local LogFileList LogDate DiffTime Stmp DateDelLog LineEndGitPull LineEndBotRun
-    Import_Config
     case $# in
     0)
+        Import_Config_Not_Check
         local RmDays=${RmLogDaysAgo}
         ;;
     1)
@@ -1400,7 +1402,7 @@ function Remove_LogFiles() {
     }
     ## 汇总
     if [ -n "${RmDays}" ]; then
-        echo -e "\n$WORKING 开始检索并删除超过 ${RmDays} 天的日志文件...\n"
+        echo -e "\n$WORKING 开始检索并删除超过 \033[34m${RmDays}\033[0m 天的日志文件...\n"
         Rm_JsLog
         Rm_UpdateLog
         Rm_BotLog

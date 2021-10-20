@@ -8,7 +8,7 @@
 57 13 * * * task rmlog >/dev/null 2>&1
 
 ## 清理内存
-# 30 10 * * * task cleanup
+# 30 10 * * * task cleanup >/dev/null 2>&1
 
 ## 导出互助码清单
 48 5 * * * task exsc >/dev/null 2>&1
