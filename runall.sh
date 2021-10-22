@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-05
+## Modified: 2021-10-21
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -120,7 +120,6 @@ function Main() {
         for del in ${ExcludeScripts}; do
             sed -i "/$del/d" $FileTmp
         done
-
         ## 输出脚本清单
         cd $WorkDir
         local ListFiles=($(
@@ -132,7 +131,6 @@ function Main() {
             echo -e "$(($i + 1)).${Name}：${ListFiles[i]}"
         done
         cd $CurrentDir
-
         read -p "$(echo -e '\n\033[1m└ 请确认是否继续 [ Y/n ]：\033[0m')" Input5
         [ -z ${Input5} ] && Input5=Y
         case $Input5 in
@@ -141,15 +139,17 @@ function Main() {
             sed -i "s/^/$TaskCmd &/g" $FileTmp
             sed -i "s/$/& $RunMode/g" $FileTmp
             sed -i '1i\#!/bin/env bash' $FileTmp
-
             ## 执行前提示
-            echo -e "\n[\033[32mTips\033[0m] Ctrl + Z 跳过执行当前脚本（如果中途卡住可以跳过），Ctrl + C 终止执行全部任务"
-            echo -e "\n$WORKING 倒计时 3 秒后开始...\n"
-            sleep 1 && echo -e "3..."
-            sleep 1 && echo -e "2.."
-            sleep 1 && echo -e "1."
-            sleep 1 && echo -e ''
-
+            echo -e "\n\033[32mTips\033[0m: Ctrl + Z 跳过执行当前脚本（如果中途卡住可以跳过），Ctrl + C 终止执行全部任务\n"
+            ## 等待动画
+            local spin=('.   ' '..  ' '... ' '....')
+            local n=0
+            while (true); do
+                ((n++))
+                echo -en "\033[?25l$WORKING 倒计时 3 秒后开始${spin[$((n % 4))]}\033[0m" "\r"
+                sleep 0.3
+                [ $n = 10 ] && echo '\n' && break
+            done
             ## 开始执行
             echo -e "[$(date "+%Y-%m-%d %H:%M:%S")] 全部执行开始\n"
             . $FileTmp

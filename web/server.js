@@ -724,6 +724,9 @@ app.get('/api/runLog', function (request, response) {
             if (jsName.indexOf(".") > -1) {
                 jsName = jsName.substring(0, jsName.lastIndexOf("."));
             }
+            if(jsName === 'jd_getShareCodes'){
+                jsName = 'jd_get_share_code'
+            }
             let pathUrl = `log/${jsName}/`;
             if (jsName.startsWith("scripts/")) {
                 jsName = jsName.substring(jsName.indexOf("/") + 1);

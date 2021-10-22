@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-20
+## Modified: 2021-10-22
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -25,7 +25,11 @@ function Find_Script() {
                 local PwdTmp=$(pwd | perl -pe "{s|/$(pwd | awk -F '/' '{printf$NF}')||g;}")
                 AbsolutePath=$(echo "$input" | perl -pe "{s|\.\./|${PwdTmp}/|;}")
             else
-                AbsolutePath=$(echo "$input" | perl -pe "{s|\./||; s|^*|$(pwd)/|;}")
+                if [[ $(pwd) == "/root" ]]; then
+                    AbsolutePath=$(echo "$input" | perl -pe "{s|\./||; s|^*|$ShellDir/|;}")
+                else
+                    AbsolutePath=$(echo "$input" | perl -pe "{s|\./||; s|^*|$(pwd)/|;}")
+                fi
             fi
         fi
         ## 判定输入是否含有后缀
@@ -548,8 +552,16 @@ function Run_Remote() {
             RunModJudge="并发执行"
             ;;
         esac
-        echo -e "\n$COMPLETE 下载完成，倒计时 3 秒后开始${RunModJudge}\n"
-        sleep 1 && echo -e "3..." && sleep 1 && echo -e "2.." && sleep 1 && echo -e "1." && sleep 1
+        echo ''
+        ## 等待动画
+        local spin=('.   ' '..  ' '... ' '....')
+        local n=0
+        while (true); do
+            ((n++))
+            echo -en "\033[?25l$COMPLETE 下载完成，倒计时 3 秒后开始${RunModJudge}${spin[$((n % 4))]}\033[0m" "\r"
+            sleep 0.3
+            [ $n = 10 ] && echo -e '\033[?25h\n\033[0m' && break
+        done
         FormatFileName=$(echo ${ScriptName} | perl -pe "{s|\.js||; s|\.py||; s|\.ts||}")
         case ${RunMod} in
         normal)
@@ -797,7 +809,7 @@ function Cookies_Control() {
                     ## 判断结果并写入至推送通知
                     FormatPin=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|[\.\/\[\]\!\@\#\$\%\^\&\*\(\)]|\\$&|g;}')
                     if [[ $(grep "Cookie => \[${FormatPin}\]" ${LogFile}) ]]; then
-                        grep "Cookie => \[${FormatPin}\]" ${LogFile} | tee -a $FileSendMark
+                        grep "Cookie => \[${FormatPin}\]" ${LogFile} | perl -pe "s|${FormatPin}|$(printf $(echo "${FormatPin}" | perl -pe "s|%|\\\x|g;"))|g;" | tee -a $FileSendMark
                     else
                         echo "Cookie => [${pt_pin_array[$UserNum]}]  更新异常" | tee -a $FileSendMark
                     fi
@@ -812,24 +824,25 @@ function Cookies_Control() {
                     for ((i = 1; i <= ${#pt_pin_array[@]}; i++)); do
                         UserNum=$((i - 1))
                         FormatPin=$(echo ${pt_pin_array[$UserNum]} | perl -pe '{s|[\.\/\[\]\!\@\#\$\%\^\&\*\(\)]|\\$&|g;}')
+                        EscapePin=$(printf $(echo ${pt_pin_array[$UserNum]} | perl -pe "s|%|\\\x|g;"))
                         CookieTmp="$(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}')"
                         [ $(grep "Cookie => \[${FormatPin}\]" ${LogFile} | awk -F ' ' '{print$NF}') != "更新成功" ] && continue
                         if [[ $(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser) ]]; then
                             if [ "$(curl -I -s --connect-timeout 5 ${Interface} -w %{http_code} | tail -n1)" -eq "302" ]; then
                                 if [[ $(curl -s --noproxy "*" "${Interface}" -H "cookie: ${CookieTmp}") ]]; then
-                                    echo -e "${pt_pin_array[$UserNum]} 有效 \033[32m${TRUE}\033[0m"
-                                    echo -e "${pt_pin_array[$UserNum]} 更新后的 Cookie 有效 ${TRUE}" >>$FileSendMark
+                                    echo -e "${EscapePin} 有效 \033[32m${TRUE}\033[0m"
+                                    echo -e "${EscapePin} 更新后的 Cookie 有效 ${TRUE}" >>$FileSendMark
                                 else
-                                    echo -e "${pt_pin_array[$UserNum]} 无效 \033[31m${FALSE}\033[0m"
-                                    echo -e "${pt_pin_array[$UserNum]} 更新后的 Cookie 无效 ${FALSE}" >>$FileSendMark
+                                    echo -e "${EscapePin} 无效 \033[31m${FALSE}\033[0m"
+                                    echo -e "${EscapePin} 更新后的 Cookie 无效 ${FALSE}" >>$FileSendMark
                                 fi
                             else
-                                echo -e "${pt_pin_array[$UserNum]} 检测出错 \033[31m[ API 请求失败 ]\033[0m"
-                                echo -e "${pt_pin_array[$UserNum]} 更新后检测出错 [ API 请求失败 ]" >>$FileSendMark
+                                echo -e "${EscapePin} 检测出错 \033[31m[ API 请求失败 ]\033[0m"
+                                echo -e "${EscapePin} 更新后检测出错 [ API 请求失败 ]" >>$FileSendMark
                             fi
                         else
-                            echo -e "${pt_pin_array[$UserNum]} 的 Cookie 不存在 \033[31m${FALSE}\033[0m"
-                            echo -e "${pt_pin_array[$UserNum]} 更新后的 Cookie 不存在 ${FALSE}" >>$FileSendMark
+                            echo -e "${EscapePin} 的 Cookie 不存在 \033[31m${FALSE}\033[0m"
+                            echo -e "${EscapePin} 更新后的 Cookie 不存在 ${FALSE}" >>$FileSendMark
                         fi
                         ## 打印 Cookie
                         # echo -e "Cookie：$(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}')\n"
@@ -846,7 +859,7 @@ function Cookies_Control() {
         ## 指定账号更新
         function UpdateSpecify() {
             local UserNum=$1
-            local pt_pin FormatPin CookieTmp LogFile
+            local pt_pin FormatPin EscapePin CookieTmp LogFile
             local AccountNum=Cookie$UserNum
             if [[ -z ${!AccountNum} ]]; then
                 echo -e "\n$ERROR 账号不存在！"
@@ -855,7 +868,6 @@ function Cookies_Control() {
             fi
             pt_pin=$(echo ${!AccountNum} | grep -o "pt_pin.*;" | perl -pe '{s|pt_pin=||g; s|pt_pin=||g; s|;||g;}')
             FormatPin="$(echo ${pt_pin} | perl -pe '{s|[\.\/\[\]\!\@\#\$\%\^\&\*\(\)]|\\$&|g;}')"
-            CookieTmp="$(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}')"
             ## 判定是否存在包含该 pt_pin 的 Cookie
             grep ${FormatPin} -q $FileAccountConf
             if [[ $? -eq 0 ]]; then
@@ -878,30 +890,32 @@ function Cookies_Control() {
                 echo -e "\n[$(date "${TIME}:%N" | cut -c1-23)] 执行结束" >>${LogFile}
                 ## 判断结果并写入至推送通知
                 if [[ $(grep "Cookie => \[${FormatPin}\]" ${LogFile}) ]]; then
-                    grep "Cookie => \[${FormatPin}\]" ${LogFile} | tee -a $FileSendMark
+                    grep "Cookie => \[${FormatPin}\]" ${LogFile} | perl -pe "s|${FormatPin}|$(printf $(echo "${FormatPin}" | perl -pe "s|%|\\\x|g;"))|g;" | tee -a $FileSendMark
                 else
                     echo "Cookie => [${pt_pin}]  更新异常" | tee -a $FileSendMark
                 fi
                 ## 更新后检测 Cookie 是否有效
                 if [[ $(grep "Cookie =>" ${LogFile}) ]]; then
+                    CookieTmp="$(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}')"
+                    EscapePin=$(printf $(echo ${JD_PT_PIN} | perl -pe "s|%|\\\x|g;"))
                     if [ $(grep "Cookie => \[${FormatPin}\]" ${LogFile} | awk -F ' ' '{print$NF}') = "更新成功" ]; then
                         echo -e "\n$WORKING 更新后 Cookie 检测：\n"
                         if [[ $(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser) ]]; then
                             if [ "$(curl -I -s --connect-timeout 5 ${Interface} -w %{http_code} | tail -n1)" -eq "302" ]; then
                                 if [[ $(curl -s --noproxy "*" "${Interface}" -H "cookie: ${CookieTmp}") ]]; then
-                                    echo -e "$JD_PT_PIN 有效 \033[32m${TRUE}\033[0m"
-                                    echo -e "$JD_PT_PIN 更新后的 Cookie 有效 ${TRUE}" >>$FileSendMark
+                                    echo -e "${EscapePin} 有效 \033[32m${TRUE}\033[0m"
+                                    echo -e "${EscapePin} 更新后的 Cookie 有效 ${TRUE}" >>$FileSendMark
                                 else
-                                    echo -e "$JD_PT_PIN 无效 \033[31m${FALSE}\033[0m"
-                                    echo -e "$JD_PT_PIN 更新后的 Cookie 无效 ${FALSE}" >>$FileSendMark
+                                    echo -e "${EscapePin} 无效 \033[31m${FALSE}\033[0m"
+                                    echo -e "${EscapePin} 更新后的 Cookie 无效 ${FALSE}" >>$FileSendMark
                                 fi
                             else
-                                echo -e "$JD_PT_PIN 检测出错 \033[31m[ API 请求失败 ]\033[0m"
-                                echo -e "$JD_PT_PIN 更新后检测出错 [ API 请求失败 ]" >>$FileSendMark
+                                echo -e "${EscapePin} 检测出错 \033[31m[ API 请求失败 ]\033[0m"
+                                echo -e "${EscapePin} 更新后检测出错 [ API 请求失败 ]" >>$FileSendMark
                             fi
                         else
-                            echo -e "$JD_PT_PIN 的 Cookie 不存在 \033[31m${FALSE}\033[0m"
-                            echo -e "$JD_PT_PIN 更新后的 Cookie 不存在 ${FALSE}" >>$FileSendMark
+                            echo -e "${EscapePin} 的 Cookie 不存在 \033[31m${FALSE}\033[0m"
+                            echo -e "${EscapePin} 更新后的 Cookie 不存在 ${FALSE}" >>$FileSendMark
                         fi
                     ## 打印 Cookie
                     # echo -e "Cookie：$(grep "^Cookie.*pt_pin=${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}')\n"
@@ -1551,6 +1565,16 @@ function List_Local_Scripts() {
     List_Other
     echo ''
 }
+
+## 临时
+function Temporary() {
+    local FullContent="export JD_CITY_HELPPOOL=\"false\" \#城城分现金关闭全部助力助力池"
+    grep "export JD_CITY_HELPPOOL=" $FileConfUser -q
+    [ $? -ne 0 ] && sed -i "9 i ${FullContent}" $FileConfUser
+}
+
+## 临时命令
+Temporary
 
 ## 判定命令
 case $# in
