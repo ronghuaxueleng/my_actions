@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-20
+## Modified: 2021-10-23
 
 ## 目录
 ShellDir=${JD_DIR}
@@ -220,7 +220,7 @@ function Combin_ShareCodes() {
     export JDHEALTH_SHARECODES=$(Combin_Sub ForOtherHealth)             ## 东东健康社区 (jd_health.js)
     # export JXNC_SHARECODES=$(Combin_Sub ForOtherJxnc)                 ## 京喜农场 (jd_jxnc.js)
     # export JDGLOBAL_SHARECODES=$(combine_sub ForOtherGlobal)          ## 环球挑战赛 (jd_global.js)
-    # export JD818_SHARECODES=$(Combin_Sub ForOtherCarni)               ## 手机狂欢城 (jd_carnivalcity.js)
+    export JD818_SHARECODES=$(Combin_Sub ForOtherCarni)                 ## 手机狂欢城 (jd_carnivalcity.js)
     export CITY_SHARECODES=$(Combin_Sub ForOtherCity)                   ## 城城分现金 (jd_city.js)               本次活动日期：10.20 ~ 11.11
 }
 

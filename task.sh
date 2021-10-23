@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-22
+## Modified: 2021-10-23
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -198,7 +198,7 @@ function Run_Normal() {
     Update_Crontab
     Count_UserSum
     Combin_All
-    [ $# -eq 1 ] && Random_Delay
+    [[ ${ENABLE_DELAY} == true ]] && Random_Delay
     Make_Dir ${LogPath}
     cd ${WhichDir}
     local LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S").log"
@@ -966,6 +966,24 @@ function Cookies_Control() {
     esac
 }
 
+## 管理own仓库功能
+function Manage_Repos() {
+    echo
+
+}
+
+## 管理Raw脚本功能
+function Manage_Raws() {
+    case $1 in
+    add) ;;
+
+    del) ;;
+
+    search) ;;
+
+    esac
+}
+
 ## 管理全局环境变量功能
 function Manage_Env() {
     local Variable Value VariableTmp ValueTmp Remarks FullContent OldContent NewContent InputA InputB InputC Input1 Input2 Keys
@@ -1602,6 +1620,7 @@ case $# in
         Debug
         ;;
     *)
+        ENABLE_DELAY=true
         Run_Normal $1
         ;;
     esac
