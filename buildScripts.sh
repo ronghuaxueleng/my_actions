@@ -135,7 +135,7 @@ replaceShareCode jd_plantBean JDHelp
 replaceShareCode jd_sgmh JDHelp
 cd ..
 
-git clone https://github.com/wuzhi04/MyActions.git MyActions
+git clone https://github.com/wuzhi05/MyActions.git MyActions
 cd MyActions
 replaceShareCode jd_cash MyActions
 replaceShareCode jd_cfd MyActions
