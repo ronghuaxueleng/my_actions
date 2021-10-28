@@ -1,6 +1,6 @@
 /*
 双十一无门槛红包
-cron 0,30 0,12,19 jd_red.js
+cron 0,30 0,12,20,22 * * * jd_HongBao.js
 添加环境变量FLCODE 如需自己吃返利，请填写该变量（https://u.jd.com/后面的英文）
 * */
 const $ = new Env('抢双11无门槛红包');
@@ -113,8 +113,8 @@ function mainInfo() {
                     let res = $.toObj(data, data);
                     if (typeof res == 'object') {
                         if (res.code == 0 && res.data && res.data.shareUrl) {
-                            $.shareCode = res.data.shareUrl.match(/$.code\?s=([^&]+)/) && res.data.shareUrl.match(/$.code\?s=([^&]+)/)[1] || ''
-                            console.log('助力码:' + $.shareCode)
+                            $.shareCode = res.data.shareUrl.match(/\?s=([^&]+)/) && res.data.shareUrl.match(/\?s=([^&]+)/)[1] || ''
+                            console.log('助力码:'+$.shareCode)
                         }
                     } else {
                         console.log(data)
