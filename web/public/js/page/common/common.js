@@ -100,7 +100,7 @@ let MenuTools = {
         path: "#",
         customClass: "highlight",
         subMenuCustomClass: "double",
-        bottomContent: '<i class="fa fa-comments"></i> 你知道我们有 Telegram 频道吗? <a href="https://t.me/jdhelloworld">立即关注</a>',
+        bottomContent: '<div class="content"><div class="bottom-left"><img class="qr-img" src="/icon/jx.png"/><a target="_blank" href="https://u.jd.com/3t9LXZe"><span class="title">打开京东/微信扫码，每日可领取三次红包！</span></a></div><div class="bottom-right"><span class="title"><i class="fa fa-comments"></i> 你知道我们有 Telegram 频道吗? </span><a class="link-btn" href="https://t.me/jdhelloworld">立即关注</a></div></div>',
         children: [{
             title: "配置文件",
             faIcon: "fa-home",

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-23
+## Modified: 2021-10-28
 
 ## 目录
 ShellDir=${JD_DIR}
@@ -147,7 +147,7 @@ bot_command=(
     health
     jxnc
     global
-    carni
+    carnivalcity
     city
 )
 
@@ -221,7 +221,7 @@ function Combin_ShareCodes() {
     # export JXNC_SHARECODES=$(Combin_Sub ForOtherJxnc)                 ## 京喜农场 (jd_jxnc.js)
     # export JDGLOBAL_SHARECODES=$(combine_sub ForOtherGlobal)          ## 环球挑战赛 (jd_global.js)
     export JD818_SHARECODES=$(Combin_Sub ForOtherCarni)                 ## 手机狂欢城 (jd_carnivalcity.js)
-    export CITY_SHARECODES=$(Combin_Sub ForOtherCity)                   ## 城城分现金 (jd_city.js)               本次活动日期：10.20 ~ 11.11
+    export CITY_SHARECODES=$(Combin_Sub ForOtherCity)                   ## 城城分现金 (jd_city.js)               本次活动日期：10.20 ~ 10.30
 }
 
 ## 组合全部
@@ -304,10 +304,10 @@ function Help() {
  ❖  $ContrlCmd check files      ✧ 检测项目相关配置文件是否存在，如果缺失就从模板导入
 
  ❖  $UpdateCmd | $UpdateCmd all      ✧ 全部更新，包括项目源码、所有仓库和脚本、自定义脚本等
- ❖  $UpdateCmd <cmd>             ✧ 单独更新，项目源码 shell、\"Scripts\" 仓库 scripts、\"Own\" 仓库 own、所有仓库 repo
-                                         \"Raw\" 脚本 raw、自定义脚本 extra
+ ❖  $UpdateCmd <cmd/path>        ✧ 单独更新，项目源码 shell、\"Scripts\" 仓库 scripts、\"Own\" 仓库 own、所有仓库 repo
+                                         \"Raw\" 脚本 raw、自定义脚本 extra、指定仓库 <path>
 
- ❋  <name> 脚本名(仅限scripts目录); <path> 脚本的相对路径或绝对路径; <cmd> 固定的可选命令参数(加在末尾); <url> 链接地址
+ ❋ 注： <name> 脚本名(仅限scripts目录); <path> 相对路径或绝对路径; <cmd> 固定的可选命令参数; <url> 链接地址
 
  脚本名无需输入后缀格式，前缀如果是 \"jd_\" 也可以省略，如果脚本同名则优先执行的是 \"js\" 脚本，项目仅支持运行 \"js\" 脚本
 "
@@ -339,10 +339,10 @@ function Help() {
  ❖  $ContrlCmd check files      ✧ 检测项目相关配置文件是否存在，如果缺失就从模板导入
 
  ❖  $UpdateCmd | $UpdateCmd all      ✧ 全部更新，包括项目源码、所有仓库和脚本、自定义脚本等
- ❖  $UpdateCmd <cmd>             ✧ 单独更新，项目源码 shell、\"Scripts\" 仓库 scripts、\"Own\" 仓库 own、所有仓库 repo
-                                         \"Raw\" 脚本 raw、自定义脚本 extra
+ ❖  $UpdateCmd <cmd/path>        ✧ 单独更新，项目源码 shell、\"Scripts\" 仓库 scripts、\"Own\" 仓库 own、所有仓库 repo
+                                         \"Raw\" 脚本 raw、自定义脚本 extra、指定仓库 <path>
 
- ❋  <name> 脚本名(仅限scripts目录); <path> 脚本的相对路径或绝对路径; <cmd> 固定的可选命令参数; <url> 链接地址
+ ❋ 注： <name> 脚本名(仅限scripts目录); <path> 相对路径或绝对路径; <cmd> 固定的可选命令参数; <url> 链接地址
 
  脚本名无需输入后缀格式，前缀如果是 \"jd_\" 也可以省略，如果脚本同名则优先执行的是 \"js\" 脚本
  项目仅预装 \"JavaScript\" 环境，支持运行 \"js、py、ts\" 脚本，如需运行其它类型的脚本需安装环境

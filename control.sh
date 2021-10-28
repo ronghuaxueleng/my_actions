@@ -470,14 +470,14 @@ function Environment_Deployment() {
         npm install -g npm npm-install-peers
         case $Arch in
         armv7l | armv6l)
-            npm install -g date-fns axios require request fs crypto-js crypto dotenv png-js ws@7.4.3 tough-cookie got global-agent
+            npm install -g tough-cookie got global-agent date-fns axios require request fs crypto crypto-js dotenv png-js ws@7.4.3
             ;;
         *)
             apk --no-cache add -f python3 py3-pip sudo build-base pkgconfig pixman-dev cairo-dev pango-dev jq
             pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
             pip3 install --upgrade pip
             pip3 install requests
-            npm install -g date-fns axios require request fs crypto-js crypto dotenv png-js ws@7.4.3 tough-cookie got global-agent ts-node typescript @types/node ts-md5 tslib jsdom prettytable
+            npm install -g got tough-cookie global-agent date-fns axios require request fs crypto crypto-js dotenv png-js ws@7.4.3 ts-node typescript @types/node ts-md5 tslib jsdom prettytable
             ;;
         esac
         echo ''

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-16
+## Modified: 2021-10-28
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -39,7 +39,7 @@ function Random_Update_Cron() {
     fi
 }
 
-## 克隆脚本，$1：仓库地址，$2：仓库保存路径，$3：分支（可省略）
+## 克隆仓库，$1：仓库地址，$2：仓库保存路径，$3：分支（可省略）
 function Git_Clone() {
     local Url=$1
     local Dir=$2
@@ -50,7 +50,7 @@ function Git_Clone() {
     ExitStatus=$?
 }
 
-## 更新脚本，$1：仓库保存路径
+## 更新仓库，$1：仓库保存路径
 function Git_Pull() {
     local CurrentDir=$(pwd)
     local WorkDir=$1
@@ -165,13 +165,16 @@ function Gen_ListOwn() {
                 local Matching=$(ls *.js | egrep -v ${ShieldTmp})
             fi
             if [[ $(ls *.js 2>/dev/null) ]]; then
-                for file in $Matching; do
-                    if [ -f $file ]; then
-                        perl -ne "print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*\/?$file/" $file |
-                            perl -pe "s|.*(([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*])( \|,\|\").*/?$file.*|${array_own_scripts_path[i]}/$file|g" |
-                            sort -u | head -1 >>$ListOwnScripts
-                    fi
-                done
+                ls | grep "\.js\b" -q
+                if [ $? -eq 0 ]; then
+                    for file in $Matching; do
+                        if [ -f $file ]; then
+                            perl -ne "print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*\/?$file/" $file |
+                                perl -pe "s|.*(([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*])( \|,\|\").*/?$file.*|${array_own_scripts_path[i]}/$file|g" |
+                                sort -u | head -1 >>$ListOwnScripts
+                        fi
+                    done
+                fi
             fi
         fi
     done
@@ -435,14 +438,14 @@ function Update_Shell() {
     Random_Update_Cron
     ## 更新仓库
     cd $ShellDir
-    echo -e "\n$WORKING 开始更新源码仓库：/jd\n"
+    echo -e "\n$WORKING 开始更新源码：/jd\n"
     git fetch --all
     git pull
     git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')
     if [[ $ExitStatus -eq 0 ]]; then
-        echo -e "\n$COMPLETE 源码仓库更新完成\n"
+        echo -e "\n$COMPLETE 源码更新完成\n"
     else
-        echo -e "\n$ERROR 源码仓库更新失败，请检查原因...\n"
+        echo -e "\n$ERROR 源码更新失败，请检查原因...\n"
     fi
     ## 检测面板模块变动
     [ -f $PanelDir/package.json ] && local PanelDependNew=$(cat $PanelDir/package.json)
@@ -515,6 +518,8 @@ function Update_Own() {
         EnableRepoUpdate="true"
         EnableRawUpdate="false"
         if [[ $OwnRepoSum -eq 0 ]]; then
+            Fix_Crontab
+            Notice
             exit
         fi
         ;;
@@ -547,12 +552,12 @@ function Update_Own() {
             grep -v "$RawDir/" $ListOwnAdd >$ListOwnRepoAdd
             grep -v "$RawDir/" $ListOwnDrop >$ListOwnRepoDrop
             ## 删除定时任务 & 通知
-            if [[ ${AutoDelOwnCron} == true || ${AutoDelOwnRepoCron} == true ]] && [ -s $ListOwnRepoDrop ]; then
+            if [[ ${AutoDelOwnRepoCron} == true ]] && [ -s $ListOwnRepoDrop ]; then
                 Output_List_Add_Drop $ListOwnRepoDrop "失效"
                 Del_Cron $ListOwnRepoDrop $TaskCmd
             fi
             ## 新增定时任务 & 通知
-            if [[ ${AutoAddOwnCron} == true || ${AutoAddOwnRepoCron} == true ]] && [ -s $ListOwnRepoAdd ]; then
+            if [[ ${AutoAddOwnRepoCron} == true ]] && [ -s $ListOwnRepoAdd ]; then
                 Output_List_Add_Drop $ListOwnRepoAdd "新"
                 Add_Cron_Own $ListOwnRepoAdd
                 Add_Cron_Notify $ExitStatus $ListOwnRepoAdd " Own 仓库脚本"
@@ -564,12 +569,12 @@ function Update_Own() {
             grep "$RawDir/" $ListOwnAdd >$ListOwnRawAdd
             grep "$RawDir/" $ListOwnDrop >$ListOwnRawDrop
             ## 删除定时任务 & 通知
-            if [[ ${AutoDelOwnCron} == true || ${AutoDelOwnRawCron} == true ]] && [ -s $ListOwnRawDrop ]; then
+            if [[ ${AutoDelOwnRawCron} == true ]] && [ -s $ListOwnRawDrop ]; then
                 Output_List_Add_Drop $ListOwnRawDrop "失效"
                 Del_Cron $ListOwnRawDrop $TaskCmd
             fi
             ## 新增定时任务 & 通知
-            if [[ ${AutoAddOwnCron} == true || ${AutoAddOwnRawCron} == true ]] && [ -s $ListOwnRawAdd ]; then
+            if [[ ${AutoAddOwnRawCron} == true ]] && [ -s $ListOwnRawAdd ]; then
                 Output_List_Add_Drop $ListOwnRawAdd "新"
                 Add_Cron_Own $ListOwnRawAdd
                 Add_Cron_Notify $ExitStatus $ListOwnRawAdd " Raw 脚本"
@@ -617,6 +622,53 @@ function ExtraShell() {
     fi
 }
 
+## 更新指定路径下的仓库
+function Update_Specify() {
+    local input=${1%*/}
+    local AbsolutePath PwdTmp
+    ## 判定输入的是绝对路径还是相对路径
+    echo $input | grep $ShellDir -q
+    if [[ $? -eq 0 ]]; then
+        AbsolutePath=$input
+    else
+        echo $input | grep "\.\./" -q
+        if [[ $? -eq 0 ]]; then
+            PwdTmp=$(pwd | perl -pe "{s|/$(pwd | awk -F '/' '{printf$NF}')||g;}")
+            AbsolutePath=$(echo "$input" | perl -pe "{s|\.\./|${PwdTmp}/|;}")
+        else
+            if [[ $(pwd) == "/root" ]]; then
+                AbsolutePath=$(echo "$input" | perl -pe "{s|\./||; s|^*|$ShellDir/|;}")
+            else
+                AbsolutePath=$(echo "$input" | perl -pe "{s|\./||; s|^*|$(pwd)/|;}")
+            fi
+        fi
+    fi
+    if [ -d ${AbsolutePath}/.git ]; then
+        Title "specify"
+        case ${AbsolutePath} in
+        /jd)
+            Update_Shell
+            ;;
+        /jd/scripts)
+            Update_Scripts
+            ;;
+        *)
+            echo -e "-------------------------------------------------------------"
+            Git_Pull ${AbsolutePath} $(grep "branch" ${AbsolutePath}/.git/config | awk -F '\"' '{print$2}')
+            if [[ $ExitStatus -eq 0 ]]; then
+                echo -e "\n$COMPLETE ${AbsolutePath} 仓库更新完成\n"
+                echo -e "注意：此模式下不会附带更新定时任务等\n"
+            else
+                echo -e "\n$ERROR ${AbsolutePath} 仓库更新失败，请检查原因...\n"
+            fi
+            ;;
+        esac
+    else
+        echo -e "\n$ERROR 未检测到 ${AbsolutePath} 路径下存在仓库，请重新确认！\n"
+        exit
+    fi
+}
+
 ## 修复crontab
 function Fix_Crontab() {
     if [[ $JD_DIR ]]; then
@@ -649,6 +701,9 @@ function Title() {
         ;;
     extra)
         Mod=" 仅extra脚本 "
+        ;;
+    specify)
+        Mod=" 指 定 仓 库 "
         ;;
     esac
     echo -e "\n+----------------- 开 始 执 行 更 新 脚 本 -----------------+"
@@ -727,9 +782,14 @@ function Combin_Function() {
             fi
             ;;
         *)
-            echo -e "\n$COMMAND_ERROR"
-            Help
-            exit 1
+            echo $1 | grep "/" -q
+            if [[ $? -eq 0 ]]; then
+                Update_Specify $1
+            else
+                echo -e "\n$COMMAND_ERROR"
+                Help
+                exit 1
+            fi
             ;;
         esac
         Fix_Crontab
