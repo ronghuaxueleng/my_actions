@@ -8,6 +8,7 @@ function initUI() {
         lineNumbers: true,
         lineWrapping: false,
         mode: 'shell',
+        viewportMargin: viewportMargin,
         theme: themeChange.getAndUpdateEditorTheme(),
         keyMap: 'sublime',
         lineNumbers: true,

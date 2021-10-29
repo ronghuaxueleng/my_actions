@@ -5,6 +5,7 @@ $(document).ready(function () {
         styleActiveLine: true,
         matchBrackets: true,
         mode: 'shell',
+        viewportMargin: viewportMargin,
         theme: themeChange.getAndUpdateEditorTheme(),
         keyMap: 'sublime'
     });
