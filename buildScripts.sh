@@ -201,7 +201,7 @@ cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts
 FileDiy=diy.sh
 EnableExtraShellProxyDownload="false"
 ExtraShellProxyUrl="https://ghproxy.com/"
-EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/diy.sh"
+EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/extra.sh"
 wget -q $EnableExtraShellURL -O ${FileDiy}
 
 if [ $? -eq 0 ]; then
