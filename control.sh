@@ -24,7 +24,8 @@ function Update_Shell() {
 function Hang_Control() {
     local HangUpScripts=""
     local ScriptFiles ServiceName ScriptFormt LastRunTime ExitStatus
-    [[ -z ${HangUpScripts} ]] && echo -e "\n目前没有挂机类的活动脚本哦~\n"
+    pm2 delete jd_cfd_loop >/dev/null 2>&1
+    [[ -z ${HangUpScripts} ]] && echo -e "\n目前没有挂机类的活动脚本哦~\n" && exit 0
     case $1 in
     ## 开启/重启服务
     up)
