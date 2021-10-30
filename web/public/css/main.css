@@ -573,6 +573,9 @@ h4 {
     cursor: pointer;
     z-index: 999;
 }
+.multi-button button span.size-2{
+    width: 100px;
+}
 
 .multi-button button:hover {
     background: #d6d8e1;
@@ -904,6 +907,7 @@ h4 {
     background: rgba(197, 197, 197, 0.3);
 }
 
+
 .login-toast{
     text-align: left;
 }
@@ -995,4 +999,14 @@ h4 {
     align-items: center;
     font-size: 14px;
     color: #1194ff;
+}
+
+.red-font{
+   color: #fb5d5d;
+}
+
+
+.mini-tool .swal2-textarea{
+    font-size: 16px;
+    height: 20em;
 }

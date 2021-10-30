@@ -100,50 +100,59 @@ let MenuTools = {
         path: "#",
         customClass: "highlight",
         subMenuCustomClass: "double",
-        bottomContent: '<div class="content"><div class="bottom-left"><img class="qr-img" src="/icon/jx.png"/><a target="_blank" href="https://u.jd.com/3t9LXZe"><span class="title">打开京东/微信扫码，每日可领取三次红包！</span></a></div><div class="bottom-right"><span class="title"><i class="fa fa-comments"></i> 你知道我们有 Telegram 频道吗? </span><a class="link-btn" href="https://t.me/jdhelloworld">立即关注</a></div></div>',
-        children: [{
-            title: "配置文件",
-            faIcon: "fa-home",
-            titleFaIcon: "fa-arrow-right",
-            subText: "编辑环境变量",
-            customClass: 'gb a',
-            path: "/config"
-        }, {
-            title: "对比工具",
-            faIcon: "fa-columns",
-            titleFaIcon: "fa-arrow-right",
-            subText: "将当前配置文件与模板进行比较",
-            customClass: 'gb g',
-            path: "/diff"
-        }, {
-            title: "定时任务",
-            faIcon: "fa-clock-o",
-            titleFaIcon: "fa-arrow-right",
-            subText: "配置 Crontab 定时任务",
-            customClass: 'gb d',
-            path: "/crontab"
-        }, {
-            title: "自定义脚本",
-            faIcon: "fa-file-text-o",
-            titleFaIcon: "fa-arrow-right",
-            subText: "编辑 Extra 脚本",
-            customClass: 'gb h',
-            path: "/extra"
-        }, {
-            title: "机器人配置",
-            faIcon: "fa-telegram",
-            titleFaIcon: "fa-arrow-right",
-            subText: "编辑 Bot 配置文件",
-            customClass: 'gb',
-            path: "/bot"
-        }, {
-            title: "账号配置",
-            faIcon: "fa-user-circle",
-            titleFaIcon: "fa-arrow-right",
-            subText: "编辑账号配置文件",
-            customClass: 'gb e',
-            path: "/remarks"
-        }]
+        bottomContent: '<div class="content"><div class="bottom-left"><img class="qr-img" src="/icon/jx.png"/><a target="_blank" href="https://u.jd.com/3t9LXZe"><span class="title red-font">打开京东/微信扫码，每日可领取三次红包！</span></a></div><div class="bottom-right"><span class="title"><i class="fa fa-comments"></i> 你知道我们有 Telegram 频道吗? </span><a class="link-btn" href="https://t.me/jdhelloworld">立即关注</a></div></div>',
+        children: [
+            {
+                title: "京东1111红包",
+                faIcon: "fa-thumbs-up",
+                titleFaIcon: "fa-hand-o-right",
+                subText: "京东1111红包",
+                platform: "mobile",
+                customClass: 'red-font',
+                path: "https://u.jd.com/3t9LXZe",
+            }, {
+                title: "配置文件",
+                faIcon: "fa-home",
+                titleFaIcon: "fa-arrow-right",
+                subText: "编辑环境变量",
+                customClass: 'gb a',
+                path: "/config"
+            }, {
+                title: "对比工具",
+                faIcon: "fa-columns",
+                titleFaIcon: "fa-arrow-right",
+                subText: "将当前配置文件与模板进行比较",
+                customClass: 'gb g',
+                path: "/diff"
+            }, {
+                title: "定时任务",
+                faIcon: "fa-clock-o",
+                titleFaIcon: "fa-arrow-right",
+                subText: "配置 Crontab 定时任务",
+                customClass: 'gb d',
+                path: "/crontab"
+            }, {
+                title: "自定义脚本",
+                faIcon: "fa-file-text-o",
+                titleFaIcon: "fa-arrow-right",
+                subText: "编辑 Extra 脚本",
+                customClass: 'gb h',
+                path: "/extra"
+            }, {
+                title: "机器人配置",
+                faIcon: "fa-telegram",
+                titleFaIcon: "fa-arrow-right",
+                subText: "编辑 Bot 配置文件",
+                customClass: 'gb',
+                path: "/bot"
+            }, {
+                title: "账号配置",
+                faIcon: "fa-user-circle",
+                titleFaIcon: "fa-arrow-right",
+                subText: "编辑账号配置文件",
+                customClass: 'gb e',
+                path: "/remarks"
+            }]
     }, {
         title: "执行工具",
         faIcon: "fa-list-alt",
@@ -263,12 +272,14 @@ let MenuTools = {
         let content = "<ul>";
         this.menuList.map((menu, i) => {
             menu.children.map((child, index) => {
-                content = content.concat(
-                    `<li class="${child.mobileCustom && child.mobileCustom.customClass || ''}">`,
-                    child.mobileCustom ? child.mobileCustom.customContent : `<a href="${child.path || '#'}"><i class="fa ${child.faIcon}"></i> ${child.title}</a>`,
-                    child.customContent || '',
-                    `</li>`
-                )
+                if (!child.platform || (child.platform && child.platform === 'mobile')) {
+                    content = content.concat(
+                        `<li class="'${child.customClass}' ${child.mobileCustom && child.mobileCustom.customClass || ''}">`,
+                        child.mobileCustom ? child.mobileCustom.customContent : `<a href="${child.path || '#'}"><i class="fa ${child.faIcon}"></i> ${child.title}</a>`,
+                        child.customContent || '',
+                        `</li>`
+                    )
+                }
             });
         });
         content = content.concat('</ul>');
@@ -287,18 +298,19 @@ let MenuTools = {
             content = content.concat(
                 `<div class="menu-item ${menu.customClass}">`,
                 `<div class="menu-text"><a href="${menu.path || '#'}"><i class="fa ${menu.faIcon}"></i> ${menu.title}</a></div>`,
-                `<div class="sub-menu ${menu.subMenuCustomClass}">`
-            )
+                `<div class="sub-menu ${menu.subMenuCustomClass}">`)
             menu.children.map((child, index) => {
-                content = content.concat(
-                    `<a href="${child.path || '#'}"><div class="icon-box ${child.customClass} ${child.path === BASE_PATH_NAME && 'active'}">`,
-                    `<div class="icon"><i class="fa ${child.faIcon}"></i></div>`,
-                    `<div class="text"><div class="title">${child.title} <i class="fa ${child.path === BASE_PATH_NAME && child.titleFaIcon === 'fa-arrow-right' ? 'fa-map-marker' : child.titleFaIcon}"></i></div><div class="sub-text">${child.subText}</div></div>`,
-                    `${child.customContent || ''}`,
-                    `</div></a>`
-                )
-                if (menu.bottomContent && menu.children.length === index + 1) {
-                    content = content.concat('<div class="bottom-container">', menu.bottomContent, '</div>');
+                if (!child.platform || (child.platform && child.platform === 'pc')) {
+                    content = content.concat(
+                        `<a href="${child.path || '#'}"><div class="icon-box ${child.customClass} ${child.path === BASE_PATH_NAME && 'active'}">`,
+                        `<div class="icon"><i class="fa ${child.faIcon}"></i></div>`,
+                        `<div class="text"><div class="title">${child.title} <i class="fa ${child.path === BASE_PATH_NAME && child.titleFaIcon === 'fa-arrow-right' ? 'fa-map-marker' : child.titleFaIcon}"></i></div><div class="sub-text">${child.subText}</div></div>`,
+                        `${child.customContent || ''}`,
+                        `</div></a>`
+                    )
+                    if (menu.bottomContent && menu.children.length === index + 1) {
+                        content = content.concat('<div class="bottom-container">', menu.bottomContent, '</div>');
+                    }
                 }
             });
             content = content.concat('</div></div>');
@@ -337,7 +349,7 @@ let panelUtils = {
             imageWidth: 160,
             width: 300,
             imageHeight: 120,
-            background: "#fbfbfb",
+            background: "#fff",
             showCancelButton: false,
         });
     },

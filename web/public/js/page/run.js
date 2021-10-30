@@ -3,7 +3,7 @@ $(document).ready(function () {
         $runCmdConc = $('#runCmdConc');
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
-        lineWrapping: false,
+        lineWrapping: true,
         styleActiveLine: true,
         matchBrackets: true,
         viewportMargin: viewportMargin,

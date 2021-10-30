@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-## Update: 2021-10-28
+## Update: 2021-10-30
 
 case $1 in
 jd_IndustryLottery.ts)
@@ -68,6 +68,9 @@ jd_jxmc.ts)
 jd_jxmc_stock.ts)
     Name="京喜牧场兑换新品通知"
     ;;
+jd_jxmc_getCoin.ts)
+    Name="京喜牧场收牛牛"
+    ;;
 jd_mofang.ts)
     Name="京东小魔方"
     ;;
@@ -104,6 +107,15 @@ jd_blueCoin.py)
 jd_cashHelp.py)
     Name="签到领现金"
     ;;
+jd_ccfxj_help.py)
+    Name="城城分现金-助力"
+    ;;
+jd_ddmc_help.py)
+    Name="东东萌宠-助力"
+    ;;
+jd_ddnc_help.py)
+    Name="东东农场-助力"
+    ;;
 jd_getFollowGift.py)
     Name="关注有礼"
     ;;
@@ -113,8 +125,14 @@ jd_jxgc_tuan.py)
 jd_qjd.py)
     Name="抢京豆"
     ;;
+jd_qmkmb_help.py)
+    Name="全民开红包-助力"
+    ;;
 jd_zjd.py)
     Name="赚京豆"
+    ;;
+jd_zddd_Help.py)
+    Name="种豆得豆-助力"
     ;;
 *)
     Name="<未知>"

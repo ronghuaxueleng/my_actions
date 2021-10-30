@@ -20,17 +20,17 @@ $(document).ready(function () {
             let accountArr = JSON.parse(confContent);
             let pt_pins = [];
             for (const account of accountArr) {
-                if(account.ws_key && account.ws_key !== "" && new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）|{}【】‘；：”“'。，、？ ]").test(account.ws_key)){
+                if (account.ws_key && account.ws_key !== "" && new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）|{}【】‘；：”“'。，、？ ]").test(account.ws_key)) {
                     panelUtils.showError(`${account.pt_pin} ${account.remarks}的 ws_key 格式不正确`)
                     return;
                 }
-                if(pt_pins.indexOf(account.pt_pin) > -1){
+                if (pt_pins.indexOf(account.pt_pin) > -1) {
                     panelUtils.showError(`${account.pt_pin} 存在重复`)
                     return;
                 }
                 pt_pins.push(account.pt_pin);
             }
-        }catch (e) {
+        } catch (e) {
             panelUtils.showError("格式出现问题，请仔细检查")
             return;
         }
@@ -53,4 +53,42 @@ $(document).ready(function () {
         var lineWrapping = editor.getOption('lineWrapping');
         editor.setOption('lineWrapping', !lineWrapping);
     });
+
+    let openTools = (value = '')=>{
+        Swal.fire({
+            customClass:{
+                container:"mini-tool"
+            },
+            inputValue: value,
+            input: 'textarea',
+            inputPlaceholder: '请输入需要编码/解码的url',
+            inputLabel: 'URL编码/解码',
+            width: userAgentTools.mobile(navigator.userAgent) ? "90%":"80%",
+            denyButtonText: "解码",
+            confirmButtonText: "编码",
+            showDenyButton: true,
+            showConfirmButton: true,
+            showCloseButton: true,
+            allowOutsideClick: false,
+            showLoaderOnConfirm: true,
+            showLoaderOnDeny: true,
+            returnInputValueOnDeny:true
+        }).then((swal)=>{
+            let txt = ""
+            if (swal.isConfirmed) {
+                txt = encodeURIComponent(swal.value || '');
+            } else if(swal.isDenied){
+                txt = decodeURIComponent(swal.value || '');
+            }
+            if (!swal.isDismissed){
+                openTools(txt);
+            }
+        })
+    }
+
+    $("#urlDecodeEncode").click(async function () {
+        openTools();
+    })
+
+
 });

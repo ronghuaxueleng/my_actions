@@ -6,12 +6,11 @@ function initUI() {
         origLeft: null,
         orig: origRight,
         lineNumbers: true,
-        lineWrapping: false,
+        lineWrapping: true,
         mode: 'shell',
         viewportMargin: viewportMargin,
         theme: themeChange.getAndUpdateEditorTheme(),
         keyMap: 'sublime',
-        lineNumbers: true,
         highlightDifferences: true,
         connect: null,
         collapseIdentical: false

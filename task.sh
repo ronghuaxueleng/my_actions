@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-23
+## Modified: 2021-10-30
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -11,7 +11,7 @@ function Find_Script() {
     WhichDir=""
     FileFormat=""
     local input=$1
-    local AbsolutePath FileNameTmp FileNameTmp1 FileNameTmp2 WhichDirTmp FormatInputName FormatInputDir
+    local AbsolutePath PwdTmp FileNameTmp FileNameTmp1 FileNameTmp2 WhichDirTmp FormatInputName FormatInputDir
     echo $input | grep "/" -q
     if [[ $? -eq 0 ]]; then
         ## 指定路径：
@@ -22,7 +22,7 @@ function Find_Script() {
         else
             echo $input | grep "\.\./" -q
             if [[ $? -eq 0 ]]; then
-                local PwdTmp=$(pwd | perl -pe "{s|/$(pwd | awk -F '/' '{printf$NF}')||g;}")
+                PwdTmp=$(pwd | perl -pe "{s|/$(pwd | awk -F '/' '{printf$NF}')||g;}")
                 AbsolutePath=$(echo "$input" | perl -pe "{s|\.\./|${PwdTmp}/|;}")
             else
                 if [[ $(pwd) == "/root" ]]; then
@@ -640,7 +640,7 @@ function Process_CleanUp() {
         ;;
     esac
     ## 生成进程清单
-    ps -axo pid,time,user,start,command | egrep "\.js\b|\.py\b|\.ts\b" | egrep -v "server\.js|pm2|egrep|perl|sed|bash" | grep -E "00:00:[0-1][0-9] root" >${FileProcessList}
+    ps -axo pid,time,user,start,command | egrep "\.js\b|\.py\b|\.ts\b" | egrep -v "server\.js|pm2|egrep|perl|sed|bash" | grep -E "00:[0-9][0-9]:[0-9][0-9] root" >${FileProcessList}
     if [ -s ${FileProcessList} ]; then
         echo -e "\n$WORKING 开始匹配并清理启动超过 \033[34m${CheckHour}\033[0m 小时的卡死进程...\n"
         ## 生成进程 PID 数组
@@ -664,13 +664,13 @@ function Process_CleanUp() {
                 ## 比较时间
                 local FormatDiffTime=$((${FormatCurrentTime} - 3600 * ${CheckHour}))
                 if [[ ${FormatDiffTime} -gt ${FormatStartTime} ]]; then
-                    echo -e "已终止进程：${ProcessArray[n]} 脚本名称：$(grep ${ProcessArray[n]} ${FileProcessList} | awk -F ' ' '{print$NF}')"
+                    echo -e "已终止进程：${ProcessArray[n]}  脚本名称：$(grep ${ProcessArray[n]} ${FileProcessList} | awk -F ' ' '{print$NF}')"
                     kill -9 ${ProcessArray[n]} >/dev/null 2>&1
                 else
                     continue
                 fi
             elif [[ ${StartTime} = [ADFJMNOS][a-z]* ]]; then
-                echo -e "已终止进程：${ProcessArray[n]} 脚本名称：$(grep ${ProcessArray[n]} ${FileProcessList} | awk -F ' ' '{print$NF}')"
+                echo -e "已终止进程：${ProcessArray[n]}  脚本名称：$(grep ${ProcessArray[n]} ${FileProcessList} | awk -F ' ' '{print$NF}')"
                 kill -9 ${ProcessArray[n]} >/dev/null 2>&1
             fi
         done
@@ -872,7 +872,7 @@ function Cookies_Control() {
             grep ${FormatPin} -q $FileAccountConf
             if [[ $? -eq 0 ]]; then
                 LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S")_$UserNum.log"
-                echo -e "\n$WORKING 开始更新...\n"
+                echo -e "\n$WORKING 开始更新账号 \033[34m$UserNum\033[0m ...\n"
                 ## 声明变量
                 export JD_PT_PIN=${pt_pin}
                 ## 执行脚本
@@ -966,28 +966,9 @@ function Cookies_Control() {
     esac
 }
 
-## 管理own仓库功能
-function Manage_Repos() {
-    echo
-
-}
-
-## 管理Raw脚本功能
-function Manage_Raws() {
-    case $1 in
-    add) ;;
-
-    del) ;;
-
-    search) ;;
-
-    esac
-}
-
 ## 管理全局环境变量功能
 function Manage_Env() {
     local Variable Value VariableTmp ValueTmp Remarks FullContent OldContent NewContent InputA InputB InputC Input1 Input2 Keys
-
     ## 控制变量启用与禁用
     function ControlEnv() {
         case $# in
@@ -1583,16 +1564,6 @@ function List_Local_Scripts() {
     List_Other
     echo ''
 }
-
-## 临时
-function Temporary() {
-    local FullContent="export JD_CITY_HELPPOOL=\"false\" \#城城分现金关闭全部助力助力池"
-    grep "export JD_CITY_HELPPOOL=" $FileConfUser -q
-    [ $? -ne 0 ] && sed -i "9 i ${FullContent}" $FileConfUser
-}
-
-## 临时命令
-Temporary
 
 ## 判定命令
 case $# in
