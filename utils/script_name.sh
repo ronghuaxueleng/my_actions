@@ -35,6 +35,9 @@ jd_checkCookie.ts)
 jd_ddWorld.ts)
     Name="东东世界"
     ;;
+jx_fls.ts)
+    Name="牛牛福利"
+    ;;
 jd_foodRunning.ts)
     Name="零食街"
     ;;

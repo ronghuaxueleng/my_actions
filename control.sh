@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## Author: SuperManito
-## Modified: 2021-10-14
+## Modified: 2021-10-30
 
 ShellDir=${JD_DIR}
 . $ShellDir/share.sh
@@ -22,8 +22,9 @@ function Update_Shell() {
 
 ## 后台挂机功能
 function Hang_Control() {
-    local HangUpScripts="jd_cfd_loop.js"
+    local HangUpScripts=""
     local ScriptFiles ServiceName ScriptFormt LastRunTime ExitStatus
+    [[ -z ${HangUpScripts} ]] && echo -e "\n目前没有挂机类的活动脚本哦~\n"
     case $1 in
     ## 开启/重启服务
     up)
