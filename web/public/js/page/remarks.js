@@ -10,6 +10,17 @@ $(document).ready(function () {
         keyMap: 'sublime'
     });
     $.get(BASE_API_PATH + '/api/config/account', function (data) {
+        try {
+            let accountArr = JSON.parse(data);
+            for (const account of accountArr) {
+                if(account && !account.config){
+                    account['config'] = {"ep":{}};
+                }
+            }
+            data = JSON.stringify(accountArr, null, 2);
+        }catch (e){
+
+        }
         editor.setValue(data);
     });
 
