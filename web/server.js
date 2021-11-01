@@ -1152,9 +1152,9 @@ function updateCookie(cookie, userMsg = '无', response) {
                         lineNext.match(/上次更新：/)
                     ) {
                         const bz = lineNext.split('备注：')[1];
-                        lines[i + 1] = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', bz ? bz : userMsg].join('');
+                        lines[i + 1] = ['## ', pt_pin, ' 上次更新：', util.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()), ' 备注：', bz ? bz : userMsg].join('');
                     } else {
-                        const newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', userMsg].join('');
+                        const newLine = ['## ', pt_pin, ' 上次更新：', util.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()), ' 备注：', userMsg].join('');
                         lines.splice(lastIndex + 1, 0, newLine);
                     }
                 }
@@ -1173,7 +1173,7 @@ function updateCookie(cookie, userMsg = '无', response) {
             ].join('');
             //提交备注
             lines.splice(lastIndex + 1, 0, newLine);
-            newLine = ['## ', pt_pin, ' 上次更新：', new Date().toLocaleDateString(), ' 备注：', userMsg].join('');
+            newLine = ['## ', pt_pin, ' 上次更新：', util.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()), ' 备注：', userMsg].join('');
             lines.splice(lastIndex + 2, 0, newLine);
         }
         saveNewConf('config.sh', lines.join('\n'));
