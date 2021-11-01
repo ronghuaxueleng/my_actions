@@ -1,28 +1,22 @@
 
 /*
- 10.28~11.5 大牌强联合 好物提前购 [jd_opencardGO3.js]
+11.1~11 品质女装 年终狂欢 [jd_opencardNZ.js]
 一次性开卡脚本
-
-1.邀请一人20豆(有可能没有豆
-2.开9张 抽奖可能获得京豆或实物
-3.关注可能10京豆
-4.加购可能5京豆
-5.抽奖(实物或30豆
-
+1.邀请一人可能20豆
+2.开2组(共11张) 成功开1组 获得1次抽奖
+  抽奖可能获得30京豆
+3.关注10豆 
+4.加购5京豆
+5.浏览店铺1豆/个
 第一个账号助力作者 其他依次助力CK1
-————————————————
-入口：[ 10.28~11.5 大牌强联合 好物提前购 (https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=946hf38m5d4vqjgs5ctfuickj65s69l528&shareUuid=c727521bfb634a28a67307ac3821ee38)]
 
-请求太频繁会被黑ip
-过10分钟再执行
-
+入口：https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dzkbblntbt20211101A&shareUuid=550632e6d7d84a499ef1defccc043910
 ============Quantumultx===============
 [task_local]
-#10.28~11.5 大牌强联合 好物提前购
-17 0,12 28-31,1-5 10,11 * https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardGO3.js, tag=10.28~11.5 大牌强联合 好物提前购, enabled=true
-
+#11.1~11 品质女装 年终狂欢
+10 0,16 1-11 11 * https://raw.githubusercontent.com/he1pu/JDHelp/main/jd_opencardNZ.js, tag=11.1~11 品质女装 年终狂欢, enabled=true
 */
-const $ = new Env("10.28~11.5 大牌强联合 好物提前购");
+const $ = new Env("11.1~11 品质女装 年终狂欢");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
@@ -47,8 +41,8 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    console.log(`入口：\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=946hf38m5d4vqjgs5ctfuickj65s69l528&shareUuid=c727521bfb634a28a67307ac3821ee38`)
-    authorCodeList = ['c727521bfb634a28a67307ac3821ee38']
+    console.log(`入口：\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dzkbblntbt20211101A&shareUuid=550632e6d7d84a499ef1defccc043910`)
+    let authorCodeList = ['550632e6d7d84a499ef1defccc043910']
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
@@ -70,10 +64,11 @@ if ($.isNode()) {
             $.bean = 0;
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
-            $.activityId = '946hf38m5d4vqjgs5ctfuickj65s69l528'
-            $.activityShopId = '1000001469'
-            $.attrTouXiang = 'https://img10.360buyimg.com/imgzone/jfs/t1/7020/27/13511/6142/5c5138d8E4df2e764/5a1216a3a5043c5d.png'
+            $.activityId = 'dzkbblntbt20211101A'
+            $.activityShopId = '1000007653'
             $.activityUrl = `https://lzdz1-isv.isvjd.com/dingzhi/dz/openCard/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
+            $.attrTouXiang = 'https://img10.360buyimg.com/imgzone/jfs/t1/7020/27/13511/6142/5c5138d8E4df2e764/5a1216a3a5043c5d.png'
+
             await rush();
             await $.wait(3000)
             if ($.bean > 0) {
@@ -106,8 +101,7 @@ async function rush() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            //console.log("助力: "+$.authorCode)
-            if ($.index==1)$.authorCode = 'c727521bfb634a28a67307ac3821ee38';
+            console.log("助力: "+$.authorCode)
             await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await task('wxActionCommon/getUserInfo', `pin=${encodeURIComponent($.secretPin)}`, 1)
             if ($.index === 1) {
@@ -116,7 +110,7 @@ async function rush() {
                 await task('dz/openCard/activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&pinImg=${$.attrTouXiang}&nick=${encodeURIComponent($.pin)}&cjyxPin=&cjhyPin=&shareUuid=${encodeURIComponent($.authorCode)}`)
             }
             await task('dz/openCard/checkOpenCard', `activityId=${$.activityId}&actorUuid=${$.actorUuid}&shareUuid=${$.authorCode}&pin=${encodeURIComponent($.secretPin)}`)
-            $.log("关注店铺: ")
+            $.log("关注店铺:")
             if ($.shopTask) {
                 if (!$.shopTask.allStatus) {
                     await task('dz/openCard/followShop', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&actorUuid=${encodeURIComponent($.actorUuid)}&taskType=23&taskValue=1000002520`)
@@ -128,10 +122,10 @@ async function rush() {
             } else {
                 $.log("没有获取到对应的任务。\n")
             }
-            $.log("加入店铺会员: ")
+            $.log("加入店铺会员:")
             if ($.openCardStatus) {
                 for (let i = 0; i < ($.openCardStatus.cardList1.length + $.openCardStatus.cardList2.length); i++) {
-                    $.log("模拟上报访问记录: ")
+                    $.log("模拟上报访问记录")
                     await task('crm/pageVisit/insertCrmPageVisit', `venderId=1000004065&pageId=dz20211013skcnurdk11jhdue84752hp&elementId=${encodeURIComponent(`去开卡${i}`)}&pin=${encodeURIComponent($.secretPin)}`, 1)
                     await $.wait(2000)
                 }
@@ -144,7 +138,7 @@ async function rush() {
 
                 } else {
                     for (const vo of t1TaskList) {
-                        $.log(`去加入${vo.name}: `)
+                        $.log(`去加入: ${vo.name}`)
                         await getShopOpenCardInfo({ "venderId": `${vo.value}`, "channel": "401" }, vo.value)
                         await bindWithVender({ "venderId": `${vo.value}`, "bindByVerifyCodeFlag": 1, "registerExtend": {}, "writeChildFlag": 0, "activityId": $.openCardActivityId, "channel": 401 }, vo.value)
                         await $.wait(2000)
@@ -197,7 +191,7 @@ function task(function_id, body, isCommon = 0, own = 0) {
                                         $.log("-------------------")
                                         if ($.index === 1) {
                                             ownCode = data.data.actorUuid
-                                            console.log(`助力码: ${ownCode}`);
+                                            console.log(ownCode)
                                         }
                                         $.actorUuid = data.data.actorUuid;
                                         $.skuTask = data.data.addSku;
@@ -527,7 +521,7 @@ function getToken() {
                             $.token = data.token
                         }
                     } else {
-                        //$.log("京东返回了空数据")
+                        $.log("京东返回了空数据")
                     }
                 }
             } catch (error) {
@@ -584,7 +578,7 @@ function checkCookie() {
                             $.nickName = data.data.userInfo.baseInfo.nickname;
                         }
                     } else {
-                        //$.log('京东返回了空数据');
+                        $.log('京东返回了空数据');
                     }
                 }
             } catch (e) {
