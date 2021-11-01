@@ -65,7 +65,7 @@ $(document).ready(function () {
         editor.setOption('lineWrapping', !lineWrapping);
     });
 
-    let openTools = (value = '')=>{
+    let openTools = (value = '') => {
         Swal.fire({
             customClass:{
                 container:"mini-tool"
@@ -81,25 +81,21 @@ $(document).ready(function () {
             showConfirmButton: true,
             showCloseButton: true,
             allowOutsideClick: false,
-            showLoaderOnConfirm: true,
-            showLoaderOnDeny: true,
-            returnInputValueOnDeny:true
-        }).then((swal)=>{
-            let txt = ""
-            if (swal.isConfirmed) {
-                txt = encodeURIComponent(swal.value || '');
-            } else if(swal.isDenied){
-                txt = decodeURIComponent(swal.value || '');
-            }
-            if (!swal.isDismissed){
-                openTools(txt);
-            }
-        })
+            returnInputValueOnDeny:true,
+            preConfirm: () => {
+                const value = document.getElementById('swal2-input').value;
+                document.getElementById('swal2-input').value = encodeURIComponent(value);
+                return false;
+            },
+            preDeny: () => {
+                const value = document.getElementById('swal2-input').value;
+                document.getElementById('swal2-input').value = decodeURIComponent(value);
+                return false;
+            },
+        });
     }
 
     $("#urlDecodeEncode").click(async function () {
         openTools();
     })
-
-
 });
