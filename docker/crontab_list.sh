@@ -63,8 +63,12 @@
 15 9,18 * * * node /scripts/jd_jmtask.js >> /scripts/logs/jd_jmtask.log 2>&1
 #财富岛热气球接待
 30 * * * * node /scripts/jd_cfd_MyActions_loop.js >> /scripts/logs/jd_cfd_MyActions_loop.log 2>&1
-#jd_opencard4
-30 2,10,20 * * * node /scripts/jd_opencard4.js >> /scripts/logs/jd_opencard4.log 2>&1
+#jd_opencard11
+30 0,8,17 * * * node /scripts/jd_opencard11.js >> /scripts/logs/jd_opencard11.log 2>&1
+#jd_opencard10
+05 3,9,18 * * * node /scripts/jd_opencard10.js >> /scripts/logs/jd_opencard10.log 2>&1
+#jd_opencard9
+05 1,10,20 * * * node /scripts/jd_opencard9.js >> /scripts/logs/jd_opencard9.log 2>&1
 #jd_opencard8
 05 2,11,19 * * * node /scripts/jd_opencard8.js >> /scripts/logs/jd_opencard8.log 2>&1
 #jd_ddworld_exchange
@@ -84,7 +88,7 @@
 # 超级盒子
 24 3,13 * * * node /scripts/jd_superbox.js >> /scripts/logs/jd_superbox.log 2>&1
 # 沸腾之夜
-33 18 * * * node /scripts/jd_hotNeight.js >> /scripts/logs/jd_hotNeight.log 2>&1
+20 1,9,16 * * * node /scripts/jd_fcwb.js >> /scripts/logs/jd_fcwb.log 2>&1
 ##############长期活动##############
 # 签到
 0 0,18 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
