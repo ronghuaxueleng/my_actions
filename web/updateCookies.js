@@ -105,8 +105,8 @@ const updateLocalCookie = (cookie, remarks) => {
                 if (
                     lineNext.match(/上次更新：/)
                 ) {
-                    const bz = lineNext.split('备注：')[1];
-                    lines[i + 1] = ['## ', pt_pin, ' 上次更新：', util.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()), ' 备注：', bz ? bz : remarks].join('');
+                    // 统一使用account.json中备注配置
+                    lines[i + 1] = ['## ', pt_pin, ' 上次更新：', util.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()), ' 备注：', remarks].join('');
                 } else {
                     const newLine = ['## ', pt_pin, ' 上次更新：', util.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()), ' 备注：', remarks].join('');
                     lines.splice(lastIndex + 1, 0, newLine);
@@ -149,7 +149,7 @@ const updateCookies = async (pt_pin) => {
         }
         await epInit();
         if (pt_pin === account.pt_pin) {
-            let remarks = decodeURIComponent(account.remarks);
+            let remarks = decodeURIComponent(account.remarks || '无');
             let headerMsg = `Cookie => [${pt_pin}] `;
             if (account.ws_key && account.ws_key !== "") {
                 let success = false;
