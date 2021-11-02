@@ -94,6 +94,7 @@ replaceShareCode jd_jdfactory JDHelloWorld
 replaceShareCode jd_pet JDHelloWorld
 replaceShareCode jd_plantBean JDHelloWorld
 replaceShareCode jd_sgmh JDHelloWorld
+replaceShareCode jd_jxmc JDHelloWorld
 
 npm install
 npm install -g npm npm-install-peers
@@ -133,6 +134,7 @@ replaceShareCode jd_jdfactory JDHelp
 replaceShareCodeV1 jd_pet JDHelp
 replaceShareCode jd_plantBean JDHelp
 replaceShareCode jd_sgmh JDHelp
+replaceShareCode jd_jxmc JDHelp
 cd ..
 
 git clone https://github.com/wuzhi05/MyActions.git MyActions
@@ -146,6 +148,7 @@ replaceShareCode jd_jdfactory MyActions
 replaceShareCode jd_pet MyActions
 replaceShareCode jd_plantBean MyActions
 replaceShareCode jd_sgmh MyActions
+replaceShareCode jd_jxmc MyActions
 cd ..
 
 git clone https://github.com/Aaron-lv/sync.git Aaron
@@ -159,6 +162,7 @@ replaceShareCode jd_jdfactory Aaron
 replaceShareCodeV1 jd_pet Aaron
 replaceShareCode jd_plantBean Aaron
 replaceShareCode jd_sgmh Aaron
+replaceShareCode jd_jxmc Aaron
 cd ..
 
 git clone https://github.com/shufflewzc/faker2.git faker2
@@ -172,6 +176,7 @@ replaceShareCode jd_jdfactory faker2
 replaceShareCodeV1 jd_pet faker2
 replaceShareCode jd_plantBean faker2
 replaceShareCode jd_sgmh faker2
+replaceShareCode jd_jxmc faker2
 cd ..
 
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
