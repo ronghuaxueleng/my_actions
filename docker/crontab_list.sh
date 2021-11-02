@@ -18,7 +18,7 @@
 #5g超级盲盒
 0 */4 * * * node /scripts/jd_mohe.js >> /scripts/logs/jd_mohe.log 2>&1
 #京喜牧场
-20 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
+20 0-23/3 * * * node /scripts/jd_jxmc_MyActions.js >> /scripts/logs/jd_jxmc_MyActions.log 2>&1
 #东东电竞经理
 47 10 * * * node /scripts/jd_djjl.js >> /scripts/logs/jd_djjl.log 2>&1
 #众筹许愿池
@@ -250,7 +250,7 @@
 # 京喜领88元红包
 4 10 * * * node /scripts/jd_jxlhb.js >> /scripts/logs/jd_jxlhb.log 2>&1
 # 惊喜牧场
-20 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
+20 0-23/3 * * * node /scripts/jd_jxmc_JDHelloWorld.js >> /scripts/logs/jd_jxmc_JDHelloWorld.log 2>&1
 # 京喜农场
 0 9,12,18 * * * node /scripts/jd_jxnc.js >> /scripts/logs/jd_jxnc.log 2>&1
 # 京东快递签到
@@ -388,7 +388,7 @@
 # 京喜领88元红包
 4 10 * * * node /scripts/jd_jxlhb.js >> /scripts/logs/jd_jxlhb.log 2>&1
 # 惊喜牧场
-20 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
+20 0-23/3 * * * node /scripts/jd_jxmc_JDHelp.js >> /scripts/logs/jd_jxmc_JDHelp.log 2>&1
 # 京喜农场
 0 9,12,18 * * * node /scripts/jd_jxnc.js >> /scripts/logs/jd_jxnc.log 2>&1
 # 京东快递签到
@@ -586,7 +586,7 @@
 # 领金贴
 5 0 * * * node /scripts/jd_jin_tie.js >> /scripts/logs/jd_jin_tie.log 2>&1
 # 京喜牧场
-15 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
+15 0-23/3 * * * node /scripts/jd_jxmc_Aaron.js >> /scripts/logs/jd_jxmc_Aaron.log 2>&1
 # 点点券
 # 10 0,1,20 * * * node /scripts/jd_necklace.js >> /scripts/logs/jd_necklace.log 2>&1
 # 京小鸽
@@ -689,7 +689,7 @@
 #
 1 0 * * * node /scripts/jd_shop.js >> /scripts/logs/jd_shop.log 2>&1
 #京喜牧场
-48 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
+48 0-23/3 * * * node /scripts/jd_jxmc_faker2.js >> /scripts/logs/jd_jxmc_faker2.log 2>&1
 #摇钱树
 23 0-23/2 * * * node /scripts/jd_moneyTree.js >> /scripts/logs/jd_moneyTree.log 2>&1
 #排行榜
