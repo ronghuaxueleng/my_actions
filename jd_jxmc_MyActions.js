@@ -166,7 +166,7 @@ async function pasture() {
         console.log(`\n温馨提示：${$.UserName} 请先手动完成【新手指导任务】再运行脚本再运行脚本\n`);
         return;
       }
-      $.currentStep = $.homeInfo?.finishedtaskId
+      $.currentStep = $.homeInfo.finishedtaskId
       console.log(`打印新手流程进度：当前进度：${$.currentStep}，下一流程：${$.homeInfo.maintaskId}`)
       if ($.homeInfo.maintaskId !== "pause" || isNew($.currentStep)) {
         console.log(`开始初始化`)
