@@ -196,7 +196,7 @@ async function pasture() {
         }
       );
       await $.wait(2000)
-      const petNum = ($.homeInfo?.petinfo || []).length
+      const petNum = ($.homeInfo.petinfo || []).length
       await takeGetRequest('GetCardInfo');
       if ($.GetCardInfo && $.GetCardInfo.cardinfo) {
         let msg = '';
@@ -654,7 +654,7 @@ function dealReturn(type, data) {
         $.homeInfo = data.data;
         $.activeid = $.homeInfo.activeid
         $.activekey = $.homeInfo.activekey || null
-        $.coins = $.homeInfo?.coins || 0;
+        $.coins = $.homeInfo.coins || 0;
         if ($.homeInfo.giftcabbagevalue) {
           console.log(`登陆获得白菜：${$.homeInfo.giftcabbagevalue} 颗`);
         }

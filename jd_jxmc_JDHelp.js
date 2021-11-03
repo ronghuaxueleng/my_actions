@@ -222,7 +222,7 @@ async function pasture() {
         }
       }
       console.log("查看宠物信息")
-      const petNum = ($.homeInfo?.petinfo || []).length
+      const petNum = ($.homeInfo.petinfo || []).length
       if (!petNum) {
         console.log(`你的鸡都生完蛋跑掉啦！！`)
         await buyNewPet(true)
@@ -651,7 +651,7 @@ function dealReturn(type, data) {
         $.homeInfo = data.data;
         $.activeid = $.homeInfo.activeid
         $.activekey = $.homeInfo.activekey || null
-        $.coins = $.homeInfo?.coins || 0;
+        $.coins = $.homeInfo.coins || 0;
         if ($.homeInfo.giftcabbagevalue) {
           console.log(`登陆获得白菜：${$.homeInfo.giftcabbagevalue} 颗`);
         }
