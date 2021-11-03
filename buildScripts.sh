@@ -3,6 +3,10 @@
 function replaceShareCode() {
     if [ ! -f "$1" ]; then
         sed -i 's/const readShareCodeRes = await readShareCode();/const readShareCodeRes = {"code": -1};/g' $1.js
+        sed -i 's/$.currentStep = $.homeInfo?.finishedtaskId/$.currentStep = $.homeInfo.finishedtaskId/g' $1.js
+        sed -i 's/$.currentStep = $.DoMainTask?.finishedtaskId/$.currentStep = $.DoMainTask.finishedtaskId/g' $1.js
+        sed -i 's/$.homeInfo?.petinfo/$.homeInfo.petinfo/g' $1.js
+        sed -i 's/$.homeInfo?.coins/$.homeInfo.coins/g' $1.js
         sed -i -e '1h;2,$H;$!d;g' -re 's/let shareCodes = \[(.*\n)+?]/let shareCodes = []/g' $1.js
         for file in `ls $1*`; do
             basename=${file%%.*}
