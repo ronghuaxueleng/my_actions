@@ -175,7 +175,7 @@ async function pasture() {
         for (let i = 0; i < 20; i++) {
           if ($.DoMainTask.maintaskId !== "pause") {
             await $.wait(2000)
-            $.currentStep = $.DoMainTask?.finishedtaskId
+            $.currentStep = $.DoMainTask.finishedtaskId
             $.step = $.DoMainTask.maintaskId
             await takeGetRequest('DoMainTask');
           } else if (isNew($.currentStep)) {
