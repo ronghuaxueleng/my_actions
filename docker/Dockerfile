@@ -1,6 +1,6 @@
 FROM dreamacro/clash as clash
 
-FROM mitmproxy/mitmproxy:6.0.2
+FROM ronghuaxueleng/mitmproxy:7.0.3
 LABEL maintainer="jishuixiansheng"
 
 ARG JD_BASE_URL=https://gitee.com/getready/my_actions.git
@@ -38,8 +38,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && npm config set registry https://registry.npm.taobao.org \
     && cd ${JD_DIR}/docker \
     && pip3 install -r requirements.txt \
-    && /usr/bin/python3 -m pip install --upgrade pip \
-    && ln -sf /usr/bin/python3 /usr/bin/python \
+    && pip3 install --upgrade pip \
+    && ln -sf /usr/local/bin/python3 /usr/bin/python \
     && npm install -g pm2 \
     && rm -rf /root/.npm \
     && touch ${JD_DIR}/runall.sh \
@@ -85,4 +85,6 @@ RUN mkdir -p /root/.ssh \
     && ssh-keyscan $REPO_URL > /root/.ssh/known_hosts \
     && git config --global pull.ff only
 
-ENTRYPOINT ${JD_DIR}/utils/init.sh
+COPY supervisord.conf /etc/
+
+CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
