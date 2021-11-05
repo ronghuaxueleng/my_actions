@@ -1,6 +1,6 @@
 FROM dreamacro/clash as clash
 
-FROM ronghuaxueleng/mitmproxy:7.0.3
+FROM ronghuaxueleng/mitmproxy-nodejs:7.0.3-17.0.1
 LABEL maintainer="jishuixiansheng"
 
 ARG JD_BASE_URL=https://gitee.com/getready/my_actions.git
@@ -30,7 +30,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     perl \
     openssh-client \
     ttyd \
-    nodejs-lts \
     npm \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
@@ -87,4 +86,5 @@ RUN mkdir -p /root/.ssh \
 
 COPY supervisord.conf /etc/
 
-CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
+# CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
+ENTRYPOINT ${JD_DIR}/utils/init.sh
