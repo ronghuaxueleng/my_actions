@@ -519,8 +519,6 @@
 35 6-18/6 * * * node /scripts/jd_pet_Aaron.js >> /scripts/logs/jd_pet_Aaron.log 2>&1
 # 京东种豆得豆
 10 7-22/1 * * * node /scripts/jd_plantBean_Aaron.js >> /scripts/logs/jd_plantBean_Aaron.log 2>&1
-# 京东全民开红包
-12 0-23/4 * * * node /scripts/jd_redPacket.js >> /scripts/logs/jd_redPacket.log 2>&1
 # 进店领豆
 6 0 * * * node /scripts/jd_shop.js >> /scripts/logs/jd_shop.log 2>&1
 # 东东超市
