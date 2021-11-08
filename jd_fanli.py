@@ -2,13 +2,13 @@
 const $ = new Env("京东饭粒");
 京东饭粒任务
 活动入口：https://u.jd.com/ytWx4w0
-每天60豆小毛，爱要不要
+每天90豆小毛，爱要不要
 
 cron:
 46 9 * * * jd_fanli.py
 """
 
-
+import sys
 import os
 import time
 import re
@@ -16,6 +16,11 @@ import requests
 import random
 
 proxies = {"http": None, "https": None}
+
+
+def printf(text):
+    print(text)
+    sys.stdout.flush()
 
 
 def randomstr(num):
@@ -57,7 +62,7 @@ def getTaskList(ck):
     url = "https://ifanli.m.jd.com/rebateapi/task/getTaskList"
     headers = getheader(ck)
     r = requests.get(url, headers=headers, proxies=proxies)
-    # print(r.text)
+    # printf(r.text)
     return r.json()["content"]
 
 
@@ -65,16 +70,17 @@ def getTaskFinishCount(ck):
     url = "https://ifanli.m.jd.com/rebateapi/task/getTaskFinishCount"
     headers = getheader(ck)
     r = requests.get(url, headers=headers, proxies=proxies)
-    print('已完成任务次数：', r.json()["content"]["finishCount"], '总任务次数：', r.json()["content"]["maxTaskCount"])
+    printf(
+        '已完成任务次数：' + str(r.json()["content"]["finishCount"]) + '   总任务次数：' + str(r.json()["content"]["maxTaskCount"]))
     return r.json()["content"]
 
 
 def saveTaskRecord(ck, taskId):
     url = "https://ifanli.m.jd.com/rebateapi/task/saveTaskRecord"
     headers = getheader(ck)
-    data = '{"taskId":%s,"taskType":4}' % taskId
+    data = '{"taskId":%s,"taskType":1}' % taskId
     r = requests.post(url, headers=headers, data=data, proxies=proxies)
-    # print(r.text)
+    # printf(r.text)
     return r.json()["content"]["uid"], r.json()["content"]["tt"]
 
 
@@ -82,26 +88,26 @@ def saveTaskRecord1(ck, taskId, uid, tt):
     # tt=int(time.time()*1000)
     url = "https://ifanli.m.jd.com/rebateapi/task/saveTaskRecord"
     headers = getheader(ck)
-    data = '{"taskId":%s,"taskType":4,"uid":"%s","tt":%s}' % (taskId, uid, tt)
-    # print(data)
+    data = '{"taskId":%s,"taskType":1,"uid":"%s","tt":%s}' % (taskId, uid, tt)
+    # printf(data)
     r = requests.post(url, headers=headers, data=data, proxies=proxies)
-    print(r.json()["content"]["msg"])
+    printf(r.json()["content"]["msg"])
 
 
 if __name__ == '__main__':
     cks = os.environ["JD_COOKIE"].split("&")
     for ck in cks:
         ptpin = re.findall(r"pt_pin=(.*?);", ck)[0]
-        print("--------开始京东账号", ptpin, "--------")
+        printf("--------开始京东账号" + ptpin + "--------")
         try:
             count = getTaskFinishCount(ck)
             if count["finishCount"] < count["maxTaskCount"]:
                 for times in range(count["maxTaskCount"] - count["finishCount"]):
                     tasks = getTaskList(ck)
                     for i in tasks:
-                        if i["taskType"] == 4:
+                        if i["taskType"] == 1:
                             uid, tt = saveTaskRecord(ck, i["taskId"])
                             time.sleep(10)
                             saveTaskRecord1(ck, i["taskId"], uid, tt)
         except:
-            print("发生异常错误")
+            printf("发生异常错误")
