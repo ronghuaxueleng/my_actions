@@ -63,6 +63,8 @@
 15 9,18 * * * node /scripts/jd_jmtask.js >> /scripts/logs/jd_jmtask.log 2>&1
 #财富岛热气球接待
 30 * * * * node /scripts/jd_cfd_MyActions_loop.js >> /scripts/logs/jd_cfd_MyActions_loop.log 2>&1
+#jd_opencard22
+05 3,18 * * * node /scripts/jd_opencard22.js >> /scripts/logs/jd_opencard22.log 2>&1
 #jd_opencard21
 30 2,20 * * * node /scripts/jd_opencard21.js >> /scripts/logs/jd_opencard21.log 2>&1
 #jd_opencard20
@@ -107,6 +109,8 @@
 01 10,15,20 * * * node /scripts/jd_NewStar.js >> /scripts/logs/jd_NewStar.log 2>&1
 # 赚京豆(微信小程序)
 12 * * * * node /scripts/jd_syj.js >> /scripts/logs/jd_syj.log 2>&1
+# 饭粒
+20 2,18 * * * node /scripts/jd_fanli.js >> /scripts/logs/jd_fanli.log 2>&1
 ##############长期活动##############
 # 签到
 0 0,18 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
