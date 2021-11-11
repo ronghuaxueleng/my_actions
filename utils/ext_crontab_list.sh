@@ -11,5 +11,5 @@
 #获取助力码
 58 20 * * * task jd_get_share_code_4_bot >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
 # 自动更新Cookie(需要配置wskey)
-0 0,7,22 * * * task cookie update >/dev/null 2>&1
+0 0,7,19,22 * * * task cookie update >/dev/null 2>&1
 
