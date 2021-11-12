@@ -31,7 +31,7 @@ if __name__ == '__main__':
             rows = json.load(load_f)
             for row in rows:
                 print("{}, {}提交,waiting".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), row['name']))
-                await client.send_message(row['bot'], '{} {}'.format(row['cmd'], row['codes']))
+                await client.send_message('@JDShareCodebot', '{} {}'.format(row['cmd'], row['codes']))
                 time.sleep(5)
 
     with client:
