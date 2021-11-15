@@ -5,7 +5,7 @@
 # 向机器人提交助力码
 0 9,21 * * * bash -x /jd/shareCode.sh >> /jd/log/shareCode.log 2>&1
 0 0 * * 1 bash -x /jd/shareCode1.sh >> /jd/log/shareCode1.log 2>&1
-10,11,12 9 * * 1 bash -x /jd/shareCode2.sh >> /jd/log/shareCode2.log 2>&1
+0 8,9 * * * bash -x /jd/shareCode2.sh >> /jd/log/shareCode2.log 2>&1
 # 提交助力码
 0 1 * * * bash /jd/submitme.sh >> /jd/log/submitme.log 2>&1
 # 更新cookie
@@ -13,5 +13,5 @@
 #获取助力码
 58 20 * * * task jd_get_share_code_4_bot >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
 # 自动更新Cookie(需要配置wskey)
-0 0,7,19,22 * * * task cookie update >/dev/null 2>&1
+0 0,7,19,21 * * * task cookie update >/dev/null 2>&1
 
