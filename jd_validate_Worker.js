@@ -13,7 +13,7 @@ const UA = require('./USER_AGENTS.js').USER_AGENT;
 const fs = require('fs')
 
 const {Worker, isMainThread, workerData} = require('worker_threads')
-let validate_num = process.env.validate_num ? process.env.validate_num : 12 // validate个数
+let validate_num = process.env.validate_num ? process.env.validate_num : 5 // validate个数
 
 Math.avg = function average() {
   let sum = 0;
