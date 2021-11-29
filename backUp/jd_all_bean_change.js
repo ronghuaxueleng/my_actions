@@ -5,14 +5,14 @@
 =================================Quantumultx=========================
 [task_local]
 #京东月资产变动通知
-30 10 * * 1 https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js, tag=翻翻乐提现, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+10 7 1-31/7 * * https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js, tag=翻翻乐提现, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 =================================Loon===================================
 [Script]
-cron "30 10 * * 1" script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js,tag=翻翻乐提现
+cron "10 7 1-31/7 * *" script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js,tag=翻翻乐提现
 ===================================Surge================================
-京东月资产变动通知 = type=cron,cronexp="30 10 * * 1",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js
+京东月资产变动通知 = type=cron,cronexp="10 7 1-31/7 * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js
 ====================================小火箭=============================
-京东月资产变动通知 = type=cron,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js, cronexpr="30 10 * * 1", timeout=3600, enable=true
+京东月资产变动通知 = type=cron,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js, cronexpr="10 7 1-31/7 * *", timeout=3600, enable=true
  */
 const $ = new Env('京东月资产变动通知');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -21,15 +21,11 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let allMessage = '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
-let pageSize = 10;
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
-  if (process.env.NOTIFY_PAGE_SIZE && process.env.NOTIFY_PAGE_SIZE !== '') {
-    pageSize = parseInt(process.env.NOTIFY_PAGE_SIZE);
-  }
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
@@ -85,12 +81,6 @@ async function showMsg() {
   // if ($.isNode()) {
   //   await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `账号${$.index}：${$.nickName || $.UserName}\n昨日收入：${$.incomeBean}京豆 🐶\n昨日支出：${$.expenseBean}京豆 🐶\n当前京豆：${$.beanCount}京豆 🐶${$.message}`, { url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean` })
   // }
-  if ($.index % pageSize === 0) {
-    if ($.isNode() && allMessage) {
-      await notify.sendNotify(`${$.name}`, `${allMessage}`, { url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean` })
-      allMessage=''
-    }
-  }
   $.msg($.name, '', `账号${$.index}：${$.nickName || $.UserName}\n当月收入(截至昨日)：${$.allincomeBean}京豆 🐶\n当月支出(截至昨日)：${$.allexpenseBean}京豆 🐶\n昨日收入：${$.incomeBean}京豆 🐶\n昨日支出：${$.expenseBean}京豆 🐶\n当前京豆：${$.beanCount}(今日将过期${$.expirejingdou})京豆🐶${$.message}`, {"open-url": "https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean"});
 }
 async function bean() {
@@ -153,7 +143,7 @@ async function bean() {
   let start = new Date( year + "-" + month + "-01 00:00:00" ).getTime()
   //结束时间 时间戳
   if( month == 12 ){
-  	 //十二月的时候进位，这里直接用加减法算了
+  	 //十二月的时候进位，这里直接用加减法算了  
   	 //也可以用 time.setMonth( month + 1 )去计算并获取结束时间的月份和年份
 	month = 0;
 	year += 1;
