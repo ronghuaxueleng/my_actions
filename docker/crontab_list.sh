@@ -216,7 +216,7 @@
 # 金榜创造营
 13 1,22 * * * node /scripts/jd_gold_creator.js >> /scripts/logs/jd_gold_creator.log 2>&1
 # 东东健康社区
-13 1,6,22 * * * node /scripts/jd_health_JDHelloWorld.js >> /scripts/logs/jd_health_JDHelloWorld.log 2>&1
+13 1,6,22 * * * node /scripts/jd_health_JDHelloWorld2.js >> /scripts/logs/jd_health_JDHelloWorld2.log 2>&1
 # 东东健康社区收集能量
 5-45/20 * * * * node /scripts/jd_health_JDHelloWorld_collect.js >> /scripts/logs/jd_health_JDHelloWorld_collect.log 2>&1
 # 东东工厂
