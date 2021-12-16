@@ -3,11 +3,20 @@
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 by:小手冰凉 tg:@chianPLA
-MF_EX_1 为 true则兑换1魔方,否则只兑换5魔方
 ============Quantumultx===============
 [task_local]
 #京东小魔方--收集兑换
-31 8 * * * jd jd_mofang_ex.js, tag=京东小魔方--收集兑换, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+31 8 * * 4 https://raw.githubusercontent.com/KingRan/JDJB/main/jd_mofang_ex.js, tag=京东小魔方--收集兑换, enabled=true
+
+================Loon==============
+[Script]
+cron "31 8 * * 4" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_mofang_ex.js,tag=京东小魔方--收集兑换
+
+===============Surge=================
+京东小魔方--收集兑换 = type=cron,cronexp="31 8 * * 4",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_mofang_ex.js
+
+============小火箭=========
+京东小魔方--收集兑换 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_mofang_ex.js, cronexpr="31 8 * * 4", timeout=3600, enable=true
 
  */
 const $ = new Env('京东小魔方--收集兑换');
@@ -141,15 +150,16 @@ async function queryInteractiveRewardInfo(encryptProjectId, sourceCode, type) {
                         await $.wait(1500);
                       }
                     }
-                  } if (sum < 5 && process.env.MF_EX_1 == 'true') {
-                    if (vo.exchangeRate == 1) {
-                      for (let i = 0; i < sum; i++) {
-                        console.log(`开始1魔方第${i + 1}次兑换`);
-                        await doInteractiveAssignment($.config.giftConfig.projectId, vo.encryptAssignmentId, "acexinpin0823", 1);
-                        await $.wait(1500);
-                      }
-                    }
-                  }
+				  }
+//                  } if (sum < 5) {
+//                     if (vo.exchangeRate == 1) {
+//                       for (let i = 0; i < sum; i++) {
+//                         console.log(`开始1魔方第${i + 1}次兑换`);
+//                         await doInteractiveAssignment($.config.giftConfig.projectId, vo.encryptAssignmentId, "acexinpin0823", 1);
+//                         await $.wait(1500);
+//                       }
+//                     }
+//                   }
                 }
               } else {
                 console.log('获取兑换失败了');
