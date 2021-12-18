@@ -1,10 +1,12 @@
 /*
-活动名称：星系牧场
+星系牧场
 活动入口：QQ星儿童牛奶京东自营旗舰店->品牌会员->星系牧场
-账号1给作者助力，后续接龙 2给1 3给2
+每次都要手动打开才能跑 不知道啥问题
+号1默认给我助力,后续接龙 2给1 3给2
+ 19.0复制整段话 http:/J7ldD7ToqMhRJI星系牧场养牛牛，可获得DHA专属奶！%VAjYb8me2b!→去猄倲←
 [task_local]
-# 星系牧场
-1 0-23/2 * * * https://gitee.com/SuperManito/scripts/raw/master/jd_qqxing.js, tag=星系牧场, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+#星系牧场
+1 0-23/2 * * * jd_qqxing.js
 */
 const $ = new Env('QQ星系牧场');
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -35,7 +37,7 @@ if ($.isNode()) {
 
 const JD_API_HOST = `https://api.m.jd.com/client.action`;
 message = ""
-$.shareuuid = "7ef7ae8f6d934db5b81dfe35b94677b3"
+$.shareuuid = "5e81094ee1d640b2996883b48d0c410a"
     !(async () => {
         if (!cookiesArr[0]) {
             $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
