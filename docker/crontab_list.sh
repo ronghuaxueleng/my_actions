@@ -206,9 +206,9 @@
 # 金榜创造营
 13 1,22 * * * node /scripts/jd_gold_creator.js >> /scripts/logs/jd_gold_creator.log 2>&1
 # 东东健康社区
-13 1,6,22 * * * node /scripts/jd_health_JDHelloWorld2.js >> /scripts/logs/jd_health_JDHelloWorld2.log 2>&1
+13 1,6,22 * * * node /scripts/jd_health2.js >> /scripts/logs/jd_health2.log 2>&1
 # 东东健康社区收集能量
-5-45/20 * * * * node /scripts/jd_health_JDHelloWorld_collect.js >> /scripts/logs/jd_health_JDHelloWorld_collect.log 2>&1
+5-45/20 * * * * node /scripts/jd_health_collect.js >> /scripts/logs/jd_health_collect.log 2>&1
 # 东东工厂
 10 * * * * node /scripts/jd_jdfactory_JDHelloWorld.js >> /scripts/logs/jd_jdfactory_JDHelloWorld.log 2>&1
 # 京东赚赚
@@ -230,7 +230,7 @@
 # 京喜领88元红包
 4 10 * * * node /scripts/jd_jxlhb.js >> /scripts/logs/jd_jxlhb.log 2>&1
 # 惊喜牧场
-20 0-23/3 * * * node /scripts/jd_jxmc_JDHelloWorld.js >> /scripts/logs/jd_jxmc_JDHelloWorld.log 2>&1
+20 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
 # 京喜农场
 0 9,12,18 * * * node /scripts/jd_jxnc.js >> /scripts/logs/jd_jxnc.log 2>&1
 # 京东快递签到
