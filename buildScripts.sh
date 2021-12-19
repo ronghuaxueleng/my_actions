@@ -105,7 +105,12 @@ npm install -g npm npm-install-peers
 npm install -g ts-node typescript --unsafe-perm=true --allow-root
 npm install -g ts-node typescript @types/node date-fns axios require tslib fs
 npm install --save-dev @types/node
-ls *.ts | xargs tsc
+{
+    ls *.ts | xargs tsc
+} || {
+    echo "tsc failed"
+}
+
 rm -rf node_modules
 rm -rf package-lock.json
 cd ..
@@ -123,7 +128,7 @@ for row in $(echo "${json}" | jq -r '.task[] | @base64'); do
     # configs=(${config//,/ })
     crontab_list+=$(echo "${config}" | perl -pe "s|(\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)https:\/\/raw\.githubusercontent\.com\/he1pu\/JDHelp\/main\/(\S+_?\w+)\.js(?:\s+)?,(?:\s+)?tag=(.+)(?:\s+)?,(?:\s+)?img-url=.+|\n# \3\n\1node /scripts/\2.js >> /scripts/logs/\2.log 2>&1|")
 done
-cat > JDHelp/docker/crontab_list.sh <<EOF
+cat > JDHelp/docker/crontab_list.sh <<EOFnpm
 $(echo -e "$crontab_list")
 EOF
 sed '/^$/d' JDHelp/docker/crontab_list.sh
