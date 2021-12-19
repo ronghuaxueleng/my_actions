@@ -1,4 +1,8 @@
 #!/bin/bash
+ShellDir=${JD_DIR:-$(
+    cd $(dirname $0)
+    pwd
+)}
 
 function replaceShareCode() {
     if [ ! -f "$1" ]; then
@@ -107,7 +111,7 @@ ls *.ts | grep -v jd_喂猪 | grep -v jd_speed_redEnvelope | xargs tsc
 
 rm -rf node_modules
 rm -rf package-lock.json
-cd ..
+cd ${ShellDir}
 
 git clone https://github.com/he1pu/JDHelp.git JDHelp
 [ ! -d JDHelp/docker ] && mkdir -p JDHelp/docker
@@ -138,7 +142,7 @@ replaceShareCodeV1 jd_pet JDHelp
 replaceShareCode jd_plantBean JDHelp
 replaceShareCode jd_sgmh JDHelp
 replaceShareCode jd_jxmc JDHelp
-cd ..
+cd ${ShellDir}
 
 git clone https://github.com/wuzhi05/MyActions.git MyActions
 cd MyActions
@@ -152,7 +156,7 @@ replaceShareCode jd_pet MyActions
 replaceShareCode jd_plantBean MyActions
 replaceShareCode jd_sgmh MyActions
 replaceShareCode jd_jxmc MyActions
-cd ..
+cd ${ShellDir}
 
 git clone https://github.com/Aaron-lv/sync.git Aaron
 cd Aaron
@@ -166,7 +170,7 @@ replaceShareCodeV1 jd_pet Aaron
 replaceShareCode jd_plantBean Aaron
 replaceShareCode jd_sgmh Aaron
 replaceShareCode jd_jxmc Aaron
-cd ..
+cd ${ShellDir}
 
 git clone https://github.com/shufflewzc/faker2.git faker2
 cd faker2
@@ -180,14 +184,10 @@ replaceShareCodeV1 jd_pet faker2
 replaceShareCode jd_plantBean faker2
 replaceShareCode jd_sgmh faker2
 replaceShareCode jd_jxmc faker2
-cd ..
+cd ${ShellDir}
 
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
-ShellDir=${JD_DIR:-$(
-    cd $(dirname $0)
-    pwd
-)}
 ScriptsDir=${ShellDir}/jd_scripts
 [ ! -d ${ScriptsDir} ] && mkdir -p ${ScriptsDir}
 DockerDir=${ScriptsDir}/docker
