@@ -206,24 +206,26 @@ ListCronScripts7=faker2/docker/crontab_list.sh
 cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} ${ListCronScripts7} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 
-FileDiy=diy.sh
-EnableExtraShellProxyDownload="false"
-ExtraShellProxyUrl="https://ghproxy.com/"
-EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/extra.sh"
-wget -q $EnableExtraShellURL -O ${FileDiy}
+# FileDiy=diy.sh
+# EnableExtraShellProxyDownload="false"
+# ExtraShellProxyUrl="https://ghproxy.com/"
+# EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/extra.sh"
+# wget -q $EnableExtraShellURL -O ${FileDiy}
 
-if [ $? -eq 0 ]; then
-    echo -e "自定义 DIY 脚本同步完成......"
-    echo -e ''
-    # sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
-    sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
-    sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
-    sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
-    sed -i '/exit 1/d' ${FileDiy}
-    # cat ${FileDiy}
-    sleep 2s
-    . ${FileDiy}
-fi
+# if [ $? -eq 0 ]; then
+#     echo -e "自定义 DIY 脚本同步完成......"
+#     echo -e ''
+#     # sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
+#     sed -i 's/ListCron/ListCronSh/g' ${FileDiy}
+#     sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
+#     sed -i -E '/^rm\s+-rf\s+\$\{ScriptsDir\}.+\$\{ListCronSh\}/d' ${FileDiy}
+#     sed -i '/exit 1/d' ${FileDiy}
+#     # cat ${FileDiy}
+#     sleep 2s
+#     . ${FileDiy}
+# fi
+pwd
+ls
 
 jq -s 'reduce .[] as $item ({}; . * $item)' MyActions/package.json JDHelloWorld/package.json JDHelp/package.json Aaron/package.json faker2/package.json > package.json
 
