@@ -1,6 +1,6 @@
 FROM dreamacro/clash as clash
 
-FROM ronghuaxueleng/mitmproxy-nodejs:7.0.4-17.0.1
+FROM ronghuaxueleng/mitmproxy-nodejs:6.0.2-17.0.1
 LABEL maintainer="jishuixiansheng"
 
 ARG JD_BASE_URL=https://gitee.com/getready/my_actions.git
