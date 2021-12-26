@@ -1,17 +1,24 @@
 /*
-店铺签到，各类店铺签到，有新的店铺直接添加token即可
-============Quantumultx===============
+店铺签到
+活动时间：长期
+更新时间：2021-12-27
+活动地址：https://h5.m.jd.com/babelDiy/Zeus/2PAAf74aG3D61qvfKUM5dxUssJQ9/index.html?token=<TOKEN>
+脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
+脚本容易黑IP，建议多台环境轮流错开跑定时任务
+
+=================================Quantumultx=========================
 [task_local]
 #店铺签到
-15 2,14 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js, tag=店铺签到, enabled=true
-===========Loon============
+1 0,9 * * * https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js, tag=店铺签到, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+=================================Loon===================================
 [Script]
-cron "15 2,14 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js,tag=店铺签到
-============Surge=============
-店铺签到 = type=cron,cronexp="15 2,14 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js
-===========小火箭========
-店铺签到 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.jss, cronexpr="15 2,14 * * *", timeout=3600, enable=true
+cron "5 1,9 * * *" script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js,tag=店铺签到
+===================================Surge================================
+店铺签到 = type=cron,cronexp="5 1,9 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js
+====================================小火箭=============================
+店铺签到 = type=cron,script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js, cronexpr="5 1,9 * * *", timeout=3600, enable=true
 */
+
 const $ = new Env('店铺签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -25,28 +32,27 @@ let vender=''
 let num=0
 let shopname=''
 const token = [
-  "39415200CB5E286A4DB604A54C901A13",
-  "0BF55BE48940544DF131B825756973C0",
-  "678380AA2C2CEFF8F755E170840E0FCD",
-  "AB3EB4ED5DB4E48516230C858A1AEE52",
-  "09B63A54599F85A17BACA9C81F50B1B8",
-  "09E4730770FD2E15F9C60365F7FEA6E4",
-  "C718DA981DBB8CF73FAC7D5480733B43",
-  "77A6C7B5C2BC9175521931ADE8E3B2E0",
-  "5BEFC891C256D515C4F0F94F15989055",
-  "D0DB6641A279674F401E52B867E595BC",
-  "9E610DED3B2F61B9A745375A2BD0D094",
-  "2EF6607AEB21E43492923322B11ADC25",
-  "B1482DB6CB72FBF33FFC90B2AB53D32C",
-  "2B9F928FC8B52D8504E230CDA71F1C54",
-  "2C7846818F0216300CB6BEC38C04E7B4",
-  "C490E5EB6729345183A5900B275ED6BC",
-  "52F91C4B6735B9AA21B33BE55DC703BA",
-  "873C3CC1B8EC220D12D9EB2F0185731A",
-  "01B246C8A8B575023E686E3B52D54A6B",
-  "571AE9B735114EEF52E43F9CD83EA02F",
-  "958D52E3CA7D9558626739F0ECC88908"
-
+  '0FCE1975D7A168F5BE2DE89BF2AA784D',//每天5
+  '4101794DF8B076B2EAEE29E9A986540A',//每天5，7天10
+  '6D180D5A0B6F4A210684757B0DAC6A38',//每天1，5天6
+  '225A5186B854F5D0A36B5257BAA98739',//每天1，8天5
+  '32204A01054F3D8F9A1DF5E5CFB4E7F4',//每天1，3天10
+  '9115177F9D949CFB76D0DE6B8FC9D621',//2天10
+  'D0DB6641A279674F401E52B867E595BC',//6天15
+  '9E2F2B62044E1AC059180A38BE06507D',//3天5
+  'A406C4990D5C50702D8C425A03F8076E',//3天5
+  'E0AB41AAE21BD9CA8E35CC0B9AA92FA7',//3天3
+  '9621D787095D0030BE681B535F8499BE',//3天3，5天5
+  '113161C294168960ED1BFF6CA79547EF',//7天10
+  '1E9E224ABC42657D32C5440F4AB17073',//7天10
+  '444051D5287C80D0613F9ECD86343818',//7天10
+  'A20223553DF12E06C7644A1BD67314B6',//7天10
+  '6FF6A61279897029F4DE69C341551CFC',//7天10
+  'A1E0F96C1D9DB38AE87202E13CE1FD1F',//7天10
+  '447EA174AB8181DD52EFDECEB4E59F16',//7天50
+  '5B3525A082F2033B002733E1C2355742',//每天2
+  'C718DA981DBB8CF73FAC7D5480733B43',//每天1，15天7
+  '9E610DED3B2F61B9A745375A2BD0D094',//每天1，3天3
 ]
 
 if ($.isNode()) {
@@ -88,11 +94,10 @@ if ($.isNode()) {
       }
       await dpqd()
       await showMsg()
-      await $.wait(1500)
     }
   }
   if ($.isNode() && allMessage) {
-    await notify.sendNotify(`${$.name}`, `${allMessage}`)
+    //await notify.sendNotify(`${$.name}`, `${allMessage}`)
   }
 })()
     .catch((e) => {
@@ -285,10 +290,10 @@ function taskUrl(token,venderId) {
           console.log(`\n${$.name}: API查询请求失败 ‼️‼️`)
           $.logErr(err);
         } else {
-          //console.log(data)
-          data = JSON.parse(/{(.*)}/g.exec(data)[0])
-          console.log(`已签到：`+data.data.days+`天`)
-          message +=`已签到：`+data.data.days+`天\n`
+            //console.log(data)
+            data = JSON.parse(/{(.*)}/g.exec(data)[0])
+            console.log(`已签到：`+data.data.days+`天`)
+            message +=`已签到：`+data.data.days+`天\n`
         }
       } catch (e) {
         $.logErr(e, resp);
