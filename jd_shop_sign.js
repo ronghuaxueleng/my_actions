@@ -1,10 +1,24 @@
 /*
-店铺签到，各类店铺签到，有新的店铺直接添加token即可
-============Quantumultx===============
+店铺签到
+活动时间：长期
+更新时间：2022-01-03
+活动地址：https://h5.m.jd.com/babelDiy/Zeus/2PAAf74aG3D61qvfKUM5dxUssJQ9/index.html?token=<TOKEN>
+脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
+脚本容易黑IP，建议多台环境轮流错开跑定时任务
+
+=================================Quantumultx=========================
 [task_local]
 #店铺签到
-0 0 * * * jd_shop_sign.js
+1 0,9 * * * https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js, tag=店铺签到, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+=================================Loon===================================
+[Script]
+cron "5 1,9 * * *" script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js,tag=店铺签到
+===================================Surge================================
+店铺签到 = type=cron,cronexp="5 1,9 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js
+====================================小火箭=============================
+店铺签到 = type=cron,script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js, cronexpr="5 1,9 * * *", timeout=3600, enable=true
 */
+
 const $ = new Env('店铺签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -18,27 +32,36 @@ let vender=''
 let num=0
 let shopname=''
 const token = [
-  "2A8794EC8DA4659DDDA0DF0E1A2AF4AF",
-  "A1E0F96C1D9DB38AE87202E13CE1FD1F",
-  "6D180D5A0B6F4A210684757B0DAC6A38",
-  "6FF6A61279897029F4DE69C341551CFC",
-  "0FCE1975D7A168F5BE2DE89BF2AA784D",
-  "9E2F2B62044E1AC059180A38BE06507D",
-  "C96A69334CA12BCA81DE74335AC1B35E",
-  "A406C4990D5C50702D8C425A03F8076E",
-  "E0AB41AAE21BD9CA8E35CC0B9AA92FA7",
-  "A20223553DF12E06C7644A1BD67314B6",
-  "9621D787095D0030BE681B535F8499BE",
-  "C718DA981DBB8CF73FAC7D5480733B43",
-  "77A6C7B5C2BC9175521931ADE8E3B2E0",
-  "5BEFC891C256D515C4F0F94F15989055",
-  "B1482DB6CB72FBF33FFC90B2AB53D32C",
-  "225A5186B854F5D0A36B5257BAA98739",
-  "9115177F9D949CFB76D0DE6B8FC9D621",
-  "AD73E1D98C83593E22802600D5F72B9B",
-  "447EA174AB8181DD52EFDECEB4E59F16",
-  "32204A01054F3D8F9A1DF5E5CFB4E7F4",
-  "6B52B6FDF119B68A42349EEF6CEEC4FF"
+  'F831C64B8D2EF803C66A2A18D5224208',//每天50，3天100，7天100
+  '7E01F24A06CF6857C40C53DC4CA71581',//每天5，7天50
+  'D3E62E196992299D3FE1D770F84DFEF3',//每天2
+  '48A36CF19795F85A76E2046149D063C7',//每天1，3天10
+  'B52C0C73C735820922346460A4CE6CC4',//每天3
+  '237DB8682E64A21BF18833A10E246162',//每天1，3天10，7天25
+  'C5FAE6D9F9B94F606370A7A98A5F2E70',//每天1，3天5，7天10
+  '35F7C32535703E670B426F09564B4E65',//每天1，7天10
+  '2AEC5E975C792B413E569A4416C8F79D',//每天1，7天7
+  '329C618CD7B700B350C8CC8054B8622E',//每天1，7天10，15天30
+  '95B5185834B4A761037D7C933A16F0FD',//2天10
+  '7BFD202E8D2D071F5E79B6E9D3892020',//2天10
+  '5E8ED59E88D41518CC5624CCACE95347',//3天3
+  '90DBB523AD134F61A8335D24728C8EB7',//3天10
+  'FBC42CD168A19C7D4A8077181CD0E578',//3天20
+  '8FFC99E54687714850BFD2EA0C040091',//3天3
+  '7352D6FB71BEDDF0ACAC6E4057640894',//5天50
+  'A79E3097CDF6192937A92D32D7DE8AA1',//3天5，7天10
+  'EC1BA6E9F4A572A240E46A2F325606DE',//3天5，5天5，7天10
+  '90B5C52E83B188F4C99382E8A2EE3983',//5天10
+  'E32042DAE362A2A939DB01AB87977D9E',//7天30
+  'D05F01E0AAC95E7AF932B53531263911',//7天50
+  '94501E6CEDE9B496870B7292C203C040',//10天20
+  '344CDCE624282AB0D50E71F002064A59',//15天5，30天10
+  '7A64973CD1A0873108CB2E4740A86D7D',//7天3
+  '9A2F9AFF0153C3D1DDD5C9516C468F52',//7天5
+  '45DBA1666FC56F3040F2F68396F1CDCE',//每天1，15天20
+  '098FD50396245FA00EA629B20A533E3E',//10天50，20天100
+  'DFB0150982F11A1EFB81A5B1399B7BD1',//7天20，10天30，15天50，30天100
+  'F21F54D77A164114746ABFBFD509393F',//7天1，14天5，21天10
 ]
 
 if ($.isNode()) {
@@ -83,7 +106,7 @@ if ($.isNode()) {
     }
   }
   if ($.isNode() && allMessage) {
-    await notify.sendNotify(`${$.name}`, `${allMessage}`)
+    //await notify.sendNotify(`${$.name}`, `${allMessage}`)
   }
 })()
     .catch((e) => {
