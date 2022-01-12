@@ -75,8 +75,6 @@
 59 0-23/1 * * * node /scripts/jd_cfd_MyActions_pearl_ex.js >> /scripts/logs/jd_cfd_MyActions_pearl_ex.log 2>&1
 # 省钱大赢家翻翻乐2
 20 0,6-23 * * * node /scripts/jd_big_winner.js >> /scripts/logs/jd_big_winner.log 2>&1
-# 城城分现金
-01 * * * * node /scripts/jd_City.js >> /scripts/logs/jd_City.log 2>&1
 # 年货签到
 0 8 * * * node /scripts/jd_nh_sign.js >> /scripts/logs/jd_nh_sign.log 2>&1
 # 见缝插针
@@ -87,8 +85,6 @@
 57 2 * * * node /scripts/jd_dayday_ysq.js >> /scripts/logs/jd_dayday_ysq.log 2>&1
 # 京享红包
 0 0,10,20,21 * * * node /scripts/jd_nhRedEnvelope.js.js >> /scripts/logs/jd_nhRedEnvelope.js.log 2>&1
-#炸年兽
-33 0,6-23/2 * * * node /scripts/jd_travel.js.js >> /scripts/logs/jd_travel.js.log 2>&1
 #jd_opencard94
 30 1 5-25/2,26 1 * node /scripts/jd_opencard94.js >> /scripts/logs/jd_opencard94.log 2>&1
 #jd_opencard95
@@ -299,6 +295,22 @@
 15 17 * * * node /scripts/backUp/xmSport.js >> /scripts/logs/backUp/xmSport.log 2>&1
 # 电竞经理
 0 0-23/2 * * * node /scripts/jd_EsportsManager.js >> /scripts/logs/jd_EsportsManager.log 2>&1
+# 导出所有互助码清单，日志在log/export_sharecodes下
+48 5 * * * bash export_sharecodes
+#拾取好友与自己零件、厂长翻倍任务、点击厂长任务
+0 1,18 * * * node /scripts/jd_factory_component.js >> /scripts/logs/jd_factory_component.log 2>&1
+#财富岛提现
+# 0 0,12 * * * node /scripts/jd_cfdtx.js >> /scripts/logs/jd_cfdtx.log 2>&1
+#生成财富岛提现token
+# 59 23 * * * node /scripts/get_jx_token.js >> /scripts/logs/get_jx_token.log 2>&1
+#生成京喜农场互助码
+59 23 * * * node /scripts/get_jxnc_token.js >> /scripts/logs/get_jxnc_token.log 2>&1
+#获取助力码
+58 20 * * 6 node /scripts/jd_get_share_code_4_bot.js >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
+# 财富岛热气球
+1 * * * * node /scripts/jd_cfd_loop.js >> /scripts/logs/jd_cfd_loop.log 2>&1
+# 预存验证
+50 * * * * node /scripts/jd_validate_Worker.js >> /scripts/logs/jd_validate_Worker.log 2>&1
 # 京东资产变动通知
 2 9 * * * node /scripts/jd_bean_change.js >> /scripts/logs/jd_bean_change.log 2>&1
 # 领京豆额外奖励
