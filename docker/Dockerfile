@@ -28,6 +28,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     procps \
     tzdata \
     perl \
+    jq \
     openssh-client \
     ttyd \
     npm \
