@@ -11,6 +11,7 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     PS1="\u@\h:\w \$ " \
     NODE_PATH=/usr/lib/node_modules \
     JD_DIR=/jd \
+    WORK_DIR=/jd \
     ENABLE_HANGUP=true \
     ENABLE_WEB_PANEL=true
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \

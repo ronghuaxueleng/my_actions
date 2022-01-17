@@ -23,7 +23,7 @@ echo -e "\n\033[1;34m$(date "${TIME}")${PLAIN} ----- ➀ 同步最新源码开�
 cd ${WORK_DIR}
 sleep 3
 git fetch --all
-git reset --hard origin/master
+git reset --hard origin/source0904
 taskctl check files >/dev/null 2>&1
 bash ${WORK_DIR}/shell/update.sh
 echo -e "\n\033[1;34m$(date "${TIME}")${PLAIN} ----- ➀ 同步最新源码结束 -----\n"
