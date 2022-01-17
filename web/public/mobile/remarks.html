@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>账号配置 · 控制面板移动端</title>
     <script type="text/javascript" src="../js/third/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/third/codemirror.min.js"></script>
-    <script type="text/javascript" src="../js/page/common/comment.js"></script>
-    <script type="text/javascript" src="../js/third/javascript.js"></script>
-    <script type="text/javascript" src="../js/third/sublime.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/codemirror.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/addons.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/modes.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/keymap/sublime.js"></script>
+
     <script type="text/javascript" src="../js/third/sweetalert2.js"></script>
     <script type="text/javascript" src="../js/third/prefixfree.min.js"></script>
     <script type="text/javascript" src="../js/page/mobile/mmenu-light.js"></script>
@@ -38,9 +39,9 @@
                                 <i class="fa fa-save"></i>
                                 <span class="animate-normal">保存</span>
                             </button>
-                            <button id="wrap">
+                            <button id="wrap" style="border-radius: 0;">
                                 <i class="fa fa-exchange"></i>
-                                <span class="animate-normal">切换换行</span>
+                                <span class="animate-normal">自动换行</span>
                             </button>
                             <button id="urlDecodeEncode">
                                 <i class="fa fa-retweet"></i>
@@ -50,10 +51,6 @@
                     </header>
 
                 </div>
-                <h4 class="tips">
-                    <font size="2">温馨提示：此配置文件用于 WSKEY 转换和通知备注，注意填的是对应的值不要把格式带进去，后面不用加分号。
-                    </font>
-                </h4>
             </div>
 
             <div class="wrapper">

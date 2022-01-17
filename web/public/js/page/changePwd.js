@@ -43,14 +43,13 @@ $("#changeBtn").click(function () {
         panelUtils.showError("两次密码输入不一致，请重新输入")
         return ;
     }
-    $.post(BASE_API_PATH + '/api/changePwd', {
+    panelRequest.post( '/api/changePwd', {
         username: $user,
         password: $password
-    }, function (data) {
-        let icon = (data.err === 0) ? "success" : "error"
-        panelUtils.showAlert({
-            text: data.msg,
-            icon: icon
+    }, function (res) {
+        res.code === 1 && panelUtils.showAlert({
+            text: res.msg,
+            icon: 'success'
         })
     });
     return false;

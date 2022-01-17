@@ -10,15 +10,11 @@
   {
     "pt_pin": "",
     "ws_key": "",
-    "remarks": "",
-    "config": {
-      "ep": {}
-    }
-  },
-  {
-    "pt_pin": "",
-    "ws_key": "",
-    "remarks": "",
+    "remarks": [
+      "remarks1",
+      "remarks2",
+      "remarks3"
+    ],
     "config": {
       "ep": {}
     }

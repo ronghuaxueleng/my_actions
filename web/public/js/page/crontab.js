@@ -1,5 +1,6 @@
 $(document).ready(function () {
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        minimap: minimapVal,
         lineNumbers: true,
         lineWrapping: true,
         styleActiveLine: true,
@@ -9,24 +10,18 @@ $(document).ready(function () {
         theme: themeChange.getAndUpdateEditorTheme(),
         keyMap: 'sublime'
     });
-    $.get(BASE_API_PATH + '/api/config/crontab', function (data) {
-        editor.setValue(data);
+    panelRequest.get('/api/config/crontab', function (res) {
+        editor.setValue(res.data);
+        !userAgentTools.mobile(navigator.userAgent) && $(".CodeMirror-scroll").css("width", `calc(100% - ${$(".CodeMirror-minimap").width() + 5}px)`);
     });
 
     $('#save').click(function () {
         var confContent = editor.getValue();
-        $.post(BASE_API_PATH + '/api/save', {
+        panelRequest.post('/api/save', {
             content: confContent,
             name: "crontab.list"
-        }, function (data) {
-            let icon = (data.err === 0) ? "success" : "error"
-            panelUtils.showAlert({
-                title: data.title,
-                html: data.msg + '<br>定时任务已同步更新',
-                icon: icon
-            }).then((result) => {
-                window.location.reload(true);
-            })
+        }, function (res) {
+            res.code === 1 && panelUtils.showSuccess(res.msg, res.desc + '<br>定时任务已同步更新');
         });
     });
 

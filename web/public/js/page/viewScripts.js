@@ -1,6 +1,7 @@
 var qrcode, userCookie, curPath;
 $(document).ready(function () {
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        minimap: minimapVal,
         lineNumbers: true,
         lineWrapping: true,
         styleActiveLine: true,
@@ -10,7 +11,7 @@ $(document).ready(function () {
         mode: 'javascript',
         theme: themeChange.getAndUpdateEditorTheme(),
     });
-    let metisMenu, $menuTree = $('#menuTree'), $scriptsSaveBtn = $('#save');
+    var $menuTree = $('#menuTree'), $scriptsSaveBtn = $('#save');
     $scriptsSaveBtn.hide();
 
     function createFileTree(dirs) {
@@ -31,11 +32,11 @@ $(document).ready(function () {
     }
 
     function loadData(keywords = '') {
-        $.get(BASE_API_PATH + '/api/scripts', {keywords}, function (data) {
-            let navHtml = createFileTree(data);
+        panelRequest.get('/api/scripts', {keywords}, function (res) {
+            let navHtml = createFileTree(res.data);
             $menuTree.metisMenu('dispose')
             $menuTree.html(navHtml);
-            metisMenu = $menuTree.metisMenu();
+            $menuTree.metisMenu();
         });
     }
 
@@ -53,30 +54,40 @@ $(document).ready(function () {
             dispatch(document.getElementById('toggleIcon'), 'click');
         }
 
-        $.get(BASE_API_PATH + `/api/scripts/content`, {path: path}, function (data) {
-            editor.setValue(data);
+        panelRequest.get(`/api/scripts/content`, {path: path}, function (res) {
+            editor.setValue(res.data);
             curPath = path;
             $scriptsSaveBtn.show();
+            !userAgentTools.mobile(navigator.userAgent) && $(".CodeMirror-scroll").css("width", `calc(100% - ${$(".CodeMirror-minimap").width() + 5}px)`);
         });
     }
     $scriptsSaveBtn.click(function () {
-        $.post(BASE_API_PATH + '/api/scripts/save', {
+        panelRequest.post('/api/scripts/save', {
             content: editor.getValue(),
             name: curPath
-        }, function (data) {
-            let icon = data.err === 0 ? "success" : "error";
-            panelUtils.showAlert({
-                title: data.title,
-                html: data.msg,
-                icon: icon
-            });
+        }, function (res) {
+            res.code === 1 && panelUtils.showSuccess(res.msg, res.desc,false);
         });
     });
+
+    $('#toggleIcon').click(() => {
+        setTimeout(() => {
+            !userAgentTools.mobile(navigator.userAgent) && $(".CodeMirror-scroll").css("width", `calc(100% - ${$(".CodeMirror-minimap").width() + 5}px)`);
+        }, 100);
+    });
+
     $('#wrap').click(function () {
         var lineWrapping = editor.getOption('lineWrapping');
         editor.setOption('lineWrapping', !lineWrapping);
     });
 
+    $('#move-bottom').click(function () {
+        editor.execCommand('goDocEnd');
+    });
+
+    setTimeout(function () {
+        userAgentTools.mobile(navigator.userAgent) && dispatch(document.getElementById('toggleIcon'), 'click');
+    }, 100);
 
     //自动触发事件
     function dispatch(ele, type) {

@@ -24,6 +24,10 @@ function dateFormat(fmt, date) {
     return fmt;
 }
 
+function randomNumber(min = 0, max = 100) {
+    return Math.min(Math.floor(min + Math.random() * (max - min)), max);
+}
+
 module.exports = {
-    dateFormat
+    dateFormat,randomNumber
 }

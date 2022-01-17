@@ -5,14 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>账号配置 · 控制面板</title>
-    <script type="text/javascript" src="js/third/jquery.min.js"></script>
-    <script type="text/javascript" src="js/third/codemirror.min.js"></script>
-    <script type="text/javascript" src="js/page/common/comment.js"></script>
-    <script type="text/javascript" src="js/third/javascript.js"></script>
-    <script type="text/javascript" src="js/third/sublime.js"></script>
-    <script type="text/javascript" src="js/third/sweetalert2.js"></script>
-    <script type="text/javascript" src="js/third/prefixfree.min.js"></script>
+    <script type="text/javascript" src="./js/third/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/third/codemirror/codemirror.min.js"></script>
+    <script type="text/javascript" src="./js/third/codemirror/addons.min.js"></script>
+    <script type="text/javascript" src="./js/third/codemirror/modes.min.js"></script>
+    <script type="text/javascript" src="./js/third/codemirror/keymap/sublime.js"></script>
+    <script type="text/javascript" src="./js/third/codemirror/searchBox.js"></script>
+    <script type="text/javascript" src="./js/third/codemirror/minimap/codemirror-minimap.js" ></script>
+
+    <script type="text/javascript" src="./js/third/sweetalert2.js"></script>
+    <script type="text/javascript" src="./js/third/prefixfree.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="./css/codemirror.min.css">
+    <link rel="stylesheet" href="./js/third/codemirror/minimap/minimap.css">
     <link rel="stylesheet" type="text/css" href="./css/codemirror-theme.css">
     <link rel="stylesheet" type="text/css" href="./css/main.css">
     <link rel="stylesheet" type="text/css" href="./css/nav.css">
@@ -33,9 +38,9 @@
                                 <i class="fa fa-save"></i>
                                 <span class="animate-normal">保存</span>
                             </button>
-                            <button id="wrap">
+                            <button id="wrap" style="border-radius: 0;">
                                 <i class="fa fa-exchange"></i>
-                                <span class="animate-normal">切换换行</span>
+                                <span class="animate-normal">自动换行</span>
                             </button>
                             <button id="urlDecodeEncode">
                                 <i class="fa fa-retweet"></i>
@@ -56,7 +61,7 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="js/page/common/common.js"></script>
-    <script type="text/javascript" src="js/page/remarks.js"></script>
+    <script type="text/javascript" src="./js/page/common/common.js"></script>
+    <script type="text/javascript" src="./js/page/remarks.js"></script>
 
 </body>

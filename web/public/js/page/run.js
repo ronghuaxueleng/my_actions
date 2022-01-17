@@ -1,13 +1,16 @@
 $(document).ready(function () {
-    var timer = 0, curScript = {key: "task list 2>&1 | tee log/tasklist.log", value: "tasklist"}, $runCmd = $('#runCmd'),
+    var timer = 0, curScript = {key: "task list 2>&1 | tee log/tasklist.log", value: "tasklist"},
+        $runCmd = $('#runCmd'),
         $runCmdConc = $('#runCmdConc');
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        minimap: minimapVal,
         lineNumbers: true,
         lineWrapping: true,
-        styleActiveLine: true,
+        styleActiveLine: false,
         matchBrackets: true,
         viewportMargin: viewportMargin,
         readOnly: true,
+        cursorHeight: 0,
         mode: 'text',
         theme: themeChange.getAndUpdateEditorTheme(),
     });
@@ -19,21 +22,21 @@ $(document).ready(function () {
      * @param refreshLog 是否刷新日志 默认不刷新
      */
     function runCmd(jsName, cmd, refreshLog = true) {
-        if(!jsName || !cmd){
-            panelUtils.showError('Oops...','请选择您需要执行的脚本！');
+        if (!jsName || !cmd) {
+            panelUtils.showError('Oops...', '请选择您需要执行的脚本！');
             return;
         }
         if (timer) {
-            panelUtils.showError('Oops...','请等待上一条任务执行完毕！');
+            panelUtils.showError('Oops...', '请等待上一条任务执行完毕！');
             return;
         }
         editor.setValue('');
 
-        $.post(BASE_API_PATH + "/api/runCmd", {
+        panelRequest.post("/api/runCmd", {
             cmd: cmd
-        }, function (data) {
-            editor.setValue(data.msg);
+        }, function (res) {
 
+            editor.setValue(res.data);
             if (jsName) {
                 //将光标和滚动条设置到文本区最下方
                 editor.execCommand('goDocEnd');
@@ -41,7 +44,6 @@ $(document).ready(function () {
             clearInterval(timer);
             timer = 0;
         })
-
         timer = 1;
         if (refreshLog) {
             const timeout = jsName === 'tasklist' ? 100 : 1000;
@@ -55,6 +57,7 @@ $(document).ready(function () {
 
     runCmd(curScript.value, curScript.key, curScript.refreshLog);
     curScript = {};
+
     function initSearch(list) {
         let $jdScript = $(".jdScript");
         $jdScript.MultiFunctionSelect({
@@ -93,9 +96,9 @@ $(document).ready(function () {
         }))
     }
 
-    $.get(BASE_API_PATH + '/api/scripts', {filterDir: true, onlyRunJs: true}, function (data) {
+    panelRequest.get('/api/scripts', {filterDir: true, onlyRunJs: true}, function (res) {
         let list = [];
-        data.map((item) => {
+        res.data.map((item) => {
             list = list.concat(item.files.map((file) => {
                 //let fileName = file.fileName;
                 // let name = fileName.substring(0, fileName.indexOf("."));
@@ -133,10 +136,12 @@ $(document).ready(function () {
     }
 
     function getLog(jsName) {
-        $.get(BASE_API_PATH + `/api/runLog`,{jsName}, function (data) {
+        panelRequest.get(`/api/runLog`, {jsName}, function (res) {
+            let data = res.data;
             if (data !== 'no logs') {
                 editor.setValue(data);
             }
+            !userAgentTools.mobile(navigator.userAgent) && $(".CodeMirror-scroll").css("width", `calc(100% - ${$(".CodeMirror-minimap").width() + 5}px)`);
             //将光标和滚动条设置到文本区最下方
             editor.execCommand('goDocEnd');
         });

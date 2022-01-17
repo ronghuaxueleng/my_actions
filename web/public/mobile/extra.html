@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>自定义脚本 · 控制面板移动端</title>
     <script type="text/javascript" src="../js/third/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/third/codemirror.min.js"></script>
-    <script type="text/javascript" src="../js/page/common/comment.js"></script>
-    <script type="text/javascript" src="../js/third/shell.js"></script>
-    <script type="text/javascript" src="../js/third/sublime.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/codemirror.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/addons.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/modes.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/keymap/sublime.js"></script>
+
     <script type="text/javascript" src="../js/third/sweetalert2.js"></script>
     <script type="text/javascript" src="../js/third/prefixfree.min.js"></script>
     <script type="text/javascript" src="../js/page/mobile/mmenu-light.js"></script>
@@ -40,14 +41,11 @@
                             </button>
                             <button id="wrap">
                                 <i class="fa fa-exchange"></i>
-                                <span class="animate-normal">切换换行</span>
+                                <span class="animate-normal">自动换行</span>
                             </button>
                         </div>
                     </header>
                 </div>
-                <h4>
-                    <font size="2">温馨提示：此脚本为自定义脚本，如果您会写 Shell 脚本并且想在更新结束时执行特定的命令，您可以参考配置文件了解如何启用该功能。</font>
-                </h4>
             </div>
             <div class="wrapper">
                 <textarea id="code" name="code"></textarea>

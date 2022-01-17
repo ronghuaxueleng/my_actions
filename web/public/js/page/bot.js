@@ -1,5 +1,6 @@
 $(document).ready(function () {
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        minimap: minimapVal,
         lineNumbers: true,
         lineWrapping: true,
         styleActiveLine: true,
@@ -8,25 +9,19 @@ $(document).ready(function () {
         theme: themeChange.getAndUpdateEditorTheme(),
         keyMap: 'sublime'
     });
-    $.get(BASE_API_PATH + '/api/config/bot', function (data) {
-        editor.setValue(data);
+    panelRequest.get('/api/config/bot', function (res) {
+        editor.setValue(res.data);
+        !userAgentTools.mobile(navigator.userAgent) && $(".CodeMirror-scroll").css("width", `calc(100% - ${$(".CodeMirror-minimap").width() + 5}px)`);
     });
 
     $('#save').click(function () {
         var confContent = editor.getValue();
         let timeStamp = (new Date()).getTime()
-        $.post(BASE_API_PATH + '/api/save?t=' + timeStamp, {
+        panelRequest.post('/api/save?t=' + timeStamp, {
             content: confContent,
             name: "bot.json"
-        }, function (data) {
-            let icon = (data.err === 0) ? "success" : "error"
-            panelUtils.showAlert({
-                title: data.title,
-                html: data.msg,
-                icon: icon
-            }).then((result) => {
-                window.location.reload(true);
-            })
+        }, function (res) {
+            res.code === 1 && panelUtils.showSuccess(res.msg, res.desc)
         });
     });
 

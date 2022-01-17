@@ -4,13 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>查阅脚本 · 控制面板移动端</title>
+    <title>脚本管理 · 控制面板移动端</title>
+
+    <script type="text/javascript" src="../js/third/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/codemirror.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/addons.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/modes.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/keymap/sublime.js"></script>
+
+    <script type="text/javascript" src="../js/third/prefixfree.min.js"></script>
+    <script type="text/javascript" src="../js/page/mobile/mmenu-light.js"></script>
+    <script type="text/javascript" src="../js/third/sweetalert2.js"></script>
+
     <link rel="stylesheet" href="../css/metisMenu.min.css"/>
     <link rel="stylesheet" href="../css/elektron.min.css">
     <link rel="stylesheet" href="../css/prism.css"/>
     <link rel="stylesheet" href="../css/onoffcanvas.min.css">
-    <script type="text/javascript" src="../js/third/prefixfree.min.js"></script>
-    <script type="text/javascript" src="../js/page/mobile/mmenu-light.js"></script>
+
     <link rel="stylesheet" type="text/css" href="../css/mobile-nav.css"/>
     <link rel="stylesheet" type="text/css" href="../css/codemirror.min.css">
     <link rel="stylesheet" type="text/css" href="../css/codemirror-theme.css">
@@ -39,7 +49,11 @@
                         <div class="multi-button">
                             <button id="wrap">
                                 <i class="fa fa-exchange"></i>
-                                <span class="animate-normal">切换换行</span>
+                                <span class="animate-normal">自动换行</span>
+                            </button>
+                            <button id="move-bottom">
+                                <i class="fa fa-arrow-circle-o-down"></i>
+                                <span class="animate-normal">跳转底部</span>
                             </button>
                             <button id="save">
                                 <i class="fa fa-save"></i>
@@ -53,9 +67,9 @@
                 <aside class="elk-side  left-list" id="elk-side">
                     <div class="elk-side-search">
                         <input id="searchInput" class="coco-input" name="searchInput" type="text"
-                               placeholder="请输入脚本名称"
+                               placeholder="请输入匹配关键词"
                                required/>
-                        <button id="submitSearch" class="btn btn-primary btn-ghost btn-shine" type="submit"><i
+                        <button id="submitSearch" class="btn btn-primary btn-ghost btn-shine" style="border-radius: 2px" type="submit"><i
                                 class="	fa fa-search"></i> 搜索
                         </button>
                     </div>
@@ -76,14 +90,12 @@
     </div>
 </div>
 
-<script src="../js/third/jquery.min.js"></script>
 <script src="../js/third/prismjs.js"></script>
 <script src="../js/third/onoffcanvas.js"></script>
 <script src="../js/third/elektron.js"></script>
 <script src="../js/third/metismenu.js"></script>
-<script src="../js/third/codemirror.min.js"></script>
-<script src="../js/third/javascript.js"></script>
-<script src="../js/third/sweetalert2.js"></script>
+
+
 <script src="../js/page/mobile/mobile-nav.js"></script>
 <script src="../js/page/common/common.js"></script>
 <script src="../js/page/viewScripts.js"></script>

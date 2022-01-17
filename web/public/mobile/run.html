@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>快速执行 · 控制面板移动端</title>
     <script type="text/javascript" src="../js/third/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/third/codemirror.min.js"></script>
-    <script type="text/javascript" src="../js/third/shell.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/codemirror.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/addons.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/modes.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/keymap/sublime.js"></script>
+
     <script type="text/javascript" src="../js/third/sweetalert2.js"></script>
     <script type="text/javascript" src="../js/third/prefixfree.min.js"></script>
     <script type="text/javascript" src="../js/page/mobile/mmenu-light.js"></script>
@@ -36,13 +39,13 @@
                         <div class="multi-button">
                             <button id="wrap">
                                 <i class="fa fa-exchange"></i>
-                                <span class="animate-normal">切换换行</span>
+                                <span class="animate-normal">自动换行</span>
                             </button>
-                            <button id="move-bottom">
+                            <button id="move-bottom" style="border-radius: 0;">
                                 <i class="fa fa-arrow-circle-o-down"></i>
                                 <span class="animate-normal">跳转底部</span>
                             </button>
-                            <button class="cmd-btn" data-cmd="task list 2>&1 | tee log/tasklist.log" data-name="tasklist">
+                            <button style="border-radius: 0;" class="cmd-btn" data-cmd="task list 2>&1 | tee log/tasklist.log" data-name="tasklist">
                                 <i class="fa fa-list-alt"></i>
                                 <span class="animate-normal">列出脚本</span>
                             </button>
@@ -59,21 +62,21 @@
                                    required/>
                         </div>
                         <div class="run-cmd-btn">
-                            <button id="runCmd" class="btn btn-primary btn-ghost btn-shine submit" type="submit"><i class="fa fa-rocket"></i> 依次执行</button>
+                            <button id="runCmd" class="btn btn-primary btn-ghost btn-shine submit" type="submit"><i class="fa fa-rocket"></i> 普通执行</button>
                             <button id="runCmdConc" class="btn btn-primary btn-ghost btn-shine submit" type="submit"><i class="fa fa-random"></i> 并发执行</button>
                         </div>
                     <div class="fast-run">
-                        <button class="cmd-btn btn btn-primary btn-ghost btn-shine" data-cmd="bash task jd_bean_change now" data-name="jd_bean_change">
+                        <button class="cmd-btn btn btn-primary btn-ghost btn-shine" data-cmd="bash task jd_bean_change now" data-name="jd_bean_change" title="task jd_bean_change now">
                             <i class="fa fa-bell"></i> 京豆变动
                         </button>
-                        <button class="cmd-btn btn btn-primary btn-ghost btn-shine" data-cmd="task jd_get_share_code now" data-name="jd_getShareCodes">
-                            <i class="fa fa-share-alt-square"></i> 获取互助码
+                        <button class="cmd-btn btn btn-primary btn-ghost btn-shine" data-cmd="task cookie check" data-name="cookiecheck" title="task cookie check">
+                            <i class="fa fa-calendar-check-o"></i> 检测账号
                         </button>
-                        <button class="cmd-btn btn btn-primary btn-ghost btn-shine" data-cmd="task rmlog | tee log/rmlog.log" data-name="rmlog">
-                            <i class="fa fa-trash"></i> 删除日志
-                        </button>
-                        <button class="cmd-btn btn btn-primary btn-ghost btn-shine" data-cmd="task ps" data-name="ps" data-refresh-log="false">
+                        <button class="cmd-btn btn btn-primary btn-ghost btn-shine" data-cmd="task ps" data-name="ps" data-refresh-log="false" title="task ps">
                             <i class="fa fa-tasks"></i> 查看进程
+                        </button>
+                        <button class="cmd-btn btn btn-primary btn-ghost btn-shine" data-cmd="taskctl jbot start" data-name="jbot" title="task jbot start">
+                            <i class="fa fa-play-circle"></i> 重启机器人
                         </button>
                     </div>
                 </div>

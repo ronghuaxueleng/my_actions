@@ -7,10 +7,11 @@
         content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
     <title>定时任务 · 控制面板移动端</title>
     <script type="text/javascript" src="../js/third/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/third/codemirror.min.js"></script>
-    <script type="text/javascript" src="../js/page/common/comment.js"></script>
-    <script type="text/javascript" src="../js/third/shell.js"></script>
-    <script type="text/javascript" src="../js/third/sublime.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/codemirror.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/addons.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/modes.min.js"></script>
+    <script type="text/javascript" src="../js/third/codemirror/keymap/sublime.js"></script>
+
     <script type="text/javascript" src="../js/third/sweetalert2.js"></script>
     <script type="text/javascript" src="../js/third/prefixfree.min.js"></script>
     <script type="text/javascript" src="../js/page/mobile/mmenu-light.js"></script>
@@ -38,9 +39,9 @@
                             <i class="fa fa-save"></i>
                             <span class="animate-normal">保存</span>
                         </button>
-                        <button id="wrap">
+                        <button id="wrap" style="border-radius: 0;">
                             <i class="fa fa-exchange"></i>
-                            <span class="animate-normal">切换换行</span>
+                            <span class="animate-normal">自动换行</span>
                         </button>
                         <a href="https://www.runoob.com/w3cnote/linux-crontab-tasks.html">
                             <button>

@@ -55,11 +55,7 @@ let themeChange = {
         let isLight = theme === this.THEMES.LIGHT;
         let editorTheme = isLight ? "juejin" : "panda-syntax";
         if (editor) {
-            console.info(editor)
-            let $editor = $(editor.getWrapperElement());
-            $editor.hide();
-            editor.setOption("theme", editorTheme);
-            $editor.fadeIn(500)
+            this.changeEditorTheme(editor, editorTheme);
         }
         let $mobileMenu = $("nav[id=mobile-menu]");
         if ($mobileMenu) {
@@ -70,6 +66,23 @@ let themeChange = {
             }
         }
         return editorTheme
+    },
+    changeEditorTheme(editor, editorTheme) {
+        try {
+            if (editor.wrap) {
+                this.changeEditorTheme(editor.editor(), editorTheme)
+            }
+            if (editor.right) {
+                this.changeEditorTheme(editor.right.orig, editorTheme)
+            }
+            let $editor = $(editor.getWrapperElement());
+            $editor.hide();
+            editor.setOption("theme", editorTheme);
+            $editor.fadeIn(500)
+
+        } catch (e) {
+        }
+
     },
     updatePageTheme(theme) {
         let isLight = theme === this.THEMES.LIGHT;
@@ -100,30 +113,33 @@ let MenuTools = {
         path: "#",
         customClass: "highlight",
         subMenuCustomClass: "double",
-        bottomContent: '<div class="content"><div class="bottom-left"><img class="qr-img" src="/icon/jx.png"/><a target="_blank" href="https://u.jd.com/3t9LXZe"><span class="title red-font">打开京东/微信扫码，每日可领取三次红包！</span></a></div><div class="bottom-right"><span class="title"><i class="fa fa-comments"></i> 你知道我们有 Telegram 频道吗? </span><a class="link-btn" href="https://t.me/jdhelloworld">立即关注</a></div></div>',
+        bottomContent: '<div class="content">' +
+            // '<div class="item bottom-left" ><img class="qr-img" src="/icon/jx.png"/><a target="_blank" href="https://u.jd.com/3t9LXZe"><span class="title red-font">打开京东/微信扫码，每日可领取三次红包！</span></a></div>' +
+            '<div class="item bottom-right"><span class="title"><i class="fa fa-comments"></i> 你知道我们有 Telegram 频道吗? </span><a class="link-btn" href="https://t.me/jdhelloworld">立即关注</a></div></div>',
         children: [
+            // {
+            //     title: "京东1111红包",
+            //     faIcon: "fa-thumbs-up",
+            //     titleFaIcon: "fa-hand-o-right",
+            //     subText: "京东1111红包",
+            //     platform: "mobile",
+            //     customClass: 'red-font',
+            //     path: "https://u.jd.com/3t9LXZe",
+            // },
             {
-                title: "京东1111红包",
-                faIcon: "fa-thumbs-up",
-                titleFaIcon: "fa-hand-o-right",
-                subText: "京东1111红包",
-                platform: "mobile",
-                customClass: 'red-font',
-                path: "https://u.jd.com/3t9LXZe",
-            }, {
-                title: "配置文件",
+                title: "环境变量",
                 faIcon: "fa-home",
                 titleFaIcon: "fa-arrow-right",
-                subText: "编辑环境变量",
+                subText: "编辑主配置文件",
                 customClass: 'gb a',
                 path: "/config"
             }, {
-                title: "对比工具",
-                faIcon: "fa-columns",
+                title: "账号配置",
+                faIcon: "fa-user-circle",
                 titleFaIcon: "fa-arrow-right",
-                subText: "将当前配置文件与模板进行比较",
-                customClass: 'gb g',
-                path: "/diff"
+                subText: "编辑账号配置文件",
+                customClass: 'gb e',
+                path: "/remarks"
             }, {
                 title: "定时任务",
                 faIcon: "fa-clock-o",
@@ -132,12 +148,12 @@ let MenuTools = {
                 customClass: 'gb d',
                 path: "/crontab"
             }, {
-                title: "自定义脚本",
-                faIcon: "fa-file-text-o",
+                title: "对比工具",
+                faIcon: "fa-columns",
                 titleFaIcon: "fa-arrow-right",
-                subText: "编辑 Extra 脚本",
-                customClass: 'gb h',
-                path: "/extra"
+                subText: "将配置文件与最新模板进行比较",
+                customClass: 'gb g',
+                path: "/diff"
             }, {
                 title: "机器人配置",
                 faIcon: "fa-telegram",
@@ -146,12 +162,12 @@ let MenuTools = {
                 customClass: 'gb',
                 path: "/bot"
             }, {
-                title: "账号配置",
-                faIcon: "fa-user-circle",
+                title: "自定义脚本",
+                faIcon: "fa-file-text-o",
                 titleFaIcon: "fa-arrow-right",
-                subText: "编辑账号配置文件",
-                customClass: 'gb e',
-                path: "/remarks"
+                subText: "编辑 Extra 脚本",
+                customClass: 'gb h',
+                path: "/extra"
             }]
     }, {
         title: "执行工具",
@@ -164,7 +180,7 @@ let MenuTools = {
             title: "快速执行",
             faIcon: "fa-play-circle",
             titleFaIcon: "fa-arrow-right",
-            subText: "一键执行相关命令和特定脚本",
+            subText: "执行相关命令或运行指定脚本",
             customClass: 'gb i',
             path: "/run"
         }, {
@@ -175,12 +191,12 @@ let MenuTools = {
             customClass: 'gb b',
             path: "/terminal"
         }, {
-            title: "使用说明",
-            faIcon: "fa-book",
+            title: "官方文档",
+            faIcon: "fa fa-tv",
             titleFaIcon: "fa-external-link",
-            subText: "查看所有关于项目的使用教程",
+            subText: "关于本项目的所有文档内容",
             customClass: 'gb c',
-            path: "javascript:window.open('./cause/index.html')"
+            path: "javascript:window.open('https://supermanito.github.io/Helloworld')"
         }]
     }, {
         title: "文件浏览",
@@ -197,7 +213,7 @@ let MenuTools = {
             customClass: 'gb d',
             path: "/taskLog"
         }, {
-            title: "查阅脚本",
+            title: "脚本管理",
             faIcon: "fa-file-code-o",
             titleFaIcon: "fa-arrow-right",
             subText: "浏览或编辑脚本内容",
@@ -207,7 +223,7 @@ let MenuTools = {
             title: "查看仓库",
             faIcon: "fa-github",
             titleFaIcon: "fa-external-link",
-            subText: "浏览 Scripts 仓库的代码托管网站",
+            subText: "浏览 Scripts 仓库代码",
             customClass: '',
             path: "javascript:window.open('https://github.com/Aaron-lv/sync')"
         }]
@@ -243,7 +259,7 @@ let MenuTools = {
             title: "切换主题",
             faIcon: "fa-delicious",
             titleFaIcon: "fa-sliders",
-            subText: "Switch theme",
+            subText: "浅色模式 | 深色模式",
             customClass: 'gb k',
             path: "#",
             mobileCustom: {
@@ -359,7 +375,16 @@ let panelUtils = {
     showAlert(opts) {
         return Swal.fire(opts)
     },
-    showError(title, text) {
+    showSuccess(msg = "", desc = "", reload = true) {
+        panelUtils.showAlert({
+            title: msg,
+            html: desc,
+            icon: 'success'
+        }).then((result) => {
+            reload && window.location.reload(true);
+        })
+    },
+    showError(title, text, desc) {
         let options = {
             text: title,
             icon: 'error'
@@ -367,6 +392,10 @@ let panelUtils = {
         if (text) {
             options.text = text;
             options.title = title
+        }
+        if (desc) {
+            options.title = text
+            options['html'] = desc;
         }
         this.showAlert(options)
     },
@@ -417,10 +446,45 @@ var userAgentTools = {
     }
 };
 
+let panelRequest = {
+    resultCallback(success, result, fail) {
+        if (result.code === 1) {
+            success && success(result);
+        } else if (result.code === 403) {
+            panelUtils.showAlert({
+                title: "请求出错",
+                html: result.msg,
+                icon: "error"
+            }).then((result) => {
+                location.href = "/auth";
+            })
+        } else {
+            panelUtils.showError("请求出错", result.msg)
+            fail && fail(result);
+        }
+    },
+    get(url, params = {}, success) {
+        if (arguments.length === 2 && typeof params === 'function') {
+            $.get(BASE_API_PATH + url, {}, (result) => {
+                this.resultCallback(params, result);
+            }, "json");
+        } else {
+            $.get(BASE_API_PATH + url, params, (result) => {
+                this.resultCallback(success, result);
+            }, "json");
+        }
+
+    },
+    post(url, data = {}, success, fail) {
+        $.post(BASE_API_PATH + url, data, (result) => {
+            this.resultCallback(success, result, fail);
+        }, "json");
+    }
+}
+
 // codeMirror指定当前滚动到视图中内容上方和下方要渲染的行数，pc端适当调大，便于文本搜索
 var viewportMargin = userAgentTools.mobile(navigator.userAgent) ? 10 : 1000;
-
+let minimapVal = !userAgentTools.mobile(navigator.userAgent) ? {scale: 5 }: false;
 // window.onresize = function(){
 //     window.location.reload();
 // }
-

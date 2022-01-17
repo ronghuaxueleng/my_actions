@@ -3,9 +3,11 @@ let origLeft, origRight;
 function initUI() {
     editor = CodeMirror.MergeView(document.getElementById('compare'), {
         value: origLeft,
+        minimap: false,
         origLeft: null,
         orig: origRight,
         lineNumbers: true,
+        styleActiveLine: true,
         lineWrapping: true,
         mode: 'shell',
         viewportMargin: viewportMargin,
@@ -18,13 +20,13 @@ function initUI() {
 }
 
 $(document).ready(function () {
-    Promise.all([$.get(BASE_API_PATH + '/api/config/config'), $.get(BASE_API_PATH + '/api/config/sample')])
-        .then((resArr) => {
-            origLeft = resArr[0];
-            origRight = resArr[1];
-
+    panelRequest.get('/api/config/config', {}, (config) => {
+        origLeft = config.data;
+        panelRequest.get('/api/config/sample', {}, (sample) => {
+            origRight = sample.data;
             initUI();
-        });
+        })
+    })
     $('#prev').click(function () {
         editor.editor().execCommand('goPrevDiff');
     });
@@ -41,18 +43,11 @@ $(document).ready(function () {
 
     $('#save').click(function () {
         var confContent = editor.editor().getValue();
-        $.post(BASE_API_PATH + '/api/save', {
+        panelRequest.post('/api/save', {
             content: confContent,
             name: "config.sh"
-        }, function (data) {
-            let icon = (data.err === 0) ? "success" : "error"
-            panelUtils.showAlert({
-                title: data.title,
-                html: data.msg,
-                icon: icon
-            }).then((result) => {
-                window.location.reload(true);
-            })
+        }, function (res) {
+            res.code === 1 && panelUtils.showSuccess(res.msg, res.desc);
         });
     });
 

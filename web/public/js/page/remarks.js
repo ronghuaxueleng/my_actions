@@ -1,5 +1,6 @@
 $(document).ready(function () {
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        minimap: minimapVal,
         lineNumbers: true,
         lineWrapping: true,
         styleActiveLine: true,
@@ -9,19 +10,20 @@ $(document).ready(function () {
         theme: themeChange.getAndUpdateEditorTheme(),
         keyMap: 'sublime'
     });
-    $.get(BASE_API_PATH + '/api/config/account', function (data) {
+    panelRequest.get( '/api/config/account', {},function (res) {
         try {
-            let accountArr = JSON.parse(data);
+            let accountArr = JSON.parse(res.data);
             for (const account of accountArr) {
-                if(account && !account.config){
-                    account['config'] = {"ep":{}};
+                if (account && !account.config) {
+                    account['config'] = {"ep": {}};
                 }
             }
-            data = JSON.stringify(accountArr, null, 2);
-        }catch (e){
+            editor.setValue(JSON.stringify(accountArr, null, 2));
+        } catch (e) {
 
         }
-        editor.setValue(data);
+
+        !userAgentTools.mobile(navigator.userAgent) && $(".CodeMirror-scroll").css("width", `calc(100% - ${$(".CodeMirror-minimap").width() + 5}px)`);
     });
 
     $('#save').click(function () {
@@ -45,18 +47,11 @@ $(document).ready(function () {
             panelUtils.showError("格式出现问题，请仔细检查")
             return;
         }
-        $.post(BASE_API_PATH + '/api/save?t=' + timeStamp, {
+        panelRequest.post('/api/save?t=' + timeStamp, {
             content: confContent,
             name: "account.json"
-        }, function (data) {
-            let icon = (data.err === 0) ? "success" : "error"
-            panelUtils.showAlert({
-                title: data.title,
-                html: data.msg,
-                icon: icon
-            }).then((result) => {
-                window.location.reload(true);
-            })
+        }, function (res) {
+            res.code === 1 && panelUtils.showSuccess(res.msg, res.desc)
         });
     });
 
@@ -67,21 +62,21 @@ $(document).ready(function () {
 
     let openTools = (value = '') => {
         Swal.fire({
-            customClass:{
-                container:"mini-tool"
+            customClass: {
+                container: "mini-tool"
             },
             inputValue: value,
             input: 'textarea',
             inputPlaceholder: '请输入需要编码/解码的url',
             inputLabel: 'URL编码/解码',
-            width: userAgentTools.mobile(navigator.userAgent) ? "90%":"80%",
+            width: userAgentTools.mobile(navigator.userAgent) ? "90%" : "80%",
             denyButtonText: "解码",
             confirmButtonText: "编码",
             showDenyButton: true,
             showConfirmButton: true,
             showCloseButton: true,
             allowOutsideClick: false,
-            returnInputValueOnDeny:true,
+            returnInputValueOnDeny: true,
             preConfirm: () => {
                 const value = document.getElementById('swal2-input').value;
                 document.getElementById('swal2-input').value = encodeURIComponent(value);

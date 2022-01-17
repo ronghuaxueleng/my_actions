@@ -1,10 +1,3 @@
-/*
- * @Author: Jerrykuku https://github.com/jerrykuku
- * @Date: 2021-1-8
- * @Version: v0.0.2
- * @thanks: FanchangWang https://github.com/FanchangWang
- */
-
 var express = require('express');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
@@ -23,6 +16,7 @@ const {
 } = require('http-proxy-middleware');
 const random = require('string-random');
 const util = require('./util');
+
 
 var rootPath = path.resolve(__dirname, '..')
 // config.sh 文件所在目录
@@ -51,11 +45,52 @@ var ScriptsPath = path.join(rootPath, 'scripts/');
 var OwnPath = path.join(rootPath, 'own/');
 
 var authError = '错误的用户名密码，请重试';
-var loginFaild = '请先登录!';
 
 var configString = 'config sample crontab extra bot account';
 
 var s_token, cookies, guid, lsid, lstoken, okl_token, token, userCookie = '', errorCount = 1;
+
+const API_STATUS_CODE = {
+    ok(msg = 'success', data, desc) {
+        return {
+            code: 1,
+            data: data,
+            desc: desc,
+            msg: msg
+        }
+    },
+    okData(data) {
+        return this.ok('success', data)
+    },
+
+    fail(msg = 'fail', code = 0, desc) {
+        return {
+            code: code,
+            msg: msg,
+            desc: desc
+        }
+    },
+    failData(msg = 'fail', data) {
+        return {
+            data: data,
+            code: 0,
+            msg: msg,
+        }
+    },
+    API: {
+        NEED_LOGIN: {
+            code: 403,
+            message: "请先登录!"
+        }
+    },
+    OPEN_API: {
+        AUTH_FAIL: {
+            code: 4403,
+            msg: "认证失败!",
+            desc: "注意，新版本将'cookieApiToken'改名为'openApiToken',请及时重置修改密码重置此token"
+        }
+    }
+}
 
 function praseSetCookies(response) {
     s_token = response.body.s_token
@@ -230,7 +265,7 @@ function panelSendNotify(title, content) {
 }
 
 /**
- * 备份 config.sh 文件
+ * 备份 config.sh 文件 并返回旧的文件内容
  */
 function bakConfFile(file) {
     mkdirConfigBakDir();
@@ -275,17 +310,27 @@ function bakConfFile(file) {
         default:
             break;
     }
+    return oldConfContent;
 }
 
 /**
  * 将 post 提交内容写入 config.sh 文件（同时备份旧的 config.sh 文件到 bak 目录）
+ * @param file
  * @param content
  */
 function saveNewConf(file, content) {
-    bakConfFile(file);
+    let oldContent = bakConfFile(file);
     switch (file) {
         case 'config.sh':
             fs.writeFileSync(confFile, content);
+            try {
+                execSync("bash /jd/config/config.sh", {encoding: 'utf8'});
+            } catch (e) {
+                fs.writeFileSync(confFile, oldContent);
+                throw new Error(e);
+            }
+
+            //判断格式是否正确
             break;
         case 'crontab.list':
             fs.writeFileSync(crontabFile, content);
@@ -443,10 +488,11 @@ function shouldCompress(req, res) {
     // fallback to standard filter function
     return compression.filter(req, res);
 }
+
 let fileStoreOptions = {
     path: "./sessions",
     fileExtension: ".json",
-    ttl: 24*60*60
+    ttl: 24 * 60 * 60
 };
 
 app.use(
@@ -456,7 +502,7 @@ app.use(
         name: `panel-connect-name-${getLocalIp().replace(/\./g, '_')}`,
         resave: true,
         saveUninitialized: true,
-        cookie: { maxAge: fileStoreOptions.ttl * 1000 },
+        cookie: {maxAge: fileStoreOptions.ttl * 1000},
     })
 );
 app.use(bodyParser.json({
@@ -486,6 +532,55 @@ app.use(
     })
 );
 
+
+//所有API登录拦截
+app.all('/*', function (req, res, next) {
+    if (req.session.loggedin && req.url.indexOf("openApi") === -1) {
+        next();
+    } else {
+        let arr = req.url.split('/');
+        //去除参数
+        for (let i = 0, length = arr.length; i < length; i++) {
+            arr[i] = arr[i].split('?')[0];
+        }
+        if (arr.length === 1 && arr[0] === '') {
+            // 根目录
+            next();
+        } else if (arr.length >= 2) {
+            if (arr[1] === "openApi") {
+                // openApi
+                let authFile = fs.readFileSync(authConfigFile, 'utf8');
+                let authFileJson = JSON.parse(authFile);
+                let token = req.headers["api-token"]
+                if (token && token !== '' && token === authFileJson.openApiToken) {
+                    next();
+                } else {
+                    res.send(API_STATUS_CODE.OPEN_API.AUTH_FAIL);
+                }
+            } else if (arr[1] !== "api") {
+                if (arr[1] === 'auth' || arr[1] === 'logout') {
+                    // 登录或者退出登录页面
+                    next();
+                } else {
+                    // API拦截
+                    req.session.originalUrl = req.originalUrl ? req.originalUrl : null;  // 记录用户原始请求路径
+                    res.redirect('/auth');  // 将用户重定向到登录页面
+                }
+            } else if (arr[1] === "api") {
+                if ((arr[2] === 'captcha' || arr[2] === 'auth' || arr[2] === 'sharecode')) {
+                    next();
+                } else {
+                    res.send(API_STATUS_CODE.API.NEED_LOGIN);
+                }
+            } else {
+                // API拦截
+                req.session.originalUrl = req.originalUrl ? req.originalUrl : null;  // 记录用户原始请求路径
+                res.redirect('/auth');  // 将用户重定向到登录页面
+            }
+        }
+    }
+});
+
 // 获取本机内网ip
 function getLocalIp() {
     try {
@@ -493,46 +588,34 @@ function getLocalIp() {
         const ipArr = res.split('\n');
         console.log(ipArr);
         return ipArr[0] || '';
-    }catch (e){
-        console.log(e)
+    } catch (e) {
+        console.log(e.message)
     }
     return "127.0.0.1"
 
 }
 
 /**
- * 登录页面
+ * 根目录
  */
 app.get('/', function (request, response) {
-    if (request.session.loggedin) {
-        response.redirect('./run');
-    } else {
-        response.redirect('./auth');
-    }
+    response.redirect(`./run`);
 });
 
-/**
- * logout
- */
-app.get('/logout', function (request, response) {
-    request.session.loggedin = false;
-    response.redirect('/auth');
-});
 
-/**
- * 登录页面
- */
-app.get('/auth', function (request, response) {
-    response.sendFile(getPath(request, `auth.html`));
-});
-
-app.get('/:page', (request, response) => {
+app.get(`/:page`, (request, response) => {
     let page = request.params.page;
-    let pageList = ['bot', 'crontab', 'config', 'diff', 'extra', 'changePwd', 'remarks', 'run', 'taskLog', 'terminal', 'viewScripts'];
-    if (page && request.session.loggedin && pageList.includes(page)) {
+    const pageList = ['bot', 'crontab', 'config', 'diff', 'extra', 'changePwd', 'remarks', 'run', 'taskLog', 'terminal', 'viewScripts'];
+    if (page && pageList.includes(page)) {
         response.sendFile(getPath(request, `${page}.html`));
     } else {
-        response.redirect('./auth');
+        if (page === 'logout') {
+            request.session.loggedin = false;
+            response.redirect('./auth');
+        } else {
+            response.sendFile(getPath(request, `auth.html`));
+        }
+
     }
 })
 
@@ -545,9 +628,7 @@ app.get('/api/captcha/flag', function (request, response) {
         if (err) console.log(err);
         var con = JSON.parse(data);
         let authErrorCount = con['authErrorCount'] || 0;
-        response.send({
-            showCaptcha: authErrorCount >= errorCount,
-        });
+        response.send(API_STATUS_CODE.okData({showCaptcha: authErrorCount >= errorCount}));
     })
 });
 
@@ -556,35 +637,19 @@ app.get('/api/captcha/flag', function (request, response) {
  */
 
 app.get('/api/qrcode', function (request, response) {
-    if (request.session.loggedin) {
-        (async () => {
-            try {
-                await step1();
-                const qrurl = await step2();
-                if (qrurl != 0) {
-                    response.send({
-                        err: 0,
-                        qrcode: qrurl
-                    });
-                } else {
-                    response.send({
-                        err: 1,
-                        msg: '错误'
-                    });
-                }
-            } catch (err) {
-                response.send({
-                    err: 1,
-                    msg: err
-                });
+    (async () => {
+        try {
+            await step1();
+            const qrUrl = await step2();
+            if (qrUrl !== 0) {
+                response.send(API_STATUS_CODE.okData({qrCode: qrUrl}));
+            } else {
+                response.send(API_STATUS_CODE.fail("出现错误"));
             }
-        })();
-    } else {
-        response.send({
-            err: 1,
-            msg: loginFaild
-        });
-    }
+        } catch (err) {
+            response.send(API_STATUS_CODE.fail(err));
+        }
+    })();
 });
 
 /**
@@ -592,39 +657,23 @@ app.get('/api/qrcode', function (request, response) {
  */
 
 app.get('/api/cookie', function (request, response) {
-    if (request.session.loggedin && cookies != '') {
-        (async () => {
-            try {
-                const cookie = await checkLogin();
-                if (cookie.body.errcode == 0) {
-                    let ucookie = getCookie(cookie);
-                    let autoReplace = request.query.autoReplace && request.query.autoReplace === 'true';
-                    if (autoReplace) {
-                        updateCookie(ucookie);
-                    }
-                    response.send({
-                        err: 0,
-                        cookie: ucookie
-                    });
-                } else {
-                    response.send({
-                        err: cookie.body.errcode,
-                        msg: cookie.body.message
-                    });
+    (async () => {
+        try {
+            const cookie = await checkLogin();
+            if (cookie.body.errcode == 0) {
+                let ucookie = getCookie(cookie);
+                let autoReplace = request.query.autoReplace && request.query.autoReplace === 'true';
+                if (autoReplace) {
+                    updateCookie(ucookie);
                 }
-            } catch (err) {
-                response.send({
-                    err: 1,
-                    msg: err
-                });
+                response.send(API_STATUS_CODE.okData({cookie: ucookie}))
+            } else {
+                response.send(API_STATUS_CODE.fail(cookie.body.message, cookie.body.errcode))
             }
-        })();
-    } else {
-        response.send({
-            err: 1,
-            msg: loginFaild
-        });
-    }
+        } catch (err) {
+            response.send(API_STATUS_CODE.fail(err));
+        }
+    })();
 });
 
 /**
@@ -632,133 +681,111 @@ app.get('/api/cookie', function (request, response) {
  */
 
 app.get('/api/config/:key', function (request, response) {
-    if (request.session.loggedin) {
-        let content = "";
-        if (configString.indexOf(request.params.key) > -1) {
-            switch (request.params.key) {
-                case 'config':
-                    content = getFileContentByName(confFile);
-                    break;
-                case 'bot':
-                    content = getFileContentByName(botFile);
-                    break;
-                case 'sample':
-                    content = getFileContentByName(sampleFile);
-                    break;
-                case 'crontab':
-                    content = getFileContentByName(crontabFile);
-                    break;
-                case 'extra':
-                    content = getFileContentByName(extraFile);
-                    break;
-                case 'account':
-                    content = getFileContentByName(accountFile);
-                    break;
-                default:
-                    break;
-            }
-            response.setHeader('Content-Type', 'text/plain');
-            response.send(content);
-        } else {
-            response.send('no config');
+
+    let content = "";
+    if (configString.indexOf(request.params.key) > -1) {
+        switch (request.params.key) {
+            case 'config':
+                content = getFileContentByName(confFile);
+                break;
+            case 'bot':
+                content = getFileContentByName(botFile);
+                break;
+            case 'sample':
+                content = getFileContentByName(sampleFile);
+                break;
+            case 'crontab':
+                content = getFileContentByName(crontabFile);
+                break;
+            case 'extra':
+                content = getFileContentByName(extraFile);
+                break;
+            case 'account':
+                content = getFileContentByName(accountFile);
+                break;
+            default:
+                break;
         }
+        response.setHeader('Content-Type', 'text/plain');
+        response.send(API_STATUS_CODE.okData(content));
     } else {
-        response.send(loginFaild);
+        response.send(API_STATUS_CODE.okData(""));
     }
 });
 
 app.post('/api/runCmd', function (request, response) {
-    if (request.session.loggedin) {
-        const cmd = `cd ${rootPath};` + request.body.cmd;
-        const delay = request.body.delay || 0;
-        // console.log('before exec');
-        // exec maxBuffer 20MB
-        exec(cmd, {
-            maxBuffer: 1024 * 1024 * 20
-        }, (error, stdout, stderr) => {
-            // console.log(error, stdout, stderr);
-            // 根据传入延时返回数据，有时太快会出问题
-            setTimeout(() => {
-                if (error) {
-                    console.error(`执行的错误: ${error}`);
-                    response.send({
-                        err: 1,
-                        msg: stdout ? `${stdout}${error}` : `${error}`,
-                    });
-                    return;
-                }
 
-                if (stdout) {
-                    // console.log(`stdout: ${stdout}`)
-                    response.send({
-                        err: 0,
-                        msg: getNeatContent(`${stdout}`)
-                    });
-                    return;
-                }
+    const cmd = `cd ${rootPath};` + request.body.cmd;
+    const delay = request.body.delay || 0;
+    // console.log('before exec');
+    // exec maxBuffer 20MB
+    exec(cmd, {
+        maxBuffer: 1024 * 1024 * 20
+    }, (error, stdout, stderr) => {
+        // console.log(error, stdout, stderr);
+        // 根据传入延时返回数据，有时太快会出问题
+        setTimeout(() => {
+            if (error) {
+                console.error(`执行的错误: ${error}`);
+                response.send(API_STATUS_CODE.okData(stdout ? `${stdout}${error}` : `${error}`));
+                return;
+            }
 
-                if (stderr) {
-                    console.error(`stderr: ${stderr}`);
-                    response.send({
-                        err: 1,
-                        msg: `${stderr}`
-                    });
-                    return;
-                }
+            if (stdout) {
+                // console.log(`stdout: ${stdout}`)
+                response.send(API_STATUS_CODE.okData(getNeatContent(`${stdout}`)));
+                return;
+            }
 
-                response.send({
-                    err: 0,
-                    msg: '执行结束，无结果返回。'
-                });
-            }, delay);
-        });
-    } else {
-        response.redirect('/');
-    }
+            if (stderr) {
+                console.error(`stderr: ${stderr}`);
+                response.send(API_STATUS_CODE.okData(stderr));
+                return;
+            }
+            response.send(API_STATUS_CODE.okData("执行结束，无结果返回。"));
+        }, delay);
+    });
+
 });
 
 /**
  * 使用jsName获取最新的日志
  */
 app.get('/api/runLog', function (request, response) {
-    if (request.session.loggedin) {
-        let jsName = request.query.jsName;
-        let logFile;
-        if (['update', 'rmlog', 'exsc', 'tasklist'].includes(jsName)) {
-            logFile = path.join(rootPath, `log/${jsName}.log`);
-        } else {
-            if (jsName.indexOf(".") > -1) {
-                jsName = jsName.substring(0, jsName.lastIndexOf("."));
-            }
-            if(jsName === 'jd_getShareCodes'){
-                jsName = 'jd_get_share_code'
-            }
-            let pathUrl = `log/${jsName}/`;
-            if (jsName.startsWith("scripts/")) {
-                jsName = jsName.substring(jsName.indexOf("/") + 1);
-                pathUrl = `log/${jsName}/`;
-            } else if (jsName.startsWith("own/")) {
-                jsName = jsName.substring(jsName.indexOf("/") + 1);
-                pathUrl = `log/${jsName.replace(new RegExp('[/\\-]', "gm"), '_')}/`;
-            } else {
-                if (!fs.existsSync(path.join(rootPath, pathUrl))) {
-                    pathUrl = `log/jd_${jsName}/`;
-                }
-            }
-            logFile = getLastModifyFilePath(
-                path.join(rootPath, pathUrl)
-            );
-        }
-
-        if (logFile) {
-            const content = getFileContentByName(logFile);
-            response.setHeader('Content-Type', 'text/plain');
-            response.send(getNeatContent(content));
-        } else {
-            response.send('no logs');
-        }
+    let jsName = request.query.jsName;
+    let logFile;
+    if (['update', 'rmlog', 'exsc', 'tasklist'].includes(jsName)) {
+        logFile = path.join(rootPath, `log/${jsName}.log`);
     } else {
-        response.send(loginFaild);
+        if (jsName.indexOf(".") > -1) {
+            jsName = jsName.substring(0, jsName.lastIndexOf("."));
+        }
+        if (jsName === 'jd_getShareCodes') {
+            jsName = 'jd_get_share_code'
+        }
+        let pathUrl = `log/${jsName}/`;
+        if (jsName.startsWith("scripts/")) {
+            jsName = jsName.substring(jsName.indexOf("/") + 1);
+            pathUrl = `log/${jsName}/`;
+        } else if (jsName.startsWith("own/")) {
+            jsName = jsName.substring(jsName.indexOf("/") + 1);
+            pathUrl = `log/${jsName.replace(new RegExp('[/\\-]', "gm"), '_')}/`;
+        } else {
+            if (!fs.existsSync(path.join(rootPath, pathUrl))) {
+                pathUrl = `log/jd_${jsName}/`;
+            }
+        }
+        logFile = getLastModifyFilePath(
+            path.join(rootPath, pathUrl)
+        );
+    }
+
+    if (logFile) {
+        const content = getFileContentByName(logFile);
+        response.setHeader('Content-Type', 'text/plain');
+        response.send(API_STATUS_CODE.okData(getNeatContent(content)));
+    } else {
+        response.send(API_STATUS_CODE.okData("no logs"));
     }
 });
 
@@ -809,29 +836,17 @@ app.post('/api/auth', async function (request, response) {
     let con = JSON.parse(data);
     let authErrorCount = con['authErrorCount'] || 0;
     if (authErrorCount >= 30) {
-        //错误次数超过30次，直接
-        response.send({
-            err: 1,
-            msg: '面板错误登录次数到达30次，已禁止登录!',
-            showCaptcha: true,
-        });
+        //错误次数超过30次，直接禁止登录
+        response.send(API_STATUS_CODE.failData('面板错误登录次数到达30次，已禁止登录!', {showCaptcha: true}))
         return;
     }
     let showCaptcha = authErrorCount >= errorCount;
     if (captcha === '' && showCaptcha) {
-        response.send({
-            err: 1,
-            msg: '请输入验证码!',
-            showCaptcha: true,
-        });
+        response.send(API_STATUS_CODE.failData('请输入验证码!', {showCaptcha: true}))
         return;
     }
     if (showCaptcha && captcha !== request.session.captcha) {
-        response.send({
-            err: 1,
-            msg: '验证码不正确!',
-            showCaptcha: showCaptcha,
-        });
+        response.send(API_STATUS_CODE.failData('验证码不正确!', {showCaptcha: showCaptcha}))
         return;
     }
     if (username && password) {
@@ -859,7 +874,7 @@ app.post('/api/auth', async function (request, response) {
                 console.log(`${username} 用户登录成功，登录IP：${ip}，登录地址：${address}`);
                 fs.writeFileSync(authConfigFile, JSON.stringify(con));
             });
-            response.send(result);
+            response.send(API_STATUS_CODE.okData(result));
         } else {
             authErrorCount++;
             if (authErrorCount === 10 || authErrorCount === 20) {
@@ -869,17 +884,10 @@ app.post('/api/auth', async function (request, response) {
             }
             con['authErrorCount'] = authErrorCount;
             fs.writeFileSync(authConfigFile, JSON.stringify(con));
-            response.send({
-                err: 1,
-                msg: authError,
-                showCaptcha: authErrorCount >= errorCount
-            });
+            response.send(API_STATUS_CODE.failData(authError, {showCaptcha: authErrorCount >= errorCount}))
         }
     } else {
-        response.send({
-            err: 1,
-            msg: '请输入用户名密码!'
-        });
+        response.send(API_STATUS_CODE.fail("请输入用户名密码！"))
     }
 
 });
@@ -889,37 +897,25 @@ app.post('/api/auth', async function (request, response) {
  * change pwd
  */
 app.post('/api/changePwd', function (request, response) {
-    if (request.session.loggedin) {
-        let username = request.body.username;
-        let password = request.body.password;
-        let config = {
-            user: username,
-            password: password,
-            cookieApiToken: random(32)
-        };
-        if (username && password) {
-            fs.writeFile(authConfigFile, JSON.stringify(config), function (err) {
-                if (err) {
-                    response.send({
-                        err: 1,
-                        msg: '写入错误请重试!'
-                    });
-                } else {
-                    response.send({
-                        err: 0,
-                        msg: '更新成功!'
-                    });
-                }
-            });
-        } else {
-            response.send({
-                err: 1,
-                msg: '请输入用户名密码!'
-            });
-        }
+    let username = request.body.username;
+    let password = request.body.password;
+    let config = {
+        user: username,
+        password: password,
+        openApiToken: random(32)
+    };
+    if (username && password) {
+        fs.writeFile(authConfigFile, JSON.stringify(config), function (err) {
+            if (err) {
+                response.send(API_STATUS_CODE.fail("修改错误，请重试!"));
+            } else {
+                response.send(API_STATUS_CODE.ok("修改成功！"));
+            }
+        });
     } else {
-        response.send(loginFaild);
+        response.send(API_STATUS_CODE.fail("请输入用户名密码!"));
     }
+
 });
 
 /**
@@ -927,22 +923,15 @@ app.post('/api/changePwd', function (request, response) {
  */
 
 app.post('/api/save', function (request, response) {
-    if (request.session.loggedin) {
-        let postContent = request.body.content;
-        let postfile = request.body.name;
+    let postContent = request.body.content;
+    let postfile = request.body.name;
+    try {
         saveNewConf(postfile, postContent);
-        response.send({
-            err: 0,
-            title: '保存成功! ',
-            msg: '将自动刷新页面查看修改后的 ' + postfile + ' 文件<br>每次保存都会生成备份',
-        });
-    } else {
-        response.send({
-            err: 1,
-            title: '保存失败! ',
-            msg: loginFaild
-        });
+        response.send(API_STATUS_CODE.ok("保存成功", {}, `将自动刷新页面查看修改后的 ${postfile} 文件<br>每次保存都会生成备份`));
+    } catch (e) {
+        response.send(API_STATUS_CODE.fail("保存失败", 0, e.message));
     }
+
 });
 
 
@@ -950,56 +939,51 @@ app.post('/api/save', function (request, response) {
  * 日志列表
  */
 app.get('/api/logs', function (request, response) {
-    if (request.session.loggedin) {
-        let keywords = request.query.keywords || '';
-        var fileList = fs.readdirSync(logPath, 'utf-8');
-        var dirs = [];
-        var rootFiles = [];
-        let excludeRegExp = /(.tmp)/;
-        fileList.map((name, index) => {
-            if ((keywords === '' || name.indexOf(keywords) > -1) && !excludeRegExp.test(name)) {
-                let stat = fs.lstatSync(logPath + name);
-                // 是目录，需要继续
-                if (stat.isDirectory()) {
-                    var fileListTmp = fs.readdirSync(logPath + '/' + name, 'utf-8');
-                    fileListTmp.reverse();
-                    var dirMap = {
-                        dirName: name,
-                        files: fileListTmp,
-                    };
-                    dirs.push(dirMap);
-                } else {
-                    rootFiles.push(name);
-                }
+
+    let keywords = request.query.keywords || '';
+    var fileList = fs.readdirSync(logPath, 'utf-8');
+    var dirs = [];
+    var rootFiles = [];
+    let excludeRegExp = /(.tmp)/;
+    fileList.map((name, index) => {
+        if ((keywords === '' || name.indexOf(keywords) > -1) && !excludeRegExp.test(name)) {
+            let stat = fs.lstatSync(logPath + name);
+            // 是目录，需要继续
+            if (stat.isDirectory()) {
+                var fileListTmp = fs.readdirSync(logPath + '/' + name, 'utf-8');
+                fileListTmp.reverse();
+                var dirMap = {
+                    dirName: name,
+                    files: fileListTmp,
+                };
+                dirs.push(dirMap);
+            } else {
+                rootFiles.push(name);
             }
-        })
-        dirs.push({
-            dirName: '@',
-            files: rootFiles,
-        });
-        response.send({dirs});
-    } else {
-        response.redirect('/');
-    }
+        }
+    })
+    dirs.push({
+        dirName: '@',
+        files: rootFiles,
+    });
+    response.send(API_STATUS_CODE.okData(dirs));
 });
 
 /**
  * 日志文件
  */
 app.get('/api/logs/:dir/:file', function (request, response) {
-    if (request.session.loggedin) {
-        let filePath;
-        if (request.params.dir === '@') {
-            filePath = logPath + request.params.file;
-        } else {
-            filePath = logPath + request.params.dir + '/' + request.params.file;
-        }
-        var content = getFileContentByName(filePath);
-        response.setHeader('Content-Type', 'text/plain');
-        response.send(getNeatContent(content));
+
+    let filePath;
+    if (request.params.dir === '@') {
+        filePath = logPath + request.params.file;
     } else {
-        response.redirect('/');
+        filePath = logPath + request.params.dir + '/' + request.params.file;
     }
+    var content = getFileContentByName(filePath);
+    response.setHeader('Content-Type', 'text/plain');
+    response.send(API_STATUS_CODE.okData(getNeatContent(content)));
+
 });
 
 function loadFile(loadPath, dirName, keywords, onlyRunJs) {
@@ -1045,38 +1029,36 @@ function loadFile(loadPath, dirName, keywords, onlyRunJs) {
  * 脚本列表
  */
 app.get('/api/scripts', function (request, response) {
-    if (request.session.loggedin) {
-        let keywords = request.query.keywords || '';
-        let onlyRunJs = request.query.onlyRunJs || 'false';
-        onlyRunJs = onlyRunJs === 'true';
-        let rootFiles = [], scriptsDir = 'scripts', ownDir = 'own', dirList = [scriptsDir];
-        if (!onlyRunJs) {
-            dirList.push(ownDir);
-        }
-        dirList.forEach((dirName) => {
-            rootFiles.push({
-                dirName: dirName,
-                dirPath: dirName,
-                files: loadFile(dirName, dirName, keywords, onlyRunJs),
-            })
-        })
-        if (onlyRunJs) {
-            let ownFileList = fs.readdirSync(OwnPath, {withFileTypes: true});
-            ownFileList.forEach((item) => {
-                let name = item.name;
-                if (item.isDirectory()) {
-                    rootFiles.push({
-                        dirName: name,
-                        dirPath: ownDir + "/" + name,
-                        files: loadFile(ownDir + "/" + name, name, keywords, onlyRunJs),
-                    })
-                }
-            })
-        }
-        response.send(rootFiles);
-    } else {
-        response.redirect('/');
+
+    let keywords = request.query.keywords || '';
+    let onlyRunJs = request.query.onlyRunJs || 'false';
+    onlyRunJs = onlyRunJs === 'true';
+    let rootFiles = [], scriptsDir = 'scripts', ownDir = 'own', dirList = [scriptsDir];
+    if (!onlyRunJs) {
+        dirList.push(ownDir);
     }
+    dirList.forEach((dirName) => {
+        rootFiles.push({
+            dirName: dirName,
+            dirPath: dirName,
+            files: loadFile(dirName, dirName, keywords, onlyRunJs),
+        })
+    })
+    if (onlyRunJs) {
+        let ownFileList = fs.readdirSync(OwnPath, {withFileTypes: true});
+        ownFileList.forEach((item) => {
+            let name = item.name;
+            if (item.isDirectory()) {
+                rootFiles.push({
+                    dirName: name,
+                    dirPath: ownDir + "/" + name,
+                    files: loadFile(ownDir + "/" + name, name, keywords, onlyRunJs),
+                })
+            }
+        })
+    }
+    response.send(API_STATUS_CODE.okData(rootFiles));
+
 });
 
 /**
@@ -1084,43 +1066,29 @@ app.get('/api/scripts', function (request, response) {
  */
 
 app.post('/api/scripts/save', function (request, response) {
-    if (request.session.loggedin) {
-        let postContent = request.body.content;
-        let postFile = request.body.name;
-        fs.writeFileSync(path.join(rootPath, postFile), postContent);
-        response.send({
-            err: 0,
-            title: '保存成功! ',
-            msg: '注意：脚本库更新可能会导致修改的内容丢失',
-        });
-    } else {
-        response.send({
-            err: 1,
-            title: '保存失败! ',
-            msg: loginFaild
-        });
-    }
+    let postContent = request.body.content;
+    let postFile = request.body.name;
+    fs.writeFileSync(path.join(rootPath, postFile), postContent);
+    response.send(API_STATUS_CODE.ok("保存成功!", {}, '注意：脚本库更新可能会导致修改的内容丢失'));
 });
 
 /**
  * 脚本文件
  */
 app.get('/api/scripts/content', function (request, response) {
-    if (request.session.loggedin) {
-        let filePath;
-        if (request.query.dir === '@') {
-            filePath = ScriptsPath + request.query.file;
-        } else if (request.query.path && request.query.path !== '') {
-            filePath = rootPath + '/' + request.query.path;
-        } else {
-            filePath = rootPath + '/' + request.query.dir + '/' + request.query.file;
-        }
-        var content = getFileContentByName(filePath);
-        response.setHeader('Content-Type', 'text/plain');
-        response.send(content);
+
+    let filePath;
+    if (request.query.dir === '@') {
+        filePath = ScriptsPath + request.query.file;
+    } else if (request.query.path && request.query.path !== '') {
+        filePath = rootPath + '/' + request.query.path;
     } else {
-        response.redirect('/');
+        filePath = rootPath + '/' + request.query.dir + '/' + request.query.file;
     }
+    var content = getFileContentByName(filePath);
+    response.setHeader('Content-Type', 'text/plain');
+    response.send(API_STATUS_CODE.okData(content));
+
 });
 
 function updateCookie(cookie, userMsg = '无', response) {
@@ -1178,40 +1146,69 @@ function updateCookie(cookie, userMsg = '无', response) {
         }
         saveNewConf('config.sh', lines.join('\n'));
         if (response) {
-            response.send({
-                err: 0,
-                msg: updateFlag ?
-                    `[更新成功]\n当前用户量:(${maxCookieCount})` : CK_AUTO_ADD === 'true' ? `[新的Cookie]\n当前用户量:(${CookieCount})` : `服务器配置不自动添加Cookie\n如需启用请添加export CK_AUTO_ADD="true"`,
-                //`[更新成功]\n本服用户量:(${maxCookieCount})` : `非本服用户\n本服用户量:(${CookieCount})`,
-            });
+            response.send(API_STATUS_CODE.ok(updateFlag ?
+                `[更新成功]\n当前用户量:(${maxCookieCount})` : CK_AUTO_ADD === 'true' ? `[新的Cookie]\n当前用户量:(${CookieCount})` : `服务器配置不自动添加Cookie\n如需启用请添加export CK_AUTO_ADD="true"`));
         }
     } else {
         if (response) {
-            response.send({
-                msg: '参数错误',
-                err: -1
-            });
+            response.send(API_STATUS_CODE.fail("参数错误"))
         }
     }
 }
 
 /**
  * 更新已经存在的人的cookie & 自动添加新用户
+ *
+ * {"cookie":"","userMsg":""}
  * */
-app.post('/updateCookie', function (request, response) {
-    fs.readFile(authConfigFile, 'utf8', function (err, data) {
-        if (err) console.log(err);
-        let con = JSON.parse(data);
-        let token = request.headers["api-token"]
-        if (token && token !== '' && token === con.cookieApiToken) {
-            updateCookie(request.body.cookie, request.body.userMsg, response);
-        } else {
-            response.send({
-                msg: '非法调用',
-                err: -1
-            });
+app.post('/openApi/updateCookie', function (request, response) {
+    updateCookie(request.body.cookie, request.body.userMsg, response);
+});
+
+function updateAccount(body, response) {
+    let {ptPin, ptKey, wsKey, remarks} = body;
+    if (!ptPin || ptPin === '') {
+        response && response.send(API_STATUS_CODE.fail("ptPin不能为空"))
+        console.log("ptPin不能为空");
+        return;
+    }
+    if (ptPin === '%2A%2A%2A%2A%2A%2A') {
+        response && response.send(API_STATUS_CODE.fail("ptPin不正确"))
+        console.log("ptPin不正确");
+        return;
+    }
+    let data = fs.readFileSync(accountFile, 'utf8');
+    let accounts = JSON.parse(data) || [], isUpdate = false;
+    remarks = remarks || ptPin;
+    accounts.forEach((account, index) => {
+        if (account['pt_pin'] && account['pt_pin'] === ptPin) {
+            account['ws_key'] = wsKey || '';
+            account['remarks'] = remarks;
+            isUpdate = true;
         }
     })
+    if (!isUpdate) {
+        accounts.push({
+            "pt_pin": ptPin,
+            "ws_key": wsKey,
+            "remarks": remarks
+        })
+    }
+    saveNewConf("account.json", JSON.stringify(accounts, null, 2))
+    if (ptKey && ptKey !== '') {
+        updateCookie(`pt_key=${ptKey};pt_pin=${ptPin};`, remarks, response);
+    }
+    console.log(`ptPin：${ptPin} 更新完成`)
+
+}
+
+/**
+ * 添加或者更新账号
+ * {"ptPin":"",ptKey:"",wsKey:"","remarks":""}
+ * ptPin 必填
+ * */
+app.post('/openApi/addOrUpdateAccount', function (request, response) {
+    updateAccount(request.body, response)
 });
 
 
@@ -1237,6 +1234,7 @@ function getNeatContent(origin) {
         .replace(/\033\[33m/g, '')
         .replace(/\033\[34m/g, '');
 }
+
 
 app.listen(5678, '0.0.0.0', () => {
     console.log('应用正在监听 5678 端口!');

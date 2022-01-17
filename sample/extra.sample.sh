@@ -30,9 +30,11 @@ my_scripts_list_1=""
 ## 如果拉取的脚本在对应仓库的某个文件夹下注意先创建对应目录
 ## Make_Dir "$ScriptsDir/<文件夹名>"
 
-##############################  随  机  函  数  ##############################
+##############################  主 命 令  ##############################
 ## 以下为脚本核心内容，不懂不要随意更改
-cd $ShellDir
+cd $RootDir
+
+## 随机函数
 rand() {
   min=$1
   max=$(($2 - $min + 1))
@@ -53,15 +55,15 @@ for author in $author_list; do
     repository_platform="https://github.com"
     repository_branch=$(echo $format_url | awk -F '/' '{print$4}')
     reformat_url=$(echo $format_url | sed "s|$repository_branch|tree/$repository_branch|g")
-    [[ ${EnableExtraShellProxy} == true ]] && DownloadJudgment="(代理)" || DownloadJudgment=""
+    [[ ${EnableExtraShellProxy} == true ]] && DownloadJudge="(代理)" || DownloadJudge=""
   elif [[ $(echo $url_list | grep -Eo "github|gitee") == "gitee" ]]; then
     repository_platform="https://gitee.com"
     reformat_url=$(echo $format_url | sed "s|/raw/|/tree/|g")
-    DownloadJudgment=""
+    DownloadJudge=""
   fi
   repository_url="$repository_platform$reformat_url"
-  echo -e "[\033[33m更新\033[0m] ${!author} ${DownloadJudgment}"
-  echo -e "[\033[33m仓库\033[0m] $repository_url"
+  echo -e "[${YELLOW}更新${PLAIN}] ${!author} ${DownloadJudge}"
+  echo -e "[${YELLOW}仓库${PLAIN}] $repository_url"
 
   for js in $scripts_list; do
     eval url=$url_list$js
@@ -73,7 +75,7 @@ for author in $author_list; do
     # 随机添加个cron到crontab.list
     if [ $? -eq 0 ]; then
       mv -f scripts/$name.new scripts/$name
-      echo -e "[\033[32mDone\033[0m] $name"
+      echo -e "$COMPLETE $name"
 
       ## 不导入某脚本的定时
       ## [[ $name == "jd_test.js" ]] && continue
@@ -81,7 +83,7 @@ for author in $author_list; do
       croname=$(echo "$name" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")
       script_cron_standard=$(cat $ScriptsDir/$name | grep "https" | awk '{if($1~/^[0-9]{1,2}/) print $1,$2,$3,$4,$5}' | sort -u | head -n 1)
       if [[ -z ${script_cron_standard} ]]; then
-        tmp1=$(grep -E "cron|script-path|tag|\* \*|$name" $ScriptsDir/$name | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\:\_]||g;}')
+        tmp1=$(grep -E "cron|script-path|tag|\* \*|$name" $ScriptsDir/$name | grep -Ev "^http.*:" | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\_]||g;}')
         ## 判断开头
         tmp2=$(echo "${tmp1}" | awk -F '[0-9]' '{print$1}' | sed 's/\*/\\*/g; s/\./\\./g')
         ## 判断表达式的第一个数字（分钟）
@@ -98,17 +100,17 @@ for author in $author_list; do
       if [ -z "${script_cron}" ]; then
         cron_min=$(rand 1 59)
         cron_hour=$(rand 1 23)
-        [ $(grep -c "$croname" $ListCrontabUser) -eq 0 ] && sed -i "/hang up/a${cron_min} ${cron_hour} * * * $TaskCmd $croname" $ListCrontabUser
+        [ $(grep -c " $TaskCmd $croname" $ListCrontabUser) -eq 0 ] && sed -i "/hang up/a${cron_min} ${cron_hour} * * * $TaskCmd $croname" $ListCrontabUser
       else
-        [ $(grep -c "$croname" $ListCrontabUser) -eq 0 ] && sed -i "/hang up/a${script_cron} $TaskCmd $croname" $ListCrontabUser
+        [ $(grep -c " $TaskCmd $croname" $ListCrontabUser) -eq 0 ] && sed -i "/hang up/a${script_cron} $TaskCmd $croname" $ListCrontabUser
       fi
     else
       [ -f scripts/$name.new ] && rm -f scripts/$name.new
-      echo -e "[\033[31mERR!\033[0m] $name 更新失败"
+      echo -e "[${RED}FAIL${PLAIN}] $name 更新失败"
     fi
   done
+  let index+=1
   echo ''
-  index=$(($index + 1))
 done
 ##############################  自  定  义  命  令  （选填）  ##############################
 

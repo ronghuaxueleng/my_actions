@@ -71,6 +71,7 @@ function togglePassword() {
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
         togglePasswordButton.setAttribute("aria-label", "Hide password.");
+        togglePasswordButton.classList.add('hide-password');
     } else {
         passwordInput.type = "password";
         togglePasswordButton.setAttribute(
@@ -78,24 +79,27 @@ function togglePassword() {
             "Show password as plain text. " +
             "Warning: this will display your password on the screen."
         );
+        togglePasswordButton.classList.remove('hide-password');
     }
 }
+
 let showCaptcha = false;
-function checkNeedCaptcha(flag = false){
+
+function checkNeedCaptcha(flag = false) {
     let $captchaInput = $(".captcha-input");
     let $captchaImage = $("#captcha-image");
-    if(flag){
+    if (flag) {
         $captchaImage.click();
         $captchaInput.show();
         showCaptcha = true;
         return;
     }
-    $.get(BASE_API_PATH + '/api/captcha/flag', function (data) {
-        showCaptcha = data.showCaptcha;
-        if(data.showCaptcha){
+    panelRequest.get('/api/captcha/flag', function (res) {
+        showCaptcha = res.data.showCaptcha;
+        if (showCaptcha) {
             $captchaInput.show();
             $captchaImage.click();
-        }else {
+        } else {
             $captchaInput.hide();
         }
     })
@@ -115,19 +119,20 @@ $(document).ready(function () {
         let $password = $("#password").val();
         let $captcha = $("#captcha").val();
         if (!$user || !$password) return;
-        if(showCaptcha && !$captcha) return ;
+        if (showCaptcha && !$captcha) return;
         panelUtils.showLoading("登录中...")
-        $.post(BASE_API_PATH + '/api/auth', {
+        panelRequest.post('/api/auth', {
             username: $user,
             password: $password,
             captcha: $captcha,
-        }, function (data) {
-            if (data.err === 0) {
+        }, function (res) {
+            let data = res.data;
+            if (res.code === 1) {
                 if (data.lastLoginInfo) {
                     localStorage.setItem("lastLoginInfo", JSON.stringify(data.lastLoginInfo))
                 }
                 if (data.newPwd) {
-                    panelUtils.showWarning("温馨提示",`系统检测到您的密码为初始密码，已修改为随机密码：${data.newPwd}，请重新登录`,"复制新密码并重新登录").then((isConfirm) => {
+                    panelUtils.showWarning("温馨提示", `系统检测到您的密码为初始密码，已修改为随机密码：${data.newPwd}，请重新登录`, "复制新密码并重新登录").then((isConfirm) => {
                         if (isConfirm.value) {
                             copyToClip(data.newPwd);
                         }
@@ -135,10 +140,9 @@ $(document).ready(function () {
                 } else {
                     window.location.href = BASE_API_PATH + data['redirect'];
                 }
-            } else {
-                checkNeedCaptcha(data.showCaptcha);
-                panelUtils.showError(data.msg)
             }
+        }, (res) => {
+            checkNeedCaptcha(res.data.showCaptcha);
         });
         return false;
     });

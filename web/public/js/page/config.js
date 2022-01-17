@@ -1,6 +1,7 @@
 var qrcode, userCookie;
 $(document).ready(function () {
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        minimap: minimapVal,
         lineNumbers: true,
         lineWrapping: true,
         styleActiveLine: true,
@@ -10,9 +11,11 @@ $(document).ready(function () {
         theme: themeChange.getAndUpdateEditorTheme(),
         keyMap: 'sublime'
     });
+
     function loadConfig(callback) {
-        $.get(BASE_API_PATH + '/api/config/config', function (data) {
-            editor.setValue(data);
+        panelRequest.get('/api/config/config', function (res) {
+            editor.setValue(res.data);
+            !userAgentTools.mobile(navigator.userAgent) && $(".CodeMirror-scroll").css("width", `calc(100% - ${$(".CodeMirror-minimap").width() + 5}px)`);
             callback && callback();
         });
     }
@@ -33,8 +36,6 @@ $(document).ready(function () {
     });
 
 
-
-
     function autoReplace(cookie) {
         var value = editor.getValue();
         var ptPin = /pt_pin=[\S]+;/.exec(cookie)[0];
@@ -52,12 +53,12 @@ $(document).ready(function () {
     function checkLogin() {
         var isAutoReplace = $('#autoReplace').prop('checked');
         var timeId = setInterval(() => {
-            $.get(BASE_API_PATH + '/api/cookie', {autoReplace: isAutoReplace}, function (data) {
-                if (data.err === 0) {
+            panelRequest.get('/api/cookie', {autoReplace: isAutoReplace}, function (res) {
+                if (res.code === 1) {
                     clearInterval(timeId);
                     $("#qrcontainer").addClass("hidden");
                     $("#refresh_qrcode").addClass("hidden");
-                    userCookie = data.cookie
+                    userCookie = res.data.cookie
                     loadConfig(() => {
                         if (isAutoReplace) {
                             if (autoReplace(userCookie)) {
@@ -97,7 +98,7 @@ $(document).ready(function () {
                         }
                     })
 
-                } else if (data.err == 21) {
+                } else if (res.code === 21) {
                     clearInterval(timeId);
                     $("#refresh_qrcode").removeClass("hidden");
                 }
@@ -107,15 +108,15 @@ $(document).ready(function () {
     }
 
     function get_code() {
-        $.get(BASE_API_PATH + '/api/qrcode', function (data) {
-            if (data.err === 0) {
+        panelRequest.get('/api/qrcode', function (res) {
+            if (res.code === 1) {
                 $("#qrcontainer").removeClass("hidden")
                 $("#refresh_qrcode").addClass("hidden")
                 qrcode.clear();
-                qrcode.makeCode(data.qrcode);
+                qrcode.makeCode(res.data.qrCode);
                 checkLogin();
             } else {
-                panelUtils.showError(data.msg)
+                panelUtils.showError(res.msg)
             }
         });
     }
@@ -131,18 +132,11 @@ $(document).ready(function () {
 
     $('#save').click(function () {
         var confContent = editor.getValue();
-        $.post(BASE_API_PATH + '/api/save', {
+        panelRequest.post( '/api/save', {
             content: confContent,
             name: "config.sh"
-        }, function (data) {
-            let icon = (data.err === 0) ? "success" : "error"
-            panelUtils.showAlert({
-                title: data.title,
-                html: data.msg,
-                icon: icon
-            }).then((result) => {
-                window.location.reload(true);
-            })
+        }, function (res) {
+            res.code === 1 && panelUtils.showSuccess(res.msg, res.desc)
         });
     });
 
