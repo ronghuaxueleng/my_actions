@@ -50,7 +50,7 @@ jobs:
       - name: 开始同步
         run: |
           shopt -s extglob
-          git clone -b main git@jd_base_gitee:supermanito/jd_base.git JD-FreeFuck
+          git clone git@jd_base_gitee:supermanito/jd_base.git JD-FreeFuck
           cd JD-FreeFuck
           rm -rf .git
           rm -rf .github
