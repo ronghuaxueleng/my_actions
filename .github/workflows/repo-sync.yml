@@ -82,6 +82,8 @@ jobs:
           cd ../
           cp -rf ./JD-FreeFuck/* ./my_actions
           cd ./my_actions
+          wget -q "https://gitee.com/SuperManito/scripts/raw/master/extra.sh" -O extra.sh
+          sed -i '/exit 1/d' extra.sh
           git add .
           git commit --allow-empty -m "up"
           git push
