@@ -11,7 +11,6 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     PS1="\u@\h:\w \$ " \
     NODE_PATH=/usr/lib/node_modules \
     JD_DIR=/jd \
-    WORK_DIR=/jd \
     ENABLE_HANGUP=true \
     ENABLE_WEB_PANEL=true
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
@@ -29,7 +28,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     procps \
     tzdata \
     perl \
-    jq \
     openssh-client \
     ttyd \
     npm \
@@ -41,17 +39,17 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && pip3 install -r requirements.txt \
     && pip3 install --upgrade pip \
     && ln -sf /usr/local/bin/python3 /usr/bin/python \
-    && npm install -g pm2 got@11.8.3 tough-cookie set-cookie-parser global-agent crypto-js \
+    && npm install -g pm2 \
     && rm -rf /root/.npm \
-    && ln -sf ${JD_DIR}/shell/task.sh /usr/local/bin/task \
-    && ln -sf ${JD_DIR}/shell/task.sh /usr/local/bin/jtask \
-    && ln -sf ${JD_DIR}/shell/task.sh /usr/local/bin/mtask \
-    && ln -sf ${JD_DIR}/shell/task.sh /usr/local/bin/otask \
-    && ln -sf ${JD_DIR}/shell/control.sh /usr/local/bin/taskctl \
-    && ln -sf ${JD_DIR}/shell/runall.sh /usr/local/bin/runall \
-    && ln -sf ${JD_DIR}/shell/update.sh /usr/local/bin/update \
-    && ln -sf ${JD_DIR}/shell/update.sh /usr/local/bin/jup \
-    && ln -sf ${JD_DIR}/shell/jcsv.sh /usr/local/bin/jcsv \
+    && touch ${JD_DIR}/runall.sh \
+    && ln -sf ${JD_DIR}/runall.sh /usr/local/bin/runall \
+    && ln -sf ${JD_DIR}/task.sh /usr/local/bin/task \
+    && ln -sf ${JD_DIR}/task.sh /usr/local/bin/jtask \
+    && ln -sf ${JD_DIR}/task.sh /usr/local/bin/mtask \
+    && ln -sf ${JD_DIR}/task.sh /usr/local/bin/otask \
+    && ln -sf ${JD_DIR}/control.sh /usr/local/bin/taskctl \
+    && ln -sf ${JD_DIR}/code.sh /usr/local/bin/code \
+    && ln -sf ${JD_DIR}/update.sh /usr/local/bin/update \
     && chmod 777 /usr/local/bin/* \
     && chmod 777 ${JD_DIR}/* \
     && rm -rf /tmp/* \
@@ -89,4 +87,4 @@ RUN mkdir -p /root/.ssh \
 COPY supervisord.conf /etc/
 
 # CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
-ENTRYPOINT ${JD_DIR}/shell/init.sh
+ENTRYPOINT ${JD_DIR}/utils/init.sh
