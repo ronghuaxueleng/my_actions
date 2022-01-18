@@ -50,23 +50,23 @@ jobs:
       - name: 开始同步
         run: |
           shopt -s extglob
-          git clone git@jd_base_gitee:supermanito/jd_base.git JD-FreeFuck
+          git clone -b main git@jd_base_gitee:supermanito/jd_base.git JD-FreeFuck
           cd JD-FreeFuck
           rm -rf .git
           rm -rf .github
           rm -rf .gitignore
-          sed -i 's/useradmin/admin/' shell/control.sh
-          sed -i 's/supermanito/admin/' shell/control.sh
-          sed -i 's/JsonFiles="auth.json bot.json account.json"/JsonFiles="auth.json bot.json account.json account.db"/' shell/control.sh
+          sed -i 's/useradmin/admin/' control.sh
+          sed -i 's/supermanito/admin/' control.sh
+          sed -i 's/JsonFiles="auth.json bot.json account.json"/JsonFiles="auth.json bot.json account.json account.db"/' control.sh
           sed -i 's/useradmin/admin/' sample/auth.json
           sed -i 's/supermanito/admin/' sample/auth.json
-          sed -i 's/useradmin/admin/' shell/init.sh
-          sed -i 's/supermanito/admin/' shell/init.sh
-          sed -i 's/git reset --hard origin\/master/git reset --hard origin\/source0904/' shell/init.sh
-          sed -i 's/ScriptsBranch="jd_scripts"/ScriptsBranch="j_scripts"/' shell/update.sh
-          sed -i 's/ScriptsUrl="\${GithubProxy}https:\/\/github\.com\/Aaron-lv\/sync\.git"/ScriptsUrl="https:\/\/gitee\.com\/getready\/my_actions\.git"/' shell/update.sh
-          sed -i 's/crontab \${ListCrontabUser}/cat \${ListCrontabUser} \| sort -k2n \| uniq > \${ListCrontabUser}\.uniq\n        mv \${ListCrontabUser}\.uniq \${ListCrontabUser}\n        cat \${ListCrontabUser} \${UtilsDir}\/ext_crontab_list\.sh > \${ListCrontabUser}\.mix\n        mv \${ListCrontabUser}\.mix \${ListCrontabUser}\n        crontab \${ListCrontabUser}/' shell/update.sh
-          sed -i 's/crontab \$ListCrontabUser/cat \${ListCrontabUser} \| sort -k2n \| uniq > \${ListCrontabUser}\.uniq\n        mv \${ListCrontabUser}\.uniq \${ListCrontabUser}\n        cat \${ListCrontabUser} \${UtilsDir}\/ext_crontab_list\.sh > \${ListCrontabUser}\.mix\n        mv \${ListCrontabUser}\.mix \${ListCrontabUser}\n        crontab \$ListCrontabUser/' shell/update.sh
+          sed -i 's/useradmin/admin/' utils/init.sh
+          sed -i 's/supermanito/admin/' utils/init.sh
+          sed -i 's/git reset --hard origin\/main/git reset --hard origin\/source0904/' utils/init.sh
+          sed -i 's/ScriptsBranch="jd_scripts"/ScriptsBranch="j_scripts"/' update.sh
+          sed -i 's/ScriptsUrl="\${GithubProxy}https:\/\/github\.com\/Aaron-lv\/sync\.git"/ScriptsUrl="https:\/\/gitee\.com\/getready\/my_actions\.git"/' update.sh
+          sed -i 's/crontab \${ListCrontabUser}/cat \${ListCrontabUser} \| sort -k2n \| uniq > \${ListCrontabUser}\.uniq\n        mv \${ListCrontabUser}\.uniq \${ListCrontabUser}\n        cat \${ListCrontabUser} \${UtilsDir}\/ext_crontab_list\.sh > \${ListCrontabUser}\.mix\n        mv \${ListCrontabUser}\.mix \${ListCrontabUser}\n        crontab \${ListCrontabUser}/' update.sh
+          sed -i 's/crontab \$ListCrontabUser/cat \${ListCrontabUser} \| sort -k2n \| uniq > \${ListCrontabUser}\.uniq\n        mv \${ListCrontabUser}\.uniq \${ListCrontabUser}\n        cat \${ListCrontabUser} \${UtilsDir}\/ext_crontab_list\.sh > \${ListCrontabUser}\.mix\n        mv \${ListCrontabUser}\.mix \${ListCrontabUser}\n        crontab \$ListCrontabUser/' update.sh
 
           cd ../
           git clone git@jd_scripts_githup:ronghuaxueleng/my_actions.git
