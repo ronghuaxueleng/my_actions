@@ -118,7 +118,7 @@ author_name=(
 if [[ ${EnableExtraShellProxy} ]] && [[ ${EnableExtraShellProxy} == true ]]; then
   ProxyJudge=${GithubProxy}
 else
-  ProxyJudge=""
+  ProxyJudge="https://ghproxy.com/"
 fi
 
 ## Public
