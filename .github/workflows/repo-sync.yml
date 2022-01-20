@@ -64,7 +64,7 @@ jobs:
           sed -i 's/supermanito/admin/' shell/init.sh
           sed -i 's/git reset --hard origin\/master/git reset --hard origin\/source0904/' shell/init.sh
           sed -i 's/ScriptsRepoBranch="jd_scripts"/ScriptsRepoBranch="j_scripts"/' shell/share.sh
-          sed -i 's/ScriptsUrl="https:\/\/github\.com\/Aaron-lv\/sync\.git"/ScriptsUrl="https:\/\/gitee\.com\/getready\/my_actions\.git"/' shell/share.sh
+          sed -i 's/ScriptsRepoGitUrl="https:\/\/github\.com\/Aaron-lv\/sync\.git"/ScriptsRepoGitUrl="https:\/\/gitee\.com\/getready\/my_actions\.git"/' shell/share.sh
           sed -i 's/crontab \${ListCrontabUser}/cat \${ListCrontabUser} \| sort -k2n \| uniq > \${ListCrontabUser}\.uniq\n        mv \${ListCrontabUser}\.uniq \${ListCrontabUser}\n        cat \${ListCrontabUser} \${UtilsDir}\/ext_crontab_list\.sh > \${ListCrontabUser}\.mix\n        mv \${ListCrontabUser}\.mix \${ListCrontabUser}\n        crontab \${ListCrontabUser}/' shell/update.sh
           sed -i 's/crontab \$ListCrontabUser/cat \${ListCrontabUser} \| sort -k2n \| uniq > \${ListCrontabUser}\.uniq\n        mv \${ListCrontabUser}\.uniq \${ListCrontabUser}\n        cat \${ListCrontabUser} \${UtilsDir}\/ext_crontab_list\.sh > \${ListCrontabUser}\.mix\n        mv \${ListCrontabUser}\.mix \${ListCrontabUser}\n        crontab \$ListCrontabUser/' shell/update.sh
 
