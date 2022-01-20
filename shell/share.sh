@@ -87,7 +87,7 @@ ShieldingScripts="\.json\b|jd_update\.js|jd_env_copy\.js|index\.js|ql\.js|jd_ene
 ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|^JDJR|Validator|validate|ZooFaker|MovementFaker|tencentscf|^api_test|^app\.|^main\.|jdEnv|${ShieldingScripts}"
 
 ## URL
-GithubProxy="https://endpoint.fastgit.org/"
+GithubProxy=""
 ScriptsRepoBranch="j_scripts"
 ScriptsRepoGitUrl="https://gitee.com/getready/my_actions.git"
 BotRepoGitUrl="${GithubProxy}https://github.com/SuMaiKaDe/bot.git"
