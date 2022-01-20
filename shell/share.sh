@@ -88,7 +88,7 @@ ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|^JDJR|Valida
 
 ## URL
 GithubProxy="https://endpoint.fastgit.org/"
-ScriptsRepoBranch="jd_scripts"
+ScriptsRepoBranch="j_scripts"
 ScriptsRepoGitUrl="https://github.com/Aaron-lv/sync.git"
 BotRepoGitUrl="${GithubProxy}https://github.com/SuMaiKaDe/bot.git"
 SignsRepoGitUrl="git@jd_base_gitee:supermanito/panel_sign_json.git"
