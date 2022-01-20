@@ -1,6 +1,6 @@
 #!/bin/bash
-# Update: 2022-01-20
-# Content: add  jx_ttysq.js(天天压岁钱) jd_travel.js(全民炸年兽)
+# Update: 2022-01-21
+# Content: add  jd_txjf.js(通讯积分)
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -50,6 +50,7 @@
 #  rush_xuanyuan.js                轩辕虎越,风生水起
 #  jx_ttysq.js                     天天压岁钱
 #  jd_travel.js                    全民炸年兽
+#  jd_txjf.js                      通讯积分
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -96,8 +97,8 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-01-20"
-UpdateContent="add  jx_ttysq.js(天天压岁钱) jd_travel.js(全民炸年兽)"
+UpdateDate="2022-01-21"
+UpdateContent="add  jd_txjf.js(通讯积分)"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm ccwav"
@@ -157,7 +158,7 @@ my_scripts_list_Dellear="jd_bean_xibean.js jd_price.js"
 
 ## jiulan
 scripts_base_url_jiulan=${ProxyJudge}https://raw.githubusercontent.com/jiulan/platypus/main/scripts/
-my_scripts_list_jiulan="jd_joy_tx.js jd_jfcz.js jd_jdtj_winner.js"
+my_scripts_list_jiulan="jd_joy_tx.js jd_jfcz.js jd_jdtj_winner.js jd_txjf.js"
 
 ## wuye999
 scripts_base_url_wuye999=${ProxyJudge}https://raw.githubusercontent.com/wuye999/myScripts/main/jd/
