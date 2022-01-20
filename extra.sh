@@ -243,7 +243,7 @@ for author in $author_list; do
       croname=$(echo "$name" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")
       script_cron_standard=$(cat $ScriptsDir/$name | grep "https" | awk '{if($1~/^[0-9]{1,2}/) print $1,$2,$3,$4,$5}' | sort -u | head -n 1)
       case $name in
-      jd_try_xh.js)
+      jd_try.js)
         script_cron="30 10 * * *" # 指定京东试用的定时
         ;;
       jd_unsubscribe_xh.js)
