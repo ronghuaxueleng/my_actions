@@ -232,7 +232,10 @@ for author in $author_list; do
     eval url=$url_list$js
     eval name=$js
     eval formatname=$(echo $js | awk -F '/' '{print$NF}')
+
+    [[ ${EnableExtraShellProxy} == true ]] && sleep 1s ## 降低使用代理下载脚本的请求频率
     wget -q --no-check-certificate $url -O "$ScriptsDir/$name.new" -T 20
+
     if [ $? -eq 0 ]; then
       mv -f $ScriptsDir/$name.new $ScriptsDir/$name
       echo -e "$COMPLETE $formatname"
