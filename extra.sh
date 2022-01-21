@@ -1,6 +1,7 @@
 #!/bin/bash
 # Update: 2022-01-21
 # Content: add  jd_txjf.js(通讯积分)
+#          del  jd_travel.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -49,7 +50,6 @@
 #  jd_mhyyl.js                     萌虎摇摇乐
 #  rush_xuanyuan.js                轩辕虎越,风生水起
 #  jx_ttysq.js                     天天压岁钱
-#  jd_travel.js                    全民炸年兽
 #  jd_txjf.js                      通讯积分
 
 ##############################  脚  本  内  环  境  变  量  ##############################
@@ -78,7 +78,7 @@
 
 ##############################  近  期  删  除  ##############################
 
-# jd_year.js
+# jd_travel.js
 
 ##############################  京  东  到  家  ##############################
 
@@ -98,7 +98,7 @@
 
 NEWLINE="\n          "
 UpdateDate="2022-01-21"
-UpdateContent="add  jd_txjf.js(通讯积分)"
+UpdateContent="add  jd_txjf.js(通讯积分)${NEWLINE}del  jd_travel.js"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm ccwav"
@@ -166,7 +166,7 @@ my_scripts_list_wuye999="jd_angryKoi.py"
 
 ## 小埋
 scripts_base_url_mmnvnmm=${ProxyJudge}https://raw.githubusercontent.com/mmnvnmm/omo/master/
-my_scripts_list_mmnvnmm="jd_sevenDay.js jd_beauty_ex.js jd_mpdzcar.js jd_travel.js"
+my_scripts_list_mmnvnmm="jd_sevenDay.js jd_beauty_ex.js jd_mpdzcar.js"
 
 ## ccwav
 scripts_base_url_ccwav=${ProxyJudge}https://raw.githubusercontent.com/ccwav/QLScript2/main/
@@ -295,14 +295,14 @@ for author in $author_list; do
 done
 ##############################  自  定  义  命  令  ##############################
 
-## 删除不知如何产生的垃圾文件
+## 删除垃圾文件
 DeleteCacheFiles=""
 for del in ${DeleteCacheFiles}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del
 done
 
 ## 删除脚本和定时
-DeleteScripts="jd_year.js"
+DeleteScripts="jd_travel.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
