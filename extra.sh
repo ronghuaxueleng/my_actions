@@ -1,6 +1,6 @@
 #!/bin/bash
 # Update: 2022-01-21
-# Content: add  jd_txjf.js(通讯积分) js_sjnhj.js(手机年货节)
+# Content: add  jd_txjf.js(通讯积分) js_sjnhj.js(手机年货节) jd_festival.js(点鞭炮赢京豆)
 #          del  jd_travel.js
 
 ##############################  京  东  商  城  ##############################
@@ -52,6 +52,7 @@
 #  jx_ttysq.js                     天天压岁钱
 #  jd_txjf.js                      通讯积分
 #  js_sjnhj.js                     手机年货节
+#  jd_festival.js                  点鞭炮赢京豆
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -99,7 +100,7 @@
 
 NEWLINE="\n          "
 UpdateDate="2022-01-21"
-UpdateContent="add  jd_txjf.js(通讯积分) js_sjnhj.js(手机年货节)${NEWLINE}del  jd_travel.js"
+UpdateContent="add  jd_txjf.js(通讯积分) js_sjnhj.js(手机年货节) jd_festival.js(点鞭炮赢京豆)${NEWLINE}del  jd_travel.js"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm ccwav"
@@ -143,7 +144,7 @@ my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_dn
 
 ## Facker
 scripts_base_url_shufflewzc=${ProxyJudge}https://raw.githubusercontent.com/shufflewzc/faker2/main/
-my_scripts_list_shufflewzc="jd_try.js jd_try_notify.py jd_DrawEntrance.js jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_lxLottery.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js"
+my_scripts_list_shufflewzc="jd_try.js jd_try_notify.py jd_DrawEntrance.js jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_lxLottery.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js jd_festival.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=${ProxyJudge}https://raw.githubusercontent.com/X1a0He/jd_scripts_fixed/main/
