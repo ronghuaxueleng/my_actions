@@ -266,7 +266,7 @@ for author in $author_list; do
         ;;
       *)
         if [[ -z ${script_cron_standard} ]]; then
-          tmp1=$(grep -E "cron|script-path|tag|\* \*|$name" $ScriptsDir/$name | grep -Ev "^http.*:" | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\_]||g;}')
+          tmp1=$(grep -E "cron|script-path|tag|\* \*|$name" $ScriptsDir/$name | grep -Ev "^http.*:|^function " | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\_]||g;}')
           ## 判断开头
           tmp2=$(echo "${tmp1}" | awk -F '[0-9]' '{print$1}' | sed 's/\*/\\*/g; s/\./\\./g')
           ## 判断表达式的第一个数字（分钟）
@@ -292,7 +292,7 @@ for author in $author_list; do
       fi
     else
       [ -f $ScriptsDir/$name.new ] && rm -f $ScriptsDir/$name.new
-      echo -e "[${RED}FAIL${PLAIN}] $formatname 更新失败"
+      echo -e "$FAIL $formatname 更新失败"
     fi
   done
   let index+=1
