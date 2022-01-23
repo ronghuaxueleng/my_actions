@@ -1,5 +1,5 @@
 #!/bin/bash
-# Update: 2022-01-23
+# Update: 2022-01-24
 # Content: add  jd_ms.js(京东秒秒币) jd_xmf.js(京东小魔方) jd_fcdyj_help.js(发财大赢家助力) jd_wish.js(众筹许愿池)
 #          rpc  js_sjnhj.js -> jd_sjnhj.js
 #          del  rush_xuanyuan.js
@@ -134,81 +134,64 @@ fi
 scripts_base_url_Public=https://gitee.com/SuperManito/scripts/raw/master/
 my_scripts_list_Public="jd_shop_sign.js jd_super_redrain.js jd_half_redrain.js jd_qqxing.js"
 
-if [[ ${ProxyJudge} == true ]]; then
-  ## 京东到家
-  scripts_base_url_passerby_b=https://cdn.jsdelivr.net/gh/passerby-b/JDDJ@main/
-  ## 青蛙
-  scripts_base_url_smiek2221=https://cdn.jsdelivr.net/gh/smiek2121/scripts@master/
-  ## star261
-  scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
-  ## Facker
-  scripts_base_url_shufflewzc=https://cdn.jsdelivr.net/gh/shufflewzc/faker2@main/
-  ## X1a0He
-  scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
-  ## KingRan
-  scripts_base_url_KingRan=https://cdn.jsdelivr.net/gh/KingRan/JDJB@main/
-  ## Dellear
-  scripts_base_url_Dellear=https://cdn.jsdelivr.net/gh/Dellear/lost@main/extra/
-  ## jiulan
-  scripts_base_url_jiulan=https://cdn.jsdelivr.net/gh/jiulan/platypus@main/scripts/
-  ## wuye999
-  scripts_base_url_wuye999=https://cdn.jsdelivr.net/gh/wuye999/myScripts@main/jd/
-  ## 小埋
-  scripts_base_url_mmnvnmm=https://cdn.jsdelivr.net/gh/mmnvnmm/omo@master/
-  ## ccwav
-  scripts_base_url_ccwav=https://cdn.jsdelivr.net/gh/ccwav/QLScript2@main/
-  ## zero205
-  scripts_base_url_zero205=https://cdn.jsdelivr.net/gh/zero205/JD_tencent_scf@main/
-else
-  ## 京东到家
-  scripts_base_url_passerby_b=https://raw.githubusercontent.com/passerby-b/JDDJ/main/
-  ## 青蛙
-  scripts_base_url_smiek2221=https://raw.githubusercontent.com/smiek2121/scripts/master/
-  ## star261
-  scripts_base_url_star261=https://raw.githubusercontent.com/star261/jd/main/scripts/
-  ## Facker
-  scripts_base_url_shufflewzc=https://raw.githubusercontent.com/shufflewzc/faker2/main/
-  ## X1a0He
-  scripts_base_url_X1a0He=https://raw.githubusercontent.com/X1a0He/jd_scripts_fixed/main/
-  ## KingRan
-  scripts_base_url_KingRan=https://raw.githubusercontent.com/KingRan/JDJB/main/
-  ## Dellear
-  scripts_base_url_Dellear=https://raw.githubusercontent.com/Dellear/lost/main/extra/
-  ## jiulan
-  scripts_base_url_jiulan=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/
-  ## wuye999
-  scripts_base_url_wuye999=https://raw.githubusercontent.com/wuye999/myScripts/main/jd/
-  ## 小埋
-  scripts_base_url_mmnvnmm=https://raw.githubusercontent.com/mmnvnmm/omo/master/
-  ## ccwav
-  scripts_base_url_ccwav=https://raw.githubusercontent.com/ccwav/QLScript2/main/
-  ## zero205
-  scripts_base_url_zero205=https://raw.githubusercontent.com/zero205/JD_tencent_scf/main/
-fi
-
+## 京东到家
+scripts_base_url_passerby_b=https://cdn.jsdelivr.net/gh/passerby-b/JDDJ@main/
 my_scripts_list_passerby_b="jddj_fruit.js jddj_fruit_collectWater.js jddj_bean.js jddj_plantBeans.js jddj_getPoints.js jddjCookie.js"
+
+## 青蛙
+scripts_base_url_smiek2221=https://cdn.jsdelivr.net/gh/smiek2121/scripts@master/
 my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRValidator_Pure.js gua_UnknownTask9.js"
+
+## star261
+scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
 my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_dns_shop.js jd_mhyyl.js jd_sjnhj.js"
+
+## Facker
+scripts_base_url_shufflewzc=https://cdn.jsdelivr.net/gh/shufflewzc/faker2@main/
 my_scripts_list_shufflewzc="jd_try.js jd_try_notify.py jd_DrawEntrance.js jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_lxLottery.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js jd_festival.js"
+
+## X1a0He
+scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
 my_scripts_list_X1a0He="jd_unsubscribe_xh.js"
+
+## KingRan
+scripts_base_url_KingRan=https://cdn.jsdelivr.net/gh/KingRan/JDJB@main/
 my_scripts_list_KingRan="jd_joy_park.js jd_joy_park_task.js jd_fanli.js jd_medal.js jd_cjhz.js jd_fcdyj_help.js jd_wish.js"
+
+## Dellear
+scripts_base_url_Dellear=https://cdn.jsdelivr.net/gh/Dellear/lost@main/extra/
 my_scripts_list_Dellear="jd_bean_xibean.js jd_price.js"
+
+## jiulan
+scripts_base_url_jiulan=https://cdn.jsdelivr.net/gh/jiulan/platypus@main/scripts/
 my_scripts_list_jiulan="jd_joy_tx.js jd_jfcz.js jd_jdtj_winner.js jd_txjf.js"
+
+## wuye999
+scripts_base_url_wuye999=https://cdn.jsdelivr.net/gh/wuye999/myScripts@main/jd/
 my_scripts_list_wuye999="jd_angryKoi.py"
+
+## 小埋
+scripts_base_url_mmnvnmm=https://cdn.jsdelivr.net/gh/mmnvnmm/omo@master/
 my_scripts_list_mmnvnmm="jd_sevenDay.js jd_beauty_ex.js jd_mpdzcar.js"
+
+## ccwav
+scripts_base_url_ccwav=https://cdn.jsdelivr.net/gh/ccwav/QLScript2@main/
 my_scripts_list_ccwav="jd_bean_change.js"
+
+## zero205
+scripts_base_url_zero205=https://cdn.jsdelivr.net/gh/zero205/JD_tencent_scf@main/
 my_scripts_list_zero205="jd_ms.js jd_xmf.js"
 
 ## he1pu
-scripts_base_url_he1pu=https://raw.githubusercontent.com/he1pu/JDHelp/main/
+scripts_base_url_he1pu=https://cdn.jsdelivr.net/gh/he1pu/JDHelp@main/
 my_scripts_list_he1pu=""
 
 ## cdle
-scripts_base_url_cdle=https://raw.githubusercontent.com/cdle/carry/main/
+scripts_base_url_cdle=https://cdn.jsdelivr.net/gh/cdle/carry@main/
 my_scripts_list_cdle=""
 
 ## curtinlv
-scripts_base_url_curtinlv=https://raw.githubusercontent.com/curtinlv/JD-Script/main/
+scripts_base_url_curtinlv=https://cdn.jsdelivr.net/gh/curtinlv/JD-Script@main/
 my_scripts_list_curtinlv=""
 
 ##############################  主 命 令  ##############################
@@ -234,21 +217,36 @@ for author in $author_list; do
   eval url_list=\$scripts_base_url_${author}
   eval author="author_name[${index}]"
 
+  echo ${url_list} | grep -Eq "cdn\.jsdelivr\.net\/gh\/"
+  if [ $? -eq 0 ]; then
+    if [[ ${ProxyJudge} == false ]]; then
+      url_list=$(echo ${url_list} | perl -pe "{s|cdn\.jsdelivr\.net\/gh|raw\.githubusercontent\.com|g; s|\@|\/|g}")
+    fi
+  fi
+
   ## 判断脚本来源仓库
-  format_url=$(echo $url_list | awk -F '.com' '{print$NF}' | sed 's/.$//')
-  if [[ $(echo $url_list | grep -Eo "github|gitee") == "github" ]]; then
+  repository_judge=$(echo $url_list | grep -Eo "github|gitee|jsdelivr")
+  download_judge=""
+  repository_platform=""
+  reformat_url=""
+  if [[ ${repository_judge} == "github" ]]; then
+    repository_platform="https://github.com"
+    repository_branch=$(echo $url_list | awk -F '.com' '{print$NF}' | sed 's/.$//' | awk -F '/' '{print$4}')
+    reformat_url=$(echo $url_list | awk -F '.com' '{print$NF}' | perl -pe "{s|.$||g; s|$repository_branch|tree\/$repository_branch|g}")
+    [[ ${ProxyJudge} == true ]] && download_judge="(代理)"
+  elif [[ ${repository_judge} == "gitee" ]]; then
+    repository_platform="https://gitee.com"
+    reformat_url=$(echo $url_list | awk -F '.com' '{print$NF}' | perl -pe "{s|.$||g; s|\/raw\/|\/tree\/|g}")
+  elif [[ ${repository_judge} == "jsdelivr" ]]; then
     repository_platform="https://github.com"
     repository_branch=$(echo $format_url | awk -F '/' '{print$4}')
-    reformat_url=$(echo $format_url | sed "s|$repository_branch|tree/$repository_branch|g")
-    [[ ${EnableExtraShellProxy} == true ]] && DownloadJudge="(代理)" || DownloadJudge=""
-  elif [[ $(echo $url_list | grep -Eo "github|gitee") == "gitee" ]]; then
-    repository_platform="https://gitee.com"
-    reformat_url=$(echo $format_url | sed "s|/raw/|/tree/|g")
-    DownloadJudge=""
+    reformat_url=$(echo $url_list | awk -F '/gh' '{print$NF}' | perl -pe "{s|.$||g; s|\@|\/tree\/|g}")
+    download_judge="(代理)"
   fi
-  repository_url="$repository_platform$reformat_url"
-  echo -e "[${YELLOW}更新${PLAIN}] ${!author} ${DownloadJudge}"
-  echo -e "[${YELLOW}仓库${PLAIN}] $repository_url"
+  repository_url="${repository_platform}${reformat_url}"
+
+  echo -e "[${YELLOW}更新${PLAIN}] ${!author} ${download_judge}"
+  [[ ${repository_url} ]] && echo -e "[${YELLOW}仓库${PLAIN}] $repository_url"
 
   for js in $scripts_list; do
     croname=""
