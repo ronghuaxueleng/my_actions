@@ -1,7 +1,6 @@
 #!/bin/bash
-# Update: 2022-01-21
-# Content: add  jd_txjf.js(通讯积分) js_sjnhj.js(手机年货节) jd_festival.js(点鞭炮赢京豆)
-#          del  jd_travel.js
+# Update: 2022-01-23
+# Content: del  rush_xuanyuan.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -48,7 +47,6 @@
 #  jd_dns_shop.js                  全民炸年兽店铺大富翁
 #  jd_babel_sign.js                通天塔签到共建
 #  jd_mhyyl.js                     萌虎摇摇乐
-#  rush_xuanyuan.js                轩辕虎越,风生水起
 #  jx_ttysq.js                     天天压岁钱
 #  jd_txjf.js                      通讯积分
 #  js_sjnhj.js                     手机年货节
@@ -80,7 +78,7 @@
 
 ##############################  近  期  删  除  ##############################
 
-# jd_travel.js
+# rush_xuanyuan.js
 
 ##############################  京  东  到  家  ##############################
 
@@ -99,8 +97,8 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-01-21"
-UpdateContent="add  jd_txjf.js(通讯积分) js_sjnhj.js(手机年货节) jd_festival.js(点鞭炮赢京豆)${NEWLINE}del  jd_travel.js"
+UpdateDate="2022-01-24"
+UpdateContent="del  rush_xuanyuan.js"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm ccwav"
@@ -128,7 +126,7 @@ fi
 
 ## Public
 scripts_base_url_Public=https://gitee.com/SuperManito/scripts/raw/master/
-my_scripts_list_Public="jd_shop_sign.js jd_super_redrain.js jd_half_redrain.js jd_qqxing.js rush_xuanyuan.js"
+my_scripts_list_Public="jd_shop_sign.js jd_super_redrain.js jd_half_redrain.js jd_qqxing.js"
 
 ## 京东到家
 scripts_base_url_passerby_b=${ProxyJudge}https://raw.githubusercontent.com/passerby-b/JDDJ/main/
@@ -307,7 +305,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="jd_travel.js"
+DeleteScripts="rush_xuanyuan.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
