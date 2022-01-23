@@ -1,6 +1,8 @@
 #!/bin/bash
 # Update: 2022-01-23
-# Content: del  rush_xuanyuan.js
+# Content: add  jd_ms.js(京东秒秒币) jd_xmf.js(京东小魔方) jd_fcdyj_help.js(发财大赢家助力) jd_wish.js(众筹许愿池)
+#          rpc  js_sjnhj.js -> jd_sjnhj.js
+#          del  rush_xuanyuan.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -47,10 +49,13 @@
 #  jd_dns_shop.js                  全民炸年兽店铺大富翁
 #  jd_babel_sign.js                通天塔签到共建
 #  jd_mhyyl.js                     萌虎摇摇乐
-#  jx_ttysq.js                     天天压岁钱
 #  jd_txjf.js                      通讯积分
-#  js_sjnhj.js                     手机年货节
+#  jd_sjnhj.js                     手机年货节
 #  jd_festival.js                  点鞭炮赢京豆
+#  jd_ms.js                        京东秒秒币
+#  jd_xmf.js                       京东小魔方
+#  jd_fcdyj_help.js                发财大赢家助力
+#  jd_wish.js                      众筹许愿池
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -98,10 +103,10 @@
 
 NEWLINE="\n          "
 UpdateDate="2022-01-24"
-UpdateContent="del  rush_xuanyuan.js"
+UpdateContent="add  jd_ms.js(京东秒秒币) jd_xmf.js(京东小魔方) jd_fcdyj_help.js(发财大赢家助力) jd_wish.js(众筹许愿池)${NEWLINE}rpc  js_sjnhj.js -> jd_sjnhj.js${NEWLINE}del  rush_xuanyuan.js"
 
 ## 作者
-author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm ccwav"
+author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm ccwav zero205"
 author_name=(
   Public
   passerby-b
@@ -115,73 +120,95 @@ author_name=(
   wuye999
   小埋
   ccwav
+  zero205
 )
 
 ## 定义下载代理 (非内置功能)
 if [[ ${EnableExtraShellProxy} ]] && [[ ${EnableExtraShellProxy} == true ]]; then
-  ProxyJudge=${GithubProxy}
+  ProxyJudge="true"
 else
-  ProxyJudge="https://ghproxy.com/"
+  ProxyJudge="false"
 fi
 
 ## Public
 scripts_base_url_Public=https://gitee.com/SuperManito/scripts/raw/master/
 my_scripts_list_Public="jd_shop_sign.js jd_super_redrain.js jd_half_redrain.js jd_qqxing.js"
 
-## 京东到家
-scripts_base_url_passerby_b=${ProxyJudge}https://raw.githubusercontent.com/passerby-b/JDDJ/main/
+if [[ ${ProxyJudge} == true ]]; then
+  ## 京东到家
+  scripts_base_url_passerby_b=https://cdn.jsdelivr.net/gh/passerby-b/JDDJ@main/
+  ## 青蛙
+  scripts_base_url_smiek2221=https://cdn.jsdelivr.net/gh/smiek2121/scripts@master/
+  ## star261
+  scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
+  ## Facker
+  scripts_base_url_shufflewzc=https://cdn.jsdelivr.net/gh/shufflewzc/faker2@main/
+  ## X1a0He
+  scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
+  ## KingRan
+  scripts_base_url_KingRan=https://cdn.jsdelivr.net/gh/KingRan/JDJB@main/
+  ## Dellear
+  scripts_base_url_Dellear=https://cdn.jsdelivr.net/gh/Dellear/lost@main/extra/
+  ## jiulan
+  scripts_base_url_jiulan=https://cdn.jsdelivr.net/gh/jiulan/platypus@main/scripts/
+  ## wuye999
+  scripts_base_url_wuye999=https://cdn.jsdelivr.net/gh/wuye999/myScripts@main/jd/
+  ## 小埋
+  scripts_base_url_mmnvnmm=https://cdn.jsdelivr.net/gh/mmnvnmm/omo@master/
+  ## ccwav
+  scripts_base_url_ccwav=https://cdn.jsdelivr.net/gh/ccwav/QLScript2@main/
+  ## zero205
+  scripts_base_url_zero205=https://cdn.jsdelivr.net/gh/zero205/JD_tencent_scf@main/
+else
+  ## 京东到家
+  scripts_base_url_passerby_b=https://raw.githubusercontent.com/passerby-b/JDDJ/main/
+  ## 青蛙
+  scripts_base_url_smiek2221=https://raw.githubusercontent.com/smiek2121/scripts/master/
+  ## star261
+  scripts_base_url_star261=https://raw.githubusercontent.com/star261/jd/main/scripts/
+  ## Facker
+  scripts_base_url_shufflewzc=https://raw.githubusercontent.com/shufflewzc/faker2/main/
+  ## X1a0He
+  scripts_base_url_X1a0He=https://raw.githubusercontent.com/X1a0He/jd_scripts_fixed/main/
+  ## KingRan
+  scripts_base_url_KingRan=https://raw.githubusercontent.com/KingRan/JDJB/main/
+  ## Dellear
+  scripts_base_url_Dellear=https://raw.githubusercontent.com/Dellear/lost/main/extra/
+  ## jiulan
+  scripts_base_url_jiulan=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/
+  ## wuye999
+  scripts_base_url_wuye999=https://raw.githubusercontent.com/wuye999/myScripts/main/jd/
+  ## 小埋
+  scripts_base_url_mmnvnmm=https://raw.githubusercontent.com/mmnvnmm/omo/master/
+  ## ccwav
+  scripts_base_url_ccwav=https://raw.githubusercontent.com/ccwav/QLScript2/main/
+  ## zero205
+  scripts_base_url_zero205=https://raw.githubusercontent.com/zero205/JD_tencent_scf/main/
+fi
+
 my_scripts_list_passerby_b="jddj_fruit.js jddj_fruit_collectWater.js jddj_bean.js jddj_plantBeans.js jddj_getPoints.js jddjCookie.js"
-
-## 青蛙
-scripts_base_url_smiek2221=${ProxyJudge}https://raw.githubusercontent.com/smiek2121/scripts/master/
 my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRValidator_Pure.js gua_UnknownTask9.js"
-
-## star261
-scripts_base_url_star261=${ProxyJudge}https://raw.githubusercontent.com/star261/jd/main/scripts/
-my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_dns_shop.js jd_mhyyl.js js_sjnhj.js"
-
-## Facker
-scripts_base_url_shufflewzc=${ProxyJudge}https://raw.githubusercontent.com/shufflewzc/faker2/main/
+my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_dns_shop.js jd_mhyyl.js jd_sjnhj.js"
 my_scripts_list_shufflewzc="jd_try.js jd_try_notify.py jd_DrawEntrance.js jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_lxLottery.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js jd_festival.js"
-
-## X1a0He
-scripts_base_url_X1a0He=${ProxyJudge}https://raw.githubusercontent.com/X1a0He/jd_scripts_fixed/main/
 my_scripts_list_X1a0He="jd_unsubscribe_xh.js"
-
-## KingRan
-scripts_base_url_KingRan=${ProxyJudge}https://raw.githubusercontent.com/KingRan/JDJB/main/
-my_scripts_list_KingRan="jd_joy_park.js jd_joy_park_task.js jd_fanli.js jd_medal.js jd_cjhz.js"
-
-## Dellear
-scripts_base_url_Dellear=${ProxyJudge}https://raw.githubusercontent.com/Dellear/lost/main/extra/
+my_scripts_list_KingRan="jd_joy_park.js jd_joy_park_task.js jd_fanli.js jd_medal.js jd_cjhz.js jd_fcdyj_help.js jd_wish.js"
 my_scripts_list_Dellear="jd_bean_xibean.js jd_price.js"
-
-## jiulan
-scripts_base_url_jiulan=${ProxyJudge}https://raw.githubusercontent.com/jiulan/platypus/main/scripts/
 my_scripts_list_jiulan="jd_joy_tx.js jd_jfcz.js jd_jdtj_winner.js jd_txjf.js"
-
-## wuye999
-scripts_base_url_wuye999=${ProxyJudge}https://raw.githubusercontent.com/wuye999/myScripts/main/jd/
 my_scripts_list_wuye999="jd_angryKoi.py"
-
-## 小埋
-scripts_base_url_mmnvnmm=${ProxyJudge}https://raw.githubusercontent.com/mmnvnmm/omo/master/
 my_scripts_list_mmnvnmm="jd_sevenDay.js jd_beauty_ex.js jd_mpdzcar.js"
-
-## ccwav
-scripts_base_url_ccwav=${ProxyJudge}https://raw.githubusercontent.com/ccwav/QLScript2/main/
 my_scripts_list_ccwav="jd_bean_change.js"
+my_scripts_list_zero205="jd_ms.js jd_xmf.js"
 
 ## he1pu
-scripts_base_url_he1pu=${ProxyJudge}https://raw.githubusercontent.com/he1pu/JDHelp/main/
+scripts_base_url_he1pu=https://raw.githubusercontent.com/he1pu/JDHelp/main/
 my_scripts_list_he1pu=""
 
 ## cdle
-scripts_base_url_cdle=${ProxyJudge}https://raw.githubusercontent.com/cdle/carry/main/
+scripts_base_url_cdle=https://raw.githubusercontent.com/cdle/carry/main/
 my_scripts_list_cdle=""
 
 ## curtinlv
-scripts_base_url_curtinlv=${ProxyJudge}https://raw.githubusercontent.com/curtinlv/JD-Script/main/
+scripts_base_url_curtinlv=https://raw.githubusercontent.com/curtinlv/JD-Script/main/
 my_scripts_list_curtinlv=""
 
 ##############################  主 命 令  ##############################
@@ -305,7 +332,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="rush_xuanyuan.js"
+DeleteScripts="rush_xuanyuan.js js_sjnhj.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
