@@ -1,6 +1,6 @@
 #!/bin/bash
 # Update: 2022-01-24
-# Content: add  jd_ms.js(京东秒秒币) jd_xmf.js(京东小魔方) jd_fcdyj_help.js(发财大赢家助力) jd_wish.js(众筹许愿池) jd_monopoly.js(集卡分豆合集)
+# Content: add  jd_ms.js(京东秒秒币) jd_xmf.js(京东小魔方) jd_fcdyj_help.js(发财大赢家助力) jd_wish.js(众筹许愿池) jd_monopoly.js(集卡分豆合集) jd_mhyyl_prize.js(萌虎摇摇乐奖励列表)
 #          rpc  js_sjnhj.js -> jd_sjnhj.js
 #          del  rush_xuanyuan.js
 
@@ -57,6 +57,7 @@
 #  jd_fcdyj_help.js                发财大赢家助力
 #  jd_wish.js                      众筹许愿池
 #  jd_monopoly.js                  集卡分豆合集
+#  jd_mhyyl_prize.js               萌虎摇摇乐奖励列表
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -104,7 +105,7 @@
 
 NEWLINE="\n          "
 UpdateDate="2022-01-24"
-UpdateContent="add  jd_ms.js(京东秒秒币) jd_xmf.js(京东小魔方) jd_fcdyj_help.js(发财大赢家助力) jd_wish.js(众筹许愿池) jd_monopoly.js(集卡分豆合集)${NEWLINE}rpc  js_sjnhj.js -> jd_sjnhj.js${NEWLINE}del  rush_xuanyuan.js"
+UpdateContent="add  jd_ms.js(京东秒秒币) jd_xmf.js(京东小魔方) jd_fcdyj_help.js(发财大赢家助力) jd_wish.js(众筹许愿池) jd_monopoly.js(集卡分豆合集) jd_mhyyl_prize.js(萌虎摇摇乐奖励列表)${NEWLINE}rpc  js_sjnhj.js -> jd_sjnhj.js${NEWLINE}del  rush_xuanyuan.js"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm ccwav zero205"
@@ -145,7 +146,7 @@ my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRVal
 
 ## star261
 scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
-my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_dns_shop.js jd_mhyyl.js jd_sjnhj.js jd_monopoly.js"
+my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_dns_shop.js jd_mhyyl.js jd_sjnhj.js jd_monopoly.js jd_mhyyl_prize.js"
 
 ## Facker
 scripts_base_url_shufflewzc=https://cdn.jsdelivr.net/gh/shufflewzc/faker2@main/
