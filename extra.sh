@@ -1,8 +1,6 @@
 #!/bin/bash
-# Update: 2022-01-24
-# Content: add  jd_ms.js(京东秒秒币) jd_xmf.js(京东小魔方) jd_fcdyj_help.js(发财大赢家助力) jd_wish.js(众筹许愿池) jd_monopoly.js(集卡分豆合集) jd_mhyyl_prize.js(萌虎摇摇乐奖励列表)
-#          rpc  js_sjnhj.js -> jd_sjnhj.js
-#          del  rush_xuanyuan.js
+# Update: 2022-01-26
+# Content: add  jd_babel_red.js(会场红包雨)
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -58,6 +56,7 @@
 #  jd_wish.js                      众筹许愿池
 #  jd_monopoly.js                  集卡分豆合集
 #  jd_mhyyl_prize.js               萌虎摇摇乐奖励列表
+#  jd_babel_red.js                 会场红包雨
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -66,6 +65,8 @@
 # "早起赢现金"
 #    export morningScPins=""  # 指定打卡账号，填 pt_pin 的值
 # "京东试用"
+#    export JD_TRY_UNIFIED=""            # 定义是否统一试用组，默认为false即每个账号都申请不同的商品，若想统一并加快脚本执行速度可设置为true
+#    export JD_TRY_TOTALPAGES=""         # 定义每个Tab页要便遍历的申请页数，默认为20
 #    export JD_TRY_PRICE=""              # 只申请试用高于此价格的商品
 #    export JD_TRY_TABID=""              # 试用商品类型：1)精选 2)闪电试 3)家用电器 4)手机数码 5)电脑办公 默认为精选
 #    export JD_TRY_TITLEFILTERS=""       # 试用商品标题关键词过滤，黑名单，多个关键词用@隔开
@@ -104,8 +105,8 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-01-24"
-UpdateContent="add  jd_ms.js(京东秒秒币) jd_xmf.js(京东小魔方) jd_fcdyj_help.js(发财大赢家助力) jd_wish.js(众筹许愿池) jd_monopoly.js(集卡分豆合集) jd_mhyyl_prize.js(萌虎摇摇乐奖励列表)${NEWLINE}rpc  js_sjnhj.js -> jd_sjnhj.js${NEWLINE}del  rush_xuanyuan.js"
+UpdateDate="2022-01-26"
+UpdateContent="add  jd_babel_red.js(会场红包雨)"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm ccwav zero205"
@@ -150,7 +151,7 @@ my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_dn
 
 ## Facker
 scripts_base_url_shufflewzc=https://cdn.jsdelivr.net/gh/shufflewzc/faker2@main/
-my_scripts_list_shufflewzc="jd_try.js jd_try_notify.py jd_DrawEntrance.js jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_lxLottery.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js jd_festival.js"
+my_scripts_list_shufflewzc="jd_try.js jd_try_notify.py jd_DrawEntrance.js jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_lxLottery.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js jd_festival.js jd_babel_red.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
