@@ -141,7 +141,7 @@ let timeH = $.time('H')
 
 async function run(type = 0){
   try{
-    rebateCodes = ["SIMHz54", "StIuUgG", "SLI8zFT"];
+    rebateCodes = ["PCqkTlK"];
     rebateCodes = rebateCodes[Math.floor((Math.random() * rebateCodes.length))]
     rebateCodes = $.isNode() ? (process.env.gua_nhjRed_rebateCode ? process.env.gua_nhjRed_rebateCode : `${rebateCodes}`) : ($.getdata('gua_nhjRed_rebateCode') ? $.getdata('gua_nhjRed_rebateCode') : `${rebateCodes}`);
     rebateCode = rebateCodes
