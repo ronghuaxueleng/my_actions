@@ -8,7 +8,6 @@
 #  jd_price.js                     京东价保
 #  jd_try.js                       京东试用
 #  jd_try_notify.py                京东试用待领取通知
-#  jd_bean_change.js               京东资产变动强化版
 #  jd_bean_xibean.js               过期京豆自动兑换喜豆
 #  jd_unsubscriLive.js             取关所有主播
 #  jd_unsubscribe_xh.js            取关店铺和商品
@@ -109,7 +108,7 @@ UpdateDate="2022-01-26"
 UpdateContent="add  jd_babel_red.js(会场红包雨)"
 
 ## 作者
-author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm ccwav zero205"
+author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm zero205"
 author_name=(
   Public
   passerby-b
@@ -122,7 +121,6 @@ author_name=(
   jiulan
   wuye999
   小埋
-  ccwav
   zero205
 )
 
@@ -177,13 +175,13 @@ my_scripts_list_wuye999="jd_angryKoi.py"
 scripts_base_url_mmnvnmm=https://cdn.jsdelivr.net/gh/mmnvnmm/omo@master/
 my_scripts_list_mmnvnmm="jd_sevenDay.js jd_beauty_ex.js jd_mpdzcar.js"
 
-## ccwav
-scripts_base_url_ccwav=https://cdn.jsdelivr.net/gh/ccwav/QLScript2@main/
-my_scripts_list_ccwav="jd_bean_change.js"
-
 ## zero205
 scripts_base_url_zero205=https://cdn.jsdelivr.net/gh/zero205/JD_tencent_scf@main/
 my_scripts_list_zero205="jd_ms.js jd_xmf.js"
+
+## ccwav
+scripts_base_url_ccwav=https://cdn.jsdelivr.net/gh/ccwav/QLScript2@main/
+my_scripts_list_ccwav=""
 
 ## he1pu
 scripts_base_url_he1pu=https://cdn.jsdelivr.net/gh/he1pu/JDHelp@main/
