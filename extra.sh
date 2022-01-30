@@ -1,6 +1,6 @@
 #!/bin/bash
-# Update: 2022-01-26
-# Content: add  jd_babel_red.js(会场红包雨)
+# Update: 2022-01-30
+# Content: del  jd_qqxing.js jd_joy_tx.js jd_sevenDay.js gua_UnknownTask9.js jd_lxLottery.js jd_dns_shop.js jd_DrawEntrance.js jd_medal.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -15,7 +15,6 @@
 #  jd_half_redrain.js              半点京豆雨
 #  jd_shop_sign.js                 店铺签到                 (内置店铺 Token，定期更新)
 #  jd_productZ4Brand.js            特物Z
-#  jd_DrawEntrance.js              天天优惠大乐透
 #  jd_sign_graphics.js             京东签到图形验证
 #  jd_morningSc.js                 早起赢现金               (活动入口在京东汽车-瓜分万元，支付一元才能参与活动)
 #  jd_moneyTree_heip.js            京东摇钱树助力
@@ -24,26 +23,18 @@
 #  jd_dwapp.js                     积分换话费
 #  jd_nnfls.js                     牛牛福利社
 #  jd_fanli.js                     京东饭粒
-#  jd_medal.js                     农场集勋章
 #  jd_gold_sign.js                 京东金榜签到
 #  jd_beauty_ex.js                 美丽研究院兑换京豆
-#  jd_joy_tx.js                    汪汪乐园提现
-#  jd_lxLottery.js                 京东我的理想家
-#  gua_UnknownTask9.js             发现好货
 #  jd_jfcz.js                      见缝插针
 #  jd_angryKoi.py                  安静的锦鲤               (全民开红包)
-#  jd_qqxing.js                    QQ星系牧场               (执行时间较长并且API容易请求失败，建议仅指定前几个头部账号运行)
 #  jd_jdtj_winner.js               京东特价翻翻乐
-#  jd_sevenDay.js                  超级无线店铺签到
 #  jd_nh_sign.js                   年货节签到
 #  jd_m_sign.js                    京东通天塔--签到
-#  jd_mofang_ex.js                 京东小魔方--收集兑换
 #  jd_xiaolong.js                  骁龙
 #  jd_cjhz.js                      京东超级盒子
 #  jd_mpdzcar.js                   京东汽车
 #  jd_bt_sign.js                   白条抽奖
 #  jx_ttysq.js                     天天压岁钱
-#  jd_dns_shop.js                  全民炸年兽店铺大富翁
 #  jd_babel_sign.js                通天塔签到共建
 #  jd_mhyyl.js                     萌虎摇摇乐
 #  jd_txjf.js                      通讯积分
@@ -85,7 +76,14 @@
 
 ##############################  近  期  删  除  ##############################
 
-# rush_xuanyuan.js
+# jd_qqxing.js
+# jd_joy_tx.js
+# jd_sevenDay.js
+# gua_UnknownTask9.js
+# jd_lxLottery.js
+# jd_dns_shop.js
+# jd_DrawEntrance.js
+# jd_medal.js
 
 ##############################  京  东  到  家  ##############################
 
@@ -104,8 +102,8 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-01-26"
-UpdateContent="add  jd_babel_red.js(会场红包雨)"
+UpdateDate="2022-01-30"
+UpdateContent="del  jd_qqxing.js jd_joy_tx.js jd_sevenDay.js gua_UnknownTask9.js jd_lxLottery.js jd_dns_shop.js jd_DrawEntrance.js jd_medal.js"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm zero205"
@@ -133,7 +131,7 @@ fi
 
 ## Public
 scripts_base_url_Public=https://gitee.com/SuperManito/scripts/raw/master/
-my_scripts_list_Public="jd_shop_sign.js jd_super_redrain.js jd_half_redrain.js jd_qqxing.js"
+my_scripts_list_Public="jd_shop_sign.js jd_super_redrain.js jd_half_redrain.js"
 
 ## 京东到家
 scripts_base_url_passerby_b=https://cdn.jsdelivr.net/gh/passerby-b/JDDJ@main/
@@ -141,15 +139,15 @@ my_scripts_list_passerby_b="jddj_fruit.js jddj_fruit_collectWater.js jddj_bean.j
 
 ## 青蛙
 scripts_base_url_smiek2221=https://cdn.jsdelivr.net/gh/smiek2121/scripts@master/
-my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRValidator_Pure.js gua_UnknownTask9.js"
+my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRValidator_Pure.js"
 
 ## star261
 scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
-my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_dns_shop.js jd_mhyyl.js jd_sjnhj.js jd_monopoly.js jd_mhyyl_prize.js"
+my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_mhyyl.js jd_sjnhj.js jd_monopoly.js jd_mhyyl_prize.js"
 
 ## Facker
 scripts_base_url_shufflewzc=https://cdn.jsdelivr.net/gh/shufflewzc/faker2@main/
-my_scripts_list_shufflewzc="jd_try.js jd_try_notify.py jd_DrawEntrance.js jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_lxLottery.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js jd_festival.js jd_babel_red.js"
+my_scripts_list_shufflewzc="jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js jd_festival.js jd_babel_red.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
@@ -157,7 +155,7 @@ my_scripts_list_X1a0He="jd_unsubscribe_xh.js"
 
 ## KingRan
 scripts_base_url_KingRan=https://cdn.jsdelivr.net/gh/KingRan/JDJB@main/
-my_scripts_list_KingRan="jd_joy_park.js jd_joy_park_task.js jd_fanli.js jd_medal.js jd_cjhz.js jd_fcdyj_help.js jd_wish.js"
+my_scripts_list_KingRan="jd_joy_park.js jd_joy_park_task.js jd_fanli.js jd_cjhz.js jd_fcdyj_help.js jd_wish.js"
 
 ## Dellear
 scripts_base_url_Dellear=https://cdn.jsdelivr.net/gh/Dellear/lost@main/extra/
@@ -165,7 +163,7 @@ my_scripts_list_Dellear="jd_bean_xibean.js jd_price.js"
 
 ## jiulan
 scripts_base_url_jiulan=https://cdn.jsdelivr.net/gh/jiulan/platypus@main/scripts/
-my_scripts_list_jiulan="jd_joy_tx.js jd_jfcz.js jd_jdtj_winner.js jd_txjf.js"
+my_scripts_list_jiulan="jd_jfcz.js jd_jdtj_winner.js jd_txjf.js"
 
 ## wuye999
 scripts_base_url_wuye999=https://cdn.jsdelivr.net/gh/wuye999/myScripts@main/jd/
@@ -173,7 +171,7 @@ my_scripts_list_wuye999="jd_angryKoi.py"
 
 ## 小埋
 scripts_base_url_mmnvnmm=https://cdn.jsdelivr.net/gh/mmnvnmm/omo@master/
-my_scripts_list_mmnvnmm="jd_sevenDay.js jd_beauty_ex.js jd_mpdzcar.js"
+my_scripts_list_mmnvnmm="jd_beauty_ex.js jd_mpdzcar.js"
 
 ## zero205
 scripts_base_url_zero205=https://cdn.jsdelivr.net/gh/zero205/JD_tencent_scf@main/
@@ -288,6 +286,9 @@ for author in $author_list; do
       jd_beauty_ex.js)
         script_cron="$(rand 1 5) $(rand 6 8),$(rand 11 13),$(rand 18 20) * * * " # 美丽研究院兑换，随机定时
         ;;
+      jd_txjf.js)
+        script_cron="8 0,1 * * *" # 指定通讯积分的定时
+        ;;
       *)
         if [[ -z ${script_cron_standard} ]]; then
           tmp1=$(grep -E "cron|script-path|tag|\* \*|$name" $ScriptsDir/$name | grep -Ev "^http.*:|^function " | head -1 | perl -pe '{s|[a-zA-Z\"\.\=\:\_]||g;}')
@@ -331,7 +332,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="rush_xuanyuan.js js_sjnhj.js"
+DeleteScripts="jd_qqxing.js jd_joy_tx.js jd_sevenDay.js gua_UnknownTask9.js jd_lxLottery.js jd_dns_shop.js jd_DrawEntrance.js jd_medal.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
