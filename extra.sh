@@ -1,6 +1,6 @@
 #!/bin/bash
-# Update: 2022-01-30
-# Content: del  jd_qqxing.js jd_joy_tx.js jd_sevenDay.js gua_UnknownTask9.js jd_lxLottery.js jd_dns_shop.js jd_DrawEntrance.js jd_medal.js
+# Update: 2022-01-31
+# Content: add  gua_HappyNewYear_Share.js(2022新春快乐 击鼓助力)
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -47,6 +47,7 @@
 #  jd_monopoly.js                  集卡分豆合集
 #  jd_mhyyl_prize.js               萌虎摇摇乐奖励列表
 #  jd_babel_red.js                 会场红包雨
+#  gua_HappyNewYear_Share.js       2022新春快乐 击鼓助力
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -102,11 +103,11 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-01-30"
-UpdateContent="del  jd_qqxing.js jd_joy_tx.js jd_sevenDay.js gua_UnknownTask9.js jd_lxLottery.js jd_dns_shop.js jd_DrawEntrance.js jd_medal.js"
+UpdateDate="2022-01-31"
+UpdateContent="add  gua_HappyNewYear_Share.js(2022新春快乐 击鼓助力)"
 
 ## 作者
-author_list="Public passerby_b smiek2221 star261 shufflewzc X1a0He KingRan Dellear jiulan wuye999 mmnvnmm zero205"
+author_list="Public passerby_b smiek2221 star261 Hyominn X1a0He KingRan Dellear jiulan wuye999 mmnvnmm zero205"
 author_name=(
   Public
   passerby-b
@@ -139,15 +140,15 @@ my_scripts_list_passerby_b="jddj_fruit.js jddj_fruit_collectWater.js jddj_bean.j
 
 ## 青蛙
 scripts_base_url_smiek2221=https://cdn.jsdelivr.net/gh/smiek2121/scripts@master/
-my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRValidator_Pure.js"
+my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRValidator_Pure.js gua_HappyNewYear_Share.js"
 
 ## star261
 scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
 my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_mhyyl.js jd_sjnhj.js jd_monopoly.js jd_mhyyl_prize.js"
 
 ## Facker
-scripts_base_url_shufflewzc=https://cdn.jsdelivr.net/gh/shufflewzc/faker2@main/
-my_scripts_list_shufflewzc="jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js jd_festival.js jd_babel_red.js"
+scripts_base_url_Hyominn=https://cdn.jsdelivr.net/gh/Hyominn/hyominnn@main/
+my_scripts_list_Hyominn="jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js jd_festival.js jd_babel_red.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
