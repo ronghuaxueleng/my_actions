@@ -1,6 +1,6 @@
 #!/bin/bash
 # Update: 2022-02-01
-# Content: del  gua_HappyNewYear_Share.js
+# Content: del  gua_HappyNewYear_Share.js jd_mhyyl.js jd_mhyyl_prize.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -36,7 +36,6 @@
 #  jd_bt_sign.js                   白条抽奖
 #  jx_ttysq.js                     天天压岁钱
 #  jd_babel_sign.js                通天塔签到共建
-#  jd_mhyyl.js                     萌虎摇摇乐
 #  jd_txjf.js                      通讯积分
 #  jd_sjnhj.js                     手机年货节
 #  jd_festival.js                  点鞭炮赢京豆
@@ -45,7 +44,6 @@
 #  jd_fcdyj_help.js                发财大赢家助力
 #  jd_wish.js                      众筹许愿池
 #  jd_monopoly.js                  集卡分豆合集
-#  jd_mhyyl_prize.js               萌虎摇摇乐奖励列表
 #  jd_babel_red.js                 会场红包雨
 
 ##############################  脚  本  内  环  境  变  量  ##############################
@@ -77,6 +75,8 @@
 ##############################  近  期  删  除  ##############################
 
 # gua_HappyNewYear_Share.js
+# jd_mhyyl.js
+# jd_mhyyl_prize.js
 
 ##############################  京  东  到  家  ##############################
 
@@ -96,7 +96,7 @@
 
 NEWLINE="\n          "
 UpdateDate="2022-02-01"
-UpdateContent="del  gua_HappyNewYear_Share.js"
+UpdateContent="del  gua_HappyNewYear_Share.js jd_mhyyl.js jd_mhyyl_prize.js"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 Hyominn X1a0He KingRan Dellear jiulan wuye999 mmnvnmm zero205"
@@ -136,7 +136,7 @@ my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRVal
 
 ## star261
 scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
-my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_mhyyl.js jd_sjnhj.js jd_monopoly.js jd_mhyyl_prize.js"
+my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js"
 
 ## Facker
 scripts_base_url_Hyominn=https://cdn.jsdelivr.net/gh/Hyominn/hyominnn@main/
@@ -325,7 +325,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="gua_HappyNewYear_Share.js"
+DeleteScripts="gua_HappyNewYear_Share.js jd_mhyyl.js jd_mhyyl_prize.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
