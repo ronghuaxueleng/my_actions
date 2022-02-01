@@ -99,7 +99,7 @@ UpdateDate="2022-02-01"
 UpdateContent="del  gua_HappyNewYear_Share.js jd_mhyyl.js jd_mhyyl_prize.js"
 
 ## 作者
-author_list="Public passerby_b smiek2221 star261 Hyominn X1a0He KingRan Dellear jiulan wuye999 mmnvnmm zero205"
+author_list="Public passerby_b smiek2221 star261 Hyominn X1a0He KingRan Dellear jiulan mmnvnmm zero205"
 author_name=(
   Public
   passerby-b
@@ -110,7 +110,6 @@ author_name=(
   KingRan
   Dellear
   jiulan
-  wuye999
   小埋
   zero205
 )
@@ -124,7 +123,7 @@ fi
 
 ## Public
 scripts_base_url_Public=https://gitee.com/SuperManito/scripts/raw/master/
-my_scripts_list_Public="jd_shop_sign.js jd_super_redrain.js jd_half_redrain.js"
+my_scripts_list_Public="jd_shop_sign.js jd_super_redrain.js jd_half_redrain.js jd_angryKoi.py"
 
 ## 京东到家
 scripts_base_url_passerby_b=https://cdn.jsdelivr.net/gh/passerby-b/JDDJ@main/
@@ -139,7 +138,7 @@ scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
 my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js"
 
 ## Facker
-scripts_base_url_Hyominn=https://cdn.jsdelivr.net/gh/Hyominn/hyominnn@main/
+scripts_base_url_Hyominn=https://cdn.jsdelivr.net/gh/hyzaw/AllJDScripts@master/
 my_scripts_list_Hyominn="jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js jd_festival.js jd_babel_red.js"
 
 ## X1a0He
@@ -158,10 +157,6 @@ my_scripts_list_Dellear="jd_bean_xibean.js jd_price.js"
 scripts_base_url_jiulan=https://cdn.jsdelivr.net/gh/jiulan/platypus@main/scripts/
 my_scripts_list_jiulan="jd_jfcz.js jd_jdtj_winner.js jd_txjf.js"
 
-## wuye999
-scripts_base_url_wuye999=https://cdn.jsdelivr.net/gh/wuye999/myScripts@main/jd/
-my_scripts_list_wuye999="jd_angryKoi.py"
-
 ## 小埋
 scripts_base_url_mmnvnmm=https://cdn.jsdelivr.net/gh/mmnvnmm/omo@master/
 my_scripts_list_mmnvnmm="jd_beauty_ex.js jd_mpdzcar.js"
@@ -169,6 +164,10 @@ my_scripts_list_mmnvnmm="jd_beauty_ex.js jd_mpdzcar.js"
 ## zero205
 scripts_base_url_zero205=https://cdn.jsdelivr.net/gh/zero205/JD_tencent_scf@main/
 my_scripts_list_zero205="jd_ms.js jd_xmf.js"
+
+## wuye999
+scripts_base_url_wuye999=https://cdn.jsdelivr.net/gh/wuye999/myScripts@main/jd/
+my_scripts_list_wuye999=""
 
 ## ccwav
 scripts_base_url_ccwav=https://cdn.jsdelivr.net/gh/ccwav/QLScript2@main/
