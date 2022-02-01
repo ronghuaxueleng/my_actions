@@ -1,6 +1,6 @@
 #!/bin/bash
-# Update: 2022-02-01
-# Content: del  gua_HappyNewYear_Share.js jd_mhyyl.js jd_mhyyl_prize.js
+# Update: 2022-02-02
+# Content: del  jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -28,23 +28,18 @@
 #  jd_jfcz.js                      见缝插针
 #  jd_angryKoi.py                  安静的锦鲤               (全民开红包)
 #  jd_jdtj_winner.js               京东特价翻翻乐
-#  jd_nh_sign.js                   年货节签到
 #  jd_m_sign.js                    京东通天塔--签到
-#  jd_xiaolong.js                  骁龙
 #  jd_cjhz.js                      京东超级盒子
 #  jd_mpdzcar.js                   京东汽车
 #  jd_bt_sign.js                   白条抽奖
 #  jx_ttysq.js                     天天压岁钱
 #  jd_babel_sign.js                通天塔签到共建
 #  jd_txjf.js                      通讯积分
-#  jd_sjnhj.js                     手机年货节
 #  jd_festival.js                  点鞭炮赢京豆
 #  jd_ms.js                        京东秒秒币
 #  jd_xmf.js                       京东小魔方
 #  jd_fcdyj_help.js                发财大赢家助力
 #  jd_wish.js                      众筹许愿池
-#  jd_monopoly.js                  集卡分豆合集
-#  jd_babel_red.js                 会场红包雨
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -77,6 +72,11 @@
 # gua_HappyNewYear_Share.js
 # jd_mhyyl.js
 # jd_mhyyl_prize.js
+# jd_nh_sign.js
+# jd_xiaolong.js
+# jd_sjnhj.js
+# jd_monopoly.js
+# jd_babel_red.js
 
 ##############################  京  东  到  家  ##############################
 
@@ -95,8 +95,8 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-02-01"
-UpdateContent="del  gua_HappyNewYear_Share.js jd_mhyyl.js jd_mhyyl_prize.js"
+UpdateDate="2022-02-02"
+UpdateContent="del  jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 Hyominn X1a0He KingRan Dellear jiulan mmnvnmm zero205"
@@ -135,11 +135,11 @@ my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRVal
 
 ## star261
 scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
-my_scripts_list_star261="jd_productZ4Brand.js jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js"
+my_scripts_list_star261="jd_productZ4Brand.js"
 
 ## Facker
 scripts_base_url_Hyominn=https://cdn.jsdelivr.net/gh/hyzaw/AllJDScripts@master/
-my_scripts_list_Hyominn="jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_m_sign.js jd_bt_sign.js jx_ttysq.js jd_babel_sign.js jx_ttysq.js jd_festival.js jd_babel_red.js"
+my_scripts_list_Hyominn="jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_m_sign.js jd_bt_sign.js jd_babel_sign.js jx_ttysq.js jd_festival.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
@@ -324,7 +324,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="gua_HappyNewYear_Share.js jd_mhyyl.js jd_mhyyl_prize.js"
+DeleteScripts="jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
