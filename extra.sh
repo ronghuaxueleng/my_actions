@@ -1,6 +1,6 @@
 #!/bin/bash
 # Update: 2022-02-02
-# Content: del  jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js
+# Content: del  jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js jd_cjhz.js jd_fcdyj_help.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -29,7 +29,6 @@
 #  jd_angryKoi.py                  安静的锦鲤               (全民开红包)
 #  jd_jdtj_winner.js               京东特价翻翻乐
 #  jd_m_sign.js                    京东通天塔--签到
-#  jd_cjhz.js                      京东超级盒子
 #  jd_mpdzcar.js                   京东汽车
 #  jd_bt_sign.js                   白条抽奖
 #  jx_ttysq.js                     天天压岁钱
@@ -38,7 +37,6 @@
 #  jd_festival.js                  点鞭炮赢京豆
 #  jd_ms.js                        京东秒秒币
 #  jd_xmf.js                       京东小魔方
-#  jd_fcdyj_help.js                发财大赢家助力
 #  jd_wish.js                      众筹许愿池
 
 ##############################  脚  本  内  环  境  变  量  ##############################
@@ -77,6 +75,8 @@
 # jd_sjnhj.js
 # jd_monopoly.js
 # jd_babel_red.js
+# jd_cjhz.js
+# jd_fcdyj_help.js
 
 ##############################  京  东  到  家  ##############################
 
@@ -96,7 +96,7 @@
 
 NEWLINE="\n          "
 UpdateDate="2022-02-02"
-UpdateContent="del  jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js"
+UpdateContent="del  jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js jd_cjhz.js jd_fcdyj_help.js"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 Hyominn X1a0He KingRan Dellear jiulan mmnvnmm zero205"
@@ -147,7 +147,7 @@ my_scripts_list_X1a0He="jd_unsubscribe_xh.js"
 
 ## KingRan
 scripts_base_url_KingRan=https://cdn.jsdelivr.net/gh/KingRan/JDJB@main/
-my_scripts_list_KingRan="jd_joy_park.js jd_joy_park_task.js jd_fanli.js jd_cjhz.js jd_fcdyj_help.js jd_wish.js"
+my_scripts_list_KingRan="jd_joy_park.js jd_joy_park_task.js jd_fanli.js jd_wish.js"
 
 ## Dellear
 scripts_base_url_Dellear=https://cdn.jsdelivr.net/gh/Dellear/lost@main/extra/
@@ -324,7 +324,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js"
+DeleteScripts="jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js jd_cjhz.js jd_fcdyj_help.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
