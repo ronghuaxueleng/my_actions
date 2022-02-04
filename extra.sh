@@ -99,13 +99,13 @@ UpdateDate="2022-02-02"
 UpdateContent="del  jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js jd_cjhz.js jd_fcdyj_help.js"
 
 ## 作者
-author_list="Public passerby_b smiek2221 star261 Hyominn X1a0He KingRan Dellear jiulan mmnvnmm zero205"
+author_list="Public passerby_b smiek2221 star261 yyds X1a0He KingRan Dellear jiulan mmnvnmm zero205"
 author_name=(
   Public
   passerby-b
   青蛙
   star261
-  Facker
+  yyds
   X1a0He
   KingRan
   Dellear
@@ -137,9 +137,9 @@ my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRVal
 scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
 my_scripts_list_star261="jd_productZ4Brand.js"
 
-## Facker
-scripts_base_url_Hyominn=https://cdn.jsdelivr.net/gh/hyzaw/AllJDScripts@master/
-my_scripts_list_Hyominn="jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_m_sign.js jd_bt_sign.js jd_babel_sign.js jx_ttysq.js jd_festival.js"
+## yyds
+scripts_base_url_yyds=https://cdn.jsdelivr.net/gh/okyyds/yyds@master/
+my_scripts_list_yyds="jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_m_sign.js jd_bt_sign.js jd_babel_sign.js jx_ttysq.js jd_festival.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
