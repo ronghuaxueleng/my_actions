@@ -1,6 +1,7 @@
 #!/bin/bash
-# Update: 2022-02-02
-# Content: del  jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js jd_cjhz.js jd_fcdyj_help.js
+# Update: 2022-02-05
+# Content: add  jd_nhdt.js(手机小时购年货地图)
+#          del  jd_festival.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -34,10 +35,10 @@
 #  jx_ttysq.js                     天天压岁钱
 #  jd_babel_sign.js                通天塔签到共建
 #  jd_txjf.js                      通讯积分
-#  jd_festival.js                  点鞭炮赢京豆
 #  jd_ms.js                        京东秒秒币
 #  jd_xmf.js                       京东小魔方
 #  jd_wish.js                      众筹许愿池
+#  jd_nhdt.js                      手机小时购年货地图
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -67,16 +68,8 @@
 
 ##############################  近  期  删  除  ##############################
 
-# gua_HappyNewYear_Share.js
-# jd_mhyyl.js
-# jd_mhyyl_prize.js
-# jd_nh_sign.js
-# jd_xiaolong.js
-# jd_sjnhj.js
-# jd_monopoly.js
-# jd_babel_red.js
-# jd_cjhz.js
-# jd_fcdyj_help.js
+# jd_mpdzcar.js
+# jd_festival.js
 
 ##############################  京  东  到  家  ##############################
 
@@ -95,11 +88,11 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-02-02"
-UpdateContent="del  jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js jd_cjhz.js jd_fcdyj_help.js"
+UpdateDate="2022-02-05"
+UpdateContent="add  jd_nhdt.js(手机小时购年货地图)${NEWLINE}del  jd_festival.js"
 
 ## 作者
-author_list="Public passerby_b smiek2221 star261 yyds X1a0He KingRan Dellear jiulan mmnvnmm zero205"
+author_list="Public passerby_b smiek2221 star261 yyds X1a0He KingRan Dellear jiulan zero205"
 author_name=(
   Public
   passerby-b
@@ -110,7 +103,6 @@ author_name=(
   KingRan
   Dellear
   jiulan
-  小埋
   zero205
 )
 
@@ -139,7 +131,7 @@ my_scripts_list_star261="jd_productZ4Brand.js"
 
 ## yyds
 scripts_base_url_yyds=https://cdn.jsdelivr.net/gh/okyyds/yyds@master/
-my_scripts_list_yyds="jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_m_sign.js jd_bt_sign.js jd_babel_sign.js jx_ttysq.js jd_festival.js"
+my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_m_sign.js jd_bt_sign.js jd_babel_sign.js jx_ttysq.js jd_beauty_ex.js jd_mpdzcar.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
@@ -157,13 +149,13 @@ my_scripts_list_Dellear="jd_bean_xibean.js jd_price.js"
 scripts_base_url_jiulan=https://cdn.jsdelivr.net/gh/jiulan/platypus@main/scripts/
 my_scripts_list_jiulan="jd_jfcz.js jd_jdtj_winner.js jd_txjf.js"
 
-## 小埋
-scripts_base_url_mmnvnmm=https://cdn.jsdelivr.net/gh/mmnvnmm/omo@master/
-my_scripts_list_mmnvnmm="jd_beauty_ex.js jd_mpdzcar.js"
-
 ## zero205
 scripts_base_url_zero205=https://cdn.jsdelivr.net/gh/zero205/JD_tencent_scf@main/
 my_scripts_list_zero205="jd_ms.js jd_xmf.js"
+
+## 小埋
+scripts_base_url_mmnvnmm=https://cdn.jsdelivr.net/gh/mmnvnmm/omo@master/
+my_scripts_list_mmnvnmm=""
 
 ## wuye999
 scripts_base_url_wuye999=https://cdn.jsdelivr.net/gh/wuye999/myScripts@main/jd/
@@ -255,7 +247,7 @@ for author in $author_list; do
       echo -e "$COMPLETE $formatname"
 
       case $name in
-      jddjCookie.js | sign_graphics_validate.js | JDJRValidator_Pure.js | TS_USER_AGENTS.ts | function/*)
+      jddjCookie.js | sign_graphics_validate.js | JDSignValidator.js | JDJRValidator_Pure.js | TS_USER_AGENTS.ts | function/*)
         continue
         ;;
       esac
@@ -324,7 +316,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="jd_nh_sign.js jd_xiaolong.js jd_sjnhj.js jd_monopoly.js jd_babel_red.js jd_cjhz.js jd_fcdyj_help.js"
+DeleteScripts="jd_festival.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
