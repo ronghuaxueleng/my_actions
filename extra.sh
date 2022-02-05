@@ -1,6 +1,6 @@
 #!/bin/bash
 # Update: 2022-02-05
-# Content: add  jd_nhdt.js(手机小时购年货地图)
+# Content: add  jd_nhdt.js(手机小时购年货地图) gua_HappyNewYear_Shares.js(2022新春快乐 击鼓助力)
 #          del  jd_festival.js
 
 ##############################  京  东  商  城  ##############################
@@ -39,6 +39,7 @@
 #  jd_xmf.js                       京东小魔方
 #  jd_wish.js                      众筹许愿池
 #  jd_nhdt.js                      手机小时购年货地图
+#  gua_HappyNewYear_Shares.js      2022新春快乐 击鼓助力
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -89,7 +90,7 @@
 
 NEWLINE="\n          "
 UpdateDate="2022-02-05"
-UpdateContent="add  jd_nhdt.js(手机小时购年货地图)${NEWLINE}del  jd_festival.js"
+UpdateContent="add  jd_nhdt.js(手机小时购年货地图) gua_HappyNewYear_Shares.js(2022新春快乐 击鼓助力)${NEWLINE}del  jd_festival.js"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 yyds X1a0He KingRan Dellear jiulan zero205"
@@ -123,7 +124,7 @@ my_scripts_list_passerby_b="jddj_fruit.js jddj_fruit_collectWater.js jddj_bean.j
 
 ## 青蛙
 scripts_base_url_smiek2221=https://cdn.jsdelivr.net/gh/smiek2121/scripts@master/
-my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRValidator_Pure.js"
+my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRValidator_Pure.js gua_HappyNewYear_Shares.js"
 
 ## star261
 scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
