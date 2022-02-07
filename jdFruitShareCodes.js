@@ -6,8 +6,7 @@
 //云服务器腾讯云函数等NOde.js用户在此处填写京东东农场的好友码。
 // 同一个京东账号的好友互助码用@符号隔开,不同京东账号之间用&符号或者换行隔开,下面给一个示例
 // 如: 京东账号1的shareCode1@京东账号1的shareCode2&京东账号2的shareCode1@京东账号2的shareCode2
-let FruitShareCodes = [
-]
+let FruitShareCodes = []
 
 // 从日志获取互助码
 // const logShareCodes = require('./utils/jdShareCodes');
@@ -27,7 +26,7 @@ if (process.env.FRUITSHARECODES) {
     FruitShareCodes = process.env.FRUITSHARECODES.split();
   }
 } else {
-  console.log(`由于您环境变量(FRUITSHARECODES)里面未设置助力码，故此次运行将互助池随机互助，请知晓！`)
+  console.log(`由于您环境变量(FRUITSHARECODES)里面未提供助力码，故此处运行将会给脚本内置的码进行助力，请知晓！`)
 }
 for (let i = 0; i < FruitShareCodes.length; i++) {
   const index = (i + 1 === 1) ? '' : (i + 1);
