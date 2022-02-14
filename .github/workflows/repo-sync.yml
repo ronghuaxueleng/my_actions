@@ -51,10 +51,13 @@ jobs:
         run: |
           shopt -s extglob
           git clone git@jd_base_gitee:supermanito/jd_base.git JD-FreeFuck
+          echo "cd JD-FreeFuck"
           cd JD-FreeFuck
+          echo "删除git信息"
           rm -rf .git
           rm -rf .github
           rm -rf .gitignore
+          echo "替换变量"
           sed -i 's/useradmin/admin/' shell/control.sh
           sed -i 's/supermanito/admin/' shell/control.sh
           sed -i 's/JsonFiles="auth.json bot.json account.json"/JsonFiles="auth.json bot.json account.json account.db"/' shell/control.sh
