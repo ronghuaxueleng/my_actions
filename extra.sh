@@ -1,7 +1,6 @@
 #!/bin/bash
-# Update: 2022-02-05
-# Content: add  jd_nhdt.js(手机小时购年货地图) gua_HappyNewYear_Shares.js(2022新春快乐 击鼓助力)
-#          del  jd_festival.js
+# Update: 2022-02-14
+# Content: add  jd_wq_wxsign.js(微信签到领红包) jd_xinruimz.js(颜究种植园) jd_mpdzcar_game.js(京东汽车-头文子J游戏) jd_mpdzcar_help.js(京东汽车-头文子J助力)
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -30,7 +29,9 @@
 #  jd_angryKoi.py                  安静的锦鲤               (全民开红包)
 #  jd_jdtj_winner.js               京东特价翻翻乐
 #  jd_m_sign.js                    京东通天塔--签到
-#  jd_mpdzcar.js                   京东汽车
+#  jd_mpdzcar.js                   京东汽车-头文子J
+#  jd_mpdzcar_game.js              京东汽车-头文子J游戏
+#  jd_mpdzcar_help.js              京东汽车-头文子J助力
 #  jd_bt_sign.js                   白条抽奖
 #  jx_ttysq.js                     天天压岁钱
 #  jd_babel_sign.js                通天塔签到共建
@@ -40,6 +41,8 @@
 #  jd_wish.js                      众筹许愿池
 #  jd_nhdt.js                      手机小时购年货地图
 #  gua_HappyNewYear_Shares.js      2022新春快乐 击鼓助力
+#  jd_wq_wxsign.js                 微信签到领红包
+#  jd_xinruimz.js                  颜究种植园               (需要手动开通活动，活动地址：https://xinruimz-isv.isvjcloud.com/plantation)
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -89,16 +92,15 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-02-05"
-UpdateContent="add  jd_nhdt.js(手机小时购年货地图) gua_HappyNewYear_Shares.js(2022新春快乐 击鼓助力)${NEWLINE}del  jd_festival.js"
+UpdateDate="2022-02-14"
+UpdateContent="add  jd_wq_wxsign.js(微信签到领红包) jd_xinruimz.js(颜究种植园) jd_mpdzcar_game.js(京东汽车-头文子J游戏) jd_mpdzcar_help.js(京东汽车-头文子J助力)"
 
 ## 作者
-author_list="Public passerby_b smiek2221 star261 yyds X1a0He KingRan Dellear jiulan zero205"
+author_list="Public passerby_b smiek2221 yyds X1a0He KingRan Dellear jiulan zero205"
 author_name=(
   Public
   passerby-b
   青蛙
-  star261
   yyds
   X1a0He
   KingRan
@@ -128,11 +130,11 @@ my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRVal
 
 ## star261
 scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
-my_scripts_list_star261="jd_productZ4Brand.js"
+my_scripts_list_star261=""
 
 ## yyds
 scripts_base_url_yyds=https://cdn.jsdelivr.net/gh/okyyds/yyds@master/
-my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_m_sign.js jd_bt_sign.js jd_babel_sign.js jx_ttysq.js jd_beauty_ex.js jd_mpdzcar.js"
+my_scripts_list_yyds="JDSignValidator.js jd_productZ4Brand.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_joy_park.js jd_joy_park_task.js jd_m_sign.js jd_bt_sign.js jd_babel_sign.js jx_ttysq.js jd_beauty_ex.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_wq_wxsign.js jd_xinruimz.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
@@ -140,7 +142,7 @@ my_scripts_list_X1a0He="jd_unsubscribe_xh.js"
 
 ## KingRan
 scripts_base_url_KingRan=https://cdn.jsdelivr.net/gh/KingRan/JDJB@main/
-my_scripts_list_KingRan="jd_joy_park.js jd_joy_park_task.js jd_fanli.js jd_wish.js"
+my_scripts_list_KingRan="jd_wish.js"
 
 ## Dellear
 scripts_base_url_Dellear=https://cdn.jsdelivr.net/gh/Dellear/lost@main/extra/
