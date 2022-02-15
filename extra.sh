@@ -1,6 +1,6 @@
 #!/bin/bash
-# Update: 2022-02-14
-# Content: add  jd_wq_wxsign.js(微信签到领红包) jd_xinruimz.js(颜究种植园) jd_mpdzcar_game.js(京东汽车-头文子J游戏) jd_mpdzcar_help.js(京东汽车-头文子J助力)
+# Update: 2022-02-15
+# Content: del  gua_HappyNewYear_Shares.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -40,7 +40,6 @@
 #  jd_xmf.js                       京东小魔方
 #  jd_wish.js                      众筹许愿池
 #  jd_nhdt.js                      手机小时购年货地图
-#  gua_HappyNewYear_Shares.js      2022新春快乐 击鼓助力
 #  jd_wq_wxsign.js                 微信签到领红包
 #  jd_xinruimz.js                  颜究种植园               (需要手动开通活动，活动地址：https://xinruimz-isv.isvjcloud.com/plantation)
 
@@ -72,8 +71,7 @@
 
 ##############################  近  期  删  除  ##############################
 
-# jd_mpdzcar.js
-# jd_festival.js
+# gua_HappyNewYear_Shares.js
 
 ##############################  京  东  到  家  ##############################
 
@@ -92,8 +90,8 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-02-14"
-UpdateContent="add  jd_wq_wxsign.js(微信签到领红包) jd_xinruimz.js(颜究种植园) jd_mpdzcar_game.js(京东汽车-头文子J游戏) jd_mpdzcar_help.js(京东汽车-头文子J助力)"
+UpdateDate="2022-02-15"
+UpdateContent="del  gua_HappyNewYear_Shares.js"
 
 ## 作者
 author_list="Public passerby_b smiek2221 yyds X1a0He KingRan Dellear jiulan zero205"
@@ -126,7 +124,7 @@ my_scripts_list_passerby_b="jddj_fruit.js jddj_fruit_collectWater.js jddj_bean.j
 
 ## 青蛙
 scripts_base_url_smiek2221=https://cdn.jsdelivr.net/gh/smiek2121/scripts@master/
-my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRValidator_Pure.js gua_HappyNewYear_Shares.js"
+my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRValidator_Pure.js"
 
 ## star261
 scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
@@ -319,7 +317,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="jd_festival.js"
+DeleteScripts="gua_HappyNewYear_Shares.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
