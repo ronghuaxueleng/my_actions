@@ -1,6 +1,6 @@
 #!/bin/bash
-# Update: 2022-02-15
-# Content: del  gua_HappyNewYear_Shares.js
+# Update: 2022-02-16
+# Content: add  jd_EsportsManager.js(东东电竞经理) jd_wyw.js(玩一玩成就)
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -42,6 +42,8 @@
 #  jd_nhdt.js                      手机小时购年货地图
 #  jd_wq_wxsign.js                 微信签到领红包
 #  jd_xinruimz.js                  颜究种植园               (需要手动开通活动，活动地址：https://xinruimz-isv.isvjcloud.com/plantation)
+#  jd_EsportsManager.js            东东电竞经理
+#  jd_wyw.js                       玩一玩成就
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -71,8 +73,6 @@
 
 ##############################  近  期  删  除  ##############################
 
-# gua_HappyNewYear_Shares.js
-
 ##############################  京  东  到  家  ##############################
 
 ## jddj_bean.js                     鲜豆任务
@@ -90,8 +90,8 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-02-15"
-UpdateContent="del  gua_HappyNewYear_Shares.js"
+UpdateDate="2022-02-16"
+UpdateContent="add  jd_EsportsManager.js(东东电竞经理) jd_wyw.js(玩一玩成就)"
 
 ## 作者
 author_list="Public passerby_b smiek2221 yyds X1a0He KingRan Dellear jiulan zero205"
@@ -132,15 +132,15 @@ my_scripts_list_star261=""
 
 ## yyds
 scripts_base_url_yyds=https://cdn.jsdelivr.net/gh/okyyds/yyds@master/
-my_scripts_list_yyds="JDSignValidator.js jd_productZ4Brand.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_joy_park.js jd_joy_park_task.js jd_m_sign.js jd_bt_sign.js jd_babel_sign.js jx_ttysq.js jd_beauty_ex.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_wq_wxsign.js jd_xinruimz.js"
+my_scripts_list_yyds="JDSignValidator.js jd_productZ4Brand.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_joy_park.js jd_joy_park_task.js jd_m_sign.js jd_bt_sign.js jd_babel_sign.js jx_ttysq.js jd_beauty_ex.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_wq_wxsign.js jd_xinruimz.js jd_wyw.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
 my_scripts_list_X1a0He="jd_unsubscribe_xh.js"
 
 ## KingRan
-scripts_base_url_KingRan=https://cdn.jsdelivr.net/gh/KingRan/JDJB@main/
-my_scripts_list_KingRan="jd_wish.js"
+scripts_base_url_KingRan=https://cdn.jsdelivr.net/gh/KingRan/KR@main/
+my_scripts_list_KingRan="jd_wish.js jd_EsportsManager.js"
 
 ## Dellear
 scripts_base_url_Dellear=https://cdn.jsdelivr.net/gh/Dellear/lost@main/extra/
@@ -317,7 +317,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="gua_HappyNewYear_Shares.js"
+DeleteScripts=""
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
