@@ -94,11 +94,12 @@ UpdateDate="2022-02-16"
 UpdateContent="add  jd_EsportsManager.js(东东电竞经理) jd_wyw.js(玩一玩成就)"
 
 ## 作者
-author_list="Public passerby_b smiek2221 yyds X1a0He KingRan Dellear jiulan zero205"
+author_list="Public passerby_b smiek2221 star261 yyds X1a0He KingRan Dellear jiulan zero205"
 author_name=(
   Public
   passerby-b
   青蛙
+  star261
   yyds
   X1a0He
   KingRan
@@ -128,11 +129,11 @@ my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRVal
 
 ## star261
 scripts_base_url_star261=https://cdn.jsdelivr.net/gh/star261/jd@main/scripts/
-my_scripts_list_star261=""
+my_scripts_list_star261="jd_productZ4Brand.js"
 
 ## yyds
 scripts_base_url_yyds=https://cdn.jsdelivr.net/gh/okyyds/yyds@master/
-my_scripts_list_yyds="JDSignValidator.js jd_productZ4Brand.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_joy_park.js jd_joy_park_task.js jd_m_sign.js jd_bt_sign.js jd_babel_sign.js jx_ttysq.js jd_beauty_ex.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_wq_wxsign.js jd_xinruimz.js jd_wyw.js"
+my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_joy_park.js jd_joy_park_task.js jd_m_sign.js jd_bt_sign.js jd_babel_sign.js jx_ttysq.js jd_beauty_ex.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_wq_wxsign.js jd_xinruimz.js jd_wyw.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://cdn.jsdelivr.net/gh/X1a0He/jd_scripts_fixed@main/
