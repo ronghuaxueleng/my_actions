@@ -1,7 +1,7 @@
 #!/bin/bash
 # Update: 2022-02-24
 # Content: add  jd_sxLottery.js(京东生鲜每日抽奖)  jd_health_plant.py(京东健康社区种植园)
-#          del  jd_ms.js jd_xmf.js jd_bt_sign.js jx_ttysq.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js
+#          del  jd_ms.js jd_xmf.js jd_bt_sign.js jx_ttysq.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_angryKoi.py
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -27,7 +27,6 @@
 #  jd_gold_sign.js                 京东金榜签到
 #  jd_beauty_ex.js                 美丽研究院兑换京豆
 #  jd_jfcz.js                      见缝插针
-#  jd_angryKoi.py                  安静的锦鲤               (全民开红包)
 #  jd_jdtj_winner.js               京东特价翻翻乐
 #  jd_m_sign.js                    京东通天塔--签到
 #  jd_babel_sign.js                通天塔签到共建
@@ -76,6 +75,7 @@
 # jd_mpdzcar.js
 # jd_mpdzcar_game.js
 # jd_mpdzcar_help.js
+# jd_angryKoi.py
 
 ##############################  京  东  到  家  ##############################
 
@@ -95,7 +95,7 @@
 
 NEWLINE="\n          "
 UpdateDate="2022-02-24"
-UpdateContent="add  jd_sxLottery.js(京东生鲜每日抽奖)  jd_health_plant.py(京东健康社区种植园)${NEWLINE}del  jd_ms.js jd_xmf.js jd_bt_sign.js jx_ttysq.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js"
+UpdateContent="add  jd_sxLottery.js(京东生鲜每日抽奖)  jd_health_plant.py(京东健康社区种植园)${NEWLINE}del  jd_ms.js jd_xmf.js jd_bt_sign.js jx_ttysq.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_angryKoi.py"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 yyds X1a0He KingRan Dellear jiulan"
@@ -120,7 +120,7 @@ fi
 
 ## Public
 scripts_base_url_Public=https://gitee.com/SuperManito/scripts/raw/master/
-my_scripts_list_Public="jd_shop_sign.js jd_super_redrain.js jd_half_redrain.js jd_angryKoi.py"
+my_scripts_list_Public="jd_shop_sign.js jd_super_redrain.js jd_half_redrain.js"
 
 ## 京东到家
 scripts_base_url_passerby_b=https://raw.githubusercontent.com/passerby-b/JDDJ/main/
@@ -322,7 +322,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="jd_ms.js jd_xmf.js jd_bt_sign.js jx_ttysq.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js"
+DeleteScripts="jd_ms.js jd_xmf.js jd_bt_sign.js jx_ttysq.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_angryKoi.py"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
