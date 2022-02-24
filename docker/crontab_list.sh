@@ -215,10 +215,6 @@
 21 1,6 * * * node /scripts/jd_speed_sign.js >> /scripts/logs/jd_speed_sign.log 2>&1
 # 京喜财富岛
 1 * * * * node /scripts/jd_cfd_Aaron.js >> /scripts/logs/jd_cfd_Aaron.log 2>&1
-# 京喜财富岛合成月饼
-5 * * * * node /scripts/jd_cfd_Aaron_mooncake.js >> /scripts/logs/jd_cfd_Aaron_mooncake.log 2>&1
-# 京喜财富岛热气球
-30 * * * * node /scripts/jd_cfd_Aaron_loop.js >> /scripts/logs/jd_cfd_Aaron_loop.log 2>&1
 # 家庭号
 # 10 6,7 * * * node /scripts/jd_family.js >> /scripts/logs/jd_family.log 2>&1
 # 京东直播（又回来了）
