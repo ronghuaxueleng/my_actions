@@ -1,7 +1,6 @@
 #!/bin/bash
-# Update: 2022-02-24
-# Content: add  jd_sxLottery.js(京东生鲜每日抽奖)  jd_health_plant.py(京东健康社区种植园)
-#          del  jd_ms.js jd_xmf.js jd_bt_sign.js jx_ttysq.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_angryKoi.py
+# Update: 2022-02-25
+# Content: del  jd_xinruimz.js jd_health_plant.py
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -34,11 +33,9 @@
 #  jd_wish.js                      众筹许愿池
 #  jd_nhdt.js                      手机小时购年货地图
 #  jd_wq_wxsign.js                 微信签到领红包
-#  jd_xinruimz.js                  颜究种植园               (需要手动开通活动，活动地址：https://xinruimz-isv.isvjcloud.com/plantation)
 #  jd_EsportsManager.js            东东电竞经理
 #  jd_wyw.js                       玩一玩成就
 #  jd_sxLottery.js                 京东生鲜每日抽奖
-#  jd_health_plant.py              京东健康社区种植园        (如想白嫖商品则需要手动开通活动，不开通也会做任务领能量，建议留着能量兑豆不建议种植商品)
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -76,6 +73,8 @@
 # jd_mpdzcar_game.js
 # jd_mpdzcar_help.js
 # jd_angryKoi.py
+# jd_xinruimz.js
+# jd_health_plant.py
 
 ##############################  京  东  到  家  ##############################
 
@@ -94,8 +93,8 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-02-24"
-UpdateContent="add  jd_sxLottery.js(京东生鲜每日抽奖)  jd_health_plant.py(京东健康社区种植园)${NEWLINE}del  jd_ms.js jd_xmf.js jd_bt_sign.js jx_ttysq.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_angryKoi.py"
+UpdateDate="2022-02-25"
+UpdateContent="del  jd_xinruimz.js jd_health_plant.py"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 yyds X1a0He KingRan Dellear jiulan"
@@ -136,7 +135,7 @@ my_scripts_list_star261="jd_productZ4Brand.js"
 
 ## yyds
 scripts_base_url_yyds=https://raw.githubusercontent.com/okyyds/yyds/master/
-my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_babel_sign.js jd_beauty_ex.js jd_wq_wxsign.js jd_xinruimz.js jd_wyw.js"
+my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_babel_sign.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://raw.githubusercontent.com/X1a0He/jd_scripts_fixed/main/
@@ -322,7 +321,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="jd_ms.js jd_xmf.js jd_bt_sign.js jx_ttysq.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_angryKoi.py"
+DeleteScripts="jd_ms.js jd_xmf.js jd_bt_sign.js jx_ttysq.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_angryKoi.py jd_xinruimz.js jd_health_plant.py"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
