@@ -27,8 +27,6 @@ docker run -dit \
 -v /home/myid/jd/jishui/config:/jd/config \
 -v /home/myid/jd/jishui/log:/jd/log \
 -p 5680:5678 \
--p 5900:5900 \
--p 8081:8080 \
 -e ENABLE_HANGUP=true \
 -e ENABLE_WEB_PANEL=true \
 -e phone=+8615901254680@+8617600819655 \
