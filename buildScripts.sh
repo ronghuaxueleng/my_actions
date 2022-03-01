@@ -107,7 +107,7 @@ npm install -g npm npm-install-peers
 npm install -g ts-node typescript --unsafe-perm=true --allow-root
 npm install -g ts-node typescript @types/node date-fns axios require tslib fs
 npm install --save-dev @types/node
-ls *.ts | grep -v jd_喂猪 | grep -v jd_speed_redEnvelope | xargs tsc
+ls *.ts | grep -v jd_喂猪 | grep -v jd_speed_redEnvelope | xargs tsc --downlevelIteration
 
 rm -rf node_modules
 rm -rf package-lock.json
