@@ -88,5 +88,5 @@ RUN mkdir -p /root/.ssh \
 
 COPY supervisord.conf /etc/
 
-# CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
-ENTRYPOINT ${JD_DIR}/shell/init.sh
+#CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
+CMD ["node"]

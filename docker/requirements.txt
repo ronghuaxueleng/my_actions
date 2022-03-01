@@ -4,5 +4,6 @@ requests==2.25.0
 furl==2.1.0
 peewee==3.14.0
 hyper==0.7.0
+supervisor==4.2.2
 passlib==1.7.1; sys_platform != 'win32' and python_version < '3.8'
 passlib==1.7.2; sys_platform == 'win32' or python_version >= '3.8'
