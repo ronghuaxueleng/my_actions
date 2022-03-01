@@ -57,6 +57,9 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && rm -rf /tmp/* \
     && rm -rf /var/cache/apk/* \
     && rm -rf /root/.npm \
+    && cp -f ${JD_DIR}/docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh \
+    && chmod 777 /usr/local/bin/docker-entrypoint.sh \
+    && cp -f ${JD_DIR}/docker/supervisord.conf /etc/ \
     && rm -rf ${JD_DIR}/docker
 WORKDIR ${JD_DIR}
 
@@ -86,7 +89,4 @@ RUN mkdir -p /root/.ssh \
     && ssh-keyscan $REPO_URL > /root/.ssh/known_hosts \
     && git config --global pull.ff only
 
-COPY supervisord.conf /etc/
-
-#CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
-CMD ["node"]
+CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
