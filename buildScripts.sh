@@ -222,6 +222,7 @@ cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts
 
 RootDir=./
 FileDiy=diy.sh
+ProxyJudge=true
 GithubProxy="https://ghproxy.com/"
 EnableExtraShellProxy="true"
 EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/extra.sh"
