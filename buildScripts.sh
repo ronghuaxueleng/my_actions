@@ -172,7 +172,7 @@ replaceShareCode jd_sgmh Aaron
 replaceShareCode jd_jxmc Aaron
 cd ${ShellDir}
 
-git clone https://github.com/shufflewzc/faker2.git faker2
+git clone -b main https://github.com/shufflewzc/faker2.git faker2
 cd faker2
 replaceShareCode jd_cash faker2
 replaceShareCode jd_cfd faker2
