@@ -235,6 +235,7 @@ if [ $? -eq 0 ]; then
     sed -i 's/ListCrontabUser/ListCronSh/g' ${FileDiy}
     sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
     sed -i '/exit 1/d' ${FileDiy}
+    sed -i 's/wget -q --no-check-certificate \$url -O "\$ScriptsDir\/\$name.new" -T 20/echo \$url\nwget -q --no-check-certificate \$url -O "\$ScriptsDir\/\$name.new" -T 20/g' ${FileDiy}
     # cat ${FileDiy}
     sleep 2s
     . ${FileDiy}
