@@ -186,6 +186,20 @@ replaceShareCode jd_sgmh faker2
 replaceShareCode jd_jxmc faker2
 cd ${ShellDir}
 
+git clone -b master https://github.com/okyyds/yyds.git yyds
+cd yyds
+replaceShareCode jd_cash yyds
+replaceShareCode jd_cfd yyds
+replaceShareCode jd_dreamFactory yyds
+replaceShareCode jd_fruit yyds
+replaceShareCode jd_health yyds
+replaceShareCode jd_jdfactory yyds
+replaceShareCodeV1 jd_pet yyds
+replaceShareCode jd_plantBean yyds
+replaceShareCode jd_sgmh yyds
+replaceShareCode jd_jxmc yyds
+cd ${ShellDir}
+
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
 ScriptsDir=${ShellDir}/jd_scripts
