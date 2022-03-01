@@ -29,7 +29,7 @@ echo -e "\n\033[1;34m$(date "${TIME}")${PLAIN} ----- ➀ 同步最新源码开�
 cd ${WORK_DIR}
 sleep 2
 git fetch --all
-git reset --hard origin
+git reset --hard origin/source0904
 ## 检测配置文件
 ${ContrlCmd} check files >/dev/null 2>&1
 sleep 2
