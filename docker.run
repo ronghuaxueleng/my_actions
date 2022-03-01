@@ -6,7 +6,7 @@ docker run -dit \
 -v $PWD/log:/var/log \
 -p 5678:5678 \
 -p 5900:5900 \
--p 8080:8080 \
+-p 8087:8080 \
 -e ENABLE_HANGUP=true \
 -e ENABLE_WEB_PANEL=true \
 -e phone=+8615901254680@+8617600819655 \
@@ -31,6 +31,8 @@ docker run -dit \
 -v /home/myid/jd/jishui/log:/var/run \
 -v /home/myid/jd/jishui/log:/var/log \
 -p 5680:5678 \
+-p 5900:5900 \
+-p 8087:8080 \
 -e ENABLE_HANGUP=true \
 -e ENABLE_WEB_PANEL=true \
 -e phone=+8615901254680@+8617600819655 \

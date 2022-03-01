@@ -70,7 +70,7 @@ RUN ln -sf /clash /usr/local/bin/clash
 ADD refresh.sh /root/.config/clash/
 RUN chmod 777 /root/.config/clash/refresh.sh
 ADD ./ll /bin/ll 
-RUN chmod +x /bin/ll
+RUN chmod +x /bin/ll && ln -s /bin/ll /usr/local/bin/ll
 
 ARG REPO=gitee
 ARG REPO_URL=gitee.com
