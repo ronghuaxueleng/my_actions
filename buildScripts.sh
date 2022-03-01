@@ -77,7 +77,7 @@ function deleteShareCode() {
 
 git clone https://github.com/JDHelloWorld/jd_scripts.git JDHelloWorld
 [ ! -d JDHelloWorld/docker ] && mkdir -p JDHelloWorld/docker
-json=$(cat JDHelloWorld/IOS/QX.json)
+json=$(cat JDHelloWorld/iOS/QX.json)
 crontab_list=""
 for row in $(echo "${json}" | jq -r '.task[] | @base64'); do
     _jq() {
