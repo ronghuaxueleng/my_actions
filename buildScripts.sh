@@ -172,7 +172,7 @@ replaceShareCode jd_sgmh Aaron
 replaceShareCode jd_jxmc Aaron
 cd ${ShellDir}
 
-git clone https://github.com/shufflewzc/faker2.git faker2
+git clone -b main https://github.com/shufflewzc/faker2.git faker2
 cd faker2
 replaceShareCode jd_cash faker2
 replaceShareCode jd_cfd faker2
@@ -222,6 +222,7 @@ cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts
 
 RootDir=./
 FileDiy=diy.sh
+ProxyJudge=true
 GithubProxy="https://ghproxy.com/"
 EnableExtraShellProxy="true"
 EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/extra.sh"
@@ -234,6 +235,7 @@ if [ $? -eq 0 ]; then
     sed -i 's/ListCrontabUser/ListCronSh/g' ${FileDiy}
     sed -i 's/scripts\/\$name/\$\{ScriptsDir\}\/\$name/g' ${FileDiy}
     sed -i '/exit 1/d' ${FileDiy}
+    sed -i 's/wget -q --no-check-certificate \$url -O "\$ScriptsDir\/\$name.new" -T 20/echo \$url\nwget -q --no-check-certificate \$url -O "\$ScriptsDir\/\$name.new" -T 20/g' ${FileDiy}
     # cat ${FileDiy}
     sleep 2s
     . ${FileDiy}
