@@ -39,6 +39,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 exports.__esModule = true;
 var axios_1 = require("axios");
 var path = require("path");
@@ -48,10 +75,11 @@ var fs_1 = require("fs");
 var cookie = '', res = '', homePageInfo, jxToken, UserName, index;
 var _a = require('./utils/jd_jxmc.js'), cow = _a.cow, token = _a.token, ua = 'jdpingou;';
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var account, cookiesArr, except, i, _i, account_1, acc, lastgettime, food, cowToken;
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var account, cookiesArr, except, i, account_1, account_1_1, acc, lastgettime, food, cowToken;
+    var e_1, _a;
+    var _b, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
                 account = [];
                 if ((0, fs_1.existsSync)('./utils/account.json')) {
@@ -64,13 +92,13 @@ var _a = require('./utils/jd_jxmc.js'), cow = _a.cow, token = _a.token, ua = 'jd
                 }
                 return [4 /*yield*/, (0, V3_1.requestAlgo)('00df8', 'jdpingou;')];
             case 1:
-                _c.sent();
+                _d.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 2:
-                cookiesArr = _c.sent();
+                cookiesArr = _d.sent();
                 except = (0, TS_USER_AGENTS_1.exceptCookie)(path.basename(__filename));
                 i = 0;
-                _c.label = 3;
+                _d.label = 3;
             case 3:
                 if (!(i < cookiesArr.length)) return [3 /*break*/, 10];
                 cookie = cookiesArr[i];
@@ -82,22 +110,31 @@ var _a = require('./utils/jd_jxmc.js'), cow = _a.cow, token = _a.token, ua = 'jd
                     return [3 /*break*/, 9];
                 }
                 ua = 'jdpingou;';
-                for (_i = 0, account_1 = account; _i < account_1.length; _i++) {
-                    acc = account_1[_i];
-                    if ((acc === null || acc === void 0 ? void 0 : acc.pt_pin.includes(UserName)) && (acc === null || acc === void 0 ? void 0 : acc.jdpingou)) {
-                        ua = acc.jdpingou;
-                        console.log('指定UA：', ua);
-                        break;
+                try {
+                    for (account_1 = (e_1 = void 0, __values(account)), account_1_1 = account_1.next(); !account_1_1.done; account_1_1 = account_1.next()) {
+                        acc = account_1_1.value;
+                        if ((acc === null || acc === void 0 ? void 0 : acc.pt_pin.includes(UserName)) && (acc === null || acc === void 0 ? void 0 : acc.jdpingou)) {
+                            ua = acc.jdpingou;
+                            console.log('指定UA：', ua);
+                            break;
+                        }
                     }
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (account_1_1 && !account_1_1.done && (_a = account_1["return"])) _a.call(account_1);
+                    }
+                    finally { if (e_1) throw e_1.error; }
                 }
                 return [4 /*yield*/, token(cookie)];
             case 4:
-                jxToken = _c.sent();
+                jxToken = _d.sent();
                 return [4 /*yield*/, api('queryservice/GetHomePageInfo', 'activeid,activekey,channel,isgift,isqueryinviteicon,isquerypicksite,isregionflag,jxmc_jstoken,phoneid,sceneid,timestamp', { isgift: 1, isquerypicksite: 1, isqueryinviteicon: 1, isregionflag: 0, activeid: null })];
             case 5:
-                homePageInfo = _c.sent();
+                homePageInfo = _d.sent();
                 lastgettime = void 0;
-                if ((_b = (_a = homePageInfo.data) === null || _a === void 0 ? void 0 : _a.cow) === null || _b === void 0 ? void 0 : _b.lastgettime) {
+                if ((_c = (_b = homePageInfo.data) === null || _b === void 0 ? void 0 : _b.cow) === null || _c === void 0 ? void 0 : _c.lastgettime) {
                     lastgettime = homePageInfo.data.cow.lastgettime;
                 }
                 else {
@@ -113,18 +150,18 @@ var _a = require('./utils/jd_jxmc.js'), cow = _a.cow, token = _a.token, ua = 'jd
                 }
                 return [4 /*yield*/, cow(lastgettime)];
             case 6:
-                cowToken = _c.sent();
+                cowToken = _d.sent();
                 return [4 /*yield*/, api('operservice/GetCoin', 'activeid,activekey,channel,commtype,jxmc_jstoken,phoneid,sceneid,timestamp,token', { token: cowToken, commtype: 0, activeid: 'jxmc_active_0001' })];
             case 7:
-                res = _c.sent();
+                res = _d.sent();
                 if (res.ret === 0)
                     console.log('收牛牛:', res.data.addcoin);
                 else
                     console.log('收牛牛:', res);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
             case 8:
-                _c.sent();
-                _c.label = 9;
+                _d.sent();
+                _d.label = 9;
             case 9:
                 i++;
                 return [3 /*break*/, 3];
@@ -134,9 +171,10 @@ var _a = require('./utils/jd_jxmc.js'), cow = _a.cow, token = _a.token, ua = 'jd
 }); })();
 function api(fn, stk, params) {
     return __awaiter(this, void 0, void 0, function () {
-        var url, t, _i, _a, _b, key, value, data, e_1;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var url, t, _a, _b, _c, key, value, data, e_2;
+        var e_3, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     t = [
                         { key: 'activekey', value: 'null' },
@@ -147,15 +185,24 @@ function api(fn, stk, params) {
                         { key: 'timestamp', value: jxToken.timestamp.toString() },
                     ];
                     url = "https://m.jingxi.com/jxmc/".concat(fn, "?channel=7&sceneid=1001&activekey=null&jxmc_jstoken=").concat(jxToken['farm_jstoken'], "&timestamp=").concat(jxToken.timestamp, "&phoneid=").concat(jxToken.phoneid, "&_stk=").concat(encodeURIComponent(stk), "&_ste=1&_=").concat(Date.now(), "&sceneval=2&g_login_type=1&callback=jsonpCBK").concat((0, TS_USER_AGENTS_1.randomWord)(), "&g_ty=ls");
-                    for (_i = 0, _a = Object.entries(params); _i < _a.length; _i++) {
-                        _b = _a[_i], key = _b[0], value = _b[1];
-                        t.push({ key: key, value: value });
-                        url += "&".concat(key, "=").concat(value);
+                    try {
+                        for (_a = __values(Object.entries(params)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                            _c = __read(_b.value, 2), key = _c[0], value = _c[1];
+                            t.push({ key: key, value: value });
+                            url += "&".concat(key, "=").concat(value);
+                        }
+                    }
+                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                    finally {
+                        try {
+                            if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
+                        }
+                        finally { if (e_3) throw e_3.error; }
                     }
                     url += "&h5st=".concat(encodeURIComponent((0, V3_1.geth5st)(t, '00df8')));
-                    _c.label = 1;
+                    _e.label = 1;
                 case 1:
-                    _c.trys.push([1, 3, , 4]);
+                    _e.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, axios_1["default"].get(url, {
                             headers: {
                                 'Host': 'm.jingxi.com',
@@ -167,11 +214,11 @@ function api(fn, stk, params) {
                             }
                         })];
                 case 2:
-                    data = (_c.sent()).data;
+                    data = (_e.sent()).data;
                     return [2 /*return*/, JSON.parse(data.replace(/jsonpCBK.?\(/, '').split('\n')[0])];
                 case 3:
-                    e_1 = _c.sent();
-                    console.log('api Error:', e_1);
+                    e_2 = _e.sent();
+                    console.log('api Error:', e_2);
                     return [2 /*return*/, {}];
                 case 4: return [2 /*return*/];
             }

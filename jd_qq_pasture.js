@@ -35,6 +35,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 exports.__esModule = true;
 var axios_1 = require("axios");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
@@ -287,17 +298,36 @@ function isvObfuscator() {
     });
 }
 function reloadCookie(setCookie) {
+    var e_1, _a, e_2, _b;
     var cookieArr = cookie.split(';');
     cookieArr.pop();
     var cookieTEMP = {};
-    for (var _i = 0, cookieArr_1 = cookieArr; _i < cookieArr_1.length; _i++) {
-        var ck = cookieArr_1[_i];
-        cookieTEMP[ck.split('=')[0]] = ck.match(/(pt_key|pt_pin|LZ_TOKEN_KEY|LZ_TOKEN_VALUE|AUTH_C_USER|lz_jdpin_token|IsvToken)=([^;]*)/)[2];
+    try {
+        for (var cookieArr_1 = __values(cookieArr), cookieArr_1_1 = cookieArr_1.next(); !cookieArr_1_1.done; cookieArr_1_1 = cookieArr_1.next()) {
+            var ck = cookieArr_1_1.value;
+            cookieTEMP[ck.split('=')[0]] = ck.match(/(pt_key|pt_pin|LZ_TOKEN_KEY|LZ_TOKEN_VALUE|AUTH_C_USER|lz_jdpin_token|IsvToken)=([^;]*)/)[2];
+        }
     }
-    for (var _a = 0, setCookie_1 = setCookie; _a < setCookie_1.length; _a++) {
-        var ck = setCookie_1[_a];
-        ck = ck.split(';')[0];
-        cookieTEMP[ck.split('=')[0]] = ck.match(/(pt_key|pt_pin|LZ_TOKEN_KEY|LZ_TOKEN_VALUE|AUTH_C_USER|lz_jdpin_token|IsvToken)=([^;]*)/)[2];
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+    finally {
+        try {
+            if (cookieArr_1_1 && !cookieArr_1_1.done && (_a = cookieArr_1["return"])) _a.call(cookieArr_1);
+        }
+        finally { if (e_1) throw e_1.error; }
+    }
+    try {
+        for (var setCookie_1 = __values(setCookie), setCookie_1_1 = setCookie_1.next(); !setCookie_1_1.done; setCookie_1_1 = setCookie_1.next()) {
+            var ck = setCookie_1_1.value;
+            ck = ck.split(';')[0];
+            cookieTEMP[ck.split('=')[0]] = ck.match(/(pt_key|pt_pin|LZ_TOKEN_KEY|LZ_TOKEN_VALUE|AUTH_C_USER|lz_jdpin_token|IsvToken)=([^;]*)/)[2];
+        }
+    }
+    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+    finally {
+        try {
+            if (setCookie_1_1 && !setCookie_1_1.done && (_b = setCookie_1["return"])) _b.call(setCookie_1);
+        }
+        finally { if (e_2) throw e_2.error; }
     }
     cookie = '';
     for (var ck in cookieTEMP) {

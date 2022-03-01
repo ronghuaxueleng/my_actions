@@ -44,6 +44,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 exports.__esModule = true;
 var date_fns_1 = require("date-fns");
 var axios_1 = require("axios");
@@ -58,27 +69,37 @@ var target = process.env.CFD_STOCK
     ? process.env.CFD_STOCK.split('&')
     : ['必胜客50元美食卡', '星巴克50元代金券'];
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var _i, _a, j, name_1, stock;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var _a, _b, j, name_1, stock;
+    var e_1, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0: return [4 /*yield*/, requestAlgo()];
             case 1:
-                _b.sent();
+                _d.sent();
                 return [4 /*yield*/, requireConfig()];
             case 2:
-                _b.sent();
+                _d.sent();
                 cookie = cookiesArr[0];
                 return [4 /*yield*/, api('user/ExchangeState', '_cfd_t,bizCode,dwEnv,dwType,ptag,source,strZone', { dwType: '0' })];
             case 3:
-                res = _b.sent();
-                for (_i = 0, _a = res.goods; _i < _a.length; _i++) {
-                    j = _a[_i];
-                    name_1 = j.strPrizeName.trim();
-                    stock = j.dwStockNum;
-                    console.log(name_1, stock);
-                    if (target.includes(name_1) && stock !== 0) {
-                        notify.sendNotify("\u8D22\u5BCC\u5C9B\u8865\u8D27\n\n".concat(name_1), "\u5E93\u5B58\uFF1A".concat(stock), '', '\n\n你好，世界！');
+                res = _d.sent();
+                try {
+                    for (_a = __values(res.goods), _b = _a.next(); !_b.done; _b = _a.next()) {
+                        j = _b.value;
+                        name_1 = j.strPrizeName.trim();
+                        stock = j.dwStockNum;
+                        console.log(name_1, stock);
+                        if (target.includes(name_1) && stock !== 0) {
+                            notify.sendNotify("\u8D22\u5BCC\u5C9B\u8865\u8D27\n\n".concat(name_1), "\u5E93\u5B58\uFF1A".concat(stock), '', '\n\n你好，世界！');
+                        }
                     }
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (_b && !_b.done && (_c = _a["return"])) _c.call(_a);
+                    }
+                    finally { if (e_1) throw e_1.error; }
                 }
                 return [2 /*return*/];
         }

@@ -35,21 +35,58 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 exports.__esModule = true;
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var cookie = '', UserName;
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, _i, _a, _b, index, value;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var cookiesArr, _a, _b, _c, index, value;
+    var e_1, _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 1:
-                cookiesArr = _c.sent();
-                for (_i = 0, _a = cookiesArr.entries(); _i < _a.length; _i++) {
-                    _b = _a[_i], index = _b[0], value = _b[1];
-                    cookie = value;
-                    UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
-                    console.log(index + 1, UserName);
+                cookiesArr = _e.sent();
+                try {
+                    for (_a = __values(cookiesArr.entries()), _b = _a.next(); !_b.done; _b = _a.next()) {
+                        _c = __read(_b.value, 2), index = _c[0], value = _c[1];
+                        cookie = value;
+                        UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
+                        console.log(index + 1, UserName);
+                    }
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
+                    }
+                    finally { if (e_1) throw e_1.error; }
                 }
                 return [2 /*return*/];
         }

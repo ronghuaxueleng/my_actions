@@ -35,6 +35,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 exports.__esModule = true;
 var fs_1 = require("fs");
 var date_fns_1 = require("date-fns");
@@ -44,9 +71,10 @@ var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var cookie = '', res = '', UserName;
 var date = (0, date_fns_1.getDate)(new Date()), message = '', allMessage = '', pushplusArr, pushplusUser = [];
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var _i, pushplusArr_1, user, cookiesArr, _a, _b, _c, index, value, jdRed, jdRedExp, _d, _e, red;
-    return __generator(this, function (_f) {
-        switch (_f.label) {
+    var pushplusArr_1, pushplusArr_1_1, user, cookiesArr, _a, _b, _c, index, value, jdRed, jdRedExp, _d, _e, red, e_1_1;
+    var e_2, _f, e_1, _g, e_3, _h;
+    return __generator(this, function (_j) {
+        switch (_j.label) {
             case 0:
                 if (Object.keys(process.env).includes("QL_DIR"))
                     return [2 /*return*/];
@@ -57,20 +85,32 @@ var date = (0, date_fns_1.getDate)(new Date()), message = '', allMessage = '', p
                     console.log('utils/pushplus.json 加载错误');
                     pushplusArr = [];
                 }
-                for (_i = 0, pushplusArr_1 = pushplusArr; _i < pushplusArr_1.length; _i++) {
-                    user = pushplusArr_1[_i];
-                    if (user.pushplus) {
-                        pushplusUser.push(decodeURIComponent(user.pt_pin));
+                try {
+                    for (pushplusArr_1 = __values(pushplusArr), pushplusArr_1_1 = pushplusArr_1.next(); !pushplusArr_1_1.done; pushplusArr_1_1 = pushplusArr_1.next()) {
+                        user = pushplusArr_1_1.value;
+                        if (user.pushplus) {
+                            pushplusUser.push(decodeURIComponent(user.pt_pin));
+                        }
                     }
+                }
+                catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                finally {
+                    try {
+                        if (pushplusArr_1_1 && !pushplusArr_1_1.done && (_f = pushplusArr_1["return"])) _f.call(pushplusArr_1);
+                    }
+                    finally { if (e_2) throw e_2.error; }
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 1:
-                cookiesArr = _f.sent();
-                _a = 0, _b = cookiesArr.entries();
-                _f.label = 2;
+                cookiesArr = _j.sent();
+                _j.label = 2;
             case 2:
-                if (!(_a < _b.length)) return [3 /*break*/, 8];
-                _c = _b[_a], index = _c[0], value = _c[1];
+                _j.trys.push([2, 10, 11, 12]);
+                _a = __values(cookiesArr.entries()), _b = _a.next();
+                _j.label = 3;
+            case 3:
+                if (!!_b.done) return [3 /*break*/, 9];
+                _c = __read(_b.value, 2), index = _c[0], value = _c[1];
                 cookie = value;
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
@@ -81,44 +121,64 @@ var date = (0, date_fns_1.getDate)(new Date()), message = '', allMessage = '', p
                         'referer': 'https://wqs.jd.com/',
                         'cookie': cookie
                     })];
-            case 3:
-                res = _f.sent();
-                for (_d = 0, _e = res.data.useRedInfo.redList; _d < _e.length; _d++) {
-                    red = _e[_d];
-                    if (red.orgLimitStr.includes("京喜")) {
+            case 4:
+                res = _j.sent();
+                try {
+                    for (_d = (e_3 = void 0, __values(res.data.useRedInfo.redList)), _e = _d.next(); !_e.done; _e = _d.next()) {
+                        red = _e.value;
+                        if (red.orgLimitStr.includes("京喜")) {
+                        }
+                        else if (red.activityName.includes('极速版')) {
+                        }
+                        else if (red.orgLimitStr.includes('京东健康')) {
+                        }
+                        else {
+                            jdRed += parseFloat(red.balance);
+                            (0, date_fns_1.getDate)(red.endTime * 1000) === date ? jdRedExp += parseFloat(red.balance) : '';
+                        }
                     }
-                    else if (red.activityName.includes('极速版')) {
+                }
+                catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                finally {
+                    try {
+                        if (_e && !_e.done && (_h = _d["return"])) _h.call(_d);
                     }
-                    else if (red.orgLimitStr.includes('京东健康')) {
-                    }
-                    else {
-                        jdRed += parseFloat(red.balance);
-                        (0, date_fns_1.getDate)(red.endTime * 1000) === date ? jdRedExp += parseFloat(red.balance) : '';
-                    }
+                    finally { if (e_3) throw e_3.error; }
                 }
                 console.log(parseFloat(jdRed.toFixed(2)), parseFloat(jdRedExp.toFixed(2)));
                 message = "\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011 ").concat(UserName, "\n\u4EAC\u4E1C\u7EA2\u5305  ").concat(jdRed.toFixed(2), "\n\u4ECA\u65E5\u8FC7\u671F  ").concat(jdRedExp.toFixed(2), "\n\n");
-                if (!pushplusUser.includes(UserName)) return [3 /*break*/, 5];
+                if (!pushplusUser.includes(UserName)) return [3 /*break*/, 6];
                 return [4 /*yield*/, (0, pushplus_1.pushplus)('京东红包', message)];
-            case 4:
-                _f.sent();
-                _f.label = 5;
             case 5:
+                _j.sent();
+                _j.label = 6;
+            case 6:
                 allMessage += message;
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 6:
-                _f.sent();
-                _f.label = 7;
             case 7:
-                _a++;
-                return [3 /*break*/, 2];
+                _j.sent();
+                _j.label = 8;
             case 8:
-                if (!allMessage) return [3 /*break*/, 10];
+                _b = _a.next();
+                return [3 /*break*/, 3];
+            case 9: return [3 /*break*/, 12];
+            case 10:
+                e_1_1 = _j.sent();
+                e_1 = { error: e_1_1 };
+                return [3 /*break*/, 12];
+            case 11:
+                try {
+                    if (_b && !_b.done && (_g = _a["return"])) _g.call(_a);
+                }
+                finally { if (e_1) throw e_1.error; }
+                return [7 /*endfinally*/];
+            case 12:
+                if (!allMessage) return [3 /*break*/, 14];
                 return [4 /*yield*/, (0, sendNotify_1.sendNotify)('京东红包', allMessage)];
-            case 9:
-                _f.sent();
-                _f.label = 10;
-            case 10: return [2 /*return*/];
+            case 13:
+                _j.sent();
+                _j.label = 14;
+            case 14: return [2 /*return*/];
         }
     });
 }); })();

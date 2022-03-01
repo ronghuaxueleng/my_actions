@@ -35,6 +35,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 exports.__esModule = true;
 exports.pushplus = void 0;
 var axios_1 = require("axios");
@@ -49,16 +60,26 @@ catch (e) {
 function pushplus(title, content, template) {
     if (template === void 0) { template = 'html'; }
     return __awaiter(this, void 0, void 0, function () {
-        var token, _i, account_1, user, data;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var token, account_1, account_1_1, user, data;
+        var e_1, _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    for (_i = 0, account_1 = account; _i < account_1.length; _i++) {
-                        user = account_1[_i];
-                        if (content.includes(decodeURIComponent(user.pt_pin)) && user.pushplus) {
-                            token = user.pushplus;
-                            break;
+                    try {
+                        for (account_1 = __values(account), account_1_1 = account_1.next(); !account_1_1.done; account_1_1 = account_1.next()) {
+                            user = account_1_1.value;
+                            if (content.includes(decodeURIComponent(user.pt_pin)) && user.pushplus) {
+                                token = user.pushplus;
+                                break;
+                            }
                         }
+                    }
+                    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                    finally {
+                        try {
+                            if (account_1_1 && !account_1_1.done && (_a = account_1["return"])) _a.call(account_1);
+                        }
+                        finally { if (e_1) throw e_1.error; }
                     }
                     if (!token) {
                         console.log('no pushplus token');
@@ -75,7 +96,7 @@ function pushplus(title, content, template) {
                             }
                         })];
                 case 1:
-                    data = (_a.sent()).data;
+                    data = (_b.sent()).data;
                     if (data.code === 200) {
                         console.log('pushplus发送成功');
                     }

@@ -35,6 +35,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 exports.__esModule = true;
 exports.cash = exports.jxfactory = exports.sgmh = exports.factory = exports.pet = exports.health = exports.farm = exports.bean = void 0;
 var axios_1 = require("axios");
@@ -137,9 +148,10 @@ exports.pet = pet;
 function factory(cookie) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var data, _i, _c, t;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var data, _c, _d, t;
+        var e_1, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0: return [4 /*yield*/, axios_1["default"].post("https://api.m.jd.com/client.action?functionId=jdfactory_getTaskDetail", "functionId=jdfactory_getTaskDetail&body=".concat(escape(JSON.stringify({})), "&client=wh5&clientVersion=9.1.0"), {
                         headers: {
                             Cookie: cookie,
@@ -150,12 +162,21 @@ function factory(cookie) {
                         }
                     })];
                 case 1:
-                    data = (_d.sent()).data;
+                    data = (_f.sent()).data;
                     if (data.data.bizCode === 0) {
-                        for (_i = 0, _c = (_b = (_a = data.data) === null || _a === void 0 ? void 0 : _a.result) === null || _b === void 0 ? void 0 : _b.taskVos; _i < _c.length; _i++) {
-                            t = _c[_i];
-                            if (t.taskType === 14)
-                                return [2 /*return*/, t.assistTaskDetailVo.taskToken];
+                        try {
+                            for (_c = __values((_b = (_a = data.data) === null || _a === void 0 ? void 0 : _a.result) === null || _b === void 0 ? void 0 : _b.taskVos), _d = _c.next(); !_d.done; _d = _c.next()) {
+                                t = _d.value;
+                                if (t.taskType === 14)
+                                    return [2 /*return*/, t.assistTaskDetailVo.taskToken];
+                            }
+                        }
+                        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                        finally {
+                            try {
+                                if (_d && !_d.done && (_e = _c["return"])) _e.call(_c);
+                            }
+                            finally { if (e_1) throw e_1.error; }
                         }
                     }
                     return [2 /*return*/, 'null'];
@@ -167,9 +188,10 @@ exports.factory = factory;
 function sgmh(cookie) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var data, _i, _c, t;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var data, _c, _d, t;
+        var e_2, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0: return [4 /*yield*/, axios_1["default"].post("https://api.m.jd.com/client.action", "functionId=interact_template_getHomeData&body={\"appId\":\"1EFRXxg\",\"taskToken\":\"\"}&client=wh5&clientVersion=1.0.0", {
                         headers: {
                             'Origin': "https://h5.m.jd.com",
@@ -180,12 +202,21 @@ function sgmh(cookie) {
                         }
                     })];
                 case 1:
-                    data = (_d.sent()).data;
+                    data = (_f.sent()).data;
                     if (data.data.bizCode === 0) {
-                        for (_i = 0, _c = (_b = (_a = data.data) === null || _a === void 0 ? void 0 : _a.result) === null || _b === void 0 ? void 0 : _b.taskVos; _i < _c.length; _i++) {
-                            t = _c[_i];
-                            if (t.taskName === '邀请好友助力')
-                                return [2 /*return*/, t.assistTaskDetailVo.taskToken];
+                        try {
+                            for (_c = __values((_b = (_a = data.data) === null || _a === void 0 ? void 0 : _a.result) === null || _b === void 0 ? void 0 : _b.taskVos), _d = _c.next(); !_d.done; _d = _c.next()) {
+                                t = _d.value;
+                                if (t.taskName === '邀请好友助力')
+                                    return [2 /*return*/, t.assistTaskDetailVo.taskToken];
+                            }
+                        }
+                        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                        finally {
+                            try {
+                                if (_d && !_d.done && (_e = _c["return"])) _e.call(_c);
+                            }
+                            finally { if (e_2) throw e_2.error; }
                         }
                     }
                     return [2 /*return*/, 'null'];

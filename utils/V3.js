@@ -35,6 +35,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 exports.__esModule = true;
 exports.makeShareCodes = exports.get = exports.geth5st = exports.requestAlgo = void 0;
 var axios_1 = require("axios");
@@ -94,9 +121,10 @@ exports.geth5st = geth5st;
 function get(fn, stk, params, jxToken, cookie, ua) {
     if (ua === void 0) { ua = 'jdpingou;'; }
     return __awaiter(this, void 0, void 0, function () {
-        var url, t, _i, _a, _b, key, value, h5st, data, e_1;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var url, t, _a, _b, _c, key, value, h5st, data, e_1;
+        var e_2, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     t = [
                         { key: 'activeid', value: 'jxmc_active_0001' },
@@ -111,16 +139,25 @@ function get(fn, stk, params, jxToken, cookie, ua) {
                         url = "https://m.jingxi.com/newtasksys/newtasksys_front/".concat(fn, "?_=").concat(Date.now(), "&source=jxmc&bizCode=jxmc&_stk=").concat(encodeURIComponent(stk), "&_ste=1&sceneval=2&g_login_type=1&callback=jsonpCBK").concat((0, TS_USER_AGENTS_1.randomWord)(), "&g_ty=ls");
                     else
                         url = "https://m.jingxi.com/jxmc/".concat(fn, "?channel=7&sceneid=1001&activeid=jxmc_active_0001&activekey=null&jxmc_jstoken=").concat(jxToken.farm_jstoken, "&timestamp=").concat(jxToken.timestamp, "&phoneid=").concat(jxToken.phoneid, "&_stk=").concat(encodeURIComponent(stk), "&_ste=1&_=").concat(Date.now(), "&sceneval=2&g_login_type=1&callback=jsonpCBK").concat((0, TS_USER_AGENTS_1.randomWord)(), "&g_ty=ls");
-                    for (_i = 0, _a = Object.entries(params); _i < _a.length; _i++) {
-                        _b = _a[_i], key = _b[0], value = _b[1];
-                        t.push({ key: key, value: value });
-                        url += "&".concat(key, "=").concat(value);
+                    try {
+                        for (_a = __values(Object.entries(params)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                            _c = __read(_b.value, 2), key = _c[0], value = _c[1];
+                            t.push({ key: key, value: value });
+                            url += "&".concat(key, "=").concat(value);
+                        }
+                    }
+                    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                    finally {
+                        try {
+                            if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
+                        }
+                        finally { if (e_2) throw e_2.error; }
                     }
                     h5st = geth5st(t, '00df8');
                     url += "&h5st=".concat(h5st);
-                    _c.label = 1;
+                    _e.label = 1;
                 case 1:
-                    _c.trys.push([1, 3, , 4]);
+                    _e.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, axios_1["default"].get(url, {
                             headers: {
                                 'Host': 'm.jingxi.com',
@@ -132,10 +169,10 @@ function get(fn, stk, params, jxToken, cookie, ua) {
                             }
                         })];
                 case 2:
-                    data = (_c.sent()).data;
+                    data = (_e.sent()).data;
                     return [2 /*return*/, JSON.parse(data.match(/jsonpCBK.?\((.*)/)[1])];
                 case 3:
-                    e_1 = _c.sent();
+                    e_1 = _e.sent();
                     (0, TS_USER_AGENTS_1.o2s)(e_1);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
@@ -146,7 +183,7 @@ function get(fn, stk, params, jxToken, cookie, ua) {
 exports.get = get;
 function makeShareCodes(code, cookie) {
     return __awaiter(this, void 0, void 0, function () {
-        var bean, farm, pin, data, e_2;
+        var bean, farm, pin, data, e_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -164,9 +201,9 @@ function makeShareCodes(code, cookie) {
                     console.log(data.message);
                     return [3 /*break*/, 5];
                 case 4:
-                    e_2 = _a.sent();
+                    e_3 = _a.sent();
                     console.log('自动提交失败');
-                    console.log(e_2);
+                    console.log(e_3);
                     return [3 /*break*/, 5];
                 case 5: return [2 /*return*/];
             }

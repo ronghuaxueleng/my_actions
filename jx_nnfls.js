@@ -40,6 +40,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -55,23 +82,24 @@ var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var cookie = '', UserName, index, res = '';
 var shareCodeSelf = [], shareCode = [], shareCodeHW = [];
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, i, coin, _i, _a, t, surplusTimes, j, i, _b, shareCode_1, code;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var cookiesArr, i, coin, _a, _b, t, e_1_1, surplusTimes, j, i, shareCode_1, shareCode_1_1, code, e_2_1;
+    var e_1, _c, e_2, _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 1:
-                cookiesArr = _c.sent();
+                cookiesArr = _e.sent();
                 i = 0;
-                _c.label = 2;
+                _e.label = 2;
             case 2:
-                if (!(i < cookiesArr.length)) return [3 /*break*/, 20];
+                if (!(i < cookiesArr.length)) return [3 /*break*/, 24];
                 cookie = cookiesArr[i];
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 index = i + 1;
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index, "\u3011").concat(UserName, "\n"));
                 return [4 /*yield*/, api('sign/UserSignNew', 'sceneval,source', { source: '' })];
             case 3:
-                res = _c.sent();
+                res = _e.sent();
                 console.log('签到');
                 console.log('助力码', res.data.token);
                 shareCodeSelf.push(res.data.token);
@@ -99,102 +127,130 @@ var shareCodeSelf = [], shareCode = [], shareCodeHW = [];
                 await wait(2000)
             
                  */
-                res = _c.sent();
-                _i = 0, _a = res.data.tasks;
-                _c.label = 5;
+                res = _e.sent();
+                _e.label = 5;
             case 5:
-                if (!(_i < _a.length)) return [3 /*break*/, 11];
-                t = _a[_i];
+                _e.trys.push([5, 13, 14, 15]);
+                _a = (e_1 = void 0, __values(res.data.tasks)), _b = _a.next();
+                _e.label = 6;
+            case 6:
+                if (!!_b.done) return [3 /*break*/, 12];
+                t = _b.value;
                 console.log(t.taskName);
                 return [4 /*yield*/, api('task/drawUserTask', 'sceneval,taskid', { taskid: t.taskId })];
-            case 6:
-                res = _c.sent();
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(t.param7 * 1000 + 1000)];
             case 7:
-                _c.sent();
-                return [4 /*yield*/, api('task/UserTaskFinish', 'sceneval,taskid', { taskid: t.taskId })];
+                res = _e.sent();
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(t.param7 * 1000 + 1000)];
             case 8:
-                res = _c.sent();
+                _e.sent();
+                return [4 /*yield*/, api('task/UserTaskFinish', 'sceneval,taskid', { taskid: t.taskId })];
+            case 9:
+                res = _e.sent();
                 (0, TS_USER_AGENTS_1.o2s)(res);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 9:
-                _c.sent();
-                _c.label = 10;
             case 10:
-                _i++;
-                return [3 /*break*/, 5];
-            case 11: return [4 /*yield*/, api('active/LuckyTwistUserInfo', 'sceneval', {})];
-            case 12:
-                res = _c.sent();
+                _e.sent();
+                _e.label = 11;
+            case 11:
+                _b = _a.next();
+                return [3 /*break*/, 6];
+            case 12: return [3 /*break*/, 15];
+            case 13:
+                e_1_1 = _e.sent();
+                e_1 = { error: e_1_1 };
+                return [3 /*break*/, 15];
+            case 14:
+                try {
+                    if (_b && !_b.done && (_c = _a["return"])) _c.call(_a);
+                }
+                finally { if (e_1) throw e_1.error; }
+                return [7 /*endfinally*/];
+            case 15: return [4 /*yield*/, api('active/LuckyTwistUserInfo', 'sceneval', {})];
+            case 16:
+                res = _e.sent();
                 surplusTimes = res.data.surplusTimes;
                 console.log('剩余抽奖次数', surplusTimes);
                 j = 0;
-                _c.label = 13;
-            case 13:
-                if (!(j < surplusTimes && coin >= 10)) return [3 /*break*/, 17];
+                _e.label = 17;
+            case 17:
+                if (!(j < surplusTimes && coin >= 10)) return [3 /*break*/, 21];
                 return [4 /*yield*/, api('active/LuckyTwistDraw', 'active,activedesc,sceneval', { active: 'rwjs_fk1111', activedesc: encodeURIComponent('幸运扭蛋机抽奖') })];
-            case 14:
-                res = _c.sent();
+            case 18:
+                res = _e.sent();
                 console.log('抽奖成功', res.data);
                 coin -= 10;
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
-            case 15:
-                _c.sent();
-                _c.label = 16;
-            case 16:
-                j++;
-                return [3 /*break*/, 13];
-            case 17: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 18:
-                _c.sent();
-                _c.label = 19;
             case 19:
+                _e.sent();
+                _e.label = 20;
+            case 20:
+                j++;
+                return [3 /*break*/, 17];
+            case 21: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+            case 22:
+                _e.sent();
+                _e.label = 23;
+            case 23:
                 i++;
                 return [3 /*break*/, 2];
-            case 20:
+            case 24:
                 console.log('内部助力', shareCodeSelf);
                 i = 0;
-                _c.label = 21;
-            case 21:
-                if (!(i < cookiesArr.length)) return [3 /*break*/, 31];
-                if (!(shareCodeHW.length === 0)) return [3 /*break*/, 23];
+                _e.label = 25;
+            case 25:
+                if (!(i < cookiesArr.length)) return [3 /*break*/, 39];
+                if (!(shareCodeHW.length === 0)) return [3 /*break*/, 27];
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.getshareCodeHW)('nnfls')];
-            case 22:
-                shareCodeHW = _c.sent();
-                _c.label = 23;
-            case 23:
-                shareCode = Array.from(new Set(__spreadArray(__spreadArray([], shareCodeSelf, true), shareCodeHW, true)));
+            case 26:
+                shareCodeHW = _e.sent();
+                _e.label = 27;
+            case 27:
+                shareCode = Array.from(new Set(__spreadArray(__spreadArray([], __read(shareCodeSelf), false), __read(shareCodeHW), false)));
                 cookie = cookiesArr[i];
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
-                _b = 0, shareCode_1 = shareCode;
-                _c.label = 24;
-            case 24:
-                if (!(_b < shareCode_1.length)) return [3 /*break*/, 30];
-                code = shareCode_1[_b];
+                _e.label = 28;
+            case 28:
+                _e.trys.push([28, 36, 37, 38]);
+                shareCode_1 = (e_2 = void 0, __values(shareCode)), shareCode_1_1 = shareCode_1.next();
+                _e.label = 29;
+            case 29:
+                if (!!shareCode_1_1.done) return [3 /*break*/, 35];
+                code = shareCode_1_1.value;
                 console.log("".concat(UserName, " \u53BB\u52A9\u529B ").concat(code));
                 return [4 /*yield*/, api('sign/helpSign', 'flag,sceneval,token', { flag: 0, token: code })];
-            case 25:
-                res = _c.sent();
+            case 30:
+                res = _e.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
-            case 26:
-                _c.sent();
+            case 31:
+                _e.sent();
                 return [4 /*yield*/, api('sign/helpSign', 'flag,sceneval,token', { flag: 1, token: code })];
-            case 27:
-                res = _c.sent();
+            case 32:
+                res = _e.sent();
                 console.log('助力结果', res.errMsg);
                 if (res.errMsg === 'help day limit')
-                    return [3 /*break*/, 30];
+                    return [3 /*break*/, 35];
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 28:
-                _c.sent();
-                _c.label = 29;
-            case 29:
-                _b++;
-                return [3 /*break*/, 24];
-            case 30:
+            case 33:
+                _e.sent();
+                _e.label = 34;
+            case 34:
+                shareCode_1_1 = shareCode_1.next();
+                return [3 /*break*/, 29];
+            case 35: return [3 /*break*/, 38];
+            case 36:
+                e_2_1 = _e.sent();
+                e_2 = { error: e_2_1 };
+                return [3 /*break*/, 38];
+            case 37:
+                try {
+                    if (shareCode_1_1 && !shareCode_1_1.done && (_d = shareCode_1["return"])) _d.call(shareCode_1);
+                }
+                finally { if (e_2) throw e_2.error; }
+                return [7 /*endfinally*/];
+            case 38:
                 i++;
-                return [3 /*break*/, 21];
-            case 31: return [2 /*return*/];
+                return [3 /*break*/, 25];
+            case 39: return [2 /*return*/];
         }
     });
 }); })();

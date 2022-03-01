@@ -39,6 +39,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -58,10 +85,11 @@ var fs_1 = require("fs");
 var cookie = '', res = '', UserName, index, ua = null, account = [];
 var shareCode = [], shareCodeSelf = [], shareCodeHW = [], isCollector = false, token = {};
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, i, _i, account_1, acc, e_1, todayMoney, flag, dwPageIndex, _a, _b, t, _c, _d, xb, tasks, _e, _f, t, prizeInfo, CardList, cards, _g, CardList_1, card, richcard, coincard, _h, coincard_1, card, _j, richcard_1, card, j, j, wallet, build, minLV, _k, _l, b, employee, _m, employee_1, emp, empRes, _o, _p, sign, shipRes, bags_1, _q, _r, s, strTypeCnt_1, n, bags, _s, _t, s, strTypeCnt, n, j, _u, _v, t, _w, _x, t, _y, _z, e, employ, _0, _1, b, _2, _3, _4, index_1, value, pool, _5, shareCode_1, code;
-    var _6;
-    return __generator(this, function (_7) {
-        switch (_7.label) {
+    var cookiesArr, i, account_1, account_1_1, acc, e_1, todayMoney, flag, dwPageIndex, _a, _b, t, _c, _d, xb, e_2_1, tasks, _e, _f, t, prizeInfo, CardList, cards, CardList_1, CardList_1_1, card, e_3_1, richcard, coincard, coincard_1, coincard_1_1, card, e_4_1, richcard_1, richcard_1_1, card, e_5_1, j, j, wallet, build, minLV, _g, _h, b, e_6_1, employee, employee_1, employee_1_1, emp, empRes, e_7_1, _j, _k, sign, e_8_1, shipRes, bags_1, _l, _m, s, strTypeCnt_1, n, bags, _o, _p, s, strTypeCnt, n, j, _q, _r, t, e_9_1, _s, _t, t, e_10_1, _u, _v, e, employ, e_11_1, _w, _x, b, e_12_1, _y, _z, _0, index_1, value, pool, shareCode_1, shareCode_1_1, code, e_13_1, e_14_1;
+    var e_15, _1, e_16, _2, e_2, _3, e_3, _4, e_17, _5, e_4, _6, e_5, _7, e_6, _8, e_7, _9, e_8, _10, e_18, _11, e_19, _12, e_9, _13, e_10, _14, e_11, _15, e_12, _16, e_14, _17, e_13, _18;
+    var _19;
+    return __generator(this, function (_20) {
+        switch (_20.label) {
             case 0:
                 if ((0, fs_1.existsSync)('./utils/account.json')) {
                     try {
@@ -73,64 +101,82 @@ var shareCode = [], shareCodeSelf = [], shareCodeHW = [], isCollector = false, t
                 }
                 return [4 /*yield*/, (0, V3_1.requestAlgo)('92a36', 'jdpingou;')];
             case 1:
-                _7.sent();
+                _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 2:
-                cookiesArr = _7.sent();
+                cookiesArr = _20.sent();
                 i = 0;
-                _7.label = 3;
+                _20.label = 3;
             case 3:
-                if (!(i < cookiesArr.length)) return [3 /*break*/, 137];
+                if (!(i < cookiesArr.length)) return [3 /*break*/, 179];
                 cookie = cookiesArr[i];
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 index = i + 1;
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index, "\u3011").concat(UserName, "\n"));
                 ua = 'jdpingou;';
-                for (_i = 0, account_1 = account; _i < account_1.length; _i++) {
-                    acc = account_1[_i];
-                    if ((acc === null || acc === void 0 ? void 0 : acc.pt_pin.includes(UserName)) && (acc === null || acc === void 0 ? void 0 : acc.jdpingou)) {
-                        ua = acc.jdpingou;
-                        console.log('指定UA：', ua);
-                        break;
+                try {
+                    for (account_1 = (e_15 = void 0, __values(account)), account_1_1 = account_1.next(); !account_1_1.done; account_1_1 = account_1.next()) {
+                        acc = account_1_1.value;
+                        if ((acc === null || acc === void 0 ? void 0 : acc.pt_pin.includes(UserName)) && (acc === null || acc === void 0 ? void 0 : acc.jdpingou)) {
+                            ua = acc.jdpingou;
+                            console.log('指定UA：', ua);
+                            break;
+                        }
                     }
                 }
+                catch (e_15_1) { e_15 = { error: e_15_1 }; }
+                finally {
+                    try {
+                        if (account_1_1 && !account_1_1.done && (_1 = account_1["return"])) _1.call(account_1);
+                    }
+                    finally { if (e_15) throw e_15.error; }
+                }
                 token = (0, TS_USER_AGENTS_1.getJxToken)(cookie);
-                _7.label = 4;
+                _20.label = 4;
             case 4:
-                _7.trys.push([4, 6, , 7]);
+                _20.trys.push([4, 6, , 7]);
                 return [4 /*yield*/, makeshareCode()];
             case 5:
-                _7.sent();
+                _20.sent();
                 return [3 /*break*/, 7];
             case 6:
-                e_1 = _7.sent();
+                e_1 = _20.sent();
                 console.log(e_1);
                 return [3 /*break*/, 7];
             case 7:
                 todayMoney = 0, flag = true;
                 dwPageIndex = 0;
-                _7.label = 8;
+                _20.label = 8;
             case 8:
                 if (!(dwPageIndex < 5)) return [3 /*break*/, 12];
                 if (!flag)
                     return [3 /*break*/, 12];
                 return [4 /*yield*/, api('user/GetMoneyDetail', '_cfd_t,bizCode,dwEnv,dwPageIndex,dwPageSize,dwProperty,dwQueryType,ptag,source,strZone', { dwQueryType: 0, dwPageIndex: 1, dwPageSize: 10, dwProperty: 1 })];
             case 9:
-                res = _7.sent();
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
             case 10:
-                _7.sent();
-                for (_a = 0, _b = res === null || res === void 0 ? void 0 : res.Detail; _a < _b.length; _a++) {
-                    t = _b[_a];
-                    if ((0, date_fns_1.getDate)(t.ddwTime * 1000) === (0, date_fns_1.getDate)(new Date())) {
-                        todayMoney += t.ddwValue;
-                    }
-                    else {
-                        flag = false;
-                        break;
+                _20.sent();
+                try {
+                    for (_a = (e_16 = void 0, __values(res === null || res === void 0 ? void 0 : res.Detail)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                        t = _b.value;
+                        if ((0, date_fns_1.getDate)(t.ddwTime * 1000) === (0, date_fns_1.getDate)(new Date())) {
+                            todayMoney += t.ddwValue;
+                        }
+                        else {
+                            flag = false;
+                            break;
+                        }
                     }
                 }
-                _7.label = 11;
+                catch (e_16_1) { e_16 = { error: e_16_1 }; }
+                finally {
+                    try {
+                        if (_b && !_b.done && (_2 = _a["return"])) _2.call(_a);
+                    }
+                    finally { if (e_16) throw e_16.error; }
+                }
+                _20.label = 11;
             case 11:
                 dwPageIndex++;
                 return [3 /*break*/, 8];
@@ -139,256 +185,350 @@ var shareCode = [], shareCodeSelf = [], shareCodeHW = [], isCollector = false, t
                 return [4 /*yield*/, api('user/QueryUserInfo', '_cfd_t,bizCode,ddwTaskId,dwEnv,ptag,source,strMarkList,strPgUUNum,strPgtimestamp,strPhoneID,strShareId,strZone', { ddwTaskId: '', strShareId: '', strMarkList: 'guider_step,collect_coin_auth,guider_medal,guider_over_flag,build_food_full,build_sea_full,build_shop_full,build_fun_full,medal_guider_show,guide_guider_show,guide_receive_vistor,daily_task,guider_daily_task', strPgtimestamp: token.strPgtimestamp, strPhoneID: token.strPhoneID, strPgUUNum: token.strPgUUNum })];
             case 13:
                 // 离线
-                res = _7.sent();
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
             case 14:
-                _7.sent();
+                _20.sent();
                 return [4 /*yield*/, api('user/QueryUserInfo', '_cfd_t,bizCode,ddwTaskId,dwEnv,dwIsReJoin,ptag,source,strPgUUNum,strPgtimestamp,strPhoneID,strShareId,strVersion,strZone', { ddwTaskId: '', strShareId: '', strMarkList: 'undefined', strVersion: '1.0.1', dwIsReJoin: 0, strPgtimestamp: token.strPgtimestamp, strPhoneID: token.strPhoneID, strPgUUNum: token.strPgUUNum })];
             case 15:
-                res = _7.sent();
+                res = _20.sent();
                 console.log('财富余额:', res.ddwRichBalance);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)
                     // 寻宝
                 ];
             case 16:
-                _7.sent();
-                _c = 0, _d = res.XbStatus.XBDetail;
-                _7.label = 17;
+                _20.sent();
+                _20.label = 17;
             case 17:
-                if (!(_c < _d.length)) return [3 /*break*/, 21];
-                xb = _d[_c];
-                if (!(xb.dwRemainCnt !== 0)) return [3 /*break*/, 20];
-                return [4 /*yield*/, api('user/TreasureHunt', '_cfd_t,bizCode,dwEnv,ptag,source,strIndex,strZone', { strIndex: xb.strIndex })];
+                _20.trys.push([17, 23, 24, 25]);
+                _c = (e_2 = void 0, __values(res.XbStatus.XBDetail)), _d = _c.next();
+                _20.label = 18;
             case 18:
-                res = _7.sent();
+                if (!!_d.done) return [3 /*break*/, 22];
+                xb = _d.value;
+                if (!(xb.dwRemainCnt !== 0)) return [3 /*break*/, 21];
+                return [4 /*yield*/, api('user/TreasureHunt', '_cfd_t,bizCode,dwEnv,ptag,source,strIndex,strZone', { strIndex: xb.strIndex })];
+            case 19:
+                res = _20.sent();
                 if (res.iRet === 0) {
                     console.log('发现宝物:', res.AwardInfo.ddwValue);
                 }
                 else {
                     console.log('寻宝失败:', res);
-                    return [3 /*break*/, 21];
+                    return [3 /*break*/, 22];
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 19:
-                _7.sent();
-                _7.label = 20;
             case 20:
-                _c++;
-                return [3 /*break*/, 17];
+                _20.sent();
+                _20.label = 21;
             case 21:
+                _d = _c.next();
+                return [3 /*break*/, 18];
+            case 22: return [3 /*break*/, 25];
+            case 23:
+                e_2_1 = _20.sent();
+                e_2 = { error: e_2_1 };
+                return [3 /*break*/, 25];
+            case 24:
+                try {
+                    if (_d && !_d.done && (_3 = _c["return"])) _3.call(_c);
+                }
+                finally { if (e_2) throw e_2.error; }
+                return [7 /*endfinally*/];
+            case 25:
                 tasks = void 0;
                 return [4 /*yield*/, api('story/GetPropTask', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
-            case 22:
+            case 26:
                 // 加速卡任务
-                tasks = _7.sent();
-                _e = 0, _f = tasks.Data.TaskList;
-                _7.label = 23;
-            case 23:
-                if (!(_e < _f.length)) return [3 /*break*/, 30];
-                t = _f[_e];
-                if (!(t.dwCompleteNum === t.dwTargetNum && t.dwAwardStatus === 2)) return [3 /*break*/, 26];
+                tasks = _20.sent();
+                _20.label = 27;
+            case 27:
+                _20.trys.push([27, 36, 37, 38]);
+                _e = (e_3 = void 0, __values(tasks.Data.TaskList)), _f = _e.next();
+                _20.label = 28;
+            case 28:
+                if (!!_f.done) return [3 /*break*/, 35];
+                t = _f.value;
+                if (!(t.dwCompleteNum === t.dwTargetNum && t.dwAwardStatus === 2)) return [3 /*break*/, 31];
                 return [4 /*yield*/, api('Award', '_cfd_t,bizCode,dwEnv,ptag,source,strZone,taskId', { bizCode: tasks.Data.strZone, taskId: t.ddwTaskId })];
-            case 24:
-                res = _7.sent();
+            case 29:
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 25:
-                _7.sent();
+            case 30:
+                _20.sent();
                 if (res.ret === 0) {
                     prizeInfo = JSON.parse(res.data.prizeInfo);
                     CardList = prizeInfo.CardInfo.CardList;
                     cards = '';
-                    for (_g = 0, CardList_1 = CardList; _g < CardList_1.length; _g++) {
-                        card = CardList_1[_g];
-                        cards += card.strCardName;
+                    try {
+                        for (CardList_1 = (e_17 = void 0, __values(CardList)), CardList_1_1 = CardList_1.next(); !CardList_1_1.done; CardList_1_1 = CardList_1.next()) {
+                            card = CardList_1_1.value;
+                            cards += card.strCardName;
+                        }
+                    }
+                    catch (e_17_1) { e_17 = { error: e_17_1 }; }
+                    finally {
+                        try {
+                            if (CardList_1_1 && !CardList_1_1.done && (_5 = CardList_1["return"])) _5.call(CardList_1);
+                        }
+                        finally { if (e_17) throw e_17.error; }
                     }
                     console.log('加速卡领取成功', cards);
                 }
                 else {
                     console.log('加速卡领取失败', res);
-                    return [3 /*break*/, 30];
+                    return [3 /*break*/, 35];
                 }
-                _7.label = 26;
-            case 26:
-                if (!(t.dwCompleteNum < t.dwTargetNum && t.strTaskName !== '去接待NPC' && t.strTaskName.indexOf('累计邀请') === -1)) return [3 /*break*/, 29];
+                _20.label = 31;
+            case 31:
+                if (!(t.dwCompleteNum < t.dwTargetNum && t.strTaskName !== '去接待NPC' && t.strTaskName.indexOf('累计邀请') === -1)) return [3 /*break*/, 34];
                 console.log(t.strTaskName);
                 return [4 /*yield*/, api('DoTask', '_cfd_t,bizCode,configExtra,dwEnv,ptag,source,strZone,taskId', { bizCode: tasks.Data.strZone, taskId: t.ddwTaskId })];
-            case 27:
-                res = _7.sent();
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)((_6 = t.dwLookTime * 1000) !== null && _6 !== void 0 ? _6 : 2000)];
-            case 28:
-                _7.sent();
+            case 32:
+                res = _20.sent();
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)((_19 = t.dwLookTime * 1000) !== null && _19 !== void 0 ? _19 : 2000)];
+            case 33:
+                _20.sent();
                 if (res.ret === 0) {
                     console.log('加速卡任务完成');
                 }
                 else {
                     console.log('加速卡任务失败', res);
-                    return [3 /*break*/, 30];
+                    return [3 /*break*/, 35];
                 }
-                _7.label = 29;
-            case 29:
-                _e++;
-                return [3 /*break*/, 23];
-            case 30: return [4 /*yield*/, api('user/GetPropCardCenterInfo', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
-            case 31:
+                _20.label = 34;
+            case 34:
+                _f = _e.next();
+                return [3 /*break*/, 28];
+            case 35: return [3 /*break*/, 38];
+            case 36:
+                e_3_1 = _20.sent();
+                e_3 = { error: e_3_1 };
+                return [3 /*break*/, 38];
+            case 37:
+                try {
+                    if (_f && !_f.done && (_4 = _e["return"])) _4.call(_e);
+                }
+                finally { if (e_3) throw e_3.error; }
+                return [7 /*endfinally*/];
+            case 38: return [4 /*yield*/, api('user/GetPropCardCenterInfo', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
+            case 39:
                 // 加速卡
-                res = _7.sent();
+                res = _20.sent();
                 richcard = res.cardInfo.richcard, coincard = res.cardInfo.coincard;
-                _h = 0, coincard_1 = coincard;
-                _7.label = 32;
-            case 32:
-                if (!(_h < coincard_1.length)) return [3 /*break*/, 35];
-                card = coincard_1[_h];
-                if (!(card.dwCardNums !== 0)) return [3 /*break*/, 34];
+                _20.label = 40;
+            case 40:
+                _20.trys.push([40, 45, 46, 47]);
+                coincard_1 = (e_4 = void 0, __values(coincard)), coincard_1_1 = coincard_1.next();
+                _20.label = 41;
+            case 41:
+                if (!!coincard_1_1.done) return [3 /*break*/, 44];
+                card = coincard_1_1.value;
+                if (!(card.dwCardNums !== 0)) return [3 /*break*/, 43];
                 return [4 /*yield*/, api('user/UsePropCard', '_cfd_t,bizCode,dwCardType,dwEnv,ptag,source,strCardTypeIndex,strZone', { dwCardType: 1, strCardTypeIndex: encodeURIComponent(card.strCardTypeIndex) })];
-            case 33:
-                res = _7.sent();
+            case 42:
+                res = _20.sent();
                 if (res.iRet === 0) {
                     console.log('金币加速卡使用成功');
                 }
                 else {
                     console.log('金币加速卡使用失败', res);
                 }
-                return [3 /*break*/, 35];
-            case 34:
-                _h++;
-                return [3 /*break*/, 32];
-            case 35:
-                _j = 0, richcard_1 = richcard;
-                _7.label = 36;
-            case 36:
-                if (!(_j < richcard_1.length)) return [3 /*break*/, 39];
-                card = richcard_1[_j];
-                if (!(card.dwCardNums !== 0)) return [3 /*break*/, 38];
+                return [3 /*break*/, 44];
+            case 43:
+                coincard_1_1 = coincard_1.next();
+                return [3 /*break*/, 41];
+            case 44: return [3 /*break*/, 47];
+            case 45:
+                e_4_1 = _20.sent();
+                e_4 = { error: e_4_1 };
+                return [3 /*break*/, 47];
+            case 46:
+                try {
+                    if (coincard_1_1 && !coincard_1_1.done && (_6 = coincard_1["return"])) _6.call(coincard_1);
+                }
+                finally { if (e_4) throw e_4.error; }
+                return [7 /*endfinally*/];
+            case 47:
+                _20.trys.push([47, 52, 53, 54]);
+                richcard_1 = (e_5 = void 0, __values(richcard)), richcard_1_1 = richcard_1.next();
+                _20.label = 48;
+            case 48:
+                if (!!richcard_1_1.done) return [3 /*break*/, 51];
+                card = richcard_1_1.value;
+                if (!(card.dwCardNums !== 0)) return [3 /*break*/, 50];
                 return [4 /*yield*/, api('user/UsePropCard', '_cfd_t,bizCode,dwCardType,dwEnv,ptag,source,strCardTypeIndex,strZone', { dwCardType: 2, strCardTypeIndex: encodeURIComponent(card.strCardTypeIndex) })];
-            case 37:
-                res = _7.sent();
+            case 49:
+                res = _20.sent();
                 if (res.iRet === 0) {
                     console.log('点券加速卡使用成功');
                 }
                 else {
                     console.log('点券加速卡使用失败', res);
                 }
-                return [3 /*break*/, 39];
-            case 38:
-                _j++;
-                return [3 /*break*/, 36];
-            case 39:
+                return [3 /*break*/, 51];
+            case 50:
+                richcard_1_1 = richcard_1.next();
+                return [3 /*break*/, 48];
+            case 51: return [3 /*break*/, 54];
+            case 52:
+                e_5_1 = _20.sent();
+                e_5 = { error: e_5_1 };
+                return [3 /*break*/, 54];
+            case 53:
+                try {
+                    if (richcard_1_1 && !richcard_1_1.done && (_7 = richcard_1["return"])) _7.call(richcard_1);
+                }
+                finally { if (e_5) throw e_5.error; }
+                return [7 /*endfinally*/];
+            case 54:
                 // 任务⬇️
                 console.log('底部任务列表开始');
                 j = 0;
-                _7.label = 40;
-            case 40:
-                if (!(j < 30)) return [3 /*break*/, 44];
+                _20.label = 55;
+            case 55:
+                if (!(j < 30)) return [3 /*break*/, 59];
                 return [4 /*yield*/, task()];
-            case 41:
-                if ((_7.sent()) === 0) {
-                    return [3 /*break*/, 44];
+            case 56:
+                if ((_20.sent()) === 0) {
+                    return [3 /*break*/, 59];
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
-            case 42:
-                _7.sent();
-                _7.label = 43;
-            case 43:
+            case 57:
+                _20.sent();
+                _20.label = 58;
+            case 58:
                 j++;
-                return [3 /*break*/, 40];
-            case 44:
+                return [3 /*break*/, 55];
+            case 59:
                 console.log('底部任务列表结束');
                 j = 0;
-                _7.label = 45;
-            case 45:
-                if (!(j < 5)) return [3 /*break*/, 63];
+                _20.label = 60;
+            case 60:
+                if (!(j < 5)) return [3 /*break*/, 82];
                 return [4 /*yield*/, api('user/QueryUserInfo', '_cfd_t,bizCode,ddwTaskId,dwEnv,ptag,source,strMarkList,strPgUUNum,strPgtimestamp,strPhoneID,strShareId,strZone', { ddwTaskId: '', strShareId: '', strMarkList: 'guider_step,collect_coin_auth,guider_medal,guider_over_flag,build_food_full,build_sea_full,build_shop_full,build_fun_full,medal_guider_show,guide_guider_show,guide_receive_vistor,daily_task,guider_daily_task', strPgtimestamp: token.strPgtimestamp, strPhoneID: token.strPhoneID, strPgUUNum: token.strPgUUNum })];
-            case 46:
-                res = _7.sent();
+            case 61:
+                res = _20.sent();
                 wallet = res.ddwCoinBalance;
                 console.log('金币余额:', wallet);
                 build = '', minLV = 99999;
-                _k = 0, _l = ['food', 'fun', 'shop', 'sea'];
-                _7.label = 47;
-            case 47:
-                if (!(_k < _l.length)) return [3 /*break*/, 51];
-                b = _l[_k];
+                _20.label = 62;
+            case 62:
+                _20.trys.push([62, 68, 69, 70]);
+                _g = (e_6 = void 0, __values(['food', 'fun', 'shop', 'sea'])), _h = _g.next();
+                _20.label = 63;
+            case 63:
+                if (!!_h.done) return [3 /*break*/, 67];
+                b = _h.value;
                 return [4 /*yield*/, api('user/GetBuildInfo', '_cfd_t,bizCode,dwEnv,dwType,ptag,source,strBuildIndex,strZone', { strBuildIndex: b })];
-            case 48:
-                res = _7.sent();
+            case 64:
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 49:
-                _7.sent();
+            case 65:
+                _20.sent();
                 if (res.dwBuildLvl <= minLV) {
                     minLV = res.dwBuildLvl;
                     build = b;
                 }
-                _7.label = 50;
-            case 50:
-                _k++;
-                return [3 /*break*/, 47];
-            case 51:
+                _20.label = 66;
+            case 66:
+                _h = _g.next();
+                return [3 /*break*/, 63];
+            case 67: return [3 /*break*/, 70];
+            case 68:
+                e_6_1 = _20.sent();
+                e_6 = { error: e_6_1 };
+                return [3 /*break*/, 70];
+            case 69:
+                try {
+                    if (_h && !_h.done && (_8 = _g["return"])) _8.call(_g);
+                }
+                finally { if (e_6) throw e_6.error; }
+                return [7 /*endfinally*/];
+            case 70:
                 console.log('最低等级建筑:', minLV, build);
                 return [4 /*yield*/, api('user/GetBuildInfo', '_cfd_t,bizCode,dwEnv,dwType,ptag,source,strBuildIndex,strZone', { strBuildIndex: build })];
-            case 52:
-                res = _7.sent();
+            case 71:
+                res = _20.sent();
                 console.log("".concat(build, "\u5347\u7EA7\u9700\u8981:"), res.ddwNextLvlCostCoin);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 53:
-                _7.sent();
-                if (!(res.dwCanLvlUp === 1 && res.ddwNextLvlCostCoin <= wallet)) return [3 /*break*/, 59];
+            case 72:
+                _20.sent();
+                if (!(res.dwCanLvlUp === 1 && res.ddwNextLvlCostCoin <= wallet)) return [3 /*break*/, 78];
                 return [4 /*yield*/, api('user/BuildLvlUp', '_cfd_t,bizCode,ddwCostCoin,dwEnv,ptag,source,strBuildIndex,strZone', { ddwCostCoin: res.ddwNextLvlCostCoin, strBuildIndex: build })];
-            case 54:
-                res = _7.sent();
+            case 73:
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 55:
-                _7.sent();
-                if (!(res.iRet === 0)) return [3 /*break*/, 57];
+            case 74:
+                _20.sent();
+                if (!(res.iRet === 0)) return [3 /*break*/, 76];
                 console.log("\u5347\u7EA7\u6210\u529F");
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 56:
-                _7.sent();
-                return [3 /*break*/, 58];
-            case 57:
+            case 75:
+                _20.sent();
+                return [3 /*break*/, 77];
+            case 76:
                 console.log('升级失败', res);
-                _7.label = 58;
-            case 58: return [3 /*break*/, 60];
-            case 59: return [3 /*break*/, 63];
-            case 60: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
-            case 61:
-                _7.sent();
-                _7.label = 62;
-            case 62:
+                _20.label = 77;
+            case 77: return [3 /*break*/, 79];
+            case 78: return [3 /*break*/, 82];
+            case 79: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
+            case 80:
+                _20.sent();
+                _20.label = 81;
+            case 81:
                 j++;
-                return [3 /*break*/, 45];
-            case 63: return [4 /*yield*/, api('story/GetTakeAggrPage', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
-            case 64:
+                return [3 /*break*/, 60];
+            case 82: return [4 /*yield*/, api('story/GetTakeAggrPage', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
+            case 83:
                 // 签到 助力奖励
-                res = _7.sent();
+                res = _20.sent();
                 employee = res.Data.Employee.EmployeeList.filter(function (e) {
                     return e.dwStatus === 0;
                 });
-                _m = 0, employee_1 = employee;
-                _7.label = 65;
-            case 65:
-                if (!(_m < employee_1.length)) return [3 /*break*/, 69];
-                emp = employee_1[_m];
+                _20.label = 84;
+            case 84:
+                _20.trys.push([84, 90, 91, 92]);
+                employee_1 = (e_7 = void 0, __values(employee)), employee_1_1 = employee_1.next();
+                _20.label = 85;
+            case 85:
+                if (!!employee_1_1.done) return [3 /*break*/, 89];
+                emp = employee_1_1.value;
                 return [4 /*yield*/, api('story/helpdraw', '_cfd_t,bizCode,dwEnv,dwUserId,ptag,source,strZone', { dwUserId: emp.dwId })];
-            case 66:
-                empRes = _7.sent();
+            case 86:
+                empRes = _20.sent();
                 if (empRes.iRet === 0)
                     console.log('助力奖励领取成功:', empRes.Data.ddwCoin);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 67:
-                _7.sent();
-                _7.label = 68;
-            case 68:
-                _m++;
-                return [3 /*break*/, 65];
-            case 69:
-                if (!(res.Data.Sign.dwTodayStatus === 0)) return [3 /*break*/, 74];
+            case 87:
+                _20.sent();
+                _20.label = 88;
+            case 88:
+                employee_1_1 = employee_1.next();
+                return [3 /*break*/, 85];
+            case 89: return [3 /*break*/, 92];
+            case 90:
+                e_7_1 = _20.sent();
+                e_7 = { error: e_7_1 };
+                return [3 /*break*/, 92];
+            case 91:
+                try {
+                    if (employee_1_1 && !employee_1_1.done && (_9 = employee_1["return"])) _9.call(employee_1);
+                }
+                finally { if (e_7) throw e_7.error; }
+                return [7 /*endfinally*/];
+            case 92:
+                if (!(res.Data.Sign.dwTodayStatus === 0)) return [3 /*break*/, 101];
                 console.log('今日未签到');
-                _o = 0, _p = res.Data.Sign.SignList;
-                _7.label = 70;
-            case 70:
-                if (!(_o < _p.length)) return [3 /*break*/, 73];
-                sign = _p[_o];
-                if (!(sign.dwDayId === res.Data.Sign.dwTodayId)) return [3 /*break*/, 72];
+                _20.label = 93;
+            case 93:
+                _20.trys.push([93, 98, 99, 100]);
+                _j = (e_8 = void 0, __values(res.Data.Sign.SignList)), _k = _j.next();
+                _20.label = 94;
+            case 94:
+                if (!!_k.done) return [3 /*break*/, 97];
+                sign = _k.value;
+                if (!(sign.dwDayId === res.Data.Sign.dwTodayId)) return [3 /*break*/, 96];
                 return [4 /*yield*/, api('story/RewardSign', '_cfd_t,bizCode,ddwCoin,ddwMoney,dwEnv,dwPrizeLv,dwPrizeType,ptag,source,strPgUUNum,strPgtimestamp,strPhoneID,strPrizePool,strZone', {
                         ddwCoin: sign.ddwCoin,
                         ddwMoney: sign.ddwMoney,
@@ -399,23 +539,34 @@ var shareCode = [], shareCodeSelf = [], shareCodeHW = [], isCollector = false, t
                         strPhoneID: token.strPhoneID,
                         strPgUUNum: token.strPgUUNum
                     })];
-            case 71:
-                res = _7.sent();
+            case 95:
+                res = _20.sent();
                 if (res.iRet === 0)
                     console.log('签到成功:', res.Data.ddwCoin, res.Data.ddwMoney, res.Data.strPrizePool);
                 else
                     console.log('签到失败:', res);
-                return [3 /*break*/, 73];
-            case 72:
-                _o++;
-                return [3 /*break*/, 70];
-            case 73: return [3 /*break*/, 75];
-            case 74:
+                return [3 /*break*/, 97];
+            case 96:
+                _k = _j.next();
+                return [3 /*break*/, 94];
+            case 97: return [3 /*break*/, 100];
+            case 98:
+                e_8_1 = _20.sent();
+                e_8 = { error: e_8_1 };
+                return [3 /*break*/, 100];
+            case 99:
+                try {
+                    if (_k && !_k.done && (_10 = _j["return"])) _10.call(_j);
+                }
+                finally { if (e_8) throw e_8.error; }
+                return [7 /*endfinally*/];
+            case 100: return [3 /*break*/, 102];
+            case 101:
                 console.log('今日已经签到');
-                _7.label = 75;
-            case 75: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 76:
-                _7.sent();
+                _20.label = 102;
+            case 102: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+            case 103:
+                _20.sent();
                 return [4 /*yield*/, api('user/QueryUserInfo', '_cfd_t,bizCode,ddwTaskId,dwEnv,ptag,source,strMarkList,strPgUUNum,strPgtimestamp,strPhoneID,strShareId,strVersion,strZone', {
                         ddwTaskId: '',
                         strShareId: '',
@@ -425,12 +576,12 @@ var shareCode = [], shareCodeSelf = [], shareCodeHW = [], isCollector = false, t
                         strPhoneID: token.strPhoneID,
                         strVersion: '1.0.1'
                     })];
-            case 77:
-                res = _7.sent();
+            case 104:
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
-            case 78:
-                _7.sent();
-                if (!res.StoryInfo.StoryList) return [3 /*break*/, 91];
+            case 105:
+                _20.sent();
+                if (!res.StoryInfo.StoryList) return [3 /*break*/, 118];
                 // 美人鱼
                 if (res.StoryInfo.StoryList[0].Mermaid) {
                     console.log("\u53D1\u73B0\u7F8E\u4EBA\u9C7C\uD83E\uDDDC\u200D\u2640\uFE0F");
@@ -463,9 +614,9 @@ var shareCode = [], shareCodeSelf = [], shareCodeHW = [], isCollector = false, t
                      */
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 79:
-                _7.sent();
-                if (!res.StoryInfo.StoryList[0].Special) return [3 /*break*/, 83];
+            case 106:
+                _20.sent();
+                if (!res.StoryInfo.StoryList[0].Special) return [3 /*break*/, 110];
                 console.log("\u8239\u6765\u4E86\uFF0C\u4E58\u5BA2\u662F".concat(res.StoryInfo.StoryList[0].Special.strName));
                 return [4 /*yield*/, api('story/SpecialUserOper', '_cfd_t,bizCode,ddwTriggerDay,dwEnv,dwType,ptag,source,strStoryId,strZone,triggerType', {
                         strStoryId: res.StoryInfo.StoryList[0].strStoryId,
@@ -473,50 +624,59 @@ var shareCode = [], shareCodeSelf = [], shareCodeHW = [], isCollector = false, t
                         triggerType: 0,
                         ddwTriggerDay: res.StoryInfo.StoryList[0].ddwTriggerDay
                     })];
-            case 80:
-                shipRes = _7.sent();
+            case 107:
+                shipRes = _20.sent();
                 console.log('正在下船，等待30s');
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(30000)];
-            case 81:
-                _7.sent();
+            case 108:
+                _20.sent();
                 return [4 /*yield*/, api('story/SpecialUserOper', '_cfd_t,bizCode,ddwTriggerDay,dwEnv,dwType,ptag,source,strStoryId,strZone,triggerType', {
                         strStoryId: res.StoryInfo.StoryList[0].strStoryId,
                         dwType: '3',
                         triggerType: 0,
                         ddwTriggerDay: res.StoryInfo.StoryList[0].ddwTriggerDay
                     })];
-            case 82:
-                shipRes = _7.sent();
+            case 109:
+                shipRes = _20.sent();
                 if (shipRes.iRet === 0)
                     console.log('船客接待成功');
                 else
                     console.log('船客接待失败', shipRes);
-                _7.label = 83;
-            case 83:
+                _20.label = 110;
+            case 110:
                 isCollector = false;
-                if (!res.StoryInfo.StoryList[0].Collector) return [3 /*break*/, 89];
+                if (!res.StoryInfo.StoryList[0].Collector) return [3 /*break*/, 116];
                 console.log('收藏家出现');
                 return [4 /*yield*/, api('story/CollectorOper', '_cfd_t,bizCode,dwEnv,ptag,source,strZone,strStoryId,dwType,ddwTriggerDay', { strStoryId: res.StoryInfo.StoryList[0].strStoryId, dwType: '2', ddwTriggerDay: res.StoryInfo.StoryList[0].ddwTriggerDay })];
-            case 84:
+            case 111:
                 // TODO 背包满了再卖给收破烂的
-                res = _7.sent();
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 85:
-                _7.sent();
+            case 112:
+                _20.sent();
                 isCollector = true;
                 return [4 /*yield*/, api('story/querystorageroom', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
-            case 86:
+            case 113:
                 // 清空背包
-                res = _7.sent();
+                res = _20.sent();
                 bags_1 = [];
-                for (_q = 0, _r = res.Data.Office; _q < _r.length; _q++) {
-                    s = _r[_q];
-                    bags_1.push(s.dwType);
-                    bags_1.push(s.dwCount);
+                try {
+                    for (_l = (e_18 = void 0, __values(res.Data.Office)), _m = _l.next(); !_m.done; _m = _l.next()) {
+                        s = _m.value;
+                        bags_1.push(s.dwType);
+                        bags_1.push(s.dwCount);
+                    }
+                }
+                catch (e_18_1) { e_18 = { error: e_18_1 }; }
+                finally {
+                    try {
+                        if (_m && !_m.done && (_11 = _l["return"])) _11.call(_l);
+                    }
+                    finally { if (e_18) throw e_18.error; }
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 87:
-                _7.sent();
+            case 114:
+                _20.sent();
                 strTypeCnt_1 = '';
                 for (n = 0; n < bags_1.length; n++) {
                     if (n % 2 === 0)
@@ -524,29 +684,38 @@ var shareCode = [], shareCodeSelf = [], shareCodeHW = [], isCollector = false, t
                     else
                         strTypeCnt_1 += "".concat(bags_1[n], "|");
                 }
-                if (!(bags_1.length !== 0)) return [3 /*break*/, 89];
+                if (!(bags_1.length !== 0)) return [3 /*break*/, 116];
                 return [4 /*yield*/, api('story/sellgoods', '_cfd_t,bizCode,dwEnv,dwSceneId,ptag,source,strTypeCnt,strZone', { dwSceneId: isCollector ? '2' : '1', strTypeCnt: strTypeCnt_1 })];
-            case 88:
-                res = _7.sent();
+            case 115:
+                res = _20.sent();
                 console.log('卖贝壳收入:', res.Data.ddwCoin, res.Data.ddwMoney);
-                _7.label = 89;
-            case 89: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 90:
-                _7.sent();
-                _7.label = 91;
-            case 91: return [4 /*yield*/, api('story/querystorageroom', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
-            case 92:
+                _20.label = 116;
+            case 116: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+            case 117:
+                _20.sent();
+                _20.label = 118;
+            case 118: return [4 /*yield*/, api('story/querystorageroom', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
+            case 119:
                 // 清空背包
-                res = _7.sent();
+                res = _20.sent();
                 bags = [];
-                for (_s = 0, _t = res.Data.Office; _s < _t.length; _s++) {
-                    s = _t[_s];
-                    bags.push(s.dwType);
-                    bags.push(s.dwCount);
+                try {
+                    for (_o = (e_19 = void 0, __values(res.Data.Office)), _p = _o.next(); !_p.done; _p = _o.next()) {
+                        s = _p.value;
+                        bags.push(s.dwType);
+                        bags.push(s.dwCount);
+                    }
+                }
+                catch (e_19_1) { e_19 = { error: e_19_1 }; }
+                finally {
+                    try {
+                        if (_p && !_p.done && (_12 = _o["return"])) _12.call(_o);
+                    }
+                    finally { if (e_19) throw e_19.error; }
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 93:
-                _7.sent();
+            case 120:
+                _20.sent();
                 strTypeCnt = '';
                 for (n = 0; n < bags.length; n++) {
                     if (n % 2 === 0)
@@ -554,98 +723,115 @@ var shareCode = [], shareCodeSelf = [], shareCodeHW = [], isCollector = false, t
                     else
                         strTypeCnt += "".concat(bags[n], "|");
                 }
-                if (!(bags.length !== 0)) return [3 /*break*/, 95];
+                if (!(bags.length !== 0)) return [3 /*break*/, 122];
                 return [4 /*yield*/, api('story/sellgoods', '_cfd_t,bizCode,dwEnv,dwSceneId,ptag,source,strTypeCnt,strZone', { dwSceneId: isCollector ? '2' : '1', strTypeCnt: strTypeCnt })];
-            case 94:
-                res = _7.sent();
+            case 121:
+                res = _20.sent();
                 console.log('卖贝壳收入:', res.Data.ddwCoin, res.Data.ddwMoney);
-                _7.label = 95;
-            case 95: return [4 /*yield*/, api('story/QueryRubbishInfo', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
-            case 96:
+                _20.label = 122;
+            case 122: return [4 /*yield*/, api('story/QueryRubbishInfo', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
+            case 123:
                 // 垃圾🚮
-                res = _7.sent();
-                if (!(res.Data.StoryInfo.StoryList.length !== 0)) return [3 /*break*/, 103];
+                res = _20.sent();
+                if (!(res.Data.StoryInfo.StoryList.length !== 0)) return [3 /*break*/, 130];
                 console.log('有垃圾');
                 return [4 /*yield*/, api('story/RubbishOper', '_cfd_t,bizCode,dwEnv,dwRewardType,dwType,ptag,source,strZone', {
                         dwType: '1',
                         dwRewardType: 0
                     })];
-            case 97:
-                _7.sent();
+            case 124:
+                _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 98:
-                _7.sent();
+            case 125:
+                _20.sent();
                 j = 1;
-                _7.label = 99;
-            case 99:
-                if (!(j < 9)) return [3 /*break*/, 103];
+                _20.label = 126;
+            case 126:
+                if (!(j < 9)) return [3 /*break*/, 130];
                 return [4 /*yield*/, api('story/RubbishOper', '_cfd_t,bizCode,dwEnv,dwRewardType,dwRubbishId,dwType,ptag,source,strZone', {
                         dwType: '2',
                         dwRewardType: 0,
                         dwRubbishId: j
                     })];
-            case 100:
-                res = _7.sent();
+            case 127:
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1500)];
-            case 101:
-                _7.sent();
-                _7.label = 102;
-            case 102:
+            case 128:
+                _20.sent();
+                _20.label = 129;
+            case 129:
                 j++;
-                return [3 /*break*/, 99];
-            case 103: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)
+                return [3 /*break*/, 126];
+            case 130: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)
                 // 任务➡️
             ];
-            case 104:
-                _7.sent();
+            case 131:
+                _20.sent();
                 return [4 /*yield*/, api('story/GetActTask', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
-            case 105:
+            case 132:
                 // 任务➡️
-                res = _7.sent();
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 106:
-                _7.sent();
-                _u = 0, _v = res.Data.TaskList;
-                _7.label = 107;
-            case 107:
-                if (!(_u < _v.length)) return [3 /*break*/, 111];
-                t = _v[_u];
-                if (!([1, 2].indexOf(t.dwOrderId) > -1 && t.dwCompleteNum < t.dwTargetNum && t.strTaskName !== '升级1个建筑')) return [3 /*break*/, 110];
+            case 133:
+                _20.sent();
+                _20.label = 134;
+            case 134:
+                _20.trys.push([134, 140, 141, 142]);
+                _q = (e_9 = void 0, __values(res.Data.TaskList)), _r = _q.next();
+                _20.label = 135;
+            case 135:
+                if (!!_r.done) return [3 /*break*/, 139];
+                t = _r.value;
+                if (!([1, 2].indexOf(t.dwOrderId) > -1 && t.dwCompleteNum < t.dwTargetNum && t.strTaskName !== '升级1个建筑')) return [3 /*break*/, 138];
                 console.log('开始任务➡️:', t.strTaskName);
                 return [4 /*yield*/, api('DoTask', '_cfd_t,bizCode,configExtra,dwEnv,ptag,source,strZone,taskId', { taskId: t.ddwTaskId, configExtra: '' }, 'right')];
-            case 108:
-                res = _7.sent();
+            case 136:
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(t.dwLookTime * 1000)];
-            case 109:
-                _7.sent();
+            case 137:
+                _20.sent();
                 if (res.ret === 0) {
                     console.log('任务完成');
                 }
                 else {
                     console.log('任务失败', res);
                 }
-                _7.label = 110;
-            case 110:
-                _u++;
-                return [3 /*break*/, 107];
-            case 111: return [4 /*yield*/, api('story/GetActTask', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
-            case 112:
-                res = _7.sent();
+                _20.label = 138;
+            case 138:
+                _r = _q.next();
+                return [3 /*break*/, 135];
+            case 139: return [3 /*break*/, 142];
+            case 140:
+                e_9_1 = _20.sent();
+                e_9 = { error: e_9_1 };
+                return [3 /*break*/, 142];
+            case 141:
+                try {
+                    if (_r && !_r.done && (_13 = _q["return"])) _13.call(_q);
+                }
+                finally { if (e_9) throw e_9.error; }
+                return [7 /*endfinally*/];
+            case 142: return [4 /*yield*/, api('story/GetActTask', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
+            case 143:
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 113:
-                _7.sent();
-                _w = 0, _x = res.Data.TaskList;
-                _7.label = 114;
-            case 114:
-                if (!(_w < _x.length)) return [3 /*break*/, 118];
-                t = _x[_w];
-                if (!(t.dwCompleteNum === t.dwTargetNum && t.dwAwardStatus === 2)) return [3 /*break*/, 117];
+            case 144:
+                _20.sent();
+                _20.label = 145;
+            case 145:
+                _20.trys.push([145, 151, 152, 153]);
+                _s = (e_10 = void 0, __values(res.Data.TaskList)), _t = _s.next();
+                _20.label = 146;
+            case 146:
+                if (!!_t.done) return [3 /*break*/, 150];
+                t = _t.value;
+                if (!(t.dwCompleteNum === t.dwTargetNum && t.dwAwardStatus === 2)) return [3 /*break*/, 149];
                 return [4 /*yield*/, api('Award', '_cfd_t,bizCode,configExtra,dwEnv,ptag,source,strZone,taskId', { taskId: t.ddwTaskId }, 'right')];
-            case 115:
-                res = _7.sent();
+            case 147:
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 116:
-                _7.sent();
+            case 148:
+                _20.sent();
                 if (res.ret === 0) {
                     try {
                         res = JSON.parse(res.data.prizeInfo);
@@ -658,115 +844,156 @@ var shareCode = [], shareCodeSelf = [], shareCodeHW = [], isCollector = false, t
                 else {
                     console.log('领奖失败', res);
                 }
-                _7.label = 117;
-            case 117:
-                _w++;
-                return [3 /*break*/, 114];
-            case 118: return [4 /*yield*/, api('story/GetActTask', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
-            case 119:
-                res = _7.sent();
+                _20.label = 149;
+            case 149:
+                _t = _s.next();
+                return [3 /*break*/, 146];
+            case 150: return [3 /*break*/, 153];
+            case 151:
+                e_10_1 = _20.sent();
+                e_10 = { error: e_10_1 };
+                return [3 /*break*/, 153];
+            case 152:
+                try {
+                    if (_t && !_t.done && (_14 = _s["return"])) _14.call(_s);
+                }
+                finally { if (e_10) throw e_10.error; }
+                return [7 /*endfinally*/];
+            case 153: return [4 /*yield*/, api('story/GetActTask', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
+            case 154:
+                res = _20.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 120:
-                _7.sent();
-                if (!(res.Data.dwStatus === 3)) return [3 /*break*/, 122];
+            case 155:
+                _20.sent();
+                if (!(res.Data.dwStatus === 3)) return [3 /*break*/, 157];
                 return [4 /*yield*/, api('story/ActTaskAward', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
-            case 121:
-                res = _7.sent();
+            case 156:
+                res = _20.sent();
                 if (res.ret === 0) {
                     console.log('100财富任务完成');
                 }
-                _7.label = 122;
-            case 122: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)
+                _20.label = 157;
+            case 157: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)
                 // 导游
             ];
-            case 123:
-                _7.sent();
+            case 158:
+                _20.sent();
                 return [4 /*yield*/, api('user/EmployTourGuideInfo', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
-            case 124:
+            case 159:
                 // 导游
-                res = _7.sent();
-                if (!!res.TourGuideList) return [3 /*break*/, 125];
+                res = _20.sent();
+                if (!!res.TourGuideList) return [3 /*break*/, 160];
                 console.log('手动雇佣4个试用导游');
-                return [3 /*break*/, 130];
-            case 125:
-                _y = 0, _z = res.TourGuideList;
-                _7.label = 126;
-            case 126:
-                if (!(_y < _z.length)) return [3 /*break*/, 130];
-                e = _z[_y];
-                if (!(e.strBuildIndex !== 'food' && e.ddwRemainTm === 0)) return [3 /*break*/, 129];
+                return [3 /*break*/, 168];
+            case 160:
+                _20.trys.push([160, 166, 167, 168]);
+                _u = (e_11 = void 0, __values(res.TourGuideList)), _v = _u.next();
+                _20.label = 161;
+            case 161:
+                if (!!_v.done) return [3 /*break*/, 165];
+                e = _v.value;
+                if (!(e.strBuildIndex !== 'food' && e.ddwRemainTm === 0)) return [3 /*break*/, 164];
                 return [4 /*yield*/, api('user/EmployTourGuide', '_cfd_t,bizCode,ddwConsumeCoin,dwEnv,dwIsFree,ptag,source,strBuildIndex,strZone', { ddwConsumeCoin: e.ddwCostCoin, dwIsFree: 0, strBuildIndex: e.strBuildIndex })];
-            case 127:
-                employ = _7.sent();
+            case 162:
+                employ = _20.sent();
                 if (employ.iRet === 0)
                     console.log("\u96C7\u4F63".concat(e.strBuildIndex, "\u5BFC\u6E38\u6210\u529F"));
                 if (employ.iRet === 2003)
-                    return [3 /*break*/, 130];
+                    return [3 /*break*/, 165];
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 128:
-                _7.sent();
-                _7.label = 129;
-            case 129:
-                _y++;
-                return [3 /*break*/, 126];
-            case 130: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 131:
-                _7.sent();
-                _0 = 0, _1 = ['fun', 'shop', 'sea', 'food'];
-                _7.label = 132;
-            case 132:
-                if (!(_0 < _1.length)) return [3 /*break*/, 136];
-                b = _1[_0];
+            case 163:
+                _20.sent();
+                _20.label = 164;
+            case 164:
+                _v = _u.next();
+                return [3 /*break*/, 161];
+            case 165: return [3 /*break*/, 168];
+            case 166:
+                e_11_1 = _20.sent();
+                e_11 = { error: e_11_1 };
+                return [3 /*break*/, 168];
+            case 167:
+                try {
+                    if (_v && !_v.done && (_15 = _u["return"])) _15.call(_u);
+                }
+                finally { if (e_11) throw e_11.error; }
+                return [7 /*endfinally*/];
+            case 168: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+            case 169:
+                _20.sent();
+                _20.label = 170;
+            case 170:
+                _20.trys.push([170, 176, 177, 178]);
+                _w = (e_12 = void 0, __values(['fun', 'shop', 'sea', 'food'])), _x = _w.next();
+                _20.label = 171;
+            case 171:
+                if (!!_x.done) return [3 /*break*/, 175];
+                b = _x.value;
                 return [4 /*yield*/, api('user/CollectCoin', '_cfd_t,bizCode,dwEnv,dwType,ptag,source,strBuildIndex,strZone', { strBuildIndex: b, dwType: '1' })];
-            case 133:
-                res = _7.sent();
+            case 172:
+                res = _20.sent();
                 console.log("".concat(b, "\u6536\u91D1\u5E01:"), res.ddwCoin);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 134:
-                _7.sent();
-                _7.label = 135;
-            case 135:
-                _0++;
-                return [3 /*break*/, 132];
-            case 136:
+            case 173:
+                _20.sent();
+                _20.label = 174;
+            case 174:
+                _x = _w.next();
+                return [3 /*break*/, 171];
+            case 175: return [3 /*break*/, 178];
+            case 176:
+                e_12_1 = _20.sent();
+                e_12 = { error: e_12_1 };
+                return [3 /*break*/, 178];
+            case 177:
+                try {
+                    if (_x && !_x.done && (_16 = _w["return"])) _16.call(_w);
+                }
+                finally { if (e_12) throw e_12.error; }
+                return [7 /*endfinally*/];
+            case 178:
                 i++;
                 return [3 /*break*/, 3];
-            case 137:
-                _2 = 0, _3 = cookiesArr.entries();
-                _7.label = 138;
-            case 138:
-                if (!(_2 < _3.length)) return [3 /*break*/, 147];
-                _4 = _3[_2], index_1 = _4[0], value = _4[1];
+            case 179:
+                _20.trys.push([179, 194, 195, 196]);
+                _y = __values(cookiesArr.entries()), _z = _y.next();
+                _20.label = 180;
+            case 180:
+                if (!!_z.done) return [3 /*break*/, 193];
+                _0 = __read(_z.value, 2), index_1 = _0[0], value = _0[1];
                 cookie = value;
-                if (!(shareCodeHW.length === 0)) return [3 /*break*/, 140];
+                if (!(shareCodeHW.length === 0)) return [3 /*break*/, 182];
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.getshareCodeHW)('jxcfd')];
-            case 139:
-                shareCodeHW = _7.sent();
-                _7.label = 140;
-            case 140: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getShareCodePool)('jxcfd', 30)];
-            case 141:
-                pool = _7.sent();
-                shareCode = Array.from(new Set(__spreadArray(__spreadArray(__spreadArray([], shareCodeSelf, true), shareCodeHW, true), pool, true)));
-                _5 = 0, shareCode_1 = shareCode;
-                _7.label = 142;
-            case 142:
-                if (!(_5 < shareCode_1.length)) return [3 /*break*/, 146];
-                code = shareCode_1[_5];
+            case 181:
+                shareCodeHW = _20.sent();
+                _20.label = 182;
+            case 182: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getShareCodePool)('jxcfd', 30)];
+            case 183:
+                pool = _20.sent();
+                shareCode = Array.from(new Set(__spreadArray(__spreadArray(__spreadArray([], __read(shareCodeSelf), false), __read(shareCodeHW), false), __read(pool), false)));
+                _20.label = 184;
+            case 184:
+                _20.trys.push([184, 190, 191, 192]);
+                shareCode_1 = (e_13 = void 0, __values(shareCode)), shareCode_1_1 = shareCode_1.next();
+                _20.label = 185;
+            case 185:
+                if (!!shareCode_1_1.done) return [3 /*break*/, 189];
+                code = shareCode_1_1.value;
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 console.log("\u3010\u8D26\u53F7".concat(index_1 + 1, "\u3011 ").concat(UserName, " \u53BB\u52A9\u529B ").concat(code));
                 return [4 /*yield*/, api('story/helpbystage', '_cfd_t,bizCode,dwEnv,ptag,source,strShareId,strZone', { strShareId: code })];
-            case 143:
-                res = _7.sent();
+            case 186:
+                res = _20.sent();
                 if (res.iRet === 0) {
                     console.log('助力成功:', res.Data.GuestPrizeInfo.strPrizeName);
                 }
                 else if (res.iRet === 2190 || res.sErrMsg === '达到助力上限') {
                     console.log('上限');
-                    return [3 /*break*/, 146];
+                    return [3 /*break*/, 189];
                 }
                 else if (res.iRet === 1023) {
                     console.log('信号弱');
-                    return [3 /*break*/, 146];
+                    return [3 /*break*/, 189];
                 }
                 else if (res.iRet === 2191) {
                     console.log('已助力');
@@ -775,16 +1002,38 @@ var shareCode = [], shareCodeSelf = [], shareCodeHW = [], isCollector = false, t
                     console.log('其他错误:', res);
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
-            case 144:
-                _7.sent();
-                _7.label = 145;
-            case 145:
-                _5++;
-                return [3 /*break*/, 142];
-            case 146:
-                _2++;
-                return [3 /*break*/, 138];
-            case 147: return [2 /*return*/];
+            case 187:
+                _20.sent();
+                _20.label = 188;
+            case 188:
+                shareCode_1_1 = shareCode_1.next();
+                return [3 /*break*/, 185];
+            case 189: return [3 /*break*/, 192];
+            case 190:
+                e_13_1 = _20.sent();
+                e_13 = { error: e_13_1 };
+                return [3 /*break*/, 192];
+            case 191:
+                try {
+                    if (shareCode_1_1 && !shareCode_1_1.done && (_18 = shareCode_1["return"])) _18.call(shareCode_1);
+                }
+                finally { if (e_13) throw e_13.error; }
+                return [7 /*endfinally*/];
+            case 192:
+                _z = _y.next();
+                return [3 /*break*/, 180];
+            case 193: return [3 /*break*/, 196];
+            case 194:
+                e_14_1 = _20.sent();
+                e_14 = { error: e_14_1 };
+                return [3 /*break*/, 196];
+            case 195:
+                try {
+                    if (_z && !_z.done && (_17 = _y["return"])) _17.call(_y);
+                }
+                finally { if (e_14) throw e_14.error; }
+                return [7 /*endfinally*/];
+            case 196: return [2 /*return*/];
         }
     });
 }); })();
@@ -792,9 +1041,10 @@ function api(fn, stk, params, taskPosition) {
     if (params === void 0) { params = {}; }
     if (taskPosition === void 0) { taskPosition = ''; }
     return __awaiter(this, void 0, void 0, function () {
-        var timestamp, url, t, bizCode, _i, _a, _b, key, value, h5st, data;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var timestamp, url, t, bizCode, _a, _b, _c, key, value, h5st, data;
+        var e_20, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     timestamp = Date.now();
                     t = [
@@ -817,10 +1067,19 @@ function api(fn, stk, params, taskPosition) {
                     else {
                         url = "https://m.jingxi.com/jxbfd/".concat(fn, "?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=").concat(timestamp, "&ptag=&_stk=").concat(encodeURIComponent(stk), "&_ste=1&_=").concat(timestamp, "&sceneval=2&g_login_type=1&callback=jsonpCBK").concat((0, TS_USER_AGENTS_1.randomWord)(), "&g_ty=ls");
                     }
-                    for (_i = 0, _a = Object.entries(params); _i < _a.length; _i++) {
-                        _b = _a[_i], key = _b[0], value = _b[1];
-                        t.push({ key: key, value: value });
-                        url += "&".concat(key, "=").concat(value);
+                    try {
+                        for (_a = __values(Object.entries(params)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                            _c = __read(_b.value, 2), key = _c[0], value = _c[1];
+                            t.push({ key: key, value: value });
+                            url += "&".concat(key, "=").concat(value);
+                        }
+                    }
+                    catch (e_20_1) { e_20 = { error: e_20_1 }; }
+                    finally {
+                        try {
+                            if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
+                        }
+                        finally { if (e_20) throw e_20.error; }
                     }
                     h5st = (0, V3_1.geth5st)(t, '92a36');
                     url += "&h5st=".concat(encodeURIComponent(h5st));
@@ -836,7 +1095,7 @@ function api(fn, stk, params, taskPosition) {
                             }
                         })];
                 case 1:
-                    data = (_c.sent()).data;
+                    data = (_e.sent()).data;
                     try {
                         return [2 /*return*/, JSON.parse(data.match(/jsonpCBK.?\(([^)]*)/)[1])];
                     }
@@ -851,31 +1110,35 @@ function api(fn, stk, params, taskPosition) {
 }
 function task() {
     return __awaiter(this, void 0, void 0, function () {
-        var _i, _a, t;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _a, _b, t, e_21_1;
+        var e_21, _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0:
                     console.log('刷新任务列表');
                     return [4 /*yield*/, api('GetUserTaskStatusList', '_cfd_t,bizCode,dwEnv,ptag,showAreaTaskFlag,source,strZone,taskId', { taskId: 0, showAreaTaskFlag: 1 })];
                 case 1:
-                    res = _b.sent();
+                    res = _d.sent();
                     return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
                 case 2:
-                    _b.sent();
-                    _i = 0, _a = res.data.userTaskStatusList;
-                    _b.label = 3;
+                    _d.sent();
+                    _d.label = 3;
                 case 3:
-                    if (!(_i < _a.length)) return [3 /*break*/, 12];
-                    t = _a[_i];
-                    if (!(t.awardStatus === 2 && t.completedTimes === t.targetTimes)) return [3 /*break*/, 8];
+                    _d.trys.push([3, 14, 15, 16]);
+                    _a = __values(res.data.userTaskStatusList), _b = _a.next();
+                    _d.label = 4;
+                case 4:
+                    if (!!_b.done) return [3 /*break*/, 13];
+                    t = _b.value;
+                    if (!(t.awardStatus === 2 && t.completedTimes === t.targetTimes)) return [3 /*break*/, 9];
                     console.log('可领奖:', t.taskName);
                     return [4 /*yield*/, api('Award', '_cfd_t,bizCode,dwEnv,ptag,source,strZone,taskId', { taskId: t.taskId, bizCode: t.bizCode })];
-                case 4:
-                    res = _b.sent();
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
                 case 5:
-                    _b.sent();
-                    if (!(res.ret === 0)) return [3 /*break*/, 7];
+                    res = _d.sent();
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+                case 6:
+                    _d.sent();
+                    if (!(res.ret === 0)) return [3 /*break*/, 8];
                     try {
                         res = JSON.parse(res.data.prizeInfo);
                         console.log("\u9886\u5956\u6210\u529F:", res.ddwCoin, res.ddwMoney);
@@ -884,21 +1147,21 @@ function task() {
                         console.log('领奖成功:', res);
                     }
                     return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-                case 6:
-                    _b.sent();
-                    return [2 /*return*/, 1];
                 case 7:
+                    _d.sent();
+                    return [2 /*return*/, 1];
+                case 8:
                     console.log('领奖失败:', res);
                     return [2 /*return*/, 0];
-                case 8:
-                    if (!(t.dateType === 2 && t.awardStatus === 2 && t.completedTimes < t.targetTimes && t.taskCaller === 1)) return [3 /*break*/, 11];
+                case 9:
+                    if (!(t.dateType === 2 && t.awardStatus === 2 && t.completedTimes < t.targetTimes && t.taskCaller === 1)) return [3 /*break*/, 12];
                     console.log('做任务:', t.taskId, t.taskName, t.completedTimes, t.targetTimes);
                     return [4 /*yield*/, api('DoTask', '_cfd_t,bizCode,configExtra,dwEnv,ptag,source,strZone,taskId', { taskId: t.taskId, configExtra: '', bizCode: t.bizCode })];
-                case 9:
-                    res = _b.sent();
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
                 case 10:
-                    _b.sent();
+                    res = _d.sent();
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
+                case 11:
+                    _d.sent();
                     if (res.ret === 0) {
                         console.log('任务完成');
                         return [2 /*return*/, 1];
@@ -907,18 +1170,29 @@ function task() {
                         console.log('任务失败');
                         return [2 /*return*/, 0];
                     }
-                    _b.label = 11;
-                case 11:
-                    _i++;
-                    return [3 /*break*/, 3];
-                case 12: return [2 /*return*/, 0];
+                    _d.label = 12;
+                case 12:
+                    _b = _a.next();
+                    return [3 /*break*/, 4];
+                case 13: return [3 /*break*/, 16];
+                case 14:
+                    e_21_1 = _d.sent();
+                    e_21 = { error: e_21_1 };
+                    return [3 /*break*/, 16];
+                case 15:
+                    try {
+                        if (_b && !_b.done && (_c = _a["return"])) _c.call(_a);
+                    }
+                    finally { if (e_21) throw e_21.error; }
+                    return [7 /*endfinally*/];
+                case 16: return [2 /*return*/, 0];
             }
         });
     });
 }
 function makeshareCode() {
     return __awaiter(this, void 0, void 0, function () {
-        var bean, farm, pin, data, e_2;
+        var bean, farm, pin, data, e_22;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -949,9 +1223,9 @@ function makeshareCode() {
                     console.log(data.message);
                     return [3 /*break*/, 6];
                 case 5:
-                    e_2 = _a.sent();
+                    e_22 = _a.sent();
                     console.log('自动提交失败');
-                    console.log(e_2);
+                    console.log(e_22);
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
             }

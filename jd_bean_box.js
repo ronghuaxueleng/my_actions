@@ -40,23 +40,35 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 exports.__esModule = true;
 var axios_1 = require("axios");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var cookie = '', res = '', UserName, index, uuid;
 // let shareCodeSelf: { shareCode: string, groupCode: string, activeId: string }[] = [], shareCode: { shareCode: string, groupCode: string, activeId: string }[] = [], shareCodeHW: { shareCode: string, groupCode: string, activeId: string }[] = []
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, i, headers, times, j, j, _i, _a, t, e_1;
-    var _b, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var cookiesArr, i, headers, times, j, j, _a, _b, t, e_1_1, e_2;
+    var e_1, _c;
+    var _d, _e;
+    return __generator(this, function (_f) {
+        switch (_f.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 1:
-                cookiesArr = _d.sent();
+                cookiesArr = _f.sent();
                 i = 0;
-                _d.label = 2;
+                _f.label = 2;
             case 2:
-                if (!(i < cookiesArr.length)) return [3 /*break*/, 25];
+                if (!(i < cookiesArr.length)) return [3 /*break*/, 29];
                 cookie = cookiesArr[i];
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 index = i + 1;
@@ -70,17 +82,17 @@ var cookie = '', res = '', UserName, index, uuid;
                 };
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)('https://api.m.jd.com/client.action?functionId=initForTurntableFarm&body=%7B%22version%22%3A4%2C%22channel%22%3A1%7D&appid=wh5', '', headers)];
             case 3:
-                res = _d.sent();
+                res = _f.sent();
                 times = res.remainLotteryTimes;
                 console.log('剩余抽奖机会:', times);
                 j = 0;
-                _d.label = 4;
+                _f.label = 4;
             case 4:
                 if (!(j < times)) return [3 /*break*/, 8];
                 console.log('开始抽奖...');
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)('https://api.m.jd.com/client.action?functionId=lotteryForTurntableFarm&body=%7B%22type%22%3A1%2C%22version%22%3A4%2C%22channel%22%3A1%7D&appid=wh5', '', headers)];
             case 5:
-                res = _d.sent();
+                res = _f.sent();
                 if (res.code === '0') {
                     if (res.type === 'thanks') {
                         console.log('抽奖成功，获得：狗屁');
@@ -94,74 +106,88 @@ var cookie = '', res = '', UserName, index, uuid;
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
             case 6:
-                _d.sent();
-                _d.label = 7;
+                _f.sent();
+                _f.label = 7;
             case 7:
                 j++;
                 return [3 /*break*/, 4];
             case 8:
                 uuid = (0, TS_USER_AGENTS_1.randomNumString)(40);
                 j = 0;
-                _d.label = 9;
+                _f.label = 9;
             case 9:
-                if (!(j < 2)) return [3 /*break*/, 24];
+                if (!(j < 2)) return [3 /*break*/, 28];
                 console.log("Round:".concat(j + 1));
                 return [4 /*yield*/, api('beanTaskList', { "viewChannel": "AppHome" })];
             case 10:
-                res = _d.sent();
-                _d.label = 11;
+                res = _f.sent();
+                _f.label = 11;
             case 11:
-                _d.trys.push([11, 20, , 21]);
-                _i = 0, _a = res.data.taskInfos;
-                _d.label = 12;
+                _f.trys.push([11, 24, , 25]);
+                _f.label = 12;
             case 12:
-                if (!(_i < _a.length)) return [3 /*break*/, 19];
-                t = _a[_i];
-                if (!(t.status === 1)) return [3 /*break*/, 18];
+                _f.trys.push([12, 21, 22, 23]);
+                _a = (e_1 = void 0, __values(res.data.taskInfos)), _b = _a.next();
+                _f.label = 13;
+            case 13:
+                if (!!_b.done) return [3 /*break*/, 20];
+                t = _b.value;
+                if (!(t.status === 1)) return [3 /*break*/, 19];
                 console.log(t.taskName);
                 return [4 /*yield*/, api('beanDoTask', {
                         "actionType": t.taskType === 3 ? 0 : 1,
                         "taskToken": t.subTaskVOS[0].taskToken
                     })];
-            case 13:
-                res = _d.sent();
-                ((_b = res.data) === null || _b === void 0 ? void 0 : _b.bizMsg) ? console.log(res.data.bizMsg) : console.log(res);
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(t.waitDuration * 1000 || 2000)];
             case 14:
-                _d.sent();
-                if (!(t.taskType !== 3)) return [3 /*break*/, 16];
+                res = _f.sent();
+                ((_d = res.data) === null || _d === void 0 ? void 0 : _d.bizMsg) ? console.log(res.data.bizMsg) : console.log(res);
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(t.waitDuration * 1000 || 2000)];
+            case 15:
+                _f.sent();
+                if (!(t.taskType !== 3)) return [3 /*break*/, 17];
                 return [4 /*yield*/, api('beanDoTask', {
                         "actionType": 0,
                         "taskToken": t.subTaskVOS[0].taskToken
                     })];
-            case 15:
-                res = _d.sent();
-                if ((_c = res.data) === null || _c === void 0 ? void 0 : _c.bizMsg)
+            case 16:
+                res = _f.sent();
+                if ((_e = res.data) === null || _e === void 0 ? void 0 : _e.bizMsg)
                     console.log(res.data.bizMsg);
-                _d.label = 16;
-            case 16: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 17:
-                _d.sent();
-                _d.label = 18;
+                _f.label = 17;
+            case 17: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
             case 18:
-                _i++;
-                return [3 /*break*/, 12];
-            case 19: return [3 /*break*/, 21];
-            case 20:
-                e_1 = _d.sent();
-                console.log('Error!', e_1);
-                return [3 /*break*/, 21];
-            case 21: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+                _f.sent();
+                _f.label = 19;
+            case 19:
+                _b = _a.next();
+                return [3 /*break*/, 13];
+            case 20: return [3 /*break*/, 23];
+            case 21:
+                e_1_1 = _f.sent();
+                e_1 = { error: e_1_1 };
+                return [3 /*break*/, 23];
             case 22:
-                _d.sent();
-                _d.label = 23;
-            case 23:
+                try {
+                    if (_b && !_b.done && (_c = _a["return"])) _c.call(_a);
+                }
+                finally { if (e_1) throw e_1.error; }
+                return [7 /*endfinally*/];
+            case 23: return [3 /*break*/, 25];
+            case 24:
+                e_2 = _f.sent();
+                console.log('Error!', e_2);
+                return [3 /*break*/, 25];
+            case 25: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+            case 26:
+                _f.sent();
+                _f.label = 27;
+            case 27:
                 j++;
                 return [3 /*break*/, 9];
-            case 24:
+            case 28:
                 i++;
                 return [3 /*break*/, 2];
-            case 25: return [2 /*return*/];
+            case 29: return [2 /*return*/];
         }
     });
 }); })();

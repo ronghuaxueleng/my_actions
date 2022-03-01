@@ -39,6 +39,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 exports.__esModule = true;
 var axios_1 = require("axios");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
@@ -46,82 +57,97 @@ var cookie = '', res = '';
 process.env.CFD_LOOP_DELAY ? console.log('设置延迟:', parseInt(process.env.CFD_LOOP_DELAY)) : console.log('设置延迟:10000~25000随机');
 var UserName, index;
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, i, shell, _i, _a, s, j, e_1;
-    var _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var cookiesArr, i, shell, _a, _b, s, j, e_1_1, e_2;
+    var e_1, _c;
+    var _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requestAlgo)()];
             case 1:
-                _c.sent();
+                _e.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 2:
-                cookiesArr = _c.sent();
-                _c.label = 3;
+                cookiesArr = _e.sent();
+                _e.label = 3;
             case 3:
-                if (!1) return [3 /*break*/, 18];
+                if (!1) return [3 /*break*/, 22];
                 if (new Date().getHours() === 0 && new Date().getMinutes() < 10)
-                    return [3 /*break*/, 18];
+                    return [3 /*break*/, 22];
                 i = 0;
-                _c.label = 4;
+                _e.label = 4;
             case 4:
-                if (!(i < cookiesArr.length)) return [3 /*break*/, 16];
+                if (!(i < cookiesArr.length)) return [3 /*break*/, 20];
                 cookie = cookiesArr[i];
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 index = i + 1;
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index, "\u3011").concat(UserName, "\n"));
-                _c.label = 5;
+                _e.label = 5;
             case 5:
-                _c.trys.push([5, 14, , 15]);
+                _e.trys.push([5, 18, , 19]);
                 return [4 /*yield*/, speedUp('_cfd_t,bizCode,dwEnv,ptag,source,strZone')];
             case 6:
-                shell = _c.sent();
-                if (!((_b = shell === null || shell === void 0 ? void 0 : shell.Data) === null || _b === void 0 ? void 0 : _b.NormShell)) return [3 /*break*/, 13];
-                _i = 0, _a = shell.Data.NormShell;
-                _c.label = 7;
+                shell = _e.sent();
+                if (!((_d = shell === null || shell === void 0 ? void 0 : shell.Data) === null || _d === void 0 ? void 0 : _d.NormShell)) return [3 /*break*/, 17];
+                _e.label = 7;
             case 7:
-                if (!(_i < _a.length)) return [3 /*break*/, 13];
-                s = _a[_i];
-                j = 0;
-                _c.label = 8;
+                _e.trys.push([7, 15, 16, 17]);
+                _a = (e_1 = void 0, __values(shell.Data.NormShell)), _b = _a.next();
+                _e.label = 8;
             case 8:
-                if (!(j < s.dwNum)) return [3 /*break*/, 12];
-                return [4 /*yield*/, speedUp('_cfd_t,bizCode,dwEnv,dwType,ptag,source,strZone', s.dwType)];
+                if (!!_b.done) return [3 /*break*/, 14];
+                s = _b.value;
+                j = 0;
+                _e.label = 9;
             case 9:
-                res = _c.sent();
+                if (!(j < s.dwNum)) return [3 /*break*/, 13];
+                return [4 /*yield*/, speedUp('_cfd_t,bizCode,dwEnv,dwType,ptag,source,strZone', s.dwType)];
+            case 10:
+                res = _e.sent();
                 if (res.iRet !== 0) {
                     console.log(res);
-                    return [3 /*break*/, 12];
+                    return [3 /*break*/, 13];
                 }
                 console.log('捡贝壳:', res.Data.strFirstDesc);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1500)];
-            case 10:
-                _c.sent();
-                _c.label = 11;
             case 11:
-                j++;
-                return [3 /*break*/, 8];
+                _e.sent();
+                _e.label = 12;
             case 12:
-                _i++;
-                return [3 /*break*/, 7];
-            case 13: return [3 /*break*/, 15];
-            case 14:
-                e_1 = _c.sent();
-                console.log(e_1);
-                return [3 /*break*/, 15];
+                j++;
+                return [3 /*break*/, 9];
+            case 13:
+                _b = _a.next();
+                return [3 /*break*/, 8];
+            case 14: return [3 /*break*/, 17];
             case 15:
+                e_1_1 = _e.sent();
+                e_1 = { error: e_1_1 };
+                return [3 /*break*/, 17];
+            case 16:
+                try {
+                    if (_b && !_b.done && (_c = _a["return"])) _c.call(_a);
+                }
+                finally { if (e_1) throw e_1.error; }
+                return [7 /*endfinally*/];
+            case 17: return [3 /*break*/, 19];
+            case 18:
+                e_2 = _e.sent();
+                console.log(e_2);
+                return [3 /*break*/, 19];
+            case 19:
                 i++;
                 return [3 /*break*/, 4];
-            case 16: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(60 * 10 * 1000)]; // 10min
-            case 17:
-                _c.sent(); // 10min
+            case 20: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(60 * 10 * 1000)]; // 10min
+            case 21:
+                _e.sent(); // 10min
                 return [3 /*break*/, 3];
-            case 18: return [2 /*return*/];
+            case 22: return [2 /*return*/];
         }
     });
 }); })();
 function speedUp(stk, dwType) {
     return __awaiter(this, void 0, void 0, function () {
-        var url, data, e_2;
+        var url, data, e_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -142,7 +168,7 @@ function speedUp(stk, dwType) {
                     data = (_a.sent()).data;
                     return [2 /*return*/, JSON.parse(data.match(/jsonpCBK.?\((.*)/)[1])];
                 case 2:
-                    e_2 = _a.sent();
+                    e_3 = _a.sent();
                     return [2 /*return*/, ''];
                 case 3: return [2 /*return*/];
             }

@@ -40,6 +40,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 exports.__esModule = true;
 var axios_1 = require("axios");
 var fs_1 = require("fs");
@@ -49,15 +76,16 @@ var jd_jxmc_js_1 = require("./utils/jd_jxmc.js");
 var sendNotify_1 = require("./sendNotify");
 var cookie = '', res = '', UserName, jxToken;
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, exist, items, message, _i, _a, good, allItems, arr, result, i, len, _b, result_1, group, _c, group_1, id, _d, _e, t, _f, _g, j;
-    return __generator(this, function (_h) {
-        switch (_h.label) {
+    var cookiesArr, exist, items, message, _a, _b, good, allItems, arr, result, i, len, result_1, result_1_1, group, group_1, group_1_1, id, _c, _d, t, e_1_1, _e, _f, j;
+    var e_2, _g, e_1, _h, e_3, _j, e_4, _k, e_5, _l;
+    return __generator(this, function (_m) {
+        switch (_m.label) {
             case 0: return [4 /*yield*/, (0, V3_1.requestAlgo)('00df8')];
             case 1:
-                _h.sent();
+                _m.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 2:
-                cookiesArr = _h.sent();
+                cookiesArr = _m.sent();
                 cookie = cookiesArr[(0, TS_USER_AGENTS_1.getRandomNumberByRange)(0, cookiesArr.length)];
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 if (!(0, fs_1.existsSync)('./json/jxmc_stock.json')) {
@@ -72,19 +100,28 @@ var cookie = '', res = '', UserName, jxToken;
                 items = '', message = '';
                 return [4 /*yield*/, api('queryservice/GetGoodsListV2', 'activeid,activekey,channel,jxmc_jstoken,phoneid,sceneid,timestamp', {})];
             case 3:
-                res = _h.sent();
-                for (_i = 0, _a = res.data.goodslist; _i < _a.length; _i++) {
-                    good = _a[_i];
-                    if (!Object.keys(exist).includes(good.prizepool)) {
-                        items += good.prizepool + ',';
-                        exist[good.prizepool] = {
-                            id: good.prizepool,
-                            egg: good.neednum
-                        };
+                res = _m.sent();
+                try {
+                    for (_a = __values(res.data.goodslist), _b = _a.next(); !_b.done; _b = _a.next()) {
+                        good = _b.value;
+                        if (!Object.keys(exist).includes(good.prizepool)) {
+                            items += good.prizepool + ',';
+                            exist[good.prizepool] = {
+                                id: good.prizepool,
+                                egg: good.neednum
+                            };
+                        }
                     }
                 }
+                catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                finally {
+                    try {
+                        if (_b && !_b.done && (_g = _a["return"])) _g.call(_a);
+                    }
+                    finally { if (e_2) throw e_2.error; }
+                }
                 allItems = items;
-                if (!items) return [3 /*break*/, 8];
+                if (!items) return [3 /*break*/, 12];
                 arr = items.split(',');
                 arr.pop();
                 items = '';
@@ -92,58 +129,100 @@ var cookie = '', res = '', UserName, jxToken;
                 for (i = 0, len = arr.length; i < len; i += 30) {
                     result.push(arr.slice(i, i + 30));
                 }
-                _b = 0, result_1 = result;
-                _h.label = 4;
+                _m.label = 4;
             case 4:
-                if (!(_b < result_1.length)) return [3 /*break*/, 8];
-                group = result_1[_b];
-                for (_c = 0, group_1 = group; _c < group_1.length; _c++) {
-                    id = group_1[_c];
-                    items += id + ',';
-                }
-                return [4 /*yield*/, getEgg(items)];
+                _m.trys.push([4, 10, 11, 12]);
+                result_1 = __values(result), result_1_1 = result_1.next();
+                _m.label = 5;
             case 5:
-                res = _h.sent();
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 6:
-                _h.sent();
-                for (_d = 0, _e = res.result; _d < _e.length; _d++) {
-                    t = _e[_d];
-                    exist[t.active].name = t.prizes[0].Name;
-                }
-                items = '';
-                _h.label = 7;
-            case 7:
-                _b++;
-                return [3 /*break*/, 4];
-            case 8:
-                console.log(exist);
-                (0, fs_1.writeFileSync)('./json/jxmc_stock.json', JSON.stringify(exist, null, 2), 'utf-8');
-                for (_f = 0, _g = Object.keys(exist); _f < _g.length; _f++) {
-                    j = _g[_f];
-                    if (allItems.indexOf(j) > -1) {
-                        message += exist[j].name + '\t' + exist[j].egg + '\n';
+                if (!!result_1_1.done) return [3 /*break*/, 9];
+                group = result_1_1.value;
+                try {
+                    for (group_1 = (e_3 = void 0, __values(group)), group_1_1 = group_1.next(); !group_1_1.done; group_1_1 = group_1.next()) {
+                        id = group_1_1.value;
+                        items += id + ',';
                     }
                 }
+                catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                finally {
+                    try {
+                        if (group_1_1 && !group_1_1.done && (_j = group_1["return"])) _j.call(group_1);
+                    }
+                    finally { if (e_3) throw e_3.error; }
+                }
+                return [4 /*yield*/, getEgg(items)];
+            case 6:
+                res = _m.sent();
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+            case 7:
+                _m.sent();
+                try {
+                    for (_c = (e_4 = void 0, __values(res.result)), _d = _c.next(); !_d.done; _d = _c.next()) {
+                        t = _d.value;
+                        exist[t.active].name = t.prizes[0].Name;
+                    }
+                }
+                catch (e_4_1) { e_4 = { error: e_4_1 }; }
+                finally {
+                    try {
+                        if (_d && !_d.done && (_k = _c["return"])) _k.call(_c);
+                    }
+                    finally { if (e_4) throw e_4.error; }
+                }
+                items = '';
+                _m.label = 8;
+            case 8:
+                result_1_1 = result_1.next();
+                return [3 /*break*/, 5];
+            case 9: return [3 /*break*/, 12];
+            case 10:
+                e_1_1 = _m.sent();
+                e_1 = { error: e_1_1 };
+                return [3 /*break*/, 12];
+            case 11:
+                try {
+                    if (result_1_1 && !result_1_1.done && (_h = result_1["return"])) _h.call(result_1);
+                }
+                finally { if (e_1) throw e_1.error; }
+                return [7 /*endfinally*/];
+            case 12:
+                console.log(exist);
+                (0, fs_1.writeFileSync)('./json/jxmc_stock.json', JSON.stringify(exist, null, 2), 'utf-8');
+                try {
+                    for (_e = __values(Object.keys(exist)), _f = _e.next(); !_f.done; _f = _e.next()) {
+                        j = _f.value;
+                        if (allItems.indexOf(j) > -1) {
+                            message += exist[j].name + '\t' + exist[j].egg + '\n';
+                        }
+                    }
+                }
+                catch (e_5_1) { e_5 = { error: e_5_1 }; }
+                finally {
+                    try {
+                        if (_f && !_f.done && (_l = _e["return"])) _l.call(_e);
+                    }
+                    finally { if (e_5) throw e_5.error; }
+                }
                 console.log(message);
-                if (!message) return [3 /*break*/, 10];
+                if (!message) return [3 /*break*/, 14];
                 return [4 /*yield*/, (0, sendNotify_1.sendNotify)('京喜牧场兑换', message)];
-            case 9:
-                _h.sent();
-                _h.label = 10;
-            case 10: return [2 /*return*/];
+            case 13:
+                _m.sent();
+                _m.label = 14;
+            case 14: return [2 /*return*/];
         }
     });
 }); })();
 function api(fn, stk, params) {
     if (params === void 0) { params = {}; }
     return __awaiter(this, void 0, void 0, function () {
-        var url, t, _i, _a, _b, key, value, h5st, data;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var url, t, _a, _b, _c, key, value, h5st, data;
+        var e_6, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0: return [4 /*yield*/, (0, jd_jxmc_js_1.token)(cookie)];
                 case 1:
-                    jxToken = _c.sent();
+                    jxToken = _e.sent();
                     t = [
                         { key: 'activeid', value: 'jxmc_active_0001' },
                         { key: 'activekey', value: 'null' },
@@ -154,10 +233,19 @@ function api(fn, stk, params) {
                         { key: 'phoneid', value: jxToken.phoneid },
                     ];
                     url = "https://m.jingxi.com/jxmc/".concat(fn, "?channel=7&sceneid=1001&_stk=").concat(encodeURIComponent(stk), "&_ste=1&sceneval=2&g_login_type=1&callback=jsonpCBK").concat((0, TS_USER_AGENTS_1.randomWord)(), "&g_ty=ls");
-                    for (_i = 0, _a = Object.entries(params); _i < _a.length; _i++) {
-                        _b = _a[_i], key = _b[0], value = _b[1];
-                        t.push({ key: key, value: value });
-                        url += "&".concat(key, "=").concat(value);
+                    try {
+                        for (_a = __values(Object.entries(params)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                            _c = __read(_b.value, 2), key = _c[0], value = _c[1];
+                            t.push({ key: key, value: value });
+                            url += "&".concat(key, "=").concat(value);
+                        }
+                    }
+                    catch (e_6_1) { e_6 = { error: e_6_1 }; }
+                    finally {
+                        try {
+                            if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
+                        }
+                        finally { if (e_6) throw e_6.error; }
                     }
                     h5st = (0, V3_1.geth5st)(t, '00df8');
                     url += "&h5st=".concat(encodeURIComponent(h5st));
@@ -173,7 +261,7 @@ function api(fn, stk, params) {
                             }
                         })];
                 case 2:
-                    data = (_c.sent()).data;
+                    data = (_e.sent()).data;
                     return [2 /*return*/, JSON.parse(data.match(/jsonpCBK.?\((.*)/)[1])];
             }
         });
