@@ -214,10 +214,11 @@ ListCronScripts4=MyScript/docker/crontab_list.sh
 ListCronScripts5=JDHelp/docker/crontab_list.sh
 ListCronScripts6=Aaron/docker/crontab_list.sh
 ListCronScripts7=faker2/docker/crontab_list.sh
+ListCronScripts8=yyds/docker/crontab_list.sh
 
 # cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} ${ListCronScripts7} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
-cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} ${ListCronScripts7} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
+cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} ${ListCronScripts7} ${ListCronScripts8} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 RootDir=./
 FileDiy=diy.sh
@@ -240,7 +241,7 @@ fi
 
 cd ${ShellDir}
 
-jq -s 'reduce .[] as $item ({}; . * $item)' MyActions/package.json JDHelloWorld/package.json JDHelp/package.json Aaron/package.json faker2/package.json > package.json
+jq -s 'reduce .[] as $item ({}; . * $item)' MyActions/package.json JDHelloWorld/package.json JDHelp/package.json Aaron/package.json faker2/package.json yyds/package.json > package.json
 
 cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
@@ -248,5 +249,6 @@ cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${
 cp -rf $(ls JDHelp | grep -v docker | sed "s:^:JDHelp/:" | xargs) ${ScriptsDir}
 cp -rf $(ls Aaron | grep -v docker | sed "s:^:Aaron/:" | xargs) ${ScriptsDir}
 cp -rf $(ls faker2 | grep -v docker | sed "s:^:faker2/:" | xargs) ${ScriptsDir}
+cp -rf $(ls yyds | grep -v docker | sed "s:^:yyds/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
 cp -rf package.json ${ScriptsDir}
