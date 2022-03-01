@@ -77,7 +77,7 @@ function deleteShareCode() {
 
 git clone https://github.com/JDHelloWorld/jd_scripts.git JDHelloWorld
 [ ! -d JDHelloWorld/docker ] && mkdir -p JDHelloWorld/docker
-json=$(cat JDHelloWorld/QuantumultX/gallery.json)
+json=$(cat JDHelloWorld/iOS/QX.json)
 crontab_list=""
 for row in $(echo "${json}" | jq -r '.task[] | @base64'); do
     _jq() {
@@ -107,7 +107,7 @@ npm install -g npm npm-install-peers
 npm install -g ts-node typescript --unsafe-perm=true --allow-root
 npm install -g ts-node typescript @types/node date-fns axios require tslib fs
 npm install --save-dev @types/node
-ls *.ts | grep -v jd_喂猪 | grep -v jd_speed_redEnvelope | xargs tsc
+ls *.ts | grep -v jd_喂猪 | grep -v jd_speed_redEnvelope | xargs tsc --downlevelIteration
 
 rm -rf node_modules
 rm -rf package-lock.json
@@ -186,6 +186,20 @@ replaceShareCode jd_sgmh faker2
 replaceShareCode jd_jxmc faker2
 cd ${ShellDir}
 
+git clone -b master https://github.com/okyyds/yyds.git yyds
+cd yyds
+replaceShareCode jd_cash yyds
+replaceShareCode jd_cfd yyds
+replaceShareCode jd_dreamFactory yyds
+replaceShareCode jd_fruit yyds
+replaceShareCode jd_health yyds
+replaceShareCode jd_jdfactory yyds
+replaceShareCodeV1 jd_pet yyds
+replaceShareCode jd_plantBean yyds
+replaceShareCode jd_sgmh yyds
+replaceShareCode jd_jxmc yyds
+cd ${ShellDir}
+
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
 ScriptsDir=${ShellDir}/jd_scripts
@@ -200,10 +214,11 @@ ListCronScripts4=MyScript/docker/crontab_list.sh
 ListCronScripts5=JDHelp/docker/crontab_list.sh
 ListCronScripts6=Aaron/docker/crontab_list.sh
 ListCronScripts7=faker2/docker/crontab_list.sh
+ListCronScripts8=yyds/docker/crontab_list.sh
 
 # cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} ${ListCronScripts7} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
-cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} ${ListCronScripts7} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
+cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} ${ListCronScripts7} ${ListCronScripts8} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 RootDir=./
 FileDiy=diy.sh
@@ -226,7 +241,7 @@ fi
 
 cd ${ShellDir}
 
-jq -s 'reduce .[] as $item ({}; . * $item)' MyActions/package.json JDHelloWorld/package.json JDHelp/package.json Aaron/package.json faker2/package.json > package.json
+jq -s 'reduce .[] as $item ({}; . * $item)' MyActions/package.json JDHelloWorld/package.json JDHelp/package.json Aaron/package.json faker2/package.json yyds/package.json > package.json
 
 cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
@@ -234,5 +249,6 @@ cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${
 cp -rf $(ls JDHelp | grep -v docker | sed "s:^:JDHelp/:" | xargs) ${ScriptsDir}
 cp -rf $(ls Aaron | grep -v docker | sed "s:^:Aaron/:" | xargs) ${ScriptsDir}
 cp -rf $(ls faker2 | grep -v docker | sed "s:^:faker2/:" | xargs) ${ScriptsDir}
+cp -rf $(ls yyds | grep -v docker | sed "s:^:yyds/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
 cp -rf package.json ${ScriptsDir}
