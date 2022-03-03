@@ -1,6 +1,6 @@
 #!/bin/bash
 # Update: 2022-03-03
-# Content: add  jd_plusReward.js(逛plus，抽京豆)
+# Content: add  jd_plusReward.js(逛plus，抽京豆) jd_fan.js(粉丝互动)
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -37,6 +37,7 @@
 #  jd_wyw.js                       玩一玩成就
 #  jd_sxLottery.js                 京东生鲜每日抽奖
 #  jd_plusReward.js                逛plus，抽京豆
+#  jd_fan.js                       粉丝互动
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -84,7 +85,7 @@
 
 NEWLINE="\n          "
 UpdateDate="2022-03-03"
-UpdateContent="add  jd_plusReward.js(逛plus，抽京豆)"
+UpdateContent="add  jd_plusReward.js(逛plus，抽京豆) jd_fan.js(粉丝互动)"
 
 ## 作者
 author_list="Public passerby_b smiek2221 star261 yyds X1a0He KingRan Dellear jiulan"
@@ -121,11 +122,11 @@ my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRVal
 
 ## star261
 scripts_base_url_star261=https://raw.githubusercontent.com/star261/jd/main/scripts/
-my_scripts_list_star261="jd_productZ4Brand.js"
+my_scripts_list_star261="jd_productZ4Brand.js jd_fan.js"
 
 ## yyds
 scripts_base_url_yyds=https://raw.githubusercontent.com/okyyds/yyds/master/
-my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_babel_sign.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js"
+my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_babel_sign.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js jd_plusReward.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://raw.githubusercontent.com/X1a0He/jd_scripts_fixed/main/
