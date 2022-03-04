@@ -1,6 +1,6 @@
 #!/bin/bash
 # Update: 2022-03-03
-# Content: add  jd_plusReward.js(逛plus，抽京豆) jd_fan.js(粉丝互动)
+# Content: del  jd_plusReward.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -36,7 +36,6 @@
 #  jd_EsportsManager.js            东东电竞经理
 #  jd_wyw.js                       玩一玩成就
 #  jd_sxLottery.js                 京东生鲜每日抽奖
-#  jd_plusReward.js                逛plus，抽京豆
 #  jd_fan.js                       粉丝互动
 
 ##############################  脚  本  内  环  境  变  量  ##############################
@@ -67,6 +66,8 @@
 
 ##############################  近  期  删  除  ##############################
 
+# jd_plusReward.js
+
 ##############################  京  东  到  家  ##############################
 
 ## jddj_bean.js                     鲜豆任务
@@ -84,8 +85,8 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-03-03"
-UpdateContent="add  jd_plusReward.js(逛plus，抽京豆) jd_fan.js(粉丝互动)"
+UpdateDate="2022-03-04"
+UpdateContent="jd_plusReward.js"
 
 ## 作者
 author_list="Public smiek2221 star261 yyds X1a0He KingRan Dellear jiulan"
@@ -125,7 +126,7 @@ my_scripts_list_star261="jd_productZ4Brand.js jd_fan.js"
 
 ## yyds
 scripts_base_url_yyds=https://raw.githubusercontent.com/okyyds/yyds/master/
-my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_babel_sign.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js jd_plusReward.js"
+my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_babel_sign.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://raw.githubusercontent.com/X1a0He/jd_scripts_fixed/main/
@@ -316,7 +317,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts=""
+DeleteScripts="jd_plusReward.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
