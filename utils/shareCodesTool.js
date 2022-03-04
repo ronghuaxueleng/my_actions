@@ -46,10 +46,27 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 exports.__esModule = true;
-exports.cash = exports.jxfactory = exports.sgmh = exports.factory = exports.pet = exports.health = exports.farm = exports.bean = void 0;
+exports.jxfactory = exports.sgmh = exports.factory = exports.pet = exports.health = exports.farm = exports.bean = void 0;
 var axios_1 = require("axios");
 var TS_USER_AGENTS_1 = require("../TS_USER_AGENTS");
+var V3_1 = require("./V3");
 function bean(cookie) {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
@@ -226,14 +243,40 @@ function sgmh(cookie) {
 }
 exports.sgmh = sgmh;
 function jxfactory(cookie) {
-    var _a, _b;
+    var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var url, data;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    url = "https://m.jingxi.com/newtasksys/newtasksys_front/GetUserTaskStatusList?source=dreamfactory&bizCode=dream_factory&_time=".concat(Date.now(), "&_stk=").concat(encodeURIComponent('_time,bizCode,source'), "&_ste=1&_=").concat(Date.now(), "&sceneval=2");
-                    url = (0, TS_USER_AGENTS_1.h5st)(url, '_time,bizCode,source', {}, 10001);
+        var url, timestamp, stk, params, t, _b, _c, _d, key, value, h5st, data;
+        var e_3, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
+                case 0: return [4 /*yield*/, (0, V3_1.requestAlgo)('c0ff1')];
+                case 1:
+                    _f.sent();
+                    timestamp = Date.now();
+                    stk = "_time,bizCode,showAreaTaskFlag,source", params = { showAreaTaskFlag: '1', bizCode: 'dream_factory' };
+                    t = [
+                        { key: '_time', value: timestamp.toString() },
+                        { key: '_ts', value: timestamp.toString() },
+                        { key: 'bizCode', value: 'dream_factory' },
+                        { key: 'source', value: 'dreamfactory' },
+                    ];
+                    url = "https://m.jingxi.com/newtasksys/newtasksys_front/GetUserTaskStatusList?source=dreamfactory&_time=".concat(timestamp, "&_ts=").concat(timestamp, "&_stk=").concat(encodeURIComponent(stk), "&_=").concat(timestamp + 3, "&sceneval=2&g_login_type=1&callback=jsonpCBK").concat((0, TS_USER_AGENTS_1.randomWord)(), "&g_ty=ls");
+                    try {
+                        for (_b = __values(Object.entries(params)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                            _d = __read(_c.value, 2), key = _d[0], value = _d[1];
+                            t.push({ key: key, value: value });
+                            url += "&".concat(key, "=").concat(value);
+                        }
+                    }
+                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                    finally {
+                        try {
+                            if (_c && !_c.done && (_e = _b["return"])) _e.call(_b);
+                        }
+                        finally { if (e_3) throw e_3.error; }
+                    }
+                    h5st = (0, V3_1.geth5st)(t, 'c0ff1');
+                    url += "&h5st=".concat(encodeURIComponent(h5st));
                     return [4 /*yield*/, axios_1["default"].get(url, {
                             headers: {
                                 'Referer': 'https://actst.jingxi.com/pingou/dream_factory/index.html',
@@ -242,34 +285,11 @@ function jxfactory(cookie) {
                                 'Cookie': cookie
                             }
                         })];
-                case 1:
-                    data = (_c.sent()).data;
-                    return [2 /*return*/, (_b = (_a = data.data) === null || _a === void 0 ? void 0 : _a.encryptPin) !== null && _b !== void 0 ? _b : 'null'];
+                case 2:
+                    data = (_f.sent()).data;
+                    return [2 /*return*/, ((_a = JSON.parse(data.match(/try{jsonpCBK.?\((.*)/)[1]).data) === null || _a === void 0 ? void 0 : _a.encryptPin) || 'null'];
             }
         });
     });
 }
 exports.jxfactory = jxfactory;
-function cash(cookie) {
-    var _a, _b, _c;
-    return __awaiter(this, void 0, void 0, function () {
-        var data;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0: return [4 /*yield*/, axios_1["default"].get("https://api.m.jd.com/client.action?functionId=cash_mob_home&body=".concat(escape(JSON.stringify({})), "&appid=CashRewardMiniH5Env&appid=9.1.0"), {
-                        headers: {
-                            'Cookie': cookie,
-                            'Host': 'api.m.jd.com',
-                            'Content-Type': 'application/json',
-                            'Referer': 'http://wq.jd.com/wxapp/pages/hd-interaction/index/index',
-                            'User-Agent': TS_USER_AGENTS_1["default"]
-                        }
-                    })];
-                case 1:
-                    data = (_d.sent()).data;
-                    return [2 /*return*/, (_c = (_b = (_a = data.data) === null || _a === void 0 ? void 0 : _a.result) === null || _b === void 0 ? void 0 : _b.inviteCode) !== null && _c !== void 0 ? _c : 'null'];
-            }
-        });
-    });
-}
-exports.cash = cash;
