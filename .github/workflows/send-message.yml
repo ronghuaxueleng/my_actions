@@ -16,7 +16,7 @@ jobs:
         uses: appleboy/telegram-action@master
         with:
           to: '@JD_ShareCode_Bot'
-          token: '5051400222:AAH4o8fu_yI8FQUdeYn4mF4HDPTzoAfMvBY'
+          token: ''
           message: |
             Someone stars *${{env.REPO_NAME}}* repository, see here(https://github.com/${{github.repository}}).
             There are currently ${{steps.repo-stars.outputs.stars}}⭐, come on!
