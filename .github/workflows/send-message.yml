@@ -1,0 +1,29 @@
+# File: .github/workflows/repo-sync.yml
+name: 向
+on:
+  schedule:
+    - cron: "0 9,21 * * *"
+  workflow_dispatch:
+  watch:
+    types: started
+  repository_dispatch:
+    types: build
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 发送电报消息
+        uses: appleboy/telegram-action@master
+        with:
+          to: @JD_ShareCode_Bot
+          token: 6798896:a82f9d37e7cd1509b50a30801e611c8b
+          message: |
+            Someone stars *${{env.REPO_NAME}}* repository, see here(https://github.com/${{github.repository}}).
+            There are currently ${{steps.repo-stars.outputs.stars}}⭐, come on!
+          format: markdown
+      - name: 删除过多的workflows
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          token: ${{ secrets.AUTH_PAT }}
+          repository: ${{ github.repository }}
+          retain_days: 1
