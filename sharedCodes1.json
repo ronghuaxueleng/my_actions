@@ -1,0 +1,43 @@
+[{
+        "name": "种豆得豆",
+        "cmd": "/bean",
+        "bot": "@JD_ShareCode_Bot",
+        "codes": "olmijoxgmjutys4k6iahgpf4hjulgqol2dnj2qi&vpqqp5glvail6hfxmege2zikgm3h7wlwy7o5jii&e7lhibzb3zek2vmu3yp6kgfr3ngznlcwdhdmzoa&x3x7xhsua3bmjjfsypyvset7zxw63q7srpgxbgy&gkk4336xszaehcuyobwejgbzhwm4xvfueg5amey"
+    },
+    {
+        "name": "东东工厂",
+        "cmd": "/ddfactory",
+        "bot": "@JD_ShareCode_Bot",
+        "codes": "T0225KkcRh0YpFHQJkz1xqMOdwCjVWnYaS5kRrbA&T018v_V1QRwQ_VbXKB6b1ACjVWnYaS5kRrbA&T0225KkcRB8b8AWFdEzzwfdYdQCjVWnYaS5kRrbA&T012Zk3ClrWQmh6LCjVWnYaS5kRrbA&T023a37mlZuxINZm9rZMlfYLdfoCjVWnYaS5kRrbA"
+    },
+    {
+        "name": "东东农场",
+        "cmd": "/farm",
+        "bot": "@JD_ShareCode_Bot",
+        "codes": "b2b4f078b8374a09ab3082a163b2d469&be2dc5cf992c4b18a2f991d3eedfb03c&dd137a76375340d793c4415e5d7e1a2c&bd16a19e819f4284b70d99e8a056db65&9c1c104e895b44bd88a4d3c2554822eb"
+    },
+    {
+        "name": "财富岛",
+        "cmd": "/jxcfd",
+        "bot": "@JD_ShareCode_Bot",
+        "codes": ""
+    },
+    {
+        "name": "京喜工厂",
+        "cmd": "/jxfactory",
+        "bot": "@JD_ShareCode_Bot",
+        "codes": "XyRWKCo2uimYVZoXYfkLNA==&jKirWt-QkUJjOxuPmEdPvA==&Wyb5kp-iqOBtOzCSEWw-6w==&Pkc-tvQX71kl-DJJEcp9dQ==&-_xKYWUv7Y4Be78_TQMkkw=="
+    },
+    {
+        "name": "东东萌宠",
+        "cmd": "/pet",
+        "bot": "@JD_ShareCode_Bot",
+        "codes": "MTE1NDQ5OTUwMDAwMDAwNDM0OTQ3NDM=&MTE1NDQ5MzYwMDAwMDAwNDM0OTQ3NDU=&MTE1NDAxNzgwMDAwMDAwNDM0OTkzNzk=&MTE1NDAxNzgwMDAwMDAwNDcwNzMwMDk=&MTE0MzE5NjEzMDAwMDAwMDQ3MDQxNTcx"
+    },
+    {
+        "name": "闪购盲盒",
+        "cmd": "/sgmh",
+        "bot": "@JD_ShareCode_Bot",
+        "codes": "T0225KkcRh0YpFHQJkz1xqMOdwCjVQmoaT5kRrbA&T018v_V1QRwQ_VbXKB6b1ACjVQmoaT5kRrbA&T0225KkcRB8b8AWFdEzzwfdYdQCjVQmoaT5kRrbA&T0205KkcOGRKrAGuSEKJyYh-CjVQmoaT5kRrbA&T0205KkcKUJ8lCKmcVuv64FYCjVQmoaT5kRrbA"
+    }
+]
