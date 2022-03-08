@@ -17,8 +17,10 @@ if __name__ == "__main__":
     useProxy = sys.argv[7] if len(sys.argv) > 7 else None
     sessionFilePath = sys.argv[8] if len(sys.argv) > 8 else ""
 
+    print("useProxy is " + useProxy)
+
     proxy = None
-    if useProxy is not None or useProxy != "false":
+    if useProxy is not None and useProxy != "false":
         host = "127.0.0.1"
         port = 7891
         proxy = (socks.SOCKS5, host, port)
