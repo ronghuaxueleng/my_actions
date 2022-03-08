@@ -13,7 +13,7 @@ if __name__ == "__main__":
     api_id = sys.argv[3]
     api_hash = sys.argv[4]
     sharedCodesJsonPath = sys.argv[5]
-    sessionFilePath = sys.argv[6] if sys.argv[7] else ""
+    sessionFilePath = sys.argv[6] if sys.argv[6] else ""
     botName = sys.argv[7]
     useProxy = sys.argv[8]
 
