@@ -12,15 +12,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 发送电报消息
-        uses: appleboy/telegram-action@master
+      - name: 安装Python 3.8
+        uses: actions/setup-python@v1
         with:
-          to: '@JD_ShareCode_Bot'
-          token: ''
-          message: |
-            Someone stars *${{env.REPO_NAME}}* repository, see here(https://github.com/${{github.repository}}).
-            There are currently ${{steps.repo-stars.outputs.stars}}⭐, come on!
-          format: markdown
+          python-version: 3.8
+      - name: 安装依赖
+        run: |
+          pip install Telethon==1.21.1
       - name: 删除过多的workflows
         uses: Mattraks/delete-workflow-runs@main
         with:
