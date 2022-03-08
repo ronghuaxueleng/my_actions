@@ -55,7 +55,7 @@ jobs:
           api_hashs=(${api_hash//@/ })
           sharedCodesJsonPaths=(${sharedCodesJsonPath//@/ })
 
-          git clone https://github.com/ronghuaxueleng/telegram-session.git sharecode
+          git clone git@github.com:ronghuaxueleng/telegram-session.git sharecode
 
           for ((i = 0; i < ${#phones[@]}; i++)); do
               python3 shareCode.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]} '@JD_ShareCode_Bot' 'false' '.'
