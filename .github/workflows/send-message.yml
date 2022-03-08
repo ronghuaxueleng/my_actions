@@ -12,6 +12,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: 设置githup信息
+        env:
+          email: ${{ secrets.EMAIL }}
+          username: ${{ secrets.USERNAME }}
+        run: |
+          git config --global user.name "$username"
+          git config --global user.email "$email"
+      - name: 设置SSH私钥信息
+        env:
+          TELEGRAM_SESSION: telegram_session
+          TELEGRAM_SESSION_HOST: github.com
+          TELEGRAM_SESSION_KEY: ${{ secrets.my_token_private_key }}
+        run: |
+          mkdir -p ~/.ssh/ && chmod 700 ~/.ssh
+          echo "$TELEGRAM_SESSION_KEY" > ~/.ssh/$TELEGRAM_SESSION
+          chmod 600 ~/.ssh/$TELEGRAM_SESSION
+          echo -e "Host $TELEGRAM_SESSION_HOST" >> ~/.ssh/config
+          echo -e "\tHostname $TELEGRAM_SESSION_HOST" >> ~/.ssh/config
+          echo -e "\tIdentityFile=~/.ssh/$TELEGRAM_SESSION" >> ~/.ssh/config
+          echo -e "\n" >> ~/.ssh/config
+          chmod 644 ~/.ssh/config
+          ssh-keyscan $TELEGRAM_SESSION_HOST >> ~/.ssh/known_hosts
       - name: checkout actions
         uses: actions/checkout@v1
       - name: 安装Python 3.8
@@ -32,6 +54,8 @@ jobs:
           api_ids=(${api_id//@/ })
           api_hashs=(${api_hash//@/ })
           sharedCodesJsonPaths=(${sharedCodesJsonPath//@/ })
+
+          git clone https://github.com/ronghuaxueleng/telegram-session.git sharecode
 
           for ((i = 0; i < ${#phones[@]}; i++)); do
               python3 shareCode.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]} '@JD_ShareCode_Bot' 'false' '.'
