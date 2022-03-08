@@ -21,11 +21,16 @@ jobs:
       - name: 提交shareCode
         run: |
           pip install Telethon==1.21.1
-          phones=(${{ secrets.phone//@/ }})
-          passwords=(${{ secrets.password//@/ }})
-          api_ids=(${{ secrets.api_id//@/ }})
-          api_hashs=(${ secrets.api_hash//@/ })
-          sharedCodesJsonPaths=(${{ secrets.sharedCodesJsonPath//@/ }})
+          phone=${{ secrets.phone }}
+          password=${{ secrets.password }}
+          api_id=${{ secrets.api_id }}
+          api_hash=${{ secrets.api_hash }}
+          sharedCodesJsonPath=${{ secrets.sharedCodesJsonPath }}
+          phones=(${ phone//@/ })
+          passwords=(${ password//@/ })
+          api_ids=(${ api_id//@/ })
+          api_hashs=(${ api_hash//@/ })
+          sharedCodesJsonPaths=(${ sharedCodesJsonPath//@/ })
 
           for ((i = 0; i < ${#phones[@]}; i++)); do
               python3 /jd/shareCode.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]}
