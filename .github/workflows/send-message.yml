@@ -34,9 +34,9 @@ jobs:
           sharedCodesJsonPaths=(${sharedCodesJsonPath//@/ })
 
           for ((i = 0; i < ${#phones[@]}; i++)); do
-              python3 shareCode.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]} '.'
-              python3 shareCode.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]} '.' '@JDShareCodebot'
-              python3 shareCode.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]} '.' '@passerbybbot'
+              python3 shareCode.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]} '@JD_ShareCode_Bot' 'false' '.'
+              python3 shareCode.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]} '@JDShareCodebot' 'false' '.'
+              python3 shareCode.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]} '@passerbybbot' 'false' '.'
           done
       - name: 删除过多的workflows
         uses: Mattraks/delete-workflow-runs@main
