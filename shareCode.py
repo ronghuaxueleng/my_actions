@@ -23,6 +23,8 @@ if __name__ == "__main__":
         port = 7891
         proxy = (socks.SOCKS5, host, port)
 
+    print("proxy is " + proxy)
+
     sessionFilePath = sessionFilePath + "/sharecode/"
     if not os.path.exists(sessionFilePath):
         os.makedirs(sessionFilePath)
