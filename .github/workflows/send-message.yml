@@ -20,7 +20,7 @@ jobs:
           python-version: 3.8
       - name: 提交shareCode
         run: |
-          pip install Telethon==1.21.1
+          pip install Telethon==1.21.1 PySocks==1.7.1
           phone=${{ secrets.phone }}
           password=${{ secrets.password }}
           api_id=${{ secrets.api_id }}
