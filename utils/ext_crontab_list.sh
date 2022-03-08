@@ -14,4 +14,6 @@
 58 20 * * * task jd_get_share_code_4_bot >> /scripts/logs/jd_get_share_code_4_bot.log 2>&1
 # 自动更新Cookie(需要配置wskey)
 59 * * * * task cookie update >/dev/null 2>&1
+# 京东极速版签到提现
+15 4 * * * task jd_js_sign >/dev/null 2>&1
 
