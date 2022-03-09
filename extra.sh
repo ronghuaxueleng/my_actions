@@ -31,7 +31,6 @@
 #  jd_babel_sign.js                通天塔签到共建
 #  jd_txjf.js                      通讯积分
 #  jd_wish.js                      众筹许愿池
-#  jd_nhdt.js                      手机小时购年货地图
 #  jd_wq_wxsign.js                 微信签到领红包
 #  jd_EsportsManager.js            东东电竞经理
 #  jd_wyw.js                       玩一玩成就
