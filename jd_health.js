@@ -190,7 +190,7 @@ var cookie = '', res = '', UserName;
                 e_3 = _l.sent();
                 console.log('Error', e_3);
                 return [3 /*break*/, 33];
-            case 30: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(10000)];
+            case 30: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
             case 31:
                 _l.sent();
                 _l.label = 32;
