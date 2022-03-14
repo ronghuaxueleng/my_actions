@@ -1,6 +1,7 @@
 #!/bin/bash
-# Update: 2022-03-03
-# Content: del  jd_plusReward.js
+# Update: 2022-03-14
+# Content: add  jd_mpdzcar.js(京东汽车头文字J) jd_mpdzcar_game.js(京东汽车头文字J游戏) jd_mpdzcar_help.js(京东汽车头文字J助力)
+#          del  jd_EsportsManager.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -32,10 +33,12 @@
 #  jd_txjf.js                      通讯积分
 #  jd_wish.js                      众筹许愿池
 #  jd_wq_wxsign.js                 微信签到领红包
-#  jd_EsportsManager.js            东东电竞经理
 #  jd_wyw.js                       玩一玩成就
 #  jd_sxLottery.js                 京东生鲜每日抽奖
 #  jd_fan.js                       粉丝互动
+#  jd_mpdzcar.js                   京东汽车头文字J
+#  jd_mpdzcar_game.js              京东汽车头文字J游戏
+#  jd_mpdzcar_help.js              京东汽车头文字J助力
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -65,27 +68,14 @@
 
 ##############################  近  期  删  除  ##############################
 
-# jd_plusReward.js
-
-##############################  京  东  到  家  ##############################
-
-## jddj_bean.js                     鲜豆任务
-## jddj_fruit.js                    果园任务
-## jddj_fruit_collectWater.js       果园水车收水滴
-## jddj_plantBeans.js               鲜豆庄园
-## jddj_getPoints.js                鲜豆庄园收水滴
-
-## 京东到家需开通 "到家果园" 活动，自行挑选水果种植与 "东东农场" 类似，不想薅这个APP的羊毛就忽略这些脚本，可以注释掉定时任务
-
-## 京东到家账号环境变量（必填）：
-## export JDDJ_CKPATH="/jd/scripts/jdCookie.js"  # 指定组合COOKIE脚本的路径
+# jd_EsportsManager.js
 
 ##############################  主  要  代  码  ##############################
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-03-04"
-UpdateContent="jd_plusReward.js"
+UpdateDate="2022-03-14"
+UpdateContent="add  jd_mpdzcar.js(京东汽车头文字J) jd_mpdzcar_game.js(京东汽车头文字J游戏) jd_mpdzcar_help.js(京东汽车头文字J助力)"
 
 ## 作者
 author_list="Public smiek2221 star261 yyds X1a0He KingRan Dellear jiulan"
@@ -111,10 +101,6 @@ fi
 scripts_base_url_Public=https://gitee.com/SuperManito/scripts/raw/master/
 my_scripts_list_Public="jd_shop_sign.js jd_super_redrain.js jd_half_redrain.js"
 
-## 京东到家
-scripts_base_url_passerby_b=https://raw.githubusercontent.com/passerby-b/JDDJ/main/
-my_scripts_list_passerby_b="jddj_fruit.js jddj_fruit_collectWater.js jddj_bean.js jddj_plantBeans.js jddj_getPoints.js jddjCookie.js"
-
 ## 青蛙
 scripts_base_url_smiek2221=https://raw.githubusercontent.com/smiek2121/scripts/master/
 my_scripts_list_smiek2221="jd_sign_graphics.js sign_graphics_validate.js JDJRValidator_Pure.js"
@@ -125,7 +111,7 @@ my_scripts_list_star261="jd_productZ4Brand.js jd_fan.js"
 
 ## yyds
 scripts_base_url_yyds=https://raw.githubusercontent.com/okyyds/yyds/master/
-my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_babel_sign.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js"
+my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_babel_sign.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://raw.githubusercontent.com/X1a0He/jd_scripts_fixed/main/
@@ -133,7 +119,7 @@ my_scripts_list_X1a0He="jd_unsubscribe_xh.js"
 
 ## KingRan
 scripts_base_url_KingRan=https://raw.githubusercontent.com/KingRan/KR/main/
-my_scripts_list_KingRan="jd_wish.js jd_joy_park.js jd_joy_park_task.js jd_EsportsManager.js jd_sxLottery.js jd_m_sign.js"
+my_scripts_list_KingRan="jd_wish.js jd_joy_park.js jd_joy_park_task.js jd_sxLottery.js jd_m_sign.js"
 
 ## Dellear
 scripts_base_url_Dellear=https://raw.githubusercontent.com/Dellear/lost/main/extra/
@@ -150,10 +136,6 @@ my_scripts_list_duck=""
 ## zero205
 scripts_base_url_zero205=https://raw.githubusercontent.com/zero205/JD_tencent_scf/main/
 my_scripts_list_zero205=""
-
-## wuye999
-scripts_base_url_wuye999=https://raw.githubusercontent.com/wuye999/myScripts/main/jd/
-my_scripts_list_wuye999=""
 
 ## ccwav
 scripts_base_url_ccwav=https://raw.githubusercontent.com/ccwav/QLScript2/main/
@@ -316,7 +298,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="jd_plusReward.js"
+DeleteScripts="jd_EsportsManager.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
