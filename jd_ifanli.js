@@ -46,89 +46,121 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 exports.__esModule = true;
 var axios_1 = require("axios");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
-var cookie = '', res = '', UserName, index;
+var cookie = '', res = '';
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, i, finishCount, maxTaskCount, j, tasks, _a, _b, t, e_1_1;
-    var e_1, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var cookiesArr, _a, _b, _c, index, value, UserName, finishCount, maxTaskCount, i, tasks, tasks_1, tasks_1_1, t, e_1_1, e_2_1;
+    var e_2, _d, e_1, _e;
+    return __generator(this, function (_f) {
+        switch (_f.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 1:
-                cookiesArr = _d.sent();
-                i = 0;
-                _d.label = 2;
+                cookiesArr = _f.sent();
+                _f.label = 2;
             case 2:
-                if (!(i < cookiesArr.length)) return [3 /*break*/, 20];
-                cookie = cookiesArr[i];
-                UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
-                index = i + 1;
-                console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index, "\u3011").concat(UserName, "\n"));
-                return [4 /*yield*/, api('getTaskFinishCount')];
+                _f.trys.push([2, 22, 23, 24]);
+                _a = __values(cookiesArr.entries()), _b = _a.next();
+                _f.label = 3;
             case 3:
-                res = _d.sent();
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                if (!!_b.done) return [3 /*break*/, 21];
+                _c = __read(_b.value, 2), index = _c[0], value = _c[1];
+                cookie = value;
+                UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
+                console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
+                return [4 /*yield*/, api('getTaskFinishCount')];
             case 4:
-                _d.sent();
-                finishCount = res.content.finishCount, maxTaskCount = res.content.maxTaskCount;
-                console.log(finishCount, '/', maxTaskCount);
-                j = 0;
-                _d.label = 5;
-            case 5:
-                if (!(j < maxTaskCount - finishCount)) return [3 /*break*/, 19];
-                return [4 /*yield*/, api('getTaskList')];
-            case 6:
-                tasks = _d.sent();
+                res = _f.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+            case 5:
+                _f.sent();
+                finishCount = res.content.content.finishCount, maxTaskCount = res.content.content.maxTaskCount;
+                console.log(finishCount, '/', maxTaskCount);
+                i = finishCount;
+                _f.label = 6;
+            case 6:
+                if (!(i < maxTaskCount)) return [3 /*break*/, 20];
+                return [4 /*yield*/, api('getTaskList')];
             case 7:
-                _d.sent();
-                _d.label = 8;
+                tasks = _f.sent();
+                tasks = tasks.content;
+                tasks = tasks.sort(compare('rewardBeans'));
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
             case 8:
-                _d.trys.push([8, 16, 17, 18]);
-                _a = (e_1 = void 0, __values(tasks.content)), _b = _a.next();
-                _d.label = 9;
+                _f.sent();
+                _f.label = 9;
             case 9:
-                if (!!_b.done) return [3 /*break*/, 15];
-                t = _b.value;
-                if (!(t.statusName !== '活动结束' && t.status !== 2)) return [3 /*break*/, 14];
-                return [4 /*yield*/, taskApi('saveTaskRecord', { taskId: t.taskId, taskType: t.taskType, businessId: t.businessId })];
+                _f.trys.push([9, 17, 18, 19]);
+                tasks_1 = (e_1 = void 0, __values(tasks)), tasks_1_1 = tasks_1.next();
+                _f.label = 10;
             case 10:
-                res = _d.sent();
+                if (!!tasks_1_1.done) return [3 /*break*/, 16];
+                t = tasks_1_1.value;
+                if (!(t.statusName !== '活动结束' && t.status !== 2)) return [3 /*break*/, 15];
+                return [4 /*yield*/, taskApi('saveTaskRecord', { "taskId": null, "taskType": 2, "businessId": null })];
+            case 11:
+                res = _f.sent();
                 (0, TS_USER_AGENTS_1.o2s)(res);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(t.watchTime * 1000 + 500)];
-            case 11:
-                _d.sent();
-                return [4 /*yield*/, taskApi('saveTaskRecord', { taskId: t.taskId, taskType: t.taskType, businessId: t.businessId, uid: res.content.uid, tt: res.content.tt })];
             case 12:
-                res = _d.sent();
+                _f.sent();
+                return [4 /*yield*/, taskApi('saveTaskRecord', { taskId: t.taskId, taskType: t.taskType, businessId: t.businessId, uid: res.content.uid, tt: res.content.tt })];
+            case 13:
+                res = _f.sent();
                 (0, TS_USER_AGENTS_1.o2s)(res);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 13:
-                _d.sent();
-                _d.label = 14;
             case 14:
-                _b = _a.next();
-                return [3 /*break*/, 9];
-            case 15: return [3 /*break*/, 18];
-            case 16:
-                e_1_1 = _d.sent();
-                e_1 = { error: e_1_1 };
-                return [3 /*break*/, 18];
+                _f.sent();
+                _f.label = 15;
+            case 15:
+                tasks_1_1 = tasks_1.next();
+                return [3 /*break*/, 10];
+            case 16: return [3 /*break*/, 19];
             case 17:
+                e_1_1 = _f.sent();
+                e_1 = { error: e_1_1 };
+                return [3 /*break*/, 19];
+            case 18:
                 try {
-                    if (_b && !_b.done && (_c = _a["return"])) _c.call(_a);
+                    if (tasks_1_1 && !tasks_1_1.done && (_e = tasks_1["return"])) _e.call(tasks_1);
                 }
                 finally { if (e_1) throw e_1.error; }
                 return [7 /*endfinally*/];
-            case 18:
-                j++;
-                return [3 /*break*/, 5];
             case 19:
                 i++;
-                return [3 /*break*/, 2];
-            case 20: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 20:
+                _b = _a.next();
+                return [3 /*break*/, 3];
+            case 21: return [3 /*break*/, 24];
+            case 22:
+                e_2_1 = _f.sent();
+                e_2 = { error: e_2_1 };
+                return [3 /*break*/, 24];
+            case 23:
+                try {
+                    if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
+                }
+                finally { if (e_2) throw e_2.error; }
+                return [7 /*endfinally*/];
+            case 24: return [2 /*return*/];
         }
     });
 }); })();
@@ -140,8 +172,8 @@ function api(fn) {
                 case 0: return [4 /*yield*/, axios_1["default"].get("https://ifanli.m.jd.com/rebateapi/task/".concat(fn), {
                         headers: {
                             "Host": "ifanli.m.jd.com",
-                            "User-Agent": TS_USER_AGENTS_1["default"],
-                            "Referer": "https://ifanli.m.jd.com/rebate/earnBean.html?paltform=null",
+                            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1',
+                            'referer': 'https://ifanli.m.jd.com/rebate/earnBean.html?paltform=null',
                             "Cookie": cookie,
                             "Content-Type": "application/json;charset=UTF-8"
                         }
@@ -161,14 +193,9 @@ function taskApi(fn, body) {
                 case 0: return [4 /*yield*/, axios_1["default"].post("https://ifanli.m.jd.com/rebateapi/task/".concat(fn), JSON.stringify(body), {
                         headers: {
                             'authority': 'ifanli.m.jd.com',
-                            'user-agent': TS_USER_AGENTS_1["default"],
-                            'content-type': 'application/json;charset=UTF-8',
-                            'accept': 'application/json, text/plain, */*',
-                            'origin': 'https://ifanli.m.jd.com',
+                            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1',
                             'referer': 'https://ifanli.m.jd.com/rebate/earnBean.html?paltform=null',
-                            'accept-language': 'zh-CN,zh;q=0.9',
-                            'cookie': cookie,
-                            'Content-Type': 'application/json; charset=UTF-8'
+                            'cookie': cookie
                         }
                     })];
                 case 1:
@@ -177,4 +204,11 @@ function taskApi(fn, body) {
             }
         });
     });
+}
+function compare(property) {
+    return function (a, b) {
+        var value1 = a[property];
+        var value2 = b[property];
+        return value2 - value1;
+    };
 }
