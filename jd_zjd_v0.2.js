@@ -82,7 +82,7 @@ var jd_zjd_tool_js_1 = require("./utils/jd_zjd_tool.js");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var crypto_js_1 = require("crypto-js");
 var cookie = '', res = '', UserName;
-var shareCodeSelf = [], shareCode = [], shareCodeHW = [], full = [];
+var shareCodeSelf = [], shareCode = [], shareCodeHW = [];
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
     var cookiesArr, _a, _b, _c, index, value, e_1, e_2_1, _d, _e, _f, index, value, shareCode_1, shareCode_1_1, code, e_3, e_4_1, e_5_1;
     var e_2, _g, e_5, _h, e_4, _j;
@@ -131,7 +131,7 @@ var shareCodeSelf = [], shareCode = [], shareCodeHW = [], full = [];
                 // 没开团
                 res = _k.sent();
                 (0, TS_USER_AGENTS_1.o2s)(res);
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
             case 10:
                 _k.sent();
                 if (!res.success) return [3 /*break*/, 13];
@@ -144,7 +144,7 @@ var shareCodeSelf = [], shareCode = [], shareCodeHW = [], full = [];
                     assistStartRecordId: res.data.assistStartRecordId,
                     assistedPinEncrypted: res.data.encPin
                 });
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
             case 12:
                 _k.sent();
                 _k.label = 13;
@@ -169,7 +169,7 @@ var shareCodeSelf = [], shareCode = [], shareCodeHW = [], full = [];
                     assistStartRecordId: res.data.assistStartRecordId,
                     assistedPinEncrypted: res.data.encPin
                 });
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
             case 18:
                 _k.sent();
                 _k.label = 19;
@@ -203,43 +203,45 @@ var shareCodeSelf = [], shareCode = [], shareCodeHW = [], full = [];
                 return [7 /*endfinally*/];
             case 29:
                 (0, TS_USER_AGENTS_1.o2s)(shareCodeSelf);
-                _k.label = 30;
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
             case 30:
-                _k.trys.push([30, 51, 52, 53]);
-                _d = __values(cookiesArr.entries()), _e = _d.next();
+                _k.sent();
                 _k.label = 31;
             case 31:
+                _k.trys.push([31, 51, 52, 53]);
+                _d = __values(cookiesArr.entries()), _e = _d.next();
+                _k.label = 32;
+            case 32:
                 if (!!_e.done) return [3 /*break*/, 50];
                 _f = __read(_e.value, 2), index = _f[0], value = _f[1];
-                if (!(shareCodeHW.length === 0)) return [3 /*break*/, 33];
+                if (!(shareCodeHW.length === 0)) return [3 /*break*/, 34];
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.getshareCodeHW)('zjd')];
-            case 32:
-                shareCodeHW = _k.sent();
-                _k.label = 33;
             case 33:
+                shareCodeHW = _k.sent();
+                _k.label = 34;
+            case 34:
                 shareCode = index === 0
                     ? Array.from(new Set(__spreadArray(__spreadArray([], __read(shareCodeHW), false), __read(shareCodeSelf), false)))
                     : Array.from(new Set(__spreadArray(__spreadArray([], __read(shareCodeSelf), false), __read(shareCodeHW), false)));
                 cookie = value;
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 return [4 /*yield*/, (0, jd_zjd_tool_js_1.zjdInit)()];
-            case 34:
-                _k.sent();
-                _k.label = 35;
             case 35:
-                _k.trys.push([35, 45, 46, 47]);
-                shareCode_1 = (e_4 = void 0, __values(shareCode)), shareCode_1_1 = shareCode_1.next();
+                _k.sent();
                 _k.label = 36;
             case 36:
-                if (!!shareCode_1_1.done) return [3 /*break*/, 44];
-                code = shareCode_1_1.value;
-                if (!!full.includes(code.assistedPinEncrypted)) return [3 /*break*/, 42];
+                _k.trys.push([36, 45, 46, 47]);
+                shareCode_1 = (e_4 = void 0, __values(shareCode)), shareCode_1_1 = shareCode_1.next();
                 _k.label = 37;
             case 37:
-                _k.trys.push([37, 39, , 40]);
+                if (!!shareCode_1_1.done) return [3 /*break*/, 44];
+                code = shareCode_1_1.value;
+                _k.label = 38;
+            case 38:
+                _k.trys.push([38, 40, , 41]);
                 console.log("\u8D26\u53F7".concat(index + 1, " ").concat(UserName, " \u53BB\u52A9\u529B ").concat(code.assistedPinEncrypted.replace('\n', '')));
                 return [4 /*yield*/, api('vvipclub_distributeBean_assist', { "activityIdEncrypted": code.activityIdEncrypted, "assistStartRecordId": code.assistStartRecordId, "assistedPinEncrypted": code.assistedPinEncrypted, "channel": "FISSION_BEAN", "launchChannel": "undefined" })];
-            case 38:
+            case 39:
                 res = _k.sent();
                 if (res.resultCode === '9200008') {
                     console.log('不能助力自己');
@@ -250,7 +252,9 @@ var shareCodeSelf = [], shareCode = [], shareCodeHW = [], full = [];
                 }
                 else if (res.resultCode === '2400205') {
                     console.log('对方已成团');
-                    full.push(code.assistedPinEncrypted);
+                }
+                else if (res.resultCode === '9200011') {
+                    console.log('已助力过');
                 }
                 else if (res.success) {
                     console.log('助力成功');
@@ -258,21 +262,18 @@ var shareCodeSelf = [], shareCode = [], shareCodeHW = [], full = [];
                 else {
                     console.log('error', JSON.stringify(res));
                 }
-                return [3 /*break*/, 40];
-            case 39:
+                return [3 /*break*/, 41];
+            case 40:
                 e_3 = _k.sent();
                 console.log(e_3);
                 return [3 /*break*/, 44];
-            case 40: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 41:
-                _k.sent();
-                return [3 /*break*/, 43];
+            case 41: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
             case 42:
-                console.log('full');
+                _k.sent();
                 _k.label = 43;
             case 43:
                 shareCode_1_1 = shareCode_1.next();
-                return [3 /*break*/, 36];
+                return [3 /*break*/, 37];
             case 44: return [3 /*break*/, 47];
             case 45:
                 e_4_1 = _k.sent();
@@ -292,7 +293,7 @@ var shareCodeSelf = [], shareCode = [], shareCodeHW = [], full = [];
                 _k.label = 49;
             case 49:
                 _e = _d.next();
-                return [3 /*break*/, 31];
+                return [3 /*break*/, 32];
             case 50: return [3 /*break*/, 53];
             case 51:
                 e_5_1 = _k.sent();
