@@ -102,7 +102,13 @@ var cookie = '', UserName = '', res = '', message = '', shareCodes = [], shareCo
                 return [4 /*yield*/, api('showSecondFloorCardInfo', { "source": "secondfloor" })];
             case 4:
                 res = _7.sent();
-                activityId = res.data.result.activityBaseInfo.activityId;
+                try {
+                    activityId = res.data.result.activityBaseInfo.activityId;
+                }
+                catch (e) {
+                    console.log('黑号');
+                    return [3 /*break*/, 29];
+                }
                 encryptProjectId = res.data.result.activityBaseInfo.encryptProjectId;
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)
                     // 任务
