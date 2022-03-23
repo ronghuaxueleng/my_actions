@@ -4,6 +4,9 @@
  * cron: 1 0,6,18 * * *
  * CK1     HW.ts -> 内部
  * CK2～n  内部   -> HW.ts
+ * 
+ * https://github.com/JDHelloWorld/jd_scripts
+ * 
  */
 
 import axios from 'axios';
