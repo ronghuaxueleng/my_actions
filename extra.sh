@@ -1,7 +1,6 @@
 #!/bin/bash
-# Update: 2022-03-14
-# Content: add  jd_mpdzcar.js(京东汽车头文字J) jd_mpdzcar_game.js(京东汽车头文字J游戏) jd_mpdzcar_help.js(京东汽车头文字J助力)
-#          del  jd_EsportsManager.js
+# Update: 2022-03-23
+# Content: del  jd_babel_sign.js jd_sxLottery.js
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -29,12 +28,10 @@
 #  jd_jfcz.js                      见缝插针
 #  jd_jdtj_winner.js               京东特价翻翻乐
 #  jd_m_sign.js                    京东通天塔--签到
-#  jd_babel_sign.js                通天塔签到共建
 #  jd_txjf.js                      通讯积分
 #  jd_wish.js                      众筹许愿池
 #  jd_wq_wxsign.js                 微信签到领红包
 #  jd_wyw.js                       玩一玩成就
-#  jd_sxLottery.js                 京东生鲜每日抽奖
 #  jd_fan.js                       粉丝互动
 #  jd_mpdzcar.js                   京东汽车头文字J
 #  jd_mpdzcar_game.js              京东汽车头文字J游戏
@@ -68,14 +65,15 @@
 
 ##############################  近  期  删  除  ##############################
 
-# jd_EsportsManager.js
+# jd_babel_sign.js
+# jd_sxLottery.js
 
 ##############################  主  要  代  码  ##############################
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-03-14"
-UpdateContent="add  jd_mpdzcar.js(京东汽车头文字J) jd_mpdzcar_game.js(京东汽车头文字J游戏) jd_mpdzcar_help.js(京东汽车头文字J助力)"
+UpdateDate="2022-03-23"
+UpdateContent="del  jd_babel_sign.js jd_sxLottery.js"
 
 ## 作者
 author_list="Public smiek2221 star261 yyds X1a0He KingRan Dellear jiulan"
@@ -111,7 +109,7 @@ my_scripts_list_star261="jd_productZ4Brand.js jd_fan.js"
 
 ## yyds
 scripts_base_url_yyds=https://raw.githubusercontent.com/okyyds/yyds/master/
-my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_babel_sign.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js"
+my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://raw.githubusercontent.com/X1a0He/jd_scripts_fixed/main/
@@ -119,7 +117,7 @@ my_scripts_list_X1a0He="jd_unsubscribe_xh.js"
 
 ## KingRan
 scripts_base_url_KingRan=https://raw.githubusercontent.com/KingRan/KR/main/
-my_scripts_list_KingRan="jd_wish.js jd_joy_park.js jd_joy_park_task.js jd_sxLottery.js jd_m_sign.js"
+my_scripts_list_KingRan="jd_wish.js jd_joy_park.js jd_joy_park_task.js jd_m_sign.js"
 
 ## Dellear
 scripts_base_url_Dellear=https://raw.githubusercontent.com/Dellear/lost/main/extra/
@@ -298,7 +296,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="jd_EsportsManager.js"
+DeleteScripts="jd_babel_sign.js jd_sxLottery.js"
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
