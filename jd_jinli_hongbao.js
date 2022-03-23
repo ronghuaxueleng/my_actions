@@ -264,7 +264,7 @@ function open() {
                 case 9:
                     res = _h.sent();
                     console.log(res.data.biz_msg, parseFloat(res.data.result.discount));
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(6000)];
                 case 10:
                     _h.sent();
                     return [3 /*break*/, 12];
@@ -293,7 +293,7 @@ function open() {
                     e_6 = _h.sent();
                     console.log(e_6);
                     return [3 /*break*/, 19];
-                case 19: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                case 19: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
                 case 20:
                     _h.sent();
                     _h.label = 21;
@@ -369,7 +369,7 @@ function help() {
                     (0, TS_USER_AGENTS_1.o2s)(res, 'jinli_h5assist');
                     if (!(res.data.result.status === 0)) return [3 /*break*/, 9];
                     console.log('助力成功：', parseFloat(res.data.result.assistReward.discount));
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(20000)];
                 case 8:
                     _f.sent();
                     return [3 /*break*/, 13];
@@ -385,7 +385,7 @@ function help() {
                         }
                     }
                     _f.label = 10;
-                case 10: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                case 10: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(20000)];
                 case 11:
                     _f.sent();
                     _f.label = 12;
@@ -445,25 +445,22 @@ function api(fn, body, retry) {
                     })];
                 case 1:
                     data = (_a.sent()).data;
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-                case 2:
-                    _a.sent();
-                    if (!(data.rtn_code === 403 && retry < 3)) return [3 /*break*/, 6];
+                    if (!(data.rtn_code === 403 && retry < 3)) return [3 /*break*/, 5];
                     console.log('retry...');
                     return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-                case 3:
+                case 2:
                     _a.sent();
                     log = jinli_log_1.logs[(0, TS_USER_AGENTS_1.getRandomNumberByRange)(0, jinli_log_1.logs.length - 1)];
                     body['random'] = log.match(/"random":"(\d+)"/)[1];
                     body['log'] = log.match(/"log":"(.*)"/)[1];
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
-                case 4:
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(10000)];
+                case 3:
                     _a.sent();
                     return [4 /*yield*/, api(fn, body, ++retry)];
-                case 5:
+                case 4:
                     _a.sent();
-                    _a.label = 6;
-                case 6: return [2 /*return*/, data];
+                    _a.label = 5;
+                case 5: return [2 /*return*/, data];
             }
         });
     });
