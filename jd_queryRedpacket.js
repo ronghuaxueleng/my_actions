@@ -71,16 +71,17 @@ var message = '';
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
     var cookiesArr, _a, _b, _c, index, value, day, jdRed, jdRedExp, _d, _e, j, text, e_1_1;
     var e_1, _f, e_2, _g;
-    return __generator(this, function (_h) {
-        switch (_h.label) {
+    var _h;
+    return __generator(this, function (_j) {
+        switch (_j.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 1:
-                cookiesArr = _h.sent();
-                _h.label = 2;
+                cookiesArr = _j.sent();
+                _j.label = 2;
             case 2:
-                _h.trys.push([2, 9, 10, 11]);
+                _j.trys.push([2, 9, 10, 11]);
                 _a = __values(cookiesArr.entries()), _b = _a.next();
-                _h.label = 3;
+                _j.label = 3;
             case 3:
                 if (!!_b.done) return [3 /*break*/, 8];
                 _c = __read(_b.value, 2), index = _c[0], value = _c[1];
@@ -94,10 +95,10 @@ var message = '';
                         'User-Agent': TS_USER_AGENTS_1["default"]
                     })];
             case 4:
-                res = _h.sent();
+                res = _j.sent();
                 day = new Date().getDay(), jdRed = 0, jdRedExp = 0;
                 try {
-                    for (_d = (e_2 = void 0, __values(res.data.useRedInfo.redList)), _e = _d.next(); !_e.done; _e = _d.next()) {
+                    for (_d = (e_2 = void 0, __values(((_h = res.data.useRedInfo) === null || _h === void 0 ? void 0 : _h.redList) || [])), _e = _d.next(); !_e.done; _e = _d.next()) {
                         j = _e.value;
                         if (j.orgLimitStr.includes('京喜')) {
                         }
@@ -123,18 +124,18 @@ var message = '';
                 text = "\u3010\u8D26\u53F7\u3011  ".concat(UserName, "\n\u4EAC\u4E1C\u7EA2\u5305  ").concat(jdRed, "\n\u4ECA\u65E5\u8FC7\u671F  ").concat(jdRedExp);
                 return [4 /*yield*/, (0, pushplus_1.pushplus)('京东红包', text)];
             case 5:
-                _h.sent();
+                _j.sent();
                 message += "".concat(text, "\n\n");
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
             case 6:
-                _h.sent();
-                _h.label = 7;
+                _j.sent();
+                _j.label = 7;
             case 7:
                 _b = _a.next();
                 return [3 /*break*/, 3];
             case 8: return [3 /*break*/, 11];
             case 9:
-                e_1_1 = _h.sent();
+                e_1_1 = _j.sent();
                 e_1 = { error: e_1_1 };
                 return [3 /*break*/, 11];
             case 10:
@@ -145,7 +146,7 @@ var message = '';
                 return [7 /*endfinally*/];
             case 11: return [4 /*yield*/, (0, sendNotify_1.sendNotify)('京东红包', message)];
             case 12:
-                _h.sent();
+                _j.sent();
                 return [2 /*return*/];
         }
     });

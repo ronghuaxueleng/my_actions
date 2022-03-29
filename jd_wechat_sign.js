@@ -67,8 +67,9 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 exports.__esModule = true;
+var sendNotify_1 = require("./sendNotify");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
-var cookie = '', res = '', UserName;
+var cookie = '', res = '', UserName, msg = '';
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
     var cookiesArr, _a, _b, _c, index, value, e_1_1;
     var e_1, _d;
@@ -96,8 +97,10 @@ var cookie = '', res = '', UserName;
                     })];
             case 4:
                 res = _e.sent();
-                if (res.data)
+                if (res.data) {
                     console.log('已签到', res.data.signDays, '天，奖励', res.data.rewardValue, '元');
+                    msg += "\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011  ").concat(UserName, "\n\u5DF2\u7B7E\u5230  ").concat(res.data.signDays, "\u5929\n\u5956\u52B1  ").concat(res.data.rewardValue, "\u5143\n\n");
+                }
                 else
                     console.log(res.message);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
@@ -118,7 +121,10 @@ var cookie = '', res = '', UserName;
                 }
                 finally { if (e_1) throw e_1.error; }
                 return [7 /*endfinally*/];
-            case 10: return [2 /*return*/];
+            case 10: return [4 /*yield*/, (0, sendNotify_1.sendNotify)('微信小程序签到红包', msg)];
+            case 11:
+                _e.sent();
+                return [2 /*return*/];
         }
     });
 }); })();
