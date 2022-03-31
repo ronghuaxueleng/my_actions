@@ -1,6 +1,6 @@
 #!/bin/bash
-# Update: 2022-03-23
-# Content: del  jd_babel_sign.js jd_sxLottery.js
+# Update: 2022-03-31
+# Content: add  jd_cash.js(签到领现金) jd_ddly.js(东东乐园)
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -36,6 +36,8 @@
 #  jd_mpdzcar.js                   京东汽车头文字J
 #  jd_mpdzcar_game.js              京东汽车头文字J游戏
 #  jd_mpdzcar_help.js              京东汽车头文字J助力
+#  jd_ddly.js                      东东乐园
+#  jd_cash.js                      签到领现金
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -72,8 +74,8 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-03-23"
-UpdateContent="del  jd_babel_sign.js jd_sxLottery.js"
+UpdateDate="2022-03-31"
+UpdateContent="add  jd_cash.js(签到领现金) jd_ddly.js(东东乐园)"
 
 ## 作者
 author_list="Public smiek2221 star261 yyds X1a0He KingRan Dellear jiulan"
@@ -81,7 +83,7 @@ author_name=(
   Public
   青蛙
   star261
-  yyds联合作者
+  yyds
   X1a0He
   KingRan
   Dellear
@@ -108,8 +110,8 @@ scripts_base_url_star261=https://raw.githubusercontent.com/star261/jd/main/scrip
 my_scripts_list_star261="jd_productZ4Brand.js jd_fan.js"
 
 ## yyds
-scripts_base_url_yyds=https://raw.githubusercontent.com/okyyds/yyds/master/
-my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js"
+scripts_base_url_yyds=https://raw.githubusercontent.com/okyyds/yydspure/master/
+my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_cash.js jd_ddly.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://raw.githubusercontent.com/X1a0He/jd_scripts_fixed/main/
@@ -296,7 +298,7 @@ for del in ${DeleteCacheFiles}; do
 done
 
 ## 删除脚本和定时
-DeleteScripts="jd_babel_sign.js jd_sxLottery.js"
+DeleteScripts=""
 for del in ${DeleteScripts}; do
   [ -f $ScriptsDir/$del ] && rm -rf $ScriptsDir/$del && sed -i "/ $TaskCmd $(echo "$del" | awk -F\. '{print $1}' | perl -pe "{s|^jd_||; s|^jx_||; s|^jr_||;}")/d" $ListCrontabUser
 done
