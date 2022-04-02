@@ -65,7 +65,7 @@ var __read = (this && this.__read) || function (o, n) {
 exports.__esModule = true;
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var cookie = '', res = '', data, UserName;
-var message = '';
+var message = '', pandaToken = process.env.PANDA_TOKEN ? process.env.PANDA_TOKEN.split('&') : [];
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
     var cookiesArr, _loop_1, _a, _b, _c, index, value, e_1_1;
     var e_1, _d;
@@ -207,7 +207,7 @@ function api(fn, body) {
         var sign;
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.post)('https://api.jds.codes/jd/sign', { fn: fn, body: body })];
+                case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.post)('https://api.jds.codes/jd/sign', { fn: fn, body: body }, { 'Authorization': "Bearer ".concat(pandaToken[(0, TS_USER_AGENTS_1.getRandomNumberByRange)(0, pandaToken.length - 1)]) })];
                 case 1:
                     sign = _b.sent();
                     if (!((_a = sign === null || sign === void 0 ? void 0 : sign.data) === null || _a === void 0 ? void 0 : _a.sign)) {
