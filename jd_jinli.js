@@ -2,7 +2,6 @@
 /**
  * 京东-锦鲤红包
  * 6点后做全部CK
- * 助力、做任务、开红包
  * cron: 5 0,1,6 * * *
  * CK1     HW.ts -> 内部
  * CK2～n  内部   -> HW.ts
@@ -83,7 +82,7 @@ exports.__esModule = true;
 var axios_1 = require("axios");
 var sendNotify_1 = require("./sendNotify");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
-var cookie, cookiesArr = [], res, data, UserName;
+var cookie, cookiesArr = [], res, UserName;
 var shareCodesSelf = [], shareCodes = [], shareCodesHW = [], fullCode = [];
 var min = [0.02, 0.12, 0.3, 0.4, 0.6, 0.7, 0.8, 1, 1.2, 2, 3.6], needLog = true;
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -101,15 +100,10 @@ var min = [0.02, 0.12, 0.3, 0.4, 0.6, 0.7, 0.8, 1, 1.2, 2, 3.6], needLog = true;
                 return [4 /*yield*/, getShareCodeSelf()];
             case 3:
                 _a.sent();
-                return [4 /*yield*/, help()];
-            case 4:
-                _a.sent();
-                needLog = false;
-                return [4 /*yield*/, task()
-                    // needLog = true
+                return [4 /*yield*/, help()
                     // await open(true)
                 ];
-            case 5:
+            case 4:
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -461,135 +455,6 @@ function help() {
         });
     });
 }
-function task() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, index, value, shopId, _d, _e, t, _f, _g, tp, e_12_1, e_13_1, e_14, e_15_1;
-        var e_15, _h, e_13, _j, e_12, _k;
-        return __generator(this, function (_l) {
-            switch (_l.label) {
-                case 0:
-                    _l.trys.push([0, 30, 31, 32]);
-                    _a = __values(cookiesArr.entries()), _b = _a.next();
-                    _l.label = 1;
-                case 1:
-                    if (!!_b.done) return [3 /*break*/, 29];
-                    _c = __read(_b.value, 2), index = _c[0], value = _c[1];
-                    _l.label = 2;
-                case 2:
-                    _l.trys.push([2, 25, , 26]);
-                    cookie = value;
-                    UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
-                    console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
-                    console.log('浏览和领券任务自己手动');
-                    return [4 /*yield*/, api('h5activityIndex', { "isjdapp": 1 })];
-                case 3:
-                    res = _l.sent();
-                    shopId = res.data.result.shopId;
-                    return [4 /*yield*/, api('taskHomePage', {})];
-                case 4:
-                    res = _l.sent();
-                    (0, TS_USER_AGENTS_1.o2s)(res);
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-                case 5:
-                    _l.sent();
-                    _l.label = 6;
-                case 6:
-                    _l.trys.push([6, 22, 23, 24]);
-                    _d = (e_13 = void 0, __values(res.data.result.taskInfos)), _e = _d.next();
-                    _l.label = 7;
-                case 7:
-                    if (!!_e.done) return [3 /*break*/, 21];
-                    t = _e.value;
-                    if (!([2, 3, 4, 5, 8].includes(t.taskType) && t.innerStatus !== 3)) return [3 /*break*/, 20];
-                    return [4 /*yield*/, api('startTask', { taskType: t.taskType })];
-                case 8:
-                    res = _l.sent();
-                    console.log(t.panelTitle, res.data.biz_msg);
-                    return [4 /*yield*/, api('getTaskDetailForColor', { taskType: t.taskType })];
-                case 9:
-                    res = _l.sent();
-                    if (!(t.taskType === 4)) return [3 /*break*/, 11];
-                    return [4 /*yield*/, api('h5redpacket_followShop', { "shopId": shopId, "operator": "2" })];
-                case 10:
-                    data = _l.sent();
-                    (0, TS_USER_AGENTS_1.o2s)(data, 'h5redpacket_followShop');
-                    _l.label = 11;
-                case 11:
-                    _l.trys.push([11, 18, 19, 20]);
-                    _f = (e_12 = void 0, __values(res.data.result.advertDetails)), _g = _f.next();
-                    _l.label = 12;
-                case 12:
-                    if (!!_g.done) return [3 /*break*/, 17];
-                    tp = _g.value;
-                    if (!(tp.status === 0)) return [3 /*break*/, 16];
-                    console.log(t.panelTitle, tp.name);
-                    return [4 /*yield*/, api('taskReportForColor', { taskType: t.taskType, detailId: tp.id })];
-                case 13:
-                    data = _l.sent();
-                    console.log(res.data.biz_msg);
-                    return [4 /*yield*/, api('h5redpacket_followShop', { "shopId": shopId, "operator": "2" })];
-                case 14:
-                    data = _l.sent();
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
-                case 15:
-                    _l.sent();
-                    _l.label = 16;
-                case 16:
-                    _g = _f.next();
-                    return [3 /*break*/, 12];
-                case 17: return [3 /*break*/, 20];
-                case 18:
-                    e_12_1 = _l.sent();
-                    e_12 = { error: e_12_1 };
-                    return [3 /*break*/, 20];
-                case 19:
-                    try {
-                        if (_g && !_g.done && (_k = _f["return"])) _k.call(_f);
-                    }
-                    finally { if (e_12) throw e_12.error; }
-                    return [7 /*endfinally*/];
-                case 20:
-                    _e = _d.next();
-                    return [3 /*break*/, 7];
-                case 21: return [3 /*break*/, 24];
-                case 22:
-                    e_13_1 = _l.sent();
-                    e_13 = { error: e_13_1 };
-                    return [3 /*break*/, 24];
-                case 23:
-                    try {
-                        if (_e && !_e.done && (_j = _d["return"])) _j.call(_d);
-                    }
-                    finally { if (e_13) throw e_13.error; }
-                    return [7 /*endfinally*/];
-                case 24: return [3 /*break*/, 26];
-                case 25:
-                    e_14 = _l.sent();
-                    console.log(e_14);
-                    return [3 /*break*/, 26];
-                case 26: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
-                case 27:
-                    _l.sent();
-                    _l.label = 28;
-                case 28:
-                    _b = _a.next();
-                    return [3 /*break*/, 1];
-                case 29: return [3 /*break*/, 32];
-                case 30:
-                    e_15_1 = _l.sent();
-                    e_15 = { error: e_15_1 };
-                    return [3 /*break*/, 32];
-                case 31:
-                    try {
-                        if (_b && !_b.done && (_h = _a["return"])) _h.call(_a);
-                    }
-                    finally { if (e_15) throw e_15.error; }
-                    return [7 /*endfinally*/];
-                case 32: return [2 /*return*/];
-            }
-        });
-    });
-}
 function api(fn, body) {
     return __awaiter(this, void 0, void 0, function () {
         var log, data;
@@ -605,16 +470,18 @@ function api(fn, body) {
                         log: log.match(/"log":"(.*)"/)[1]
                     });
                     _a.label = 2;
-                case 2: return [4 /*yield*/, axios_1["default"].post("https://api.m.jd.com/api?appid=jinlihongbao&functionId=".concat(fn, "&loginType=2&client=jinlihongbao&clientVersion=10.2.4&osVersion=AndroidOS&d_brand=Xiaomi&d_model=Xiaomi"), "body=".concat(encodeURIComponent(JSON.stringify(body))), {
-                        headers: {
-                            "origin": "https://h5.m.jd.com",
-                            "referer": "https://h5.m.jd.com/babelDiy/Zeus/2NUvze9e1uWf4amBhe1AV6ynmSuH/index.html",
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            "X-Requested-With": "com.jingdong.app.mall",
-                            "User-Agent": "jdltapp;iPhone;3.1.0;".concat(Math.ceil(Math.random() * 4 + 10), ".").concat(Math.ceil(Math.random() * 4), ";").concat((0, TS_USER_AGENTS_1.randomString)(40)),
-                            "Cookie": cookie
-                        }
-                    })];
+                case 2:
+                    console.log(fn, body);
+                    return [4 /*yield*/, axios_1["default"].post("https://api.m.jd.com/api?appid=jinlihongbao&functionId=".concat(fn, "&loginType=2&client=jinlihongbao&clientVersion=10.2.4&osVersion=AndroidOS&d_brand=Xiaomi&d_model=Xiaomi"), "body=".concat(encodeURIComponent(JSON.stringify(body))), {
+                            headers: {
+                                "origin": "https://h5.m.jd.com",
+                                "referer": "https://h5.m.jd.com/babelDiy/Zeus/2NUvze9e1uWf4amBhe1AV6ynmSuH/index.html",
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                "X-Requested-With": "com.jingdong.app.mall",
+                                "User-Agent": "jdltapp;iPhone;3.1.0;".concat(Math.ceil(Math.random() * 4 + 10), ".").concat(Math.ceil(Math.random() * 4), ";").concat((0, TS_USER_AGENTS_1.randomString)(40)),
+                                "Cookie": cookie
+                            }
+                        })];
                 case 3:
                     data = (_a.sent()).data;
                     return [2 /*return*/, data];
@@ -630,7 +497,10 @@ function getLog() {
                 case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://api.yuuuu.xyz/newlog.php")];
                 case 1:
                     yuuuu = _a.sent();
+                    if (!(yuuuu.random && yuuuu.log)) return [3 /*break*/, 2];
                     return [2 /*return*/, "\"random\":\"".concat(yuuuu.random, "\",\"log\":\"").concat(yuuuu.log, "\"")];
+                case 2: return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://api.jdsharecode.xyz/api/jlhb_log")];
+                case 3: return [2 /*return*/, _a.sent()];
             }
         });
     });
