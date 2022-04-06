@@ -1,6 +1,6 @@
 #!/bin/bash
-# Update: 2022-04-01
-# Content: add  jd_speed_redpocke.js(京东极速版红包)
+# Update: 2022-04-06
+# Content: add  jd_carnivalcity.js(京东手机狂欢城)
 
 ##############################  京  东  商  城  ##############################
 ## 列表格式： 脚本名称 | 活动名称 | 备注说明
@@ -39,6 +39,7 @@
 #  jd_ddly.js                      东东乐园
 #  jd_cash.js                      签到领现金
 #  jd_speed_redpocke.js            京东极速版红包
+#  jd_carnivalcity.js              京东手机狂欢城
 
 ##############################  脚  本  内  环  境  变  量  ##############################
 ## 推荐使用项目自带的环境变量管理命令，默认交互支持快捷命令
@@ -75,8 +76,8 @@
 ## 免责声明：当作者的脚本不可拉取时，会临时启用别人 FORK 或搬运的库代替
 
 NEWLINE="\n          "
-UpdateDate="2022-04-01"
-UpdateContent="add  jd_speed_redpocke.js(京东极速版红包)"
+UpdateDate="2022-04-06"
+UpdateContent="add  jd_carnivalcity.js(京东手机狂欢城)"
 
 ## 作者
 author_list="Public smiek2221 star261 yyds X1a0He KingRan Dellear jiulan"
@@ -112,7 +113,7 @@ my_scripts_list_star261="jd_productZ4Brand.js jd_fan.js"
 
 ## yyds
 scripts_base_url_yyds=https://raw.githubusercontent.com/okyyds/yydspure/master/
-my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_cash.js jd_ddly.js jd_speed_redpocke.js"
+my_scripts_list_yyds="JDSignValidator.js jd_try.js jd_try_notify.py jd_morningSc.js jd_moneyTree_heip.js jd_dwapp.js jd_unsubscriLive.js jd_nnfls.js jd_gold_sign.js jd_fanli.js jd_beauty_ex.js jd_wq_wxsign.js jd_wyw.js jd_mpdzcar.js jd_mpdzcar_game.js jd_mpdzcar_help.js jd_cash.js jd_ddly.js jd_speed_redpocke.js jd_carnivalcity.js"
 
 ## X1a0He
 scripts_base_url_X1a0He=https://raw.githubusercontent.com/X1a0He/jd_scripts_fixed/main/
