@@ -64,6 +64,7 @@ var __read = (this && this.__read) || function (o, n) {
 };
 exports.__esModule = true;
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
+require("dotenv/config");
 var cookie = '', res = '', data, UserName;
 var message = '', pandaToken = process.env.PANDA_TOKEN ? process.env.PANDA_TOKEN.split('&') : [];
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -76,7 +77,7 @@ var message = '', pandaToken = process.env.PANDA_TOKEN ? process.env.PANDA_TOKEN
             case 1:
                 cookiesArr = _h.sent();
                 _loop_1 = function (index, value) {
-                    var type, otherTaskNum, taskNum, i, _j, _k, t, e_2_1;
+                    var type, otherTaskNum, taskNum, i, _j, _k, t, e_2_1, fs;
                     var e_2, _l;
                     return __generator(this, function (_m) {
                         switch (_m.label) {
@@ -167,7 +168,10 @@ var message = '', pandaToken = process.env.PANDA_TOKEN ? process.env.PANDA_TOKEN
                             case 19:
                                 i++;
                                 return [3 /*break*/, 7];
-                            case 20: return [2 /*return*/];
+                            case 20:
+                                fs = require('fs');
+                                fs.writeFileSync('.env', 'PANDA_TOKEN=""\n');
+                                return [2 /*return*/];
                         }
                     });
                 };
