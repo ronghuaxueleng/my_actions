@@ -64,7 +64,6 @@ var __read = (this && this.__read) || function (o, n) {
 };
 exports.__esModule = true;
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
-require("dotenv/config");
 var cookie = '', res = '', data, UserName;
 var message = '', pandaToken = process.env.PANDA_TOKEN ? process.env.PANDA_TOKEN.split('&') : [];
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
