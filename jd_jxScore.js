@@ -65,7 +65,6 @@ var __read = (this && this.__read) || function (o, n) {
 exports.__esModule = true;
 var axios_1 = require("axios");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
-var TS_USER_AGENTS_2 = require("./test/TS_USER_AGENTS");
 var cookie = '', UserName = '', elements;
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
     var cookiesArr, _a, _b, _c, index, value, e_1_1;
@@ -91,7 +90,7 @@ var cookie = '', UserName = '', elements;
                         'Host': 'api.m.jd.com',
                         'Origin': 'https://vipgrowth.m.jd.com',
                         'Accept': 'application/json',
-                        'User-Agent': TS_USER_AGENTS_2["default"],
+                        'User-Agent': TS_USER_AGENTS_1["default"],
                         'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
                         'Referer': 'https://vipgrowth.m.jd.com/',
                         'Cookie': cookie
@@ -120,7 +119,7 @@ var cookie = '', UserName = '', elements;
                 })["catch"](function (err) {
                     console.log(err);
                 });
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
             case 4:
                 _e.sent();
                 _e.label = 5;
