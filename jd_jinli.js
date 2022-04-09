@@ -82,6 +82,7 @@ exports.__esModule = true;
 var axios_1 = require("axios");
 var sendNotify_1 = require("./sendNotify");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
+// import {logs} from './test'
 var cookie, cookiesArr = [], res, UserName;
 var shareCodesSelf = [], shareCodes = [], shareCodesHW = [], fullCode = [];
 var min = [0.02, 0.12, 0.3, 0.4, 0.6, 0.7, 0.8, 1, 1.2, 2, 3.6], needLog = true;
@@ -91,16 +92,19 @@ var min = [0.02, 0.12, 0.3, 0.4, 0.6, 0.7, 0.8, 1, 1.2, 2, 3.6], needLog = true;
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)(false)];
             case 1:
                 cookiesArr = _a.sent();
-                cookiesArr = cookiesArr.slice(0, 9);
+                if (new Date().getHours() === 0) {
+                    cookiesArr = cookiesArr.slice(0, 1);
+                }
+                else {
+                    cookiesArr = cookiesArr.slice(1, 9);
+                }
                 return [4 /*yield*/, join()];
             case 2:
                 _a.sent();
                 return [4 /*yield*/, getShareCodeSelf()];
             case 3:
                 _a.sent();
-                return [4 /*yield*/, help()
-                    // await open(false)
-                ];
+                return [4 /*yield*/, help()];
             case 4:
                 _a.sent();
                 return [2 /*return*/];
@@ -114,11 +118,11 @@ function join() {
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
-                    _e.trys.push([0, 14, 15, 16]);
+                    _e.trys.push([0, 16, 17, 18]);
                     _a = __values(cookiesArr.entries()), _b = _a.next();
                     _e.label = 1;
                 case 1:
-                    if (!!_b.done) return [3 /*break*/, 13];
+                    if (!!_b.done) return [3 /*break*/, 15];
                     _c = __read(_b.value, 2), index = _c[0], value = _c[1];
                     _e.label = 2;
                 case 2:
@@ -159,21 +163,25 @@ function join() {
                     e_2 = _e.sent();
                     console.log(e_2);
                     return [3 /*break*/, 12];
-                case 12:
+                case 12: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+                case 13:
+                    _e.sent();
+                    _e.label = 14;
+                case 14:
                     _b = _a.next();
                     return [3 /*break*/, 1];
-                case 13: return [3 /*break*/, 16];
-                case 14:
+                case 15: return [3 /*break*/, 18];
+                case 16:
                     e_3_1 = _e.sent();
                     e_3 = { error: e_3_1 };
-                    return [3 /*break*/, 16];
-                case 15:
+                    return [3 /*break*/, 18];
+                case 17:
                     try {
                         if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
                     }
                     finally { if (e_3) throw e_3.error; }
                     return [7 /*endfinally*/];
-                case 16: return [2 /*return*/];
+                case 18: return [2 /*return*/];
             }
         });
     });
@@ -192,11 +200,11 @@ function getShareCodeSelf(one) {
                     res = _e.sent();
                     return [2 /*return*/, res.data.result.redpacketInfo.id];
                 case 2:
-                    _e.trys.push([2, 10, 11, 12]);
+                    _e.trys.push([2, 12, 13, 14]);
                     _a = __values(cookiesArr.entries()), _b = _a.next();
                     _e.label = 3;
                 case 3:
-                    if (!!_b.done) return [3 /*break*/, 9];
+                    if (!!_b.done) return [3 /*break*/, 11];
                     _c = __read(_b.value, 2), index = _c[0], value = _c[1];
                     _e.label = 4;
                 case 4:
@@ -217,24 +225,28 @@ function getShareCodeSelf(one) {
                     e_4 = _e.sent();
                     console.log(e_4);
                     return [3 /*break*/, 8];
-                case 8:
+                case 8: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+                case 9:
+                    _e.sent();
+                    _e.label = 10;
+                case 10:
                     _b = _a.next();
                     return [3 /*break*/, 3];
-                case 9: return [3 /*break*/, 12];
-                case 10:
+                case 11: return [3 /*break*/, 14];
+                case 12:
                     e_5_1 = _e.sent();
                     e_5 = { error: e_5_1 };
-                    return [3 /*break*/, 12];
-                case 11:
+                    return [3 /*break*/, 14];
+                case 13:
                     try {
                         if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
                     }
                     finally { if (e_5) throw e_5.error; }
                     return [7 /*endfinally*/];
-                case 12:
+                case 14:
                     (0, TS_USER_AGENTS_1.o2s)(shareCodesSelf);
-                    _e.label = 13;
-                case 13: return [2 /*return*/];
+                    _e.label = 15;
+                case 15: return [2 /*return*/];
             }
         });
     });
@@ -327,7 +339,7 @@ function open(autoOpen) {
                     e_7 = _h.sent();
                     console.log(e_7);
                     return [3 /*break*/, 23];
-                case 23: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
+                case 23: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(6000)];
                 case 24:
                     _h.sent();
                     _h.label = 25;
@@ -365,7 +377,7 @@ function help() {
                     _c = __read(_b.value, 2), index = _c[0], value = _c[1];
                     _f.label = 2;
                 case 2:
-                    _f.trys.push([2, 21, , 22]);
+                    _f.trys.push([2, 19, , 20]);
                     cookie = value;
                     UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                     if (!(shareCodesHW.length === 0)) return [3 /*break*/, 4];
@@ -374,8 +386,7 @@ function help() {
                     shareCodesHW = _f.sent();
                     _f.label = 4;
                 case 4:
-                    // 1 3 5 5 9 15
-                    if (index === 0) {
+                    if (index === 0 && new Date().getHours() === 0) {
                         shareCodes = Array.from(new Set(__spreadArray(__spreadArray([], __read(shareCodesHW), false), __read(shareCodesSelf), false)));
                     }
                     else {
@@ -386,13 +397,13 @@ function help() {
                     me = _f.sent();
                     _f.label = 6;
                 case 6:
-                    _f.trys.push([6, 18, 19, 20]);
+                    _f.trys.push([6, 16, 17, 18]);
                     shareCodes_1 = (e_9 = void 0, __values(shareCodes)), shareCodes_1_1 = shareCodes_1.next();
                     _f.label = 7;
                 case 7:
-                    if (!!shareCodes_1_1.done) return [3 /*break*/, 17];
+                    if (!!shareCodes_1_1.done) return [3 /*break*/, 15];
                     code = shareCodes_1_1.value;
-                    if (!(!fullCode.includes(code) && code !== me)) return [3 /*break*/, 16];
+                    if (!(!fullCode.includes(code) && code !== me)) return [3 /*break*/, 14];
                     console.log("\u8D26\u53F7".concat(index + 1, " ").concat(UserName, " \u53BB\u52A9\u529B ").concat(code, " ").concat(shareCodesSelf.includes(code) ? '*内部*' : ''));
                     return [4 /*yield*/, api('jinli_h5assist', { "redPacketId": code, "followShop": 0 })];
                 case 8:
@@ -402,49 +413,46 @@ function help() {
                     return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(45000)];
                 case 9:
                     _f.sent();
-                    return [3 /*break*/, 17];
+                    return [3 /*break*/, 15];
                 case 10:
                     if (!(res.data.result.status === 3)) return [3 /*break*/, 12];
                     console.log('今日助力次数已满');
                     return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(45000)];
                 case 11:
                     _f.sent();
-                    return [3 /*break*/, 17];
+                    return [3 /*break*/, 15];
                 case 12:
-                    if (!(res.data.result.statusDesc === '抱歉，你不能为自己助力哦')) return [3 /*break*/, 14];
-                    console.log('不能助力自己');
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(45000)];
-                case 13:
-                    _f.sent();
-                    return [3 /*break*/, 16];
-                case 14:
                     console.log('助力结果：', res.data.result.statusDesc);
                     if (res.data.result.statusDesc === '啊偶，TA的助力已满，开启自己的红包活动吧~') {
                         fullCode.push(code);
                     }
                     return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(45000)];
-                case 15:
+                case 13:
                     _f.sent();
-                    _f.label = 16;
-                case 16:
+                    _f.label = 14;
+                case 14:
                     shareCodes_1_1 = shareCodes_1.next();
                     return [3 /*break*/, 7];
-                case 17: return [3 /*break*/, 20];
-                case 18:
+                case 15: return [3 /*break*/, 18];
+                case 16:
                     e_9_1 = _f.sent();
                     e_9 = { error: e_9_1 };
-                    return [3 /*break*/, 20];
-                case 19:
+                    return [3 /*break*/, 18];
+                case 17:
                     try {
                         if (shareCodes_1_1 && !shareCodes_1_1.done && (_e = shareCodes_1["return"])) _e.call(shareCodes_1);
                     }
                     finally { if (e_9) throw e_9.error; }
                     return [7 /*endfinally*/];
-                case 20: return [3 /*break*/, 22];
-                case 21:
+                case 18: return [3 /*break*/, 20];
+                case 19:
                     e_10 = _f.sent();
                     console.log(e_10);
-                    return [3 /*break*/, 22];
+                    return [3 /*break*/, 20];
+                case 20: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(6000)];
+                case 21:
+                    _f.sent();
+                    _f.label = 22;
                 case 22:
                     _b = _a.next();
                     return [3 /*break*/, 1];
@@ -476,7 +484,8 @@ function api(fn, body) {
                     log = _a.sent();
                     Object.assign(body, {
                         random: log.match(/"random":"(\d+)"/)[1],
-                        log: log.match(/"log":"(.*)"/)[1]
+                        log: log.match(/"log":"(.*)"/)[1],
+                        sceneid: 'JLHBhPageh5'
                     });
                     _a.label = 2;
                 case 2: return [4 /*yield*/, axios_1["default"].post("https://api.m.jd.com/api?appid=jinlihongbao&functionId=".concat(fn, "&loginType=2&client=jinlihongbao&clientVersion=10.2.4&osVersion=AndroidOS&d_brand=Xiaomi&d_model=Xiaomi"), "body=".concat(encodeURIComponent(JSON.stringify(body))), {
@@ -485,7 +494,7 @@ function api(fn, body) {
                             "referer": "https://h5.m.jd.com/babelDiy/Zeus/2NUvze9e1uWf4amBhe1AV6ynmSuH/index.html",
                             'Content-Type': 'application/x-www-form-urlencoded',
                             "X-Requested-With": "com.jingdong.app.mall",
-                            "User-Agent": "jdltapp;iPhone;3.1.0;".concat(Math.ceil(Math.random() * 4 + 10), ".").concat(Math.ceil(Math.random() * 4), ";").concat((0, TS_USER_AGENTS_1.randomString)(40)),
+                            "User-Agent": "Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1",
                             "Cookie": cookie
                         }
                     })];
@@ -498,10 +507,20 @@ function api(fn, body) {
 }
 function getLog() {
     return __awaiter(this, void 0, void 0, function () {
+        var data;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://api.jdsharecode.xyz/api/jlhb_log")];
-                case 1: return [2 /*return*/, _a.sent()];
+                case 1:
+                    data = _a.sent();
+                    if (data !== 1 && data !== '1') {
+                        return [2 /*return*/, data];
+                    }
+                    else {
+                        console.log('No log');
+                        process.exit(0);
+                    }
+                    return [2 /*return*/];
             }
         });
     });
