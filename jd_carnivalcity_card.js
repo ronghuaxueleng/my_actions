@@ -69,7 +69,7 @@ var __read = (this && this.__read) || function (o, n) {
 };
 exports.__esModule = true;
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
-var cookie = '', res = '', UserName;
+var cookie = '', res = '', UserName, shareCodeSelf = [];
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
     var cookiesArr, _a, _b, _c, index, value, i, e_1_1;
     var e_1, _d;
@@ -80,59 +80,70 @@ var cookie = '', res = '', UserName;
                 cookiesArr = _e.sent();
                 _e.label = 2;
             case 2:
-                _e.trys.push([2, 19, 20, 21]);
+                _e.trys.push([2, 23, 24, 25]);
                 _a = __values(cookiesArr.entries()), _b = _a.next();
                 _e.label = 3;
             case 3:
-                if (!!_b.done) return [3 /*break*/, 18];
+                if (!!_b.done) return [3 /*break*/, 22];
                 _c = __read(_b.value, 2), index = _c[0], value = _c[1];
                 cookie = value;
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
-                i = 0;
-                _e.label = 4;
+                if (!(new Date().getMinutes() < 10)) return [3 /*break*/, 6];
+                return [4 /*yield*/, api({ "apiMapping": "/khc/task/getSupport" })];
             case 4:
-                if (!(i < 30)) return [3 /*break*/, 15];
-                return [4 /*yield*/, api({ "apiMapping": "/khc/index/headInfo" })];
+                res = _e.sent();
+                console.log('助力码', res.data.shareId);
+                shareCodeSelf.push(res.data.shareId);
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
             case 5:
+                _e.sent();
+                return [3 /*break*/, 21];
+            case 6:
+                i = 0;
+                _e.label = 7;
+            case 7:
+                if (!(i < 30)) return [3 /*break*/, 18];
+                return [4 /*yield*/, api({ "apiMapping": "/khc/index/headInfo" })];
+            case 8:
                 res = _e.sent();
                 (0, TS_USER_AGENTS_1.o2s)(res.data);
-                if (!(res.data.taskType === '14')) return [3 /*break*/, 8];
+                if (!(res.data.taskType === '14')) return [3 /*break*/, 11];
                 return [4 /*yield*/, api({ "taskId": res.data.taskId, "taskIndex": res.data.taskIndex, "apiMapping": "/khc/task/getHeadJoinPrize" })];
-            case 6:
+            case 9:
                 res = _e.sent();
                 console.log('加购', res.msg, res.data.jingBean);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 7:
-                _e.sent();
-                return [3 /*break*/, 14];
-            case 8:
-                if (!['13', '15'].includes(res.data.taskType)) return [3 /*break*/, 13];
-                return [4 /*yield*/, api({ "taskIndex": res.data.taskIndex, "taskId": res.data.taskId, "taskType": res.data.taskType, "apiMapping": "/khc/task/doBrowseHead" })];
-            case 9:
-                res = _e.sent();
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(6000)];
             case 10:
                 _e.sent();
-                return [4 /*yield*/, api({ "browseId": res.data.browseId, "apiMapping": "/khc/task/getHeadBrowsePrize" })];
+                return [3 /*break*/, 17];
             case 11:
+                if (!['13', '15'].includes(res.data.taskType)) return [3 /*break*/, 16];
+                return [4 /*yield*/, api({ "taskIndex": res.data.taskIndex, "taskId": res.data.taskId, "taskType": res.data.taskType, "apiMapping": "/khc/task/doBrowseHead" })];
+            case 12:
+                res = _e.sent();
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(6000)];
+            case 13:
+                _e.sent();
+                return [4 /*yield*/, api({ "browseId": res.data.browseId, "apiMapping": "/khc/task/getHeadBrowsePrize" })];
+            case 14:
                 res = _e.sent();
                 console.log('浏览', res.msg, res.data.jingBean);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 12:
+            case 15:
                 _e.sent();
-                return [3 /*break*/, 14];
-            case 13:
+                return [3 /*break*/, 17];
+            case 16:
                 if (!res.data.taskType) {
                     console.log('任务全部完成');
-                    return [3 /*break*/, 15];
+                    return [3 /*break*/, 18];
                 }
-                _e.label = 14;
-            case 14:
+                _e.label = 17;
+            case 17:
                 i++;
-                return [3 /*break*/, 4];
-            case 15: return [4 /*yield*/, api({ "apiMapping": "/khc/rank/dayRank" })];
-            case 16:
+                return [3 /*break*/, 7];
+            case 18: return [4 /*yield*/, api({ "apiMapping": "/khc/rank/dayRank" })];
+            case 19:
                 res = _e.sent();
                 console.log('我的积分', parseInt(res.data.myRank.integral));
                 console.log('我的排名', parseInt(res.data.myRank.rank));
@@ -141,22 +152,29 @@ var cookie = '', res = '', UserName;
                     console.log('TOP1 ', parseInt(res.data.rankList[0].integral));
                     console.log('TOP10', parseInt(res.data.rankList[9].integral));
                 }
-                _e.label = 17;
-            case 17:
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+            case 20:
+                _e.sent();
+                _e.label = 21;
+            case 21:
                 _b = _a.next();
                 return [3 /*break*/, 3];
-            case 18: return [3 /*break*/, 21];
-            case 19:
+            case 22: return [3 /*break*/, 25];
+            case 23:
                 e_1_1 = _e.sent();
                 e_1 = { error: e_1_1 };
-                return [3 /*break*/, 21];
-            case 20:
+                return [3 /*break*/, 25];
+            case 24:
                 try {
                     if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
                 }
                 finally { if (e_1) throw e_1.error; }
                 return [7 /*endfinally*/];
-            case 21: return [2 /*return*/];
+            case 25:
+                if (shareCodeSelf.length !== 0) {
+                    (0, TS_USER_AGENTS_1.o2s)(shareCodeSelf);
+                }
+                return [2 /*return*/];
         }
     });
 }); })();
