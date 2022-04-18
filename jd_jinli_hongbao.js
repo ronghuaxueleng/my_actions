@@ -95,23 +95,24 @@ var min = [0.02, 0.12, 0.3, 0.4, 0.6, 0.7, 0.8, 1, 1.2, 2, 3.6], log;
                 return [4 /*yield*/, join()];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, getShareCodeSelf()];
+                return [4 /*yield*/, help()];
             case 3:
                 _a.sent();
-                return [4 /*yield*/, help()];
+                cookiesArr = cookiesArr.slice(0, 9);
+                return [4 /*yield*/, join()];
             case 4:
                 _a.sent();
-                cookiesArr = cookiesArr.slice(1, 9);
-                return [4 /*yield*/, join()];
+                return [4 /*yield*/, getShareCodeSelf()];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, getShareCodeSelf()];
+                return [4 /*yield*/, help()];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, help()
-                    // await open(true)
-                ];
+                return [4 /*yield*/, task()];
             case 7:
+                _a.sent();
+                return [4 /*yield*/, open(false)];
+            case 8:
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -222,7 +223,7 @@ function getShareCodeSelf(one) {
                     return [4 /*yield*/, api('h5activityIndex', { "isjdapp": 1 })];
                 case 5:
                     res = _h.sent();
-                    console.log('红包ID：', res.data.result.redpacketInfo.id);
+                    console.log('ID：', res.data.result.redpacketInfo.id);
                     shareCodesSelf.push(res.data.result.redpacketInfo.id);
                     return [3 /*break*/, 7];
                 case 6:
@@ -288,10 +289,10 @@ function open(autoOpen) {
                         for (_d = (e_9 = void 0, __values(res.data.result.redpacketConfigFillRewardInfo)), _e = _d.next(); !_e.done; _e = _d.next()) {
                             t = _e.value;
                             if (t.packetStatus === 1) {
-                                console.log("\u7EA2\u5305".concat(j, "\u53EF\u62C6"));
+                                console.log("".concat(j, " \u53EF\u62C6"));
                             }
                             else if (t.packetStatus === 2) {
-                                console.log("\u7EA2\u5305".concat(j, "\u5DF2\u62C6"));
+                                console.log("".concat(j, " \u5DF2\u62C6"));
                             }
                             j++;
                         }
@@ -314,7 +315,7 @@ function open(autoOpen) {
                     if (!!_g.done) return [3 /*break*/, 16];
                     t = _g.value;
                     if (!(t.packetStatus === 1)) return [3 /*break*/, 13];
-                    console.log("\u7EA2\u5305".concat(j, "\u53EF\u62C6"));
+                    console.log("".concat(j, " \u53EF\u62C6"));
                     if (!autoOpen) return [3 /*break*/, 12];
                     return [4 /*yield*/, getLog()];
                 case 7:
@@ -492,6 +493,195 @@ function help() {
                     finally { if (e_12) throw e_12.error; }
                     return [7 /*endfinally*/];
                 case 27: return [2 /*return*/];
+            }
+        });
+    });
+}
+function task() {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, _b, _c, index, value, _d, _e, t, _f, _g, tp, e_13_1, e_14_1, _h, _j, t, e_15_1, e_16, e_17_1;
+        var e_17, _k, e_14, _l, e_13, _m, e_15, _o;
+        return __generator(this, function (_p) {
+            switch (_p.label) {
+                case 0:
+                    _p.trys.push([0, 50, 51, 52]);
+                    _a = __values(cookiesArr.entries()), _b = _a.next();
+                    _p.label = 1;
+                case 1:
+                    if (!!_b.done) return [3 /*break*/, 49];
+                    _c = __read(_b.value, 2), index = _c[0], value = _c[1];
+                    _p.label = 2;
+                case 2:
+                    _p.trys.push([2, 47, , 48]);
+                    cookie = value;
+                    UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
+                    console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
+                    return [4 /*yield*/, api('taskHomePage', {})];
+                case 3:
+                    res = _p.sent();
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                case 4:
+                    _p.sent();
+                    _p.label = 5;
+                case 5:
+                    _p.trys.push([5, 28, 29, 30]);
+                    _d = (e_14 = void 0, __values(res.data.result.taskInfos)), _e = _d.next();
+                    _p.label = 6;
+                case 6:
+                    if (!!_e.done) return [3 /*break*/, 27];
+                    t = _e.value;
+                    if (!(!t.alreadyReceivedCount || t.alreadyReceivedCount < t.requireCount)) return [3 /*break*/, 20];
+                    if (![2, 3, 4, 5, 8].includes(t.taskType)) return [3 /*break*/, 20];
+                    return [4 /*yield*/, getLog()];
+                case 7:
+                    log = _p.sent();
+                    return [4 /*yield*/, api('startTask', { "taskType": t.taskType, random: log.match(/"random":"(\d+)"/)[1], log: log.match(/"log":"(.*)"/)[1], sceneid: 'JLHBhPageh5' })];
+                case 8:
+                    res = _p.sent();
+                    console.log(t.title, res.data.biz_msg);
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                case 9:
+                    _p.sent();
+                    return [4 /*yield*/, api('getTaskDetailForColor', { taskType: t.taskType })];
+                case 10:
+                    res = _p.sent();
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                case 11:
+                    _p.sent();
+                    _p.label = 12;
+                case 12:
+                    _p.trys.push([12, 18, 19, 20]);
+                    _f = (e_13 = void 0, __values(res.data.result.advertDetails)), _g = _f.next();
+                    _p.label = 13;
+                case 13:
+                    if (!!_g.done) return [3 /*break*/, 17];
+                    tp = _g.value;
+                    if (!(tp.status === 0)) return [3 /*break*/, 16];
+                    return [4 /*yield*/, api('taskReportForColor', { "taskType": t.taskType, "detailId": tp.id })];
+                case 14:
+                    res = _p.sent();
+                    console.log(t.title, tp.name, res.data.biz_msg);
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                case 15:
+                    _p.sent();
+                    _p.label = 16;
+                case 16:
+                    _g = _f.next();
+                    return [3 /*break*/, 13];
+                case 17: return [3 /*break*/, 20];
+                case 18:
+                    e_13_1 = _p.sent();
+                    e_13 = { error: e_13_1 };
+                    return [3 /*break*/, 20];
+                case 19:
+                    try {
+                        if (_g && !_g.done && (_m = _f["return"])) _m.call(_f);
+                    }
+                    finally { if (e_13) throw e_13.error; }
+                    return [7 /*endfinally*/];
+                case 20:
+                    if (!(t.innerStatus === 3)) return [3 /*break*/, 26];
+                    return [4 /*yield*/, getLog()];
+                case 21:
+                    log = _p.sent();
+                    return [4 /*yield*/, api('h5receiveRedpacketAll', { "taskType": t.taskType, random: log.match(/"random":"(\d+)"/)[1], log: log.match(/"log":"(.*)"/)[1], sceneid: 'JLHBhPageh5' })];
+                case 22:
+                    res = _p.sent();
+                    console.log("".concat(t.title, " \u6253\u5F00\u6210\u529F\uFF0C\u83B7\u5F97"), parseFloat(res.data.result.discount));
+                    if (!!min.includes(parseFloat(res.data.result.discount))) return [3 /*break*/, 24];
+                    return [4 /*yield*/, (0, sendNotify_1.sendNotify)("\u9526\u9CA4\u7EA2\u5305", "\u8D26\u53F7".concat(index + 1, " ").concat(UserName, "\n").concat(res.data.result.discount))];
+                case 23:
+                    _p.sent();
+                    _p.label = 24;
+                case 24: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                case 25:
+                    _p.sent();
+                    _p.label = 26;
+                case 26:
+                    _e = _d.next();
+                    return [3 /*break*/, 6];
+                case 27: return [3 /*break*/, 30];
+                case 28:
+                    e_14_1 = _p.sent();
+                    e_14 = { error: e_14_1 };
+                    return [3 /*break*/, 30];
+                case 29:
+                    try {
+                        if (_e && !_e.done && (_l = _d["return"])) _l.call(_d);
+                    }
+                    finally { if (e_14) throw e_14.error; }
+                    return [7 /*endfinally*/];
+                case 30: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                case 31:
+                    _p.sent();
+                    return [4 /*yield*/, api('taskHomePage', {})];
+                case 32:
+                    res = _p.sent();
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                case 33:
+                    _p.sent();
+                    _p.label = 34;
+                case 34:
+                    _p.trys.push([34, 43, 44, 45]);
+                    _h = (e_15 = void 0, __values(res.data.result.taskInfos)), _j = _h.next();
+                    _p.label = 35;
+                case 35:
+                    if (!!_j.done) return [3 /*break*/, 42];
+                    t = _j.value;
+                    if (!(t.innerStatus === 3)) return [3 /*break*/, 41];
+                    return [4 /*yield*/, getLog()];
+                case 36:
+                    log = _p.sent();
+                    return [4 /*yield*/, api('h5receiveRedpacketAll', { "taskType": t.taskType, random: log.match(/"random":"(\d+)"/)[1], log: log.match(/"log":"(.*)"/)[1], sceneid: 'JLHBhPageh5' })];
+                case 37:
+                    res = _p.sent();
+                    console.log("".concat(t.title, " \u6253\u5F00\u6210\u529F\uFF0C\u83B7\u5F97"), parseFloat(res.data.result.discount));
+                    if (!!min.includes(parseFloat(res.data.result.discount))) return [3 /*break*/, 39];
+                    return [4 /*yield*/, (0, sendNotify_1.sendNotify)("\u9526\u9CA4\u7EA2\u5305", "\u8D26\u53F7".concat(index + 1, " ").concat(UserName, "\n").concat(res.data.result.discount))];
+                case 38:
+                    _p.sent();
+                    _p.label = 39;
+                case 39: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
+                case 40:
+                    _p.sent();
+                    _p.label = 41;
+                case 41:
+                    _j = _h.next();
+                    return [3 /*break*/, 35];
+                case 42: return [3 /*break*/, 45];
+                case 43:
+                    e_15_1 = _p.sent();
+                    e_15 = { error: e_15_1 };
+                    return [3 /*break*/, 45];
+                case 44:
+                    try {
+                        if (_j && !_j.done && (_o = _h["return"])) _o.call(_h);
+                    }
+                    finally { if (e_15) throw e_15.error; }
+                    return [7 /*endfinally*/];
+                case 45: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+                case 46:
+                    _p.sent();
+                    return [3 /*break*/, 48];
+                case 47:
+                    e_16 = _p.sent();
+                    console.log(e_16);
+                    return [3 /*break*/, 48];
+                case 48:
+                    _b = _a.next();
+                    return [3 /*break*/, 1];
+                case 49: return [3 /*break*/, 52];
+                case 50:
+                    e_17_1 = _p.sent();
+                    e_17 = { error: e_17_1 };
+                    return [3 /*break*/, 52];
+                case 51:
+                    try {
+                        if (_b && !_b.done && (_k = _a["return"])) _k.call(_a);
+                    }
+                    finally { if (e_17) throw e_17.error; }
+                    return [7 /*endfinally*/];
+                case 52: return [2 /*return*/];
             }
         });
     });
