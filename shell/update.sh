@@ -1,6 +1,6 @@
 #!/bin/bash
 ## Author: SuperManito
-## Modified: 2022-03-23
+## Modified: 2022-04-25
 
 ShellDir=${WORK_DIR}/shell
 . $ShellDir/share.sh
@@ -550,7 +550,7 @@ function Update_Shell() {
     Random_Update_Cron
     ## 更新仓库
     cd $RootDir
-    echo -e "\n$WORKING 开始更新源码：/jd\n"
+    echo -e "\n$WORKING 开始更新源码：$RootDir\n"
     git fetch --all
     git pull
     git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')

@@ -157,6 +157,10 @@ app.all('/*', function (req, res, next) {
                 // openApi
                 let authFileJson = JSON.parse(getFile(CONFIG_FILE_KEY.AUTH));
                 let token = req.headers["api-token"]
+                if(!token || token === ''){
+                    //取URL中的TOKEN
+                    token = req.query['api-token'];
+                }
                 if (token && token !== '' && token === authFileJson.openApiToken) {
                     next();
                 } else {
@@ -172,7 +176,7 @@ app.all('/*', function (req, res, next) {
                     res.redirect('/auth');  // 将用户重定向到登录页面
                 }
             } else if (arr[1] === "api") {
-                if ((arr[2] === 'captcha' || arr[2] === 'auth' || arr[2] === 'sharecode')) {
+                if ((arr[2] === 'captcha' || arr[2] === 'auth' || arr[2] === 'extra')) {
                     next();
                 } else {
                     res.send(API_STATUS_CODE.API.NEED_LOGIN);
@@ -253,7 +257,7 @@ app.get('/api/cookie', function (request, response) {
                 let ucookie = getCookie(cookie);
                 let autoReplace = request.query.autoReplace && request.query.autoReplace === 'true';
                 if (autoReplace) {
-                    updateCookie(ucookie);
+                    updateCookie({ck: ucookie});
                 }
                 response.send(API_STATUS_CODE.okData({cookie: ucookie}))
             } else {
@@ -604,7 +608,7 @@ app.post('/api/sms/checkCode', async function (request, response) {
                 `pt_key=${data.data.pt_key};pt_pin=${encodeURIComponent(data.data.pt_pin)};`;
             let cookieCount = 0, updateSuccess = false, errorMsg = "";
             try {
-                cookieCount = updateCookie(cookie, "");
+                cookieCount = updateCookie({ck: cookie, remarks: "", phone});
                 updateSuccess = true;
             } catch (e) {
                 errorMsg = e.message;
@@ -632,11 +636,15 @@ app.post('/api/sms/checkCode', async function (request, response) {
 /**
  * 更新已经存在的人的cookie & 自动添加新用户
  *
- * {"cookie":"","userMsg":""}
+ * {"cookie":"","userMsg":""， phone: ""}
  * */
 app.post('/openApi/updateCookie', function (request, response) {
     try {
-        response.send(API_STATUS_CODE.okData(updateCookie(request.body.cookie, request.body.userMsg)));
+        response.send(API_STATUS_CODE.okData(updateCookie({
+            ck: request.body.cookie,
+            remarks: request.body.userMsg,
+            phone: request.body.phone
+        })));
     } catch (e) {
         response.send(API_STATUS_CODE.fail(e.message));
     }
@@ -690,8 +698,29 @@ app.get('/openApi/count', function (request, response) {
 app.post('/openApi/account/sort', function (request, response) {
     try {
         let {ptPin, sort} = request.body;
-        updateAccountSort(ptPin, sort);
         response.send(API_STATUS_CODE.okData(getCount()))
+    } catch (e) {
+        response.send(API_STATUS_CODE.fail(e.message));
+    }
+});
+
+/**
+ * CK 回调
+ * Body 内容为 {
+            ck: "",
+            remarks: "",
+            phone: ""
+        }
+ 其中 ck为必须项，remarks和phone为非必须
+ */
+app.post('/openApi/cookie/webhook', function (request, response) {
+    try {
+        let {ck,remarks,phone} = request.body;
+        response.send(API_STATUS_CODE.okData(updateCookie({
+            ck: ck,
+            remarks: remarks,
+            phone: phone
+        })));
     } catch (e) {
         response.send(API_STATUS_CODE.fail(e.message));
     }
