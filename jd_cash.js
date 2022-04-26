@@ -171,7 +171,7 @@ var cookie = '', res = '', data, UserName;
                 _h.label = 2;
             case 2:
                 _h.trys.push([2, 7, 8, 9]);
-                _a = __values(Object.entries(cookiesArr)), _b = _a.next();
+                _a = __values(cookiesArr.entries()), _b = _a.next();
                 _h.label = 3;
             case 3:
                 if (!!_b.done) return [3 /*break*/, 6];

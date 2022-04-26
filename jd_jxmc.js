@@ -68,6 +68,7 @@ var __read = (this && this.__read) || function (o, n) {
 };
 exports.__esModule = true;
 var axios_1 = require("axios");
+var path = require("path");
 var ts_md5_1 = require("ts-md5");
 var sendNotify_1 = require("./sendNotify");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
@@ -77,12 +78,13 @@ var token = require('./utils/jd_jxmc.js').token;
 var cookie = '', res = '', shareCodes = [], homePageInfo = '', jxToken = '', UserName = '', ua = null, account = [];
 var shareCodesSelf = [], shareCodesHW = [];
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, _a, _b, _c, index, value, account_1, account_1_1, acc, lastgettime, food, petid, coins, petNum, petids, e_1, drawTimes, j, _d, _e, card, e_2_1, e_3, _f, _g, day, e_4_1, j, _h, _j, t, j, e_5, j, e_6, e_7_1;
+    var except, cookiesArr, _a, _b, _c, index, value, account_1, account_1_1, acc, lastgettime, food, petid, coins, petNum, petids, e_1, drawTimes, j, _d, _e, card, e_2_1, e_3, _f, _g, day, e_4_1, j, _h, _j, t, j, e_5, j, e_6, e_7_1;
     var e_7, _k, e_8, _l, e_2, _m, e_4, _o, e_9, _p;
     var _q, _r;
     return __generator(this, function (_s) {
         switch (_s.label) {
             case 0:
+                except = (0, TS_USER_AGENTS_1.exceptCookie)(path.basename(__filename));
                 if ((0, fs_1.existsSync)('./utils/account.json')) {
                     try {
                         account = JSON.parse((0, fs_1.readFileSync)('./utils/account.json').toString());
@@ -108,6 +110,10 @@ var shareCodesSelf = [], shareCodesHW = [];
                 cookie = value;
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
+                if (except.includes(encodeURIComponent(UserName))) {
+                    console.log('已设置跳过');
+                    return [3 /*break*/, 91];
+                }
                 ua = null;
                 try {
                     for (account_1 = (e_8 = void 0, __values(account)), account_1_1 = account_1.next(); !account_1_1.done; account_1_1 = account_1.next()) {
@@ -432,7 +438,7 @@ var shareCodesSelf = [], shareCodesHW = [];
                     return [3 /*break*/, 72];
                 }
                 _s.label = 70;
-            case 70: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(8000)];
+            case 70: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(10000)];
             case 71:
                 _s.sent();
                 return [3 /*break*/, 64];
