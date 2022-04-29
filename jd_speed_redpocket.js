@@ -1,4 +1,7 @@
 "use strict";
+/**
+ * 极速版-领红包
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -63,108 +66,98 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 exports.__esModule = true;
-var sendNotify_1 = require("./sendNotify");
-var pushplus_1 = require("./utils/pushplus");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
-var cookie = '', res = '', UserName;
-var message = '';
+var h5st_1 = require("./h5st");
+var cookie = '', res = '', UserName = '';
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, _a, _b, _c, index, value, day, jdRed, jdRedExp, _d, _e, j, text, e_1_1;
-    var e_1, _f, e_2, _g;
-    var _h;
-    return __generator(this, function (_j) {
-        switch (_j.label) {
+    var cookiesArr, _a, _b, _c, index, value, remainChance, i, e_1_1;
+    var e_1, _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 1:
-                cookiesArr = _j.sent();
-                _j.label = 2;
+                cookiesArr = _e.sent();
+                _e.label = 2;
             case 2:
-                _j.trys.push([2, 9, 10, 11]);
+                _e.trys.push([2, 11, 12, 13]);
                 _a = __values(cookiesArr.entries()), _b = _a.next();
-                _j.label = 3;
+                _e.label = 3;
             case 3:
-                if (!!_b.done) return [3 /*break*/, 8];
+                if (!!_b.done) return [3 /*break*/, 10];
                 _c = __read(_b.value, 2), index = _c[0], value = _c[1];
                 cookie = value;
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://m.jingxi.com/user/info/QueryUserRedEnvelopesV2?type=1&orgFlag=JD_PinGou_New&page=1&cashRedType=1&redBalanceFlag=1&channel=1&_=".concat(Date.now(), "&sceneval=2&g_login_type=1&g_ty=ls"), {
-                        'Host': 'm.jingxi.com',
-                        'Referer': 'https://st.jingxi.com/my/redpacket.shtml',
-                        "Cookie": cookie,
-                        'User-Agent': TS_USER_AGENTS_1["default"]
-                    })];
+                return [4 /*yield*/, api('spring_reward_query', { "linkId": "Eu7-E0CUzqYyhZJo9d3YkQ", "inviter": "" })];
             case 4:
-                res = _j.sent();
-                day = new Date().getDay(), jdRed = 0, jdRedExp = 0;
-                try {
-                    for (_d = (e_2 = void 0, __values(((_h = res.data.useRedInfo) === null || _h === void 0 ? void 0 : _h.redList) || [])), _e = _d.next(); !_e.done; _e = _d.next()) {
-                        j = _e.value;
-                        if (j.orgLimitStr.includes('京喜')) {
-                        }
-                        else if (j.activityName.includes('极速版')) {
-                        }
-                        else if (j.orgLimitStr.includes('京东健康')) {
-                        }
-                        else {
-                            jdRed = add(jdRed, j.balance);
-                            if (new Date(j.endTime * 1000).getDay() === day)
-                                jdRedExp = add(jdRedExp, j.balance);
-                        }
-                    }
-                }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (_e && !_e.done && (_g = _d["return"])) _g.call(_d);
-                    }
-                    finally { if (e_2) throw e_2.error; }
-                }
-                console.log(jdRed, '  今日过期：', jdRedExp);
-                text = "\u3010\u8D26\u53F7\u3011  ".concat(UserName, "\n\u4EAC\u4E1C\u7EA2\u5305  ").concat(jdRed, "\n\u4ECA\u65E5\u8FC7\u671F  ").concat(jdRedExp);
-                return [4 /*yield*/, (0, pushplus_1.pushplus)('京东红包', text)];
+                res = _e.sent();
+                remainChance = res.data.remainChance;
+                console.log('剩余抽奖次数：', remainChance);
+                i = 0;
+                _e.label = 5;
             case 5:
-                _j.sent();
-                message += "".concat(text, "\n\n");
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+                if (!(i < remainChance)) return [3 /*break*/, 9];
+                return [4 /*yield*/, api('spring_reward_receive', { "inviter": "", "linkId": "Eu7-E0CUzqYyhZJo9d3YkQ" })];
             case 6:
-                _j.sent();
-                _j.label = 7;
+                res = _e.sent();
+                try {
+                    console.log('抽奖成功', res.data.received.prizeDesc);
+                }
+                catch (e) {
+                    console.log('抽奖失败');
+                    return [3 /*break*/, 9];
+                }
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
             case 7:
+                _e.sent();
+                _e.label = 8;
+            case 8:
+                i++;
+                return [3 /*break*/, 5];
+            case 9:
                 _b = _a.next();
                 return [3 /*break*/, 3];
-            case 8: return [3 /*break*/, 11];
-            case 9:
-                e_1_1 = _j.sent();
+            case 10: return [3 /*break*/, 13];
+            case 11:
+                e_1_1 = _e.sent();
                 e_1 = { error: e_1_1 };
-                return [3 /*break*/, 11];
-            case 10:
+                return [3 /*break*/, 13];
+            case 12:
                 try {
-                    if (_b && !_b.done && (_f = _a["return"])) _f.call(_a);
+                    if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
                 }
                 finally { if (e_1) throw e_1.error; }
                 return [7 /*endfinally*/];
-            case 11: return [4 /*yield*/, (0, sendNotify_1.sendNotify)('京东红包', message)];
-            case 12:
-                _j.sent();
-                return [2 /*return*/];
+            case 13: return [2 /*return*/];
         }
     });
 }); })();
-function add(arg1, arg2) {
-    var r1, r2, m;
-    try {
-        r1 = arg1.toString().split('.')[1].length;
-    }
-    catch (e) {
-        r1 = 0;
-    }
-    try {
-        r2 = arg2.toString().split('.')[1].length;
-    }
-    catch (e) {
-        r2 = 0;
-    }
-    m = Math.pow(10, Math.max(r1, r2));
-    return parseFloat(((arg1 * m + arg2 * m) / m).toFixed(2));
+function api(fn, body) {
+    return __awaiter(this, void 0, void 0, function () {
+        var timestamp, t, h5st;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    timestamp = Date.now(), t = [
+                        { key: 'appid', value: 'activities_platform' },
+                        { key: 'body', value: JSON.stringify(body) },
+                        { key: 'client', value: 'H5' },
+                        { key: 'clientVersion', value: '1.0.0' },
+                        { key: 'functionId', value: fn },
+                        { key: 't', value: timestamp.toString() },
+                    ];
+                    return [4 /*yield*/, new h5st_1.H5ST(t, "07244", "jdltapp;", "5817062902662730").__run()];
+                case 1:
+                    h5st = _a.sent();
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://api.m.jd.com/?functionId=".concat(fn, "&body=").concat(encodeURIComponent(JSON.stringify(body)), "&t=").concat(timestamp, "&appid=activities_platform&h5st=").concat(h5st), {
+                            'Host': 'api.m.jd.com',
+                            'Origin': 'https://prodev.m.jd.com',
+                            'User-Agent': 'jdltapp;',
+                            'Referer': 'https://prodev.m.jd.com/',
+                            'Cookie': cookie
+                        })];
+                case 2: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
 }

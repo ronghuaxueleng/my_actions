@@ -138,7 +138,7 @@ var cookie = '', UserName, allMessage = '', res = '';
                     'referer': 'https://wqs.jd.com/',
                     'cookie': cookie
                 };
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://wq.jd.com/bases/orderlist/list?order_type=2&start_page=1&last_page=0&page_size=10&callersource=mainorder&t=".concat(Date.now(), "&sceneval=2&_=").concat(Date.now(), "&sceneval=2"), '', headers)];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://wq.jd.com/bases/orderlist/list?order_type=2&start_page=1&last_page=0&page_size=10&callersource=mainorder&t=".concat(Date.now(), "&sceneval=2&_=").concat(Date.now(), "&sceneval=2"), headers)];
             case 4:
                 res = _o.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
@@ -158,7 +158,7 @@ var cookie = '', UserName, allMessage = '', res = '';
                 t = ((_k = order.progressInfo) === null || _k === void 0 ? void 0 : _k.tip) || null;
                 status_1 = ((_l = order.progressInfo) === null || _l === void 0 ? void 0 : _l.content) || null;
                 shopName = order.shopInfo.shopName;
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://wq.jd.com/bases/wuliudetail/dealloglist?deal_id=".concat(orderId, "&orderstate=15&ordertype=").concat(orderType, "&t=").concat(Date.now(), "&sceneval=2"), '', headers)];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://wq.jd.com/bases/wuliudetail/dealloglist?deal_id=".concat(orderId, "&orderstate=15&ordertype=").concat(orderType, "&t=").concat(Date.now(), "&sceneval=2"), headers)];
             case 8:
                 res = _o.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
