@@ -67,8 +67,8 @@ var __read = (this && this.__read) || function (o, n) {
 };
 exports.__esModule = true;
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
-var h5st_1 = require("./h5st");
-var cookie = '', res = '', UserName = '';
+var h5st_1 = require("./utils/h5st");
+var cookie = '', res = '', UserName = '', h5stTool = new h5st_1.H5ST("07244", "jdltapp;", "5817062902662730");
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
     var cookiesArr, _a, _b, _c, index, value, remainChance, i, e_1_1;
     var e_1, _d;
@@ -79,56 +79,63 @@ var cookie = '', res = '', UserName = '';
                 cookiesArr = _e.sent();
                 _e.label = 2;
             case 2:
-                _e.trys.push([2, 11, 12, 13]);
+                _e.trys.push([2, 14, 15, 16]);
                 _a = __values(cookiesArr.entries()), _b = _a.next();
                 _e.label = 3;
             case 3:
-                if (!!_b.done) return [3 /*break*/, 10];
+                if (!!_b.done) return [3 /*break*/, 13];
                 _c = __read(_b.value, 2), index = _c[0], value = _c[1];
                 cookie = value;
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
-                return [4 /*yield*/, api('spring_reward_query', { "linkId": "Eu7-E0CUzqYyhZJo9d3YkQ", "inviter": "" })];
+                return [4 /*yield*/, h5stTool.__genAlgo()];
             case 4:
+                _e.sent();
+                return [4 /*yield*/, api('spring_reward_query', { "linkId": "Eu7-E0CUzqYyhZJo9d3YkQ", "inviter": "" })];
+            case 5:
                 res = _e.sent();
                 remainChance = res.data.remainChance;
                 console.log('剩余抽奖次数：', remainChance);
                 i = 0;
-                _e.label = 5;
-            case 5:
-                if (!(i < remainChance)) return [3 /*break*/, 9];
-                return [4 /*yield*/, api('spring_reward_receive', { "inviter": "", "linkId": "Eu7-E0CUzqYyhZJo9d3YkQ" })];
+                _e.label = 6;
             case 6:
+                if (!(i < remainChance)) return [3 /*break*/, 10];
+                return [4 /*yield*/, api('spring_reward_receive', { "inviter": "", "linkId": "Eu7-E0CUzqYyhZJo9d3YkQ" })];
+            case 7:
                 res = _e.sent();
                 try {
                     console.log('抽奖成功', res.data.received.prizeDesc);
                 }
                 catch (e) {
                     console.log('抽奖失败');
-                    return [3 /*break*/, 9];
+                    return [3 /*break*/, 10];
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 7:
-                _e.sent();
-                _e.label = 8;
             case 8:
-                i++;
-                return [3 /*break*/, 5];
+                _e.sent();
+                _e.label = 9;
             case 9:
+                i++;
+                return [3 /*break*/, 6];
+            case 10: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+            case 11:
+                _e.sent();
+                _e.label = 12;
+            case 12:
                 _b = _a.next();
                 return [3 /*break*/, 3];
-            case 10: return [3 /*break*/, 13];
-            case 11:
+            case 13: return [3 /*break*/, 16];
+            case 14:
                 e_1_1 = _e.sent();
                 e_1 = { error: e_1_1 };
-                return [3 /*break*/, 13];
-            case 12:
+                return [3 /*break*/, 16];
+            case 15:
                 try {
                     if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
                 }
                 finally { if (e_1) throw e_1.error; }
                 return [7 /*endfinally*/];
-            case 13: return [2 /*return*/];
+            case 16: return [2 /*return*/];
         }
     });
 }); })();
@@ -146,9 +153,7 @@ function api(fn, body) {
                         { key: 'functionId', value: fn },
                         { key: 't', value: timestamp.toString() },
                     ];
-                    return [4 /*yield*/, new h5st_1.H5ST(t, "07244", "jdltapp;", "5817062902662730").__run()];
-                case 1:
-                    h5st = _a.sent();
+                    h5st = h5stTool.__genH5st(t);
                     return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://api.m.jd.com/?functionId=".concat(fn, "&body=").concat(encodeURIComponent(JSON.stringify(body)), "&t=").concat(timestamp, "&appid=activities_platform&h5st=").concat(h5st), {
                             'Host': 'api.m.jd.com',
                             'Origin': 'https://prodev.m.jd.com',
@@ -156,7 +161,7 @@ function api(fn, body) {
                             'Referer': 'https://prodev.m.jd.com/',
                             'Cookie': cookie
                         })];
-                case 2: return [2 /*return*/, _a.sent()];
+                case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
