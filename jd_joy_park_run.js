@@ -71,36 +71,64 @@ var __read = (this && this.__read) || function (o, n) {
 exports.__esModule = true;
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var h5st_1 = require("./utils/h5st");
+var fs_1 = require("fs");
 var cookie = '', res = '', data, UserName;
-var assets = parseFloat(process.env.JD_JOY_PARK_RUN_ASSETS || '0.04'), captainId = '', h5stTool = new h5st_1.H5ST('b6ac3', 'jdltapp;', '1804945295425750');
+var assets = 0.04, captainId = '', h5stTool = new h5st_1.H5ST('b6ac3', 'jdltapp;', '1804945295425750');
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, _a, _b, _c, index, value, _d, _e, member, e_1, i, assets_1, e_2, e_3_1;
-    var e_3, _f, e_4, _g;
-    return __generator(this, function (_h) {
-        switch (_h.label) {
+    var cookiesArr, account, _a, _b, _c, index, value, account_1, account_1_1, user, _d, _e, member, e_1, i, assets_1, e_2, e_3_1;
+    var e_3, _f, e_4, _g, e_5, _h;
+    return __generator(this, function (_j) {
+        switch (_j.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
             case 1:
-                cookiesArr = _h.sent();
-                _h.label = 2;
+                cookiesArr = _j.sent();
+                account = [];
+                if ((0, fs_1.existsSync)('./utils/account.json')) {
+                    try {
+                        account = JSON.parse((0, fs_1.readFileSync)('./utils/account.json').toString());
+                    }
+                    catch (e) {
+                        console.log('./utils/account.json 加载出错');
+                    }
+                }
+                _j.label = 2;
             case 2:
-                _h.trys.push([2, 36, 37, 38]);
+                _j.trys.push([2, 36, 37, 38]);
                 _a = __values(cookiesArr.entries()), _b = _a.next();
-                _h.label = 3;
+                _j.label = 3;
             case 3:
                 if (!!_b.done) return [3 /*break*/, 35];
                 _c = __read(_b.value, 2), index = _c[0], value = _c[1];
                 cookie = value;
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
-                _h.label = 4;
+                assets = parseFloat(process.env.JD_JOY_PARK_RUN_ASSETS || '0.04');
+                try {
+                    for (account_1 = (e_4 = void 0, __values(account)), account_1_1 = account_1.next(); !account_1_1.done; account_1_1 = account_1.next()) {
+                        user = account_1_1.value;
+                        if (user.pt_pin === encodeURIComponent(UserName) && user.joy_park_run) {
+                            console.log('自定义终点', user.joy_park_run);
+                            assets = parseFloat(user.joy_park_run.toString());
+                            break;
+                        }
+                    }
+                }
+                catch (e_4_1) { e_4 = { error: e_4_1 }; }
+                finally {
+                    try {
+                        if (account_1_1 && !account_1_1.done && (_g = account_1["return"])) _g.call(account_1);
+                    }
+                    finally { if (e_4) throw e_4.error; }
+                }
+                _j.label = 4;
             case 4:
-                _h.trys.push([4, 11, , 12]);
+                _j.trys.push([4, 11, , 12]);
                 return [4 /*yield*/, h5stTool.__genAlgo()];
             case 5:
-                _h.sent();
+                _j.sent();
                 return [4 /*yield*/, team('runningTeamInfo', { "linkId": "L-sOanK_5RJCz7I314FpnQ" })];
             case 6:
-                res = _h.sent();
+                res = _j.sent();
                 (0, TS_USER_AGENTS_1.o2s)(res);
                 if (!(!captainId && res.data.members.length === 0)) return [3 /*break*/, 7];
                 console.log('组队ID不存在,开始创建组队');
@@ -111,11 +139,11 @@ var assets = parseFloat(process.env.JD_JOY_PARK_RUN_ASSETS || '0.04'), captainId
                 console.log('已有组队ID，未加入队伍');
                 return [4 /*yield*/, team('runningJoinTeam', { "linkId": "L-sOanK_5RJCz7I314FpnQ", "captainId": captainId })];
             case 8:
-                res = _h.sent();
+                res = _j.sent();
                 if (res.code === 0) {
                     console.log('组队成功');
                     try {
-                        for (_d = (e_4 = void 0, __values(res.data.members)), _e = _d.next(); !_e.done; _e = _d.next()) {
+                        for (_d = (e_5 = void 0, __values(res.data.members)), _e = _d.next(); !_e.done; _e = _d.next()) {
                             member = _e.value;
                             if (member.captain) {
                                 console.log('队长', member.nickName);
@@ -123,12 +151,12 @@ var assets = parseFloat(process.env.JD_JOY_PARK_RUN_ASSETS || '0.04'), captainId
                             }
                         }
                     }
-                    catch (e_4_1) { e_4 = { error: e_4_1 }; }
+                    catch (e_5_1) { e_5 = { error: e_5_1 }; }
                     finally {
                         try {
-                            if (_e && !_e.done && (_g = _d["return"])) _g.call(_d);
+                            if (_e && !_e.done && (_h = _d["return"])) _h.call(_d);
                         }
-                        finally { if (e_4) throw e_4.error; }
+                        finally { if (e_5) throw e_5.error; }
                     }
                     if (res.data.members.length === 6) {
                         console.log('队伍已满');
@@ -138,49 +166,49 @@ var assets = parseFloat(process.env.JD_JOY_PARK_RUN_ASSETS || '0.04'), captainId
                 return [3 /*break*/, 10];
             case 9:
                 console.log('已组队', res.data.members.length);
-                _h.label = 10;
+                _j.label = 10;
             case 10: return [3 /*break*/, 12];
             case 11:
-                e_1 = _h.sent();
+                e_1 = _j.sent();
                 console.log('组队 Error', e_1);
                 return [3 /*break*/, 12];
             case 12:
-                _h.trys.push([12, 33, , 34]);
+                _j.trys.push([12, 33, , 34]);
                 return [4 /*yield*/, runningPageHome()];
             case 13:
-                res = _h.sent();
+                res = _j.sent();
                 console.log('🧧', res.data.runningHomeInfo.prizeValue);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
             case 14:
-                _h.sent();
+                _j.sent();
                 console.log('能量恢复中', secondsToMinutes(res.data.runningHomeInfo.nextRunningTime / 1000), '能量棒', res.data.runningHomeInfo.energy);
                 if (!(res.data.runningHomeInfo.nextRunningTime && res.data.runningHomeInfo.nextRunningTime / 1000 < 300)) return [3 /*break*/, 18];
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(res.data.runningHomeInfo.nextRunningTime)];
             case 15:
-                _h.sent();
+                _j.sent();
                 return [4 /*yield*/, runningPageHome()];
             case 16:
-                res = _h.sent();
+                res = _j.sent();
                 console.log('能量恢复中', secondsToMinutes(res.data.runningHomeInfo.nextRunningTime / 1000), '能量棒', res.data.runningHomeInfo.energy);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
             case 17:
-                _h.sent();
-                _h.label = 18;
+                _j.sent();
+                _j.label = 18;
             case 18:
                 if (!!res.data.runningHomeInfo.nextRunningTime) return [3 /*break*/, 30];
                 console.log('终点目标', assets);
                 i = 0;
-                _h.label = 19;
+                _j.label = 19;
             case 19:
                 if (!(i < 10)) return [3 /*break*/, 30];
                 return [4 /*yield*/, api('runningOpenBox', { "linkId": "L-sOanK_5RJCz7I314FpnQ" })];
             case 20:
-                res = _h.sent();
+                res = _j.sent();
                 if (!(parseFloat(res.data.assets) >= assets)) return [3 /*break*/, 22];
                 assets_1 = parseFloat(res.data.assets);
                 return [4 /*yield*/, api('runningPreserveAssets', { "linkId": "L-sOanK_5RJCz7I314FpnQ" })];
             case 21:
-                res = _h.sent();
+                res = _j.sent();
                 console.log('领取成功', assets_1);
                 return [3 /*break*/, 30];
             case 22:
@@ -188,35 +216,35 @@ var assets = parseFloat(process.env.JD_JOY_PARK_RUN_ASSETS || '0.04'), captainId
                 console.log('翻倍成功', parseFloat(res.data.assets));
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
             case 23:
-                _h.sent();
+                _j.sent();
                 return [3 /*break*/, 27];
             case 24:
                 if (!(!res.data.doubleSuccess && !res.data.runningHomeInfo.runningFinish)) return [3 /*break*/, 26];
                 console.log('开始跑步', parseFloat(res.data.assets));
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
             case 25:
-                _h.sent();
+                _j.sent();
                 return [3 /*break*/, 27];
             case 26:
                 console.log('翻倍失败');
                 return [3 /*break*/, 30];
             case 27: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
             case 28:
-                _h.sent();
-                _h.label = 29;
+                _j.sent();
+                _j.label = 29;
             case 29:
                 i++;
                 return [3 /*break*/, 19];
             case 30: return [4 /*yield*/, runningPageHome()];
             case 31:
-                res = _h.sent();
+                res = _j.sent();
                 console.log('🧧', res.data.runningHomeInfo.prizeValue);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
             case 32:
-                _h.sent();
+                _j.sent();
                 return [3 /*break*/, 34];
             case 33:
-                e_2 = _h.sent();
+                e_2 = _j.sent();
                 console.log('跑步 Error', e_2);
                 return [3 /*break*/, 34];
             case 34:
@@ -224,7 +252,7 @@ var assets = parseFloat(process.env.JD_JOY_PARK_RUN_ASSETS || '0.04'), captainId
                 return [3 /*break*/, 3];
             case 35: return [3 /*break*/, 38];
             case 36:
-                e_3_1 = _h.sent();
+                e_3_1 = _j.sent();
                 e_3 = { error: e_3_1 };
                 return [3 /*break*/, 38];
             case 37:
