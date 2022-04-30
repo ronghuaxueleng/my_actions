@@ -74,8 +74,8 @@ var h5st_1 = require("./utils/h5st");
 var cookie = '', res = '', data, UserName;
 var assets = parseFloat(process.env.JD_JOY_PARK_RUN_ASSETS || '0.04'), captainId = '', h5stTool = new h5st_1.H5ST('b6ac3', 'jdltapp;', '1804945295425750');
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, _a, _b, _c, index, value, _d, _e, member, i, assets_1, e_1_1;
-    var e_1, _f, e_2, _g;
+    var cookiesArr, _a, _b, _c, index, value, _d, _e, member, e_1, i, assets_1, e_2, e_3_1;
+    var e_3, _f, e_4, _g;
     return __generator(this, function (_h) {
         switch (_h.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
@@ -83,36 +83,39 @@ var assets = parseFloat(process.env.JD_JOY_PARK_RUN_ASSETS || '0.04'), captainId
                 cookiesArr = _h.sent();
                 _h.label = 2;
             case 2:
-                _h.trys.push([2, 32, 33, 34]);
+                _h.trys.push([2, 36, 37, 38]);
                 _a = __values(cookiesArr.entries()), _b = _a.next();
                 _h.label = 3;
             case 3:
-                if (!!_b.done) return [3 /*break*/, 31];
+                if (!!_b.done) return [3 /*break*/, 35];
                 _c = __read(_b.value, 2), index = _c[0], value = _c[1];
                 cookie = value;
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
-                return [4 /*yield*/, h5stTool.__genAlgo()];
+                _h.label = 4;
             case 4:
+                _h.trys.push([4, 11, , 12]);
+                return [4 /*yield*/, h5stTool.__genAlgo()];
+            case 5:
                 _h.sent();
                 return [4 /*yield*/, team('runningTeamInfo', { "linkId": "L-sOanK_5RJCz7I314FpnQ" })];
-            case 5:
+            case 6:
                 res = _h.sent();
                 (0, TS_USER_AGENTS_1.o2s)(res);
-                if (!(!captainId && res.data.members.length === 0)) return [3 /*break*/, 6];
+                if (!(!captainId && res.data.members.length === 0)) return [3 /*break*/, 7];
                 console.log('组队ID不存在,开始创建组队');
                 captainId = res.data.captainId;
-                return [3 /*break*/, 9];
-            case 6:
-                if (!(captainId && res.data.members.length === 0)) return [3 /*break*/, 8];
-                console.log('已有组队ID，未加入队伍');
-                return [4 /*yield*/, team('runningJoinTeam', { "linkId": "L-sOanK_5RJCz7I314FpnQ", "captainId": "IReO3ad-dyrjil-pq4FZeg" })];
+                return [3 /*break*/, 10];
             case 7:
+                if (!(captainId && res.data.members.length === 0)) return [3 /*break*/, 9];
+                console.log('已有组队ID，未加入队伍');
+                return [4 /*yield*/, team('runningJoinTeam', { "linkId": "L-sOanK_5RJCz7I314FpnQ", "captainId": captainId })];
+            case 8:
                 res = _h.sent();
                 if (res.code === 0) {
                     console.log('组队成功');
                     try {
-                        for (_d = (e_2 = void 0, __values(res.data.members)), _e = _d.next(); !_e.done; _e = _d.next()) {
+                        for (_d = (e_4 = void 0, __values(res.data.members)), _e = _d.next(); !_e.done; _e = _d.next()) {
                             member = _e.value;
                             if (member.captain) {
                                 console.log('队长', member.nickName);
@@ -120,106 +123,117 @@ var assets = parseFloat(process.env.JD_JOY_PARK_RUN_ASSETS || '0.04'), captainId
                             }
                         }
                     }
-                    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                    catch (e_4_1) { e_4 = { error: e_4_1 }; }
                     finally {
                         try {
                             if (_e && !_e.done && (_g = _d["return"])) _g.call(_d);
                         }
-                        finally { if (e_2) throw e_2.error; }
+                        finally { if (e_4) throw e_4.error; }
                     }
                     if (res.data.members.length === 6) {
                         console.log('队伍已满');
                         captainId = '';
                     }
                 }
-                return [3 /*break*/, 9];
-            case 8:
+                return [3 /*break*/, 10];
+            case 9:
                 console.log('已组队', res.data.members.length);
-                _h.label = 9;
-            case 9: return [4 /*yield*/, runningPageHome()];
-            case 10:
-                res = _h.sent();
-                console.log('🧧', res.data.runningHomeInfo.prizeValue);
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+                _h.label = 10;
+            case 10: return [3 /*break*/, 12];
             case 11:
-                _h.sent();
-                console.log('能量恢复中', secondsToMinutes(res.data.runningHomeInfo.nextRunningTime / 1000), '能量棒', res.data.runningHomeInfo.energy);
-                if (!(res.data.runningHomeInfo.nextRunningTime && res.data.runningHomeInfo.nextRunningTime / 1000 < 300)) return [3 /*break*/, 15];
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(res.data.runningHomeInfo.nextRunningTime)];
+                e_1 = _h.sent();
+                console.log('组队 Error', e_1);
+                return [3 /*break*/, 12];
             case 12:
-                _h.sent();
+                _h.trys.push([12, 33, , 34]);
                 return [4 /*yield*/, runningPageHome()];
             case 13:
                 res = _h.sent();
-                console.log('能量恢复中', secondsToMinutes(res.data.runningHomeInfo.nextRunningTime / 1000), '能量棒', res.data.runningHomeInfo.energy);
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                console.log('🧧', res.data.runningHomeInfo.prizeValue);
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
             case 14:
                 _h.sent();
-                _h.label = 15;
+                console.log('能量恢复中', secondsToMinutes(res.data.runningHomeInfo.nextRunningTime / 1000), '能量棒', res.data.runningHomeInfo.energy);
+                if (!(res.data.runningHomeInfo.nextRunningTime && res.data.runningHomeInfo.nextRunningTime / 1000 < 300)) return [3 /*break*/, 18];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(res.data.runningHomeInfo.nextRunningTime)];
             case 15:
-                if (!!res.data.runningHomeInfo.nextRunningTime) return [3 /*break*/, 27];
+                _h.sent();
+                return [4 /*yield*/, runningPageHome()];
+            case 16:
+                res = _h.sent();
+                console.log('能量恢复中', secondsToMinutes(res.data.runningHomeInfo.nextRunningTime / 1000), '能量棒', res.data.runningHomeInfo.energy);
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+            case 17:
+                _h.sent();
+                _h.label = 18;
+            case 18:
+                if (!!res.data.runningHomeInfo.nextRunningTime) return [3 /*break*/, 30];
                 console.log('终点目标', assets);
                 i = 0;
-                _h.label = 16;
-            case 16:
-                if (!(i < 10)) return [3 /*break*/, 27];
+                _h.label = 19;
+            case 19:
+                if (!(i < 10)) return [3 /*break*/, 30];
                 return [4 /*yield*/, api('runningOpenBox', { "linkId": "L-sOanK_5RJCz7I314FpnQ" })];
-            case 17:
+            case 20:
                 res = _h.sent();
-                if (!(parseFloat(res.data.assets) >= assets)) return [3 /*break*/, 19];
+                if (!(parseFloat(res.data.assets) >= assets)) return [3 /*break*/, 22];
                 assets_1 = parseFloat(res.data.assets);
                 return [4 /*yield*/, api('runningPreserveAssets', { "linkId": "L-sOanK_5RJCz7I314FpnQ" })];
-            case 18:
+            case 21:
                 res = _h.sent();
                 console.log('领取成功', assets_1);
-                return [3 /*break*/, 27];
-            case 19:
-                if (!res.data.doubleSuccess) return [3 /*break*/, 21];
+                return [3 /*break*/, 30];
+            case 22:
+                if (!res.data.doubleSuccess) return [3 /*break*/, 24];
                 console.log('翻倍成功', parseFloat(res.data.assets));
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
-            case 20:
+            case 23:
                 _h.sent();
-                return [3 /*break*/, 24];
-            case 21:
-                if (!(!res.data.doubleSuccess && !res.data.runningHomeInfo.runningFinish)) return [3 /*break*/, 23];
+                return [3 /*break*/, 27];
+            case 24:
+                if (!(!res.data.doubleSuccess && !res.data.runningHomeInfo.runningFinish)) return [3 /*break*/, 26];
                 console.log('开始跑步', parseFloat(res.data.assets));
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
-            case 22:
-                _h.sent();
-                return [3 /*break*/, 24];
-            case 23:
-                console.log('翻倍失败');
-                return [3 /*break*/, 27];
-            case 24: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
             case 25:
                 _h.sent();
-                _h.label = 26;
+                return [3 /*break*/, 27];
             case 26:
-                i++;
-                return [3 /*break*/, 16];
-            case 27: return [4 /*yield*/, runningPageHome()];
+                console.log('翻倍失败');
+                return [3 /*break*/, 30];
+            case 27: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
             case 28:
+                _h.sent();
+                _h.label = 29;
+            case 29:
+                i++;
+                return [3 /*break*/, 19];
+            case 30: return [4 /*yield*/, runningPageHome()];
+            case 31:
                 res = _h.sent();
                 console.log('🧧', res.data.runningHomeInfo.prizeValue);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 29:
-                _h.sent();
-                _h.label = 30;
-            case 30:
-                _b = _a.next();
-                return [3 /*break*/, 3];
-            case 31: return [3 /*break*/, 34];
             case 32:
-                e_1_1 = _h.sent();
-                e_1 = { error: e_1_1 };
+                _h.sent();
                 return [3 /*break*/, 34];
             case 33:
+                e_2 = _h.sent();
+                console.log('跑步 Error', e_2);
+                return [3 /*break*/, 34];
+            case 34:
+                _b = _a.next();
+                return [3 /*break*/, 3];
+            case 35: return [3 /*break*/, 38];
+            case 36:
+                e_3_1 = _h.sent();
+                e_3 = { error: e_3_1 };
+                return [3 /*break*/, 38];
+            case 37:
                 try {
                     if (_b && !_b.done && (_f = _a["return"])) _f.call(_a);
                 }
-                finally { if (e_1) throw e_1.error; }
+                finally { if (e_3) throw e_3.error; }
                 return [7 /*endfinally*/];
-            case 34: return [2 /*return*/];
+            case 38: return [2 /*return*/];
         }
     });
 }); })();
