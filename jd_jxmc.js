@@ -599,15 +599,15 @@ function api(fn, stk, params) {
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
-                    t = [
-                        { key: 'activeid', value: 'jxmc_active_0001' },
-                        { key: 'activekey', value: 'null' },
-                        { key: 'channel', value: '7' },
-                        { key: 'jxmc_jstoken', value: jxToken['farm_jstoken'] },
-                        { key: 'phoneid', value: jxToken['phoneid'] },
-                        { key: 'sceneid', value: '1001' },
-                        { key: 'timestamp', value: jxToken['timestamp'] },
-                    ];
+                    t = {
+                        activeid: 'jxmc_active_0001',
+                        activekey: 'null',
+                        channel: '7',
+                        jxmc_jstoken: jxToken['farm_jstoken'],
+                        phoneid: jxToken['phoneid'],
+                        sceneid: '1001',
+                        timestamp: jxToken['timestamp']
+                    };
                     if (['GetUserTaskStatusList', 'DoTask', 'Award'].indexOf(fn) > -1)
                         url = "https://m.jingxi.com/newtasksys/newtasksys_front/".concat(fn, "?_=").concat(Date.now(), "&source=jxmc&bizCode=jxmc&_stk=").concat(encodeURIComponent(stk), "&_ste=1&sceneval=2&g_login_type=1&callback=jsonpCBK").concat((0, TS_USER_AGENTS_1.randomWord)(), "&g_ty=ls");
                     else
@@ -615,7 +615,7 @@ function api(fn, stk, params) {
                     try {
                         for (_a = __values(Object.entries(params)), _b = _a.next(); !_b.done; _b = _a.next()) {
                             _c = __read(_b.value, 2), key = _c[0], value = _c[1];
-                            t.push({ key: key, value: value });
+                            t[key] = value;
                             url += "&".concat(key, "=").concat(value);
                         }
                     }
