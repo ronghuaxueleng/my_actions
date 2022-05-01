@@ -70,8 +70,8 @@ var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var h5st_1 = require("./utils/h5st");
 var cookie = '', res = '', UserName = '', h5stTool = new h5st_1.H5ST("07244", "jdltapp;", "5817062902662730");
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, _a, _b, _c, index, value, remainChance, i, e_1_1;
-    var e_1, _d;
+    var cookiesArr, _a, _b, _c, index, value, remainChance, i, e_1, e_2_1;
+    var e_2, _d;
     return __generator(this, function (_e) {
         switch (_e.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
@@ -79,63 +79,71 @@ var cookie = '', res = '', UserName = '', h5stTool = new h5st_1.H5ST("07244", "j
                 cookiesArr = _e.sent();
                 _e.label = 2;
             case 2:
-                _e.trys.push([2, 14, 15, 16]);
+                _e.trys.push([2, 17, 18, 19]);
                 _a = __values(cookiesArr.entries()), _b = _a.next();
                 _e.label = 3;
             case 3:
-                if (!!_b.done) return [3 /*break*/, 13];
+                if (!!_b.done) return [3 /*break*/, 16];
                 _c = __read(_b.value, 2), index = _c[0], value = _c[1];
                 cookie = value;
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
-                return [4 /*yield*/, h5stTool.__genAlgo()];
+                _e.label = 4;
             case 4:
+                _e.trys.push([4, 12, , 13]);
+                return [4 /*yield*/, h5stTool.__genAlgo()];
+            case 5:
                 _e.sent();
                 return [4 /*yield*/, api('spring_reward_query', { "linkId": "Eu7-E0CUzqYyhZJo9d3YkQ", "inviter": "" })];
-            case 5:
+            case 6:
                 res = _e.sent();
                 remainChance = res.data.remainChance;
                 console.log('剩余抽奖次数：', remainChance);
                 i = 0;
-                _e.label = 6;
-            case 6:
-                if (!(i < remainChance)) return [3 /*break*/, 10];
-                return [4 /*yield*/, api('spring_reward_receive', { "inviter": "", "linkId": "Eu7-E0CUzqYyhZJo9d3YkQ" })];
+                _e.label = 7;
             case 7:
+                if (!(i < remainChance)) return [3 /*break*/, 11];
+                return [4 /*yield*/, api('spring_reward_receive', { "inviter": "", "linkId": "Eu7-E0CUzqYyhZJo9d3YkQ" })];
+            case 8:
                 res = _e.sent();
                 try {
                     console.log('抽奖成功', res.data.received.prizeDesc);
                 }
                 catch (e) {
                     console.log('抽奖失败');
-                    return [3 /*break*/, 10];
+                    return [3 /*break*/, 11];
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 8:
-                _e.sent();
-                _e.label = 9;
             case 9:
-                i++;
-                return [3 /*break*/, 6];
-            case 10: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 11:
                 _e.sent();
-                _e.label = 12;
+                _e.label = 10;
+            case 10:
+                i++;
+                return [3 /*break*/, 7];
+            case 11: return [3 /*break*/, 13];
             case 12:
+                e_1 = _e.sent();
+                console.log('火爆');
+                return [3 /*break*/, 13];
+            case 13: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
+            case 14:
+                _e.sent();
+                _e.label = 15;
+            case 15:
                 _b = _a.next();
                 return [3 /*break*/, 3];
-            case 13: return [3 /*break*/, 16];
-            case 14:
-                e_1_1 = _e.sent();
-                e_1 = { error: e_1_1 };
-                return [3 /*break*/, 16];
-            case 15:
+            case 16: return [3 /*break*/, 19];
+            case 17:
+                e_2_1 = _e.sent();
+                e_2 = { error: e_2_1 };
+                return [3 /*break*/, 19];
+            case 18:
                 try {
                     if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
                 }
-                finally { if (e_1) throw e_1.error; }
+                finally { if (e_2) throw e_2.error; }
                 return [7 /*endfinally*/];
-            case 16: return [2 /*return*/];
+            case 19: return [2 /*return*/];
         }
     });
 }); })();
