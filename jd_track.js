@@ -85,10 +85,10 @@ var cookie = '', UserName, allMessage = '', res = '';
                 except = (0, TS_USER_AGENTS_1.exceptCookie)(path.basename(__filename));
                 orders = {}, pushplusUser = [];
                 try {
-                    pushplusArr = JSON.parse((0, fs_1.readFileSync)('./utils/pushplus.json').toString());
+                    pushplusArr = JSON.parse((0, fs_1.readFileSync)('./utils/account.json').toString());
                 }
                 catch (e) {
-                    console.log('utils/pushplus.json load failed');
+                    console.log('utils/account.json load failed');
                 }
                 try {
                     for (pushplusArr_1 = __values(pushplusArr), pushplusArr_1_1 = pushplusArr_1.next(); !pushplusArr_1_1.done; pushplusArr_1_1 = pushplusArr_1.next()) {
