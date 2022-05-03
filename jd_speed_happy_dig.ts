@@ -20,8 +20,6 @@ let shareCodes: INVITE[] = [], shareCodesHW = [], shareCodesSelf: INVITE[] = []
 
 !(async () => {
   let cookiesArr: string[] = await requireConfig()
-
-  // 获取助力码
   for (let [index, value] of cookiesArr.entries()) {
     try {
       cookie = value
@@ -33,14 +31,13 @@ let shareCodes: INVITE[] = [], shareCodesHW = [], shareCodesSelf: INVITE[] = []
       console.log('助力码', res.data.markedPin, res.data.inviteCode)
       shareCodesSelf.push({inviter: res.data.markedPin, inviteCode: res.data.inviteCode})
     } catch (e) {
-      console.log('error', e)
+      console.log('error')
     }
     await wait(2000)
   }
   console.log('内部助力')
   o2s(shareCodesSelf)
 
-  // 助力
   for (let [index, value] of cookiesArr.entries()) {
     try {
       cookie = value
@@ -75,13 +72,28 @@ let shareCodes: INVITE[] = [], shareCodesHW = [], shareCodesSelf: INVITE[] = []
         }
         await wait(2000)
       }
+
+      res = await api('apTaskList', {"linkId": "pTTvJeSTrpthgk9ASBVGsw"})
+      await wait(1000)
+
+      for (let t of res.data) {
+        if (t.taskType === 'BROWSE_CHANNEL' && t.taskDoTimes === 0 && t.taskLimitTimes === 1) {
+          console.log(t.taskShowTitle)
+          data = await api('apDoTask', {"linkId": "pTTvJeSTrpthgk9ASBVGsw", "taskType": "BROWSE_CHANNEL", "taskId": t.id, "channel": 4, "itemId": encodeURIComponent(t.taskSourceUrl), "checkVersion": false})
+          await wait(1000)
+          if (data.success) {
+            console.log('任务完成')
+          } else {
+            o2s(data, '任务失败')
+          }
+        }
+      }
     } catch (e) {
       console.log('error', e)
       await wait(2000)
     }
   }
 
-  // 开挖
   for (let [index, value] of cookiesArr.entries()) {
     cookie = value
     UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)![1])
@@ -91,58 +103,38 @@ let shareCodes: INVITE[] = [], shareCodesHW = [], shareCodesSelf: INVITE[] = []
     res = await api('happyDigHome', {"linkId": "pTTvJeSTrpthgk9ASBVGsw"})
     let blood: number = res.data.blood
     for (let i = 0; i < 4; i++) {
-      if (blood <= 1) {
-        console.log('能量剩余1，跳过 A')
-        break
-      }
-      for (let j = 0; j < 4; j++) {
+      try {
         if (blood <= 1) {
-          console.log('能量剩余1，跳过 B')
+          console.log('能量剩余1，跳过 A')
           break
         }
-        res = await api('happyDigDo', {"round": 1, "rowIdx": i, "colIdx": j, "linkId": "pTTvJeSTrpthgk9ASBVGsw"})
-        o2s(res)
+        for (let j = 0; j < 4; j++) {
+          if (blood <= 1) {
+            console.log('能量剩余1，跳过 B')
+            break
+          }
+          res = await api('happyDigDo', {"round": 1, "rowIdx": i, "colIdx": j, "linkId": "pTTvJeSTrpthgk9ASBVGsw"})
+          o2s(res)
 
-        if (res.data.chunk.type === 1) {
-          console.log('挖到👎')
-        } else if (res.data.chunk.type === 2) {
-          console.log('挖到🧧', parseFloat(res.data.chunk.value))
-        } else if (res.data.chunk.type === 4) {
-          console.log('挖到💣')
+          if (res.data.chunk.type === 1) {
+            console.log('挖到👎')
+          } else if (res.data.chunk.type === 2) {
+            console.log('挖到🧧', parseFloat(res.data.chunk.value))
+          } else if (res.data.chunk.type === 4) {
+            console.log('挖到💣')
+          }
+          await wait(1000)
+          res = await api('happyDigHome', {"linkId": "pTTvJeSTrpthgk9ASBVGsw"})
+          if (res.data.blood === 1) {
+            blood = 1
+            console.log('能量剩余1，退出')
+            break
+          }
+          await wait(4000)
         }
-        await wait(1000)
-        res = await api('happyDigHome', {"linkId": "pTTvJeSTrpthgk9ASBVGsw"})
-        if (res.data.blood === 1) {
-          blood = 1
-          console.log('能量剩余1，退出')
-          break
-        }
-        await wait(2000)
+      } catch (e) {
+        console.log('error', res?.errMsg)
       }
-    }
-
-    // 任务
-    res = await api('apTaskList', {"linkId": "pTTvJeSTrpthgk9ASBVGsw"})
-    for (let t of res.data) {
-      if (t.taskType === 'BROWSE_CHANNEL') {
-        console.log(t.taskTitle)
-        data = await api('apDoTask', {"linkId": "pTTvJeSTrpthgk9ASBVGsw", "taskType": "BROWSE_CHANNEL", "taskId": t.id, "channel": 4, "itemId": encodeURIComponent(t.taskSourceUrl), "checkVersion": false})
-        data.errMsg ? console.log('任务失败', data.errMsg) : console.log('任务成功')
-        await wait(2000)
-      }
-    }
-    for (let t of res.data) {
-      if (t.taskTitle === '发财挖宝浏览任务') {
-
-      }
-    }
-    res = await api('apTaskDetail', {"linkId": "SS55rTBOHtnLCm3n9UMk7Q", "taskType": "BROWSE_CHANNEL", "taskId": 357, "channel": 4})
-    for (let j = res.data.status.userFinishedTimes; j < res.data.status.finishNeed; j++) {
-      res = await api('apTaskTimeRecord', {"linkId": "SS55rTBOHtnLCm3n9UMk7Q", "taskId": 357})
-      await wait(20 * 1000)
-      await api('apTaskList', {"linkId": "SS55rTBOHtnLCm3n9UMk7Q"})
-      res = await api('apTaskDetail', {"linkId": "SS55rTBOHtnLCm3n9UMk7Q", "taskType": "BROWSE_CHANNEL", "taskId": 357, "channel": 4})
-      console.log(res)
     }
   }
 })()
