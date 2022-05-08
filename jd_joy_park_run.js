@@ -73,10 +73,11 @@ var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var h5st_1 = require("./utils/h5st");
 var fs_1 = require("fs");
 var date_fns_1 = require("date-fns");
+var path = require("path");
 var cookie = '', res = '', UserName = '';
 var assets = 0, captainId = '', h5stTool = new h5st_1.H5ST('b6ac3', 'jdltapp;', '1804945295425750');
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, account, _a, _b, _c, index, value, account_1, account_1_1, user, sum, rewardAmount, _d, _e, t, _f, _g, member, e_1, i, assets_1, e_2, e_3_1;
+    var cookiesArr, account, except, _a, _b, _c, index, value, account_1, account_1_1, user, sum, rewardAmount, success, _d, _e, t, _f, _g, member, e_1, i, assets_1, e_2, e_3_1;
     var e_3, _h, e_4, _j, e_5, _k, e_6, _l;
     return __generator(this, function (_m) {
         switch (_m.label) {
@@ -92,6 +93,7 @@ var assets = 0, captainId = '', h5stTool = new h5st_1.H5ST('b6ac3', 'jdltapp;', 
                         console.log('./utils/account.json 加载出错');
                     }
                 }
+                except = (0, TS_USER_AGENTS_1.exceptCookie)(path.basename(__filename));
                 _m.label = 2;
             case 2:
                 _m.trys.push([2, 43, 44, 45]);
@@ -103,6 +105,10 @@ var assets = 0, captainId = '', h5stTool = new h5st_1.H5ST('b6ac3', 'jdltapp;', 
                 cookie = value;
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
+                if (except.includes(encodeURIComponent(UserName))) {
+                    console.log('已设置跳过');
+                    return [3 /*break*/, 41];
+                }
                 assets = parseFloat(process.env.JD_JOY_PARK_RUN_ASSETS || '0.04');
                 try {
                     for (account_1 = (e_4 = void 0, __values(account)), account_1_1 = account_1.next(); !account_1_1.done; account_1_1 = account_1.next()) {
@@ -127,12 +133,13 @@ var assets = 0, captainId = '', h5stTool = new h5st_1.H5ST('b6ac3', 'jdltapp;', 
                 return [4 /*yield*/, team('runningMyPrize', { "linkId": "L-sOanK_5RJCz7I314FpnQ", "pageSize": 20, "time": null, "ids": null })];
             case 5:
                 res = _m.sent();
-                sum = 0, rewardAmount = res.data.rewardAmount;
+                sum = 0, rewardAmount = res.data.rewardAmount, success = 0;
                 try {
                     for (_d = (e_5 = void 0, __values(res.data.detailVos)), _e = _d.next(); !_e.done; _e = _d.next()) {
                         t = _e.value;
                         if ((0, date_fns_1.getDate)(new Date(t.createTime)) === new Date().getDate()) {
                             sum = add(sum, t.amount);
+                            success++;
                         }
                         else {
                             break;
@@ -146,7 +153,8 @@ var assets = 0, captainId = '', h5stTool = new h5st_1.H5ST('b6ac3', 'jdltapp;', 
                     }
                     finally { if (e_5) throw e_5.error; }
                 }
-                console.log('今日收益', sum);
+                console.log('成功', success);
+                console.log('收益', sum);
                 if (!res.data.runningCashStatus.currentEndTime) return [3 /*break*/, 10];
                 if (!(res.data.runningCashStatus.status === 0)) return [3 /*break*/, 8];
                 console.log('可提现', rewardAmount);
