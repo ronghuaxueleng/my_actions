@@ -84,7 +84,7 @@ var cookie = '', UserName = '', res = '', message = '', shareCodes = [], shareCo
     var _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5;
     return __generator(this, function (_6) {
         switch (_6.label) {
-            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
+            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
             case 1:
                 cookiesArr = _6.sent();
                 _6.label = 2;
@@ -326,6 +326,7 @@ var cookie = '', UserName = '', res = '', message = '', shareCodes = [], shareCo
                 }
                 else if (res.data.bizCode === '4001') {
                     console.log('助力码过期');
+                    full.push(code.itemId);
                 }
                 else {
                     (0, TS_USER_AGENTS_1.o2s)(res, 'error');

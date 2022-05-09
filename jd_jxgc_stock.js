@@ -53,6 +53,7 @@ var __values = (this && this.__values) || function(o) {
 exports.__esModule = true;
 var axios_1 = require("axios");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
+var V3_1 = require("./utils/V3");
 var sendNotify_1 = require("./sendNotify");
 var cookie = '', res = '', message = '';
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -60,10 +61,10 @@ var cookie = '', res = '', message = '';
     var e_2, _c, e_1, _d;
     return __generator(this, function (_e) {
         switch (_e.label) {
-            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requestAlgo)(10001)];
+            case 0: return [4 /*yield*/, (0, V3_1.requestAlgo)('10001')];
             case 1:
                 _e.sent();
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
             case 2:
                 cookiesArr = _e.sent();
                 cookie = cookiesArr[Math.floor(Math.random() * cookiesArr.length)];

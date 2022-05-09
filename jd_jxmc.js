@@ -94,7 +94,7 @@ var shareCodesSelf = [], shareCodesHW = [];
                         console.log(e);
                     }
                 }
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
             case 1:
                 cookiesArr = _s.sent();
                 _s.label = 2;

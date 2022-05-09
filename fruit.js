@@ -83,7 +83,7 @@ var message = '', h5stTool = new h5st_1.H5ST("0c010", TS_USER_AGENTS_1["default"
     var e_10, _p, e_1, _q, e_2, _r, e_3, _s, e_4, _t, e_5, _u, e_6, _v, e_7, _w, e_8, _x;
     return __generator(this, function (_y) {
         switch (_y.label) {
-            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
+            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
             case 1:
                 cookiesArr = _y.sent();
                 _y.label = 2;

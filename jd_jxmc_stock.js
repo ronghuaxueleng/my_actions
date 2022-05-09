@@ -83,7 +83,7 @@ var cookie = '', res = '', UserName, jxToken;
             case 0: return [4 /*yield*/, (0, V3_1.requestAlgo)('00df8')];
             case 1:
                 _m.sent();
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
             case 2:
                 cookiesArr = _m.sent();
                 cookie = cookiesArr[(0, TS_USER_AGENTS_1.getRandomNumberByRange)(0, cookiesArr.length)];

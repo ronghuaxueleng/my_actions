@@ -60,7 +60,7 @@ var UA = "jdapp;JD4iPhone/167724 (iPhone; iOS ".concat((0, TS_USER_AGENTS_1.getR
     var _h, _j;
     return __generator(this, function (_k) {
         switch (_k.label) {
-            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
+            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
             case 1:
                 cookiesArr = _k.sent();
                 i = 0;

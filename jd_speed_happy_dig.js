@@ -88,7 +88,7 @@ var shareCodes = [], shareCodesHW = [], shareCodesSelf = [];
     var e_2, _m, e_6, _o, e_3, _p, e_4, _q, e_8, _r;
     return __generator(this, function (_s) {
         switch (_s.label) {
-            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
+            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
             case 1:
                 cookiesArr = _s.sent();
                 _s.label = 2;

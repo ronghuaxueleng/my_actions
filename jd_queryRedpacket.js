@@ -74,7 +74,7 @@ var message = '';
     var _h;
     return __generator(this, function (_j) {
         switch (_j.label) {
-            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.requireConfig)()];
+            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
             case 1:
                 cookiesArr = _j.sent();
                 _j.label = 2;
