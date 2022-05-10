@@ -79,14 +79,11 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 exports.__esModule = true;
-var sendNotify_1 = require("./sendNotify");
 var dotenv = require("dotenv");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var rabbitToken = process.env.RABBIT_TOKEN || '', tg_id = process.env.TG_ID || '';
 var cookie, cookiesArr = [], res, UserName;
-var ua = "Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1";
-var shareCodesSelf = [], shareCodes = [], shareCodesHW = [], fullCode = [];
-var min = [0.02, 0.03, 0.12, 0.3, 0.4, 0.6, 0.7, 0.8, 1, 1.2, 2, 3.6], log;
+var shareCodesSelf = [], shareCodes = [], shareCodesHW = [], fullCode = [], log;
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -116,9 +113,6 @@ var min = [0.02, 0.03, 0.12, 0.3, 0.4, 0.6, 0.7, 0.8, 1, 1.2, 2, 3.6], log;
                 _a.sent();
                 return [4 /*yield*/, help()];
             case 8:
-                _a.sent();
-                return [4 /*yield*/, open(0)];
-            case 9:
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -164,7 +158,7 @@ function join() {
                 case 7:
                     e_1 = _e.sent();
                     console.log('join error', res.rtn_code);
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
                 case 8:
                     _e.sent();
                     return [3 /*break*/, 9];
@@ -176,7 +170,7 @@ function join() {
                     e_2 = _e.sent();
                     console.log(e_2);
                     return [3 /*break*/, 12];
-                case 12: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+                case 12: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
                 case 13:
                     _e.sent();
                     _e.label = 14;
@@ -262,131 +256,10 @@ function getShareCodeSelf(one) {
         });
     });
 }
-function open(autoOpen) {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, index, value, j, _d, _e, t, _f, _g, t, e_6_1, e_7, e_8_1;
-        var e_8, _h, e_9, _j, e_6, _k;
-        return __generator(this, function (_l) {
-            switch (_l.label) {
-                case 0:
-                    _l.trys.push([0, 24, 25, 26]);
-                    _a = __values(cookiesArr.entries()), _b = _a.next();
-                    _l.label = 1;
-                case 1:
-                    if (!!_b.done) return [3 /*break*/, 23];
-                    _c = __read(_b.value, 2), index = _c[0], value = _c[1];
-                    _l.label = 2;
-                case 2:
-                    _l.trys.push([2, 19, , 20]);
-                    cookie = value;
-                    UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
-                    console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
-                    j = 1;
-                    return [4 /*yield*/, api('h5activityIndex', { "isjdapp": 1 })];
-                case 3:
-                    res = _l.sent();
-                    try {
-                        for (_d = (e_9 = void 0, __values(res.data.result.redpacketConfigFillRewardInfo)), _e = _d.next(); !_e.done; _e = _d.next()) {
-                            t = _e.value;
-                            if (t.packetStatus === 1) {
-                                console.log("".concat(j, " \u53EF\u62C6"));
-                            }
-                            else if (t.packetStatus === 2) {
-                                console.log("".concat(j, " \u5DF2\u62C6"));
-                            }
-                            j++;
-                        }
-                    }
-                    catch (e_9_1) { e_9 = { error: e_9_1 }; }
-                    finally {
-                        try {
-                            if (_e && !_e.done && (_j = _d["return"])) _j.call(_d);
-                        }
-                        finally { if (e_9) throw e_9.error; }
-                    }
-                    console.log('');
-                    j = 1;
-                    _l.label = 4;
-                case 4:
-                    _l.trys.push([4, 16, 17, 18]);
-                    _f = (e_6 = void 0, __values(res.data.result.redpacketConfigFillRewardInfo)), _g = _f.next();
-                    _l.label = 5;
-                case 5:
-                    if (!!_g.done) return [3 /*break*/, 15];
-                    t = _g.value;
-                    if (!(t.packetStatus === 1)) return [3 /*break*/, 12];
-                    if (!autoOpen) return [3 /*break*/, 11];
-                    return [4 /*yield*/, getLog()];
-                case 6:
-                    log = _l.sent();
-                    return [4 /*yield*/, api('h5receiveRedpacketAll', { random: log.match(/"random":"(\d+)"/)[1], log: log.match(/"log":"(.*)"/)[1], sceneid: 'JLHBhPageh5' })];
-                case 7:
-                    res = _l.sent();
-                    console.log('打开成功', parseFloat(res.data.result.discount));
-                    if (!!min.includes(parseFloat(res.data.result.discount))) return [3 /*break*/, 9];
-                    return [4 /*yield*/, (0, sendNotify_1.sendNotify)('锦鲤红包', "\u8D26\u53F7".concat(index + 1, " ").concat(UserName, "\n").concat(t.packetAmount))];
-                case 8:
-                    _l.sent();
-                    _l.label = 9;
-                case 9: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(6000)];
-                case 10:
-                    _l.sent();
-                    _l.label = 11;
-                case 11: return [3 /*break*/, 13];
-                case 12:
-                    if (![1, 2].includes(t.packetStatus)) {
-                        console.log("".concat(j), t.hasAssistNum, '/', t.requireAssistNum);
-                    }
-                    _l.label = 13;
-                case 13:
-                    j++;
-                    _l.label = 14;
-                case 14:
-                    _g = _f.next();
-                    return [3 /*break*/, 5];
-                case 15: return [3 /*break*/, 18];
-                case 16:
-                    e_6_1 = _l.sent();
-                    e_6 = { error: e_6_1 };
-                    return [3 /*break*/, 18];
-                case 17:
-                    try {
-                        if (_g && !_g.done && (_k = _f["return"])) _k.call(_f);
-                    }
-                    finally { if (e_6) throw e_6.error; }
-                    return [7 /*endfinally*/];
-                case 18: return [3 /*break*/, 20];
-                case 19:
-                    e_7 = _l.sent();
-                    console.log(e_7);
-                    return [3 /*break*/, 20];
-                case 20: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
-                case 21:
-                    _l.sent();
-                    _l.label = 22;
-                case 22:
-                    _b = _a.next();
-                    return [3 /*break*/, 1];
-                case 23: return [3 /*break*/, 26];
-                case 24:
-                    e_8_1 = _l.sent();
-                    e_8 = { error: e_8_1 };
-                    return [3 /*break*/, 26];
-                case 25:
-                    try {
-                        if (_b && !_b.done && (_h = _a["return"])) _h.call(_a);
-                    }
-                    finally { if (e_8) throw e_8.error; }
-                    return [7 /*endfinally*/];
-                case 26: return [2 /*return*/];
-            }
-        });
-    });
-}
 function help() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, index, value, me, remain, shareCodes_1, shareCodes_1_1, code, success, i, e_10_1, e_11, e_12_1;
-        var e_12, _d, e_10, _e;
+        var _a, _b, _c, index, value, me, remain, shareCodes_1, shareCodes_1_1, code, success, i, e_6_1, e_7, e_8_1;
+        var e_8, _d, e_6, _e;
         return __generator(this, function (_f) {
             switch (_f.label) {
                 case 0:
@@ -419,7 +292,7 @@ function help() {
                     _f.label = 6;
                 case 6:
                     _f.trys.push([6, 21, 22, 23]);
-                    shareCodes_1 = (e_10 = void 0, __values(shareCodes)), shareCodes_1_1 = shareCodes_1.next();
+                    shareCodes_1 = (e_6 = void 0, __values(shareCodes)), shareCodes_1_1 = shareCodes_1.next();
                     _f.label = 7;
                 case 7:
                     if (!!shareCodes_1_1.done) return [3 /*break*/, 20];
@@ -481,21 +354,21 @@ function help() {
                     return [3 /*break*/, 7];
                 case 20: return [3 /*break*/, 23];
                 case 21:
-                    e_10_1 = _f.sent();
-                    e_10 = { error: e_10_1 };
+                    e_6_1 = _f.sent();
+                    e_6 = { error: e_6_1 };
                     return [3 /*break*/, 23];
                 case 22:
                     try {
                         if (shareCodes_1_1 && !shareCodes_1_1.done && (_e = shareCodes_1["return"])) _e.call(shareCodes_1);
                     }
-                    finally { if (e_10) throw e_10.error; }
+                    finally { if (e_6) throw e_6.error; }
                     return [7 /*endfinally*/];
                 case 23: return [3 /*break*/, 25];
                 case 24:
-                    e_11 = _f.sent();
-                    console.log(e_11);
+                    e_7 = _f.sent();
+                    console.log(e_7);
                     return [3 /*break*/, 25];
-                case 25: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(6000)];
+                case 25: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
                 case 26:
                     _f.sent();
                     _f.label = 27;
@@ -504,14 +377,14 @@ function help() {
                     return [3 /*break*/, 1];
                 case 28: return [3 /*break*/, 31];
                 case 29:
-                    e_12_1 = _f.sent();
-                    e_12 = { error: e_12_1 };
+                    e_8_1 = _f.sent();
+                    e_8 = { error: e_8_1 };
                     return [3 /*break*/, 31];
                 case 30:
                     try {
                         if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
                     }
-                    finally { if (e_12) throw e_12.error; }
+                    finally { if (e_8) throw e_8.error; }
                     return [7 /*endfinally*/];
                 case 31: return [2 /*return*/];
             }
@@ -527,8 +400,10 @@ function api(fn, body) {
                         "referer": "https://h5.m.jd.com/babelDiy/Zeus/2NUvze9e1uWf4amBhe1AV6ynmSuH/index.html",
                         'Content-Type': 'application/x-www-form-urlencoded',
                         "X-Requested-With": "com.jingdong.app.mall",
-                        "User-Agent": ua,
-                        "Cookie": cookie
+                        "User-Agent": [
+                            "Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1",
+                            "MQQBrowser/26 Mozilla/5.0 (Linux; U; Android 2.3.7; zh-cn; MB200 Build/GRJ22; CyanogenMod-7) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+                        ][Math.floor(Math.random() * 2)], "Cookie": cookie
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
@@ -537,13 +412,12 @@ function api(fn, body) {
 }
 function getLog() {
     return __awaiter(this, void 0, void 0, function () {
-        var pwd, github, data, data, i, e_13;
+        var data, data, i, e_9;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!(!rabbitToken && !tg_id)) return [3 /*break*/, 2];
-                    pwd = '/', github = '';
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://api.jdsharecode.xyz/api/jlhb?pwd=".concat(pwd, "&github=").concat(github))];
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("https://api.jdsharecode.xyz/api/jlhb?pwd=".concat(__dirname, "&t=").concat(Date.now()))];
                 case 1:
                     data = _a.sent();
                     if (data !== 1 && data !== '1') {
@@ -569,7 +443,7 @@ function getLog() {
                     data = _a.sent();
                     return [3 /*break*/, 8];
                 case 6:
-                    e_13 = _a.sent();
+                    e_9 = _a.sent();
                     console.log('rabbit log api error');
                     return [3 /*break*/, 7];
                 case 7:
