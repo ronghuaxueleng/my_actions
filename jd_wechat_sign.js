@@ -1,8 +1,24 @@
 "use strict";
 /**
  * 微信小程序签到红包
+ * FP_9A38A
  * cron: 8 0 * * *
  */
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,105 +55,65 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __values = (this && this.__values) || function(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-    if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
 exports.__esModule = true;
-var sendNotify_1 = require("./sendNotify");
-var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var h5st_1 = require("./utils/h5st");
-var cookie = '', res = '', UserName, msg = '', h5stTool = new h5st_1.H5ST("9a38a", 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15F79 MicroMessenger/8.0.15(0x18000f2e) NetType/WIFI Language/zh_CN', "6468223550974529");
-!(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, _a, _b, _c, index, value, timestamp, h5st, e_1_1;
-    var e_1, _d;
-    return __generator(this, function (_e) {
-        switch (_e.label) {
-            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
-            case 1:
-                cookiesArr = _e.sent();
-                _e.label = 2;
-            case 2:
-                _e.trys.push([2, 9, 10, 11]);
-                _a = __values(cookiesArr.entries()), _b = _a.next();
-                _e.label = 3;
-            case 3:
-                if (!!_b.done) return [3 /*break*/, 8];
-                _c = __read(_b.value, 2), index = _c[0], value = _c[1];
-                cookie = value;
-                UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
-                console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011").concat(UserName, "\n"));
-                return [4 /*yield*/, h5stTool.__genAlgo()];
-            case 4:
-                _e.sent();
-                timestamp = Date.now();
-                h5st = h5stTool.__genH5st({
-                    appid: 'hot_channel',
-                    body: JSON.stringify({ "activityId": "10002" }),
-                    client: 'android',
-                    clientVersion: '7.16.250',
-                    functionId: 'SignComponent_doSignTask',
-                    t: timestamp.toString()
-                });
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.post)("https://api.m.jd.com/signTask/doSignTask?functionId=SignComponent_doSignTask&appid=hot_channel&body={\"activityId\":\"10002\"}&client=android&clientVersion=7.16.250&t=".concat(timestamp, "&h5st=").concat(h5st), '', {
-                        'content-type': 'application/json',
-                        'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15F79 MicroMessenger/8.0.15(0x18000f2e) NetType/WIFI Language/zh_CN',
-                        'referer': 'https://servicewechat.com/wx91d27dbf599dff74/581/page-frame.html',
-                        'cookie': cookie
-                    })];
-            case 5:
-                res = _e.sent();
-                if (res.data) {
-                    console.log('已签到', res.data.signDays, '天，奖励', res.data.rewardValue, '元');
-                    msg += "\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index + 1, "\u3011  ").concat(UserName, "\n\u5DF2\u7B7E\u5230  ").concat(res.data.signDays, "\u5929\n\u5956\u52B1  ").concat(res.data.rewardValue, "\u5143\n\n");
+var JDHelloWorld_1 = require("./JDHelloWorld");
+var Wechat_sign = /** @class */ (function (_super) {
+    __extends(Wechat_sign, _super);
+    function Wechat_sign() {
+        return _super.call(this, "微信小程序签到红包") || this;
+    }
+    Wechat_sign.prototype.init = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.run(new Wechat_sign())];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
                 }
-                else
-                    console.log(res.message);
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
-            case 6:
-                _e.sent();
-                _e.label = 7;
-            case 7:
-                _b = _a.next();
-                return [3 /*break*/, 3];
-            case 8: return [3 /*break*/, 11];
-            case 9:
-                e_1_1 = _e.sent();
-                e_1 = { error: e_1_1 };
-                return [3 /*break*/, 11];
-            case 10:
-                try {
-                    if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
+            });
+        });
+    };
+    Wechat_sign.prototype.main = function (user) {
+        return __awaiter(this, void 0, void 0, function () {
+            var h5stTool, timestamp, h5st, res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        h5stTool = new h5st_1.H5ST("9a38a", 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15F79 MicroMessenger/8.0.15(0x18000f2e) NetType/WIFI Language/zh_CN', process.env.FP_9A38A || "");
+                        return [4 /*yield*/, h5stTool.__genAlgo()];
+                    case 1:
+                        _a.sent();
+                        timestamp = Date.now();
+                        h5st = h5stTool.__genH5st({
+                            appid: 'hot_channel',
+                            body: JSON.stringify({ "activityId": "10002" }),
+                            client: 'android',
+                            clientVersion: '7.16.250',
+                            functionId: 'SignComponent_doSignTask',
+                            t: timestamp.toString()
+                        });
+                        return [4 /*yield*/, this.post("https://api.m.jd.com/signTask/doSignTask?functionId=SignComponent_doSignTask&appid=hot_channel&body={\"activityId\":\"10002\"}&client=android&clientVersion=7.16.250&t=".concat(timestamp, "&h5st=").concat(h5st), '', {
+                                'content-type': 'application/json',
+                                'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15F79 MicroMessenger/8.0.15(0x18000f2e) NetType/WIFI Language/zh_CN',
+                                'referer': 'https://servicewechat.com/wx91d27dbf599dff74/581/page-frame.html',
+                                'cookie': user.cookie
+                            })];
+                    case 2:
+                        res = _a.sent();
+                        if (res.data) {
+                            console.log('已签到', res.data.signDays, '天，奖励', res.data.rewardValue, '元');
+                            return [2 /*return*/, { msg: "\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(user.i + 1, "\u3011  ").concat(user.UserName, "\n\u5DF2\u7B7E\u5230  ").concat(res.data.signDays, "\u5929\n\u5956\u52B1  ").concat(res.data.rewardValue, "\u5143\n\n") }];
+                        }
+                        else {
+                            console.log(res.message);
+                        }
+                        return [2 /*return*/];
                 }
-                finally { if (e_1) throw e_1.error; }
-                return [7 /*endfinally*/];
-            case 11: return [4 /*yield*/, (0, sendNotify_1.sendNotify)('微信小程序签到红包', msg)];
-            case 12:
-                _e.sent();
-                return [2 /*return*/];
-        }
-    });
-}); })();
+            });
+        });
+    };
+    return Wechat_sign;
+}(JDHelloWorld_1.JDHelloWorld));
+new Wechat_sign().init().then();
