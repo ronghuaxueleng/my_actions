@@ -1,9 +1,23 @@
 "use strict";
 /**
  * 京东-新品-魔方
- * rabbit log
  * cron: 10 9,12,15 * * *
  */
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -52,293 +66,281 @@ var __values = (this && this.__values) || function(o) {
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 exports.__esModule = true;
-var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
-var fs_1 = require("fs");
-var dotenv = require("dotenv");
-var cookie = '', res = '', UserName, index, log = '';
-var rabbitToken = process.env.RABBIT_TOKEN || '', tg_id = process.env.TG_ID || '', mf_logs;
-!(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, i, sign, _a, _b, t, signDay, type, _c, _d, proInfo, e_1_1, _e, _f, proInfo, e_2_1, _g, _h, proInfo, e_3_1, _j, _k, proInfo, e_4_1, e_5_1;
-    var e_5, _l, e_1, _m, e_2, _o, e_3, _p, e_4, _q;
-    var _r, _s, _t, _u, _v;
-    return __generator(this, function (_w) {
-        switch (_w.label) {
-            case 0:
-                dotenv.config();
-                if ((0, fs_1.existsSync)('./test/mf_log.ts')) {
-                    mf_logs = require('./test/mf_log').mf_logs;
+var TS_JDHelloWorld_1 = require("./TS_JDHelloWorld");
+var Mofang = /** @class */ (function (_super) {
+    __extends(Mofang, _super);
+    function Mofang() {
+        return _super.call(this) || this;
+    }
+    Mofang.prototype.init = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.run(new Mofang())];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
                 }
-                else {
-                    console.log('./test/mf_log not found');
-                }
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
-            case 1:
-                cookiesArr = _w.sent();
-                i = 0;
-                _w.label = 2;
-            case 2:
-                if (!(i < cookiesArr.length)) return [3 /*break*/, 55];
-                cookie = cookiesArr[i];
-                UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
-                index = i + 1;
-                console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index, "\u3011").concat(UserName, "\n"));
-                return [4 /*yield*/, api("functionId=getInteractionHomeInfo&body=%7B%22sign%22%3A%22u6vtLQ7ztxgykLEr%22%7D&appid=content_ecology&client=wh5&clientVersion=1.0.0")];
-            case 3:
-                res = _w.sent();
-                sign = res.result.taskConfig.projectId;
-                return [4 /*yield*/, api("functionId=queryInteractiveInfo&body=%7B%22encryptProjectId%22%3A%22".concat(sign, "%22%2C%22sourceCode%22%3A%22acexinpin0823%22%2C%22ext%22%3A%7B%7D%7D&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
-            case 4:
-                res = _w.sent();
-                _w.label = 5;
-            case 5:
-                _w.trys.push([5, 52, 53, 54]);
-                _a = (e_5 = void 0, __values(res.assignmentList)), _b = _a.next();
-                _w.label = 6;
-            case 6:
-                if (!!_b.done) return [3 /*break*/, 51];
-                t = _b.value;
-                if (!(t.completionCnt < t.assignmentTimesLimit)) return [3 /*break*/, 50];
-                if (!t.ext) return [3 /*break*/, 49];
-                if (!(t.assignmentName === '每日签到')) return [3 /*break*/, 10];
-                if (!(t.ext.sign1.status === 1)) return [3 /*break*/, 9];
-                signDay = ((_r = t.ext.sign1.signList) === null || _r === void 0 ? void 0 : _r.length) || 0, type = t.rewards[signDay].rewardType;
-                console.log(signDay, type);
-                return [4 /*yield*/, getLog()];
-            case 7:
-                log = _w.sent();
-                return [4 /*yield*/, api("functionId=doInteractiveAssignment&body=".concat(JSON.stringify({
-                        "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": "1", "actionType": "", "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" }
-                    }), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
-            case 8:
-                res = _w.sent();
-                console.log('签到成功');
-                return [3 /*break*/, 10];
-            case 9:
-                console.log('已签到');
-                _w.label = 10;
-            case 10:
-                _w.trys.push([10, 16, 17, 18]);
-                _c = (e_1 = void 0, __values((_s = t.ext.productsInfo) !== null && _s !== void 0 ? _s : [])), _d = _c.next();
-                _w.label = 11;
-            case 11:
-                if (!!_d.done) return [3 /*break*/, 15];
-                proInfo = _d.value;
-                if (!(proInfo.status === 1)) return [3 /*break*/, 14];
-                console.log(t.assignmentName);
-                return [4 /*yield*/, getLog()];
-            case 12:
-                log = _w.sent();
-                return [4 /*yield*/, api("functionId=doInteractiveAssignment&body=".concat(encodeURIComponent(JSON.stringify({ "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": 0, "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" } })), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
-            case 13:
-                res = _w.sent();
-                console.log(res.msg);
-                if (res.msg === '任务已完成') {
-                    return [3 /*break*/, 15];
-                }
-                _w.label = 14;
-            case 14:
-                _d = _c.next();
-                return [3 /*break*/, 11];
-            case 15: return [3 /*break*/, 18];
-            case 16:
-                e_1_1 = _w.sent();
-                e_1 = { error: e_1_1 };
-                return [3 /*break*/, 18];
-            case 17:
-                try {
-                    if (_d && !_d.done && (_m = _c["return"])) _m.call(_c);
-                }
-                finally { if (e_1) throw e_1.error; }
-                return [7 /*endfinally*/];
-            case 18:
-                _w.trys.push([18, 27, 28, 29]);
-                _e = (e_2 = void 0, __values((_t = t.ext.shoppingActivity) !== null && _t !== void 0 ? _t : [])), _f = _e.next();
-                _w.label = 19;
-            case 19:
-                if (!!_f.done) return [3 /*break*/, 26];
-                proInfo = _f.value;
-                if (!(proInfo.status === 1)) return [3 /*break*/, 25];
-                console.log(t.assignmentName);
-                return [4 /*yield*/, getLog()];
-            case 20:
-                log = _w.sent();
-                return [4 /*yield*/, api("functionId=doInteractiveAssignment&body=".concat(encodeURIComponent(JSON.stringify({ "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": 1, "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" } })), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
-            case 21:
-                res = _w.sent();
-                console.log(res.msg);
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(t.ext.waitDuration * 1000)];
-            case 22:
-                _w.sent();
-                return [4 /*yield*/, getLog()];
-            case 23:
-                log = _w.sent();
-                return [4 /*yield*/, api("functionId=doInteractiveAssignment&body=".concat(encodeURIComponent(JSON.stringify({ "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": 0, "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" } })), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
-            case 24:
-                res = _w.sent();
-                console.log(res.msg);
-                _w.label = 25;
-            case 25:
-                _f = _e.next();
-                return [3 /*break*/, 19];
-            case 26: return [3 /*break*/, 29];
-            case 27:
-                e_2_1 = _w.sent();
-                e_2 = { error: e_2_1 };
-                return [3 /*break*/, 29];
-            case 28:
-                try {
-                    if (_f && !_f.done && (_o = _e["return"])) _o.call(_e);
-                }
-                finally { if (e_2) throw e_2.error; }
-                return [7 /*endfinally*/];
-            case 29:
-                _w.trys.push([29, 38, 39, 40]);
-                _g = (e_3 = void 0, __values((_u = t.ext.browseShop) !== null && _u !== void 0 ? _u : [])), _h = _g.next();
-                _w.label = 30;
-            case 30:
-                if (!!_h.done) return [3 /*break*/, 37];
-                proInfo = _h.value;
-                if (!(proInfo.status === 1)) return [3 /*break*/, 36];
-                console.log(t.assignmentName);
-                return [4 /*yield*/, getLog()];
-            case 31:
-                log = _w.sent();
-                return [4 /*yield*/, api("functionId=doInteractiveAssignment&body=".concat(JSON.stringify({
-                        "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": 1, "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" }
-                    }), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
-            case 32:
-                res = _w.sent();
-                console.log(res.msg);
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(t.ext.waitDuration * 1000)];
-            case 33:
-                _w.sent();
-                return [4 /*yield*/, getLog()];
-            case 34:
-                log = _w.sent();
-                return [4 /*yield*/, api("functionId=doInteractiveAssignment&body=".concat(JSON.stringify({
-                        "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": 0, "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" }
-                    }), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
-            case 35:
-                res = _w.sent();
-                console.log(res.msg);
-                _w.label = 36;
-            case 36:
-                _h = _g.next();
-                return [3 /*break*/, 30];
-            case 37: return [3 /*break*/, 40];
-            case 38:
-                e_3_1 = _w.sent();
-                e_3 = { error: e_3_1 };
-                return [3 /*break*/, 40];
-            case 39:
-                try {
-                    if (_h && !_h.done && (_p = _g["return"])) _p.call(_g);
-                }
-                finally { if (e_3) throw e_3.error; }
-                return [7 /*endfinally*/];
-            case 40:
-                _w.trys.push([40, 46, 47, 48]);
-                _j = (e_4 = void 0, __values((_v = t.ext.addCart) !== null && _v !== void 0 ? _v : [])), _k = _j.next();
-                _w.label = 41;
-            case 41:
-                if (!!_k.done) return [3 /*break*/, 45];
-                proInfo = _k.value;
-                if (!(proInfo.status === 1)) return [3 /*break*/, 44];
-                console.log(t.assignmentName);
-                return [4 /*yield*/, getLog()];
-            case 42:
-                log = _w.sent();
-                return [4 /*yield*/, api("functionId=doInteractiveAssignment&body=".concat(encodeURIComponent(JSON.stringify({ "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": "0", "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFJGh5" } })), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
-            case 43:
-                res = _w.sent();
-                console.log(res.msg);
-                if (res.msg === '任务已完成') {
-                    return [3 /*break*/, 45];
-                }
-                _w.label = 44;
-            case 44:
-                _k = _j.next();
-                return [3 /*break*/, 41];
-            case 45: return [3 /*break*/, 48];
-            case 46:
-                e_4_1 = _w.sent();
-                e_4 = { error: e_4_1 };
-                return [3 /*break*/, 48];
-            case 47:
-                try {
-                    if (_k && !_k.done && (_q = _j["return"])) _q.call(_j);
-                }
-                finally { if (e_4) throw e_4.error; }
-                return [7 /*endfinally*/];
-            case 48: return [3 /*break*/, 50];
-            case 49:
-                if (t.assignmentName === '去新品频道逛逛') {
-                }
-                _w.label = 50;
-            case 50:
-                _b = _a.next();
-                return [3 /*break*/, 6];
-            case 51: return [3 /*break*/, 54];
-            case 52:
-                e_5_1 = _w.sent();
-                e_5 = { error: e_5_1 };
-                return [3 /*break*/, 54];
-            case 53:
-                try {
-                    if (_b && !_b.done && (_l = _a["return"])) _l.call(_a);
-                }
-                finally { if (e_5) throw e_5.error; }
-                return [7 /*endfinally*/];
-            case 54:
-                i++;
-                return [3 /*break*/, 2];
-            case 55: return [2 /*return*/];
-        }
-    });
-}); })();
-function api(params) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-                case 1:
-                    _a.sent();
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.post)("https://api.m.jd.com/client.action", params, {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            "User-Agent": "Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1",
-                            'Referer': 'https://h5.m.jd.com/babelDiy/Zeus/2bf3XEEyWG11pQzPGkKpKX2GxJz2/index.html',
-                            'Origin': 'https://h5.m.jd.com',
-                            'Host': 'api.m.jd.com',
-                            'Cookie': cookie
-                        })];
-                case 2: return [2 /*return*/, _a.sent()];
-            }
+            });
         });
-    });
-}
-function getLog() {
-    return __awaiter(this, void 0, void 0, function () {
-        var data;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!(rabbitToken && tg_id)) return [3 /*break*/, 2];
-                    console.log('rabbit log api');
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)("http://www.madrabbit.cf:8080/license/log?tg_id=".concat(tg_id, "&token=").concat(rabbitToken))];
-                case 1:
-                    data = (_a.sent()).data;
-                    return [2 /*return*/, "'\"random\":\"".concat(data.random, "\",\"log\":\"").concat(data.log, "\"'")];
-                case 2:
-                    if (mf_logs) {
-                        return [2 /*return*/, mf_logs[Math.floor(Math.random() * mf_logs.length)]];
-                    }
-                    else {
-                        console.log('No log');
-                        process.exit(0);
-                    }
-                    _a.label = 3;
-                case 3: return [2 /*return*/];
-            }
+    };
+    Mofang.prototype.api = function (params) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.wait(1000)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.post("https://api.m.jd.com/client.action", params, {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                "User-Agent": this.user.UserAgent,
+                                'Referer': 'https://h5.m.jd.com/babelDiy/Zeus/2bf3XEEyWG11pQzPGkKpKX2GxJz2/index.html',
+                                'Origin': 'https://h5.m.jd.com',
+                                'Host': 'api.m.jd.com',
+                                'Cookie': this.user.cookie
+                            })];
+                    case 2: return [2 /*return*/, _a.sent()];
+                }
+            });
         });
-    });
-}
+    };
+    Mofang.prototype.getLog = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.get("http://127.0.0.1:10007?fn=doInteractiveAssignment&uid=".concat(encodeURIComponent(this.user.UserName)))];
+                    case 1:
+                        data = _a.sent();
+                        if (data !== 1 && data !== '1') {
+                            return [2 /*return*/, data.toString()];
+                        }
+                        else {
+                            console.log('No log');
+                            process.exit(0);
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Mofang.prototype.main = function (user) {
+        var _a, _b, _c, _d, _e;
+        return __awaiter(this, void 0, void 0, function () {
+            var log, res, sign, _f, _g, t, signDay, type, _h, _j, proInfo, e_1_1, _k, _l, proInfo, e_2_1, _m, _o, proInfo, e_3_1, _p, _q, proInfo, e_4_1, e_5_1;
+            var e_5, _r, e_1, _s, e_2, _t, e_3, _u, e_4, _v;
+            return __generator(this, function (_w) {
+                switch (_w.label) {
+                    case 0:
+                        this.user = user;
+                        log = '';
+                        return [4 /*yield*/, this.api("functionId=getInteractionHomeInfo&body=%7B%22sign%22%3A%22u6vtLQ7ztxgykLEr%22%7D&appid=content_ecology&client=wh5&clientVersion=1.0.0")];
+                    case 1:
+                        res = _w.sent();
+                        sign = res.result.taskConfig.projectId;
+                        return [4 /*yield*/, this.api("functionId=queryInteractiveInfo&body=%7B%22encryptProjectId%22%3A%22".concat(sign, "%22%2C%22sourceCode%22%3A%22acexinpin0823%22%2C%22ext%22%3A%7B%7D%7D&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
+                    case 2:
+                        res = _w.sent();
+                        _w.label = 3;
+                    case 3:
+                        _w.trys.push([3, 48, 49, 50]);
+                        _f = __values(res.assignmentList), _g = _f.next();
+                        _w.label = 4;
+                    case 4:
+                        if (!!_g.done) return [3 /*break*/, 47];
+                        t = _g.value;
+                        if (!(t.completionCnt < t.assignmentTimesLimit)) return [3 /*break*/, 46];
+                        if (!t.ext) return [3 /*break*/, 46];
+                        if (!(t.assignmentName === '每日签到')) return [3 /*break*/, 8];
+                        if (!(t.ext.sign1.status === 1)) return [3 /*break*/, 7];
+                        signDay = ((_a = t.ext.sign1.signList) === null || _a === void 0 ? void 0 : _a.length) || 0, type = t.rewards[signDay].rewardType;
+                        console.log(signDay, type);
+                        return [4 /*yield*/, this.getLog()];
+                    case 5:
+                        log = _w.sent();
+                        return [4 /*yield*/, this.api("functionId=doInteractiveAssignment&body=".concat(JSON.stringify({
+                                "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": "1", "actionType": "", "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" }
+                            }), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
+                    case 6:
+                        res = _w.sent();
+                        console.log('签到成功');
+                        return [3 /*break*/, 8];
+                    case 7:
+                        console.log('已签到');
+                        _w.label = 8;
+                    case 8:
+                        _w.trys.push([8, 14, 15, 16]);
+                        _h = (e_1 = void 0, __values((_b = t.ext.productsInfo) !== null && _b !== void 0 ? _b : [])), _j = _h.next();
+                        _w.label = 9;
+                    case 9:
+                        if (!!_j.done) return [3 /*break*/, 13];
+                        proInfo = _j.value;
+                        if (!(proInfo.status === 1)) return [3 /*break*/, 12];
+                        console.log(t.assignmentName);
+                        return [4 /*yield*/, this.getLog()];
+                    case 10:
+                        log = _w.sent();
+                        return [4 /*yield*/, this.api("functionId=doInteractiveAssignment&body=".concat(encodeURIComponent(JSON.stringify({ "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": 0, "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" } })), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
+                    case 11:
+                        res = _w.sent();
+                        console.log(res.msg);
+                        if (res.msg === '任务已完成') {
+                            return [3 /*break*/, 13];
+                        }
+                        _w.label = 12;
+                    case 12:
+                        _j = _h.next();
+                        return [3 /*break*/, 9];
+                    case 13: return [3 /*break*/, 16];
+                    case 14:
+                        e_1_1 = _w.sent();
+                        e_1 = { error: e_1_1 };
+                        return [3 /*break*/, 16];
+                    case 15:
+                        try {
+                            if (_j && !_j.done && (_s = _h["return"])) _s.call(_h);
+                        }
+                        finally { if (e_1) throw e_1.error; }
+                        return [7 /*endfinally*/];
+                    case 16:
+                        _w.trys.push([16, 25, 26, 27]);
+                        _k = (e_2 = void 0, __values((_c = t.ext.shoppingActivity) !== null && _c !== void 0 ? _c : [])), _l = _k.next();
+                        _w.label = 17;
+                    case 17:
+                        if (!!_l.done) return [3 /*break*/, 24];
+                        proInfo = _l.value;
+                        if (!(proInfo.status === 1)) return [3 /*break*/, 23];
+                        console.log(t.assignmentName);
+                        return [4 /*yield*/, this.getLog()];
+                    case 18:
+                        log = _w.sent();
+                        return [4 /*yield*/, this.api("functionId=doInteractiveAssignment&body=".concat(encodeURIComponent(JSON.stringify({ "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": 1, "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" } })), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
+                    case 19:
+                        res = _w.sent();
+                        console.log(res.msg);
+                        return [4 /*yield*/, this.wait(t.ext.waitDuration * 1000)];
+                    case 20:
+                        _w.sent();
+                        return [4 /*yield*/, this.getLog()];
+                    case 21:
+                        log = _w.sent();
+                        return [4 /*yield*/, this.api("functionId=doInteractiveAssignment&body=".concat(encodeURIComponent(JSON.stringify({ "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": 0, "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" } })), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
+                    case 22:
+                        res = _w.sent();
+                        console.log(res.msg);
+                        _w.label = 23;
+                    case 23:
+                        _l = _k.next();
+                        return [3 /*break*/, 17];
+                    case 24: return [3 /*break*/, 27];
+                    case 25:
+                        e_2_1 = _w.sent();
+                        e_2 = { error: e_2_1 };
+                        return [3 /*break*/, 27];
+                    case 26:
+                        try {
+                            if (_l && !_l.done && (_t = _k["return"])) _t.call(_k);
+                        }
+                        finally { if (e_2) throw e_2.error; }
+                        return [7 /*endfinally*/];
+                    case 27:
+                        _w.trys.push([27, 36, 37, 38]);
+                        _m = (e_3 = void 0, __values((_d = t.ext.browseShop) !== null && _d !== void 0 ? _d : [])), _o = _m.next();
+                        _w.label = 28;
+                    case 28:
+                        if (!!_o.done) return [3 /*break*/, 35];
+                        proInfo = _o.value;
+                        if (!(proInfo.status === 1)) return [3 /*break*/, 34];
+                        console.log(t.assignmentName);
+                        return [4 /*yield*/, this.getLog()];
+                    case 29:
+                        log = _w.sent();
+                        return [4 /*yield*/, this.api("functionId=doInteractiveAssignment&body=".concat(JSON.stringify({
+                                "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": 1, "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" }
+                            }), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
+                    case 30:
+                        res = _w.sent();
+                        console.log(res.msg);
+                        return [4 /*yield*/, this.wait(t.ext.waitDuration * 1000)];
+                    case 31:
+                        _w.sent();
+                        return [4 /*yield*/, this.getLog()];
+                    case 32:
+                        log = _w.sent();
+                        return [4 /*yield*/, this.api("functionId=doInteractiveAssignment&body=".concat(JSON.stringify({
+                                "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": 0, "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFhPageh5" }
+                            }), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
+                    case 33:
+                        res = _w.sent();
+                        console.log(res.msg);
+                        _w.label = 34;
+                    case 34:
+                        _o = _m.next();
+                        return [3 /*break*/, 28];
+                    case 35: return [3 /*break*/, 38];
+                    case 36:
+                        e_3_1 = _w.sent();
+                        e_3 = { error: e_3_1 };
+                        return [3 /*break*/, 38];
+                    case 37:
+                        try {
+                            if (_o && !_o.done && (_u = _m["return"])) _u.call(_m);
+                        }
+                        finally { if (e_3) throw e_3.error; }
+                        return [7 /*endfinally*/];
+                    case 38:
+                        _w.trys.push([38, 44, 45, 46]);
+                        _p = (e_4 = void 0, __values((_e = t.ext.addCart) !== null && _e !== void 0 ? _e : [])), _q = _p.next();
+                        _w.label = 39;
+                    case 39:
+                        if (!!_q.done) return [3 /*break*/, 43];
+                        proInfo = _q.value;
+                        if (!(proInfo.status === 1)) return [3 /*break*/, 42];
+                        console.log(t.assignmentName);
+                        return [4 /*yield*/, this.getLog()];
+                    case 40:
+                        log = _w.sent();
+                        return [4 /*yield*/, this.api("functionId=doInteractiveAssignment&body=".concat(encodeURIComponent(JSON.stringify({ "encryptProjectId": sign, "encryptAssignmentId": t.encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": proInfo.itemId, "actionType": "0", "completionFlag": "", "ext": {}, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFJGh5" } })), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
+                    case 41:
+                        res = _w.sent();
+                        console.log(res.msg);
+                        if (res.msg === '任务已完成') {
+                            return [3 /*break*/, 43];
+                        }
+                        _w.label = 42;
+                    case 42:
+                        _q = _p.next();
+                        return [3 /*break*/, 39];
+                    case 43: return [3 /*break*/, 46];
+                    case 44:
+                        e_4_1 = _w.sent();
+                        e_4 = { error: e_4_1 };
+                        return [3 /*break*/, 46];
+                    case 45:
+                        try {
+                            if (_q && !_q.done && (_v = _p["return"])) _v.call(_p);
+                        }
+                        finally { if (e_4) throw e_4.error; }
+                        return [7 /*endfinally*/];
+                    case 46:
+                        _g = _f.next();
+                        return [3 /*break*/, 4];
+                    case 47: return [3 /*break*/, 50];
+                    case 48:
+                        e_5_1 = _w.sent();
+                        e_5 = { error: e_5_1 };
+                        return [3 /*break*/, 50];
+                    case 49:
+                        try {
+                            if (_g && !_g.done && (_r = _f["return"])) _r.call(_f);
+                        }
+                        finally { if (e_5) throw e_5.error; }
+                        return [7 /*endfinally*/];
+                    case 50: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return Mofang;
+}(TS_JDHelloWorld_1.JDHelloWorld));
+new Mofang().init().then();
