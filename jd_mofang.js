@@ -118,7 +118,7 @@ var Mofang = /** @class */ (function (_super) {
     Mofang.prototype.main = function (user) {
         var _a, _b, _c, _d, _e;
         return __awaiter(this, void 0, void 0, function () {
-            var log, res, sign, _f, _g, t, signDay, type, _h, _j, proInfo, e_1_1, _k, _l, proInfo, e_2_1, _m, _o, proInfo, e_3_1, _p, _q, proInfo, e_4_1, e_5_1;
+            var log, res, sign, rewardSign, _f, _g, t, signDay, type, _h, _j, proInfo, e_1_1, _k, _l, proInfo, e_2_1, _m, _o, proInfo, e_3_1, _p, _q, proInfo, e_4_1, e_5_1, score;
             var e_5, _r, e_1, _s, e_2, _t, e_3, _u, e_4, _v;
             return __generator(this, function (_w) {
                 switch (_w.label) {
@@ -132,7 +132,7 @@ var Mofang = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.api("functionId=getInteractionHomeInfo&body=%7B%22sign%22%3A%22u6vtLQ7ztxgykLEr%22%7D&appid=content_ecology&client=wh5&clientVersion=1.0.0")];
                     case 2:
                         res = _w.sent();
-                        sign = res.result.taskConfig.projectId;
+                        sign = res.result.taskConfig.projectId, rewardSign = res.result.giftConfig.projectId;
                         return [4 /*yield*/, this.api("functionId=queryInteractiveInfo&body=%7B%22encryptProjectId%22%3A%22".concat(sign, "%22%2C%22sourceCode%22%3A%22acexinpin0823%22%2C%22ext%22%3A%7B%7D%7D&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
                     case 3:
                         res = _w.sent();
@@ -331,7 +331,45 @@ var Mofang = /** @class */ (function (_super) {
                         }
                         finally { if (e_5) throw e_5.error; }
                         return [7 /*endfinally*/];
-                    case 51: return [2 /*return*/];
+                    case 51: return [4 /*yield*/, this.api("functionId=queryInteractiveRewardInfo&body=".concat(encodeURIComponent(JSON.stringify({ "encryptProjectId": rewardSign, "sourceCode": "acexinpin0823", "ext": { "needExchangeRestScore": "1" } })), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
+                    case 52:
+                        res = _w.sent();
+                        score = res.exchangeRestScoreMap["367"];
+                        console.log('当前碎片', score);
+                        if (!(score >= 3)) return [3 /*break*/, 55];
+                        return [4 /*yield*/, this.getLog()];
+                    case 53:
+                        log = _w.sent();
+                        return [4 /*yield*/, this.api("functionId=doInteractiveAssignment&body=".concat(JSON.stringify({ "encryptProjectId": rewardSign, "encryptAssignmentId": "khdCzL9YRdYjh3dWFXfZLteUTYu", "sourceCode": "acexinpin0823", "itemId": "", "actionType": "", "completionFlag": "", "ext": { "exchangeNum": 1 }, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFDHh5" } }), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
+                    case 54:
+                        res = _w.sent();
+                        if (res.subCode === '0') {
+                            console.log('兑换成功', res.rewardsInfo.successRewards['3'][0].rewardName);
+                            score -= 3;
+                        }
+                        else {
+                            console.log('兑换失败', res.msg);
+                        }
+                        _w.label = 55;
+                    case 55:
+                        if (!(score >= 1)) return [3 /*break*/, 58];
+                        return [4 /*yield*/, this.getLog()];
+                    case 56:
+                        log = _w.sent();
+                        return [4 /*yield*/, this.api("functionId=doInteractiveAssignment&body=".concat(JSON.stringify({ "encryptProjectId": rewardSign, "encryptAssignmentId": "2VUEMo9KjtktsQNvb2yHED2m2oCh", "sourceCode": "acexinpin0823", "itemId": "", "actionType": "", "completionFlag": "", "ext": { "exchangeNum": 1 }, "extParam": { "businessData": { "random": log.match(/"random":"(\d+)"/)[1] }, "signStr": log.match(/"log":"(.*)"/)[1], "sceneid": "XMFDHh5" } }), "&client=wh5&clientVersion=1.0.0&appid=content_ecology"))];
+                    case 57:
+                        res = _w.sent();
+                        if (res.subCode === '0') {
+                            console.log('兑换成功', res.rewardsInfo.successRewards['3'][0].rewardName);
+                            score -= 1;
+                        }
+                        else {
+                            console.log('兑换失败', res.msg);
+                        }
+                        _w.label = 58;
+                    case 58:
+                        console.log('当前碎片', score);
+                        return [2 /*return*/];
                 }
             });
         });
