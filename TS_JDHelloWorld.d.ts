@@ -3,6 +3,7 @@ interface User {
     UserName: string;
     cookie: string;
     UserAgent: string;
+    end?: boolean;
 }
 declare class JDHelloWorld {
     scriptName: string;
