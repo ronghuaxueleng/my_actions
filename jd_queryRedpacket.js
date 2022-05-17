@@ -62,11 +62,11 @@ var __values = (this && this.__values) || function(o) {
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 exports.__esModule = true;
-var TS_JDHelloWorld_1 = require("./TS_JDHelloWorld");
+var JDHelloWorld2_1 = require("./JDHelloWorld2");
 var Jd_queryRedpacket = /** @class */ (function (_super) {
     __extends(Jd_queryRedpacket, _super);
     function Jd_queryRedpacket() {
-        return _super.call(this) || this;
+        return _super.call(this, "京东红包") || this;
     }
     Jd_queryRedpacket.prototype.init = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -79,6 +79,23 @@ var Jd_queryRedpacket = /** @class */ (function (_super) {
                 }
             });
         });
+    };
+    Jd_queryRedpacket.prototype.add = function (arg1, arg2) {
+        var r1, r2, m;
+        try {
+            r1 = arg1.toString().split('.')[1].length;
+        }
+        catch (e) {
+            r1 = 0;
+        }
+        try {
+            r2 = arg2.toString().split('.')[1].length;
+        }
+        catch (e) {
+            r2 = 0;
+        }
+        m = Math.pow(10, Math.max(r1, r2));
+        return parseFloat(((arg1 * m + arg2 * m) / m).toFixed(2));
     };
     Jd_queryRedpacket.prototype.main = function (user) {
         var _a;
@@ -106,9 +123,9 @@ var Jd_queryRedpacket = /** @class */ (function (_super) {
                                 else if (j.orgLimitStr.includes('京东健康')) {
                                 }
                                 else {
-                                    jdRed = add(jdRed, j.balance);
+                                    jdRed = this.add(jdRed, j.balance);
                                     if (new Date(j.endTime * 1000).getDay() === day)
-                                        jdRedExp = add(jdRedExp, j.balance);
+                                        jdRedExp = this.add(jdRedExp, j.balance);
                                 }
                             }
                         }
@@ -129,22 +146,5 @@ var Jd_queryRedpacket = /** @class */ (function (_super) {
         });
     };
     return Jd_queryRedpacket;
-}(TS_JDHelloWorld_1.JDHelloWorld));
-new Jd_queryRedpacket().init().then()["catch"]();
-function add(arg1, arg2) {
-    var r1, r2, m;
-    try {
-        r1 = arg1.toString().split('.')[1].length;
-    }
-    catch (e) {
-        r1 = 0;
-    }
-    try {
-        r2 = arg2.toString().split('.')[1].length;
-    }
-    catch (e) {
-        r2 = 0;
-    }
-    m = Math.pow(10, Math.max(r1, r2));
-    return parseFloat(((arg1 * m + arg2 * m) / m).toFixed(2));
-}
+}(JDHelloWorld2_1.JDHelloWorld));
+new Jd_queryRedpacket().init().then();
