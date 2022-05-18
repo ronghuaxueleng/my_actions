@@ -62,7 +62,7 @@ var __values = (this && this.__values) || function(o) {
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 exports.__esModule = true;
-var JDHelloWorld2_1 = require("./JDHelloWorld2");
+var TS_JDHelloWorld_1 = require("./TS_JDHelloWorld");
 var Jd_queryRedpacket = /** @class */ (function (_super) {
     __extends(Jd_queryRedpacket, _super);
     function Jd_queryRedpacket() {
@@ -146,5 +146,5 @@ var Jd_queryRedpacket = /** @class */ (function (_super) {
         });
     };
     return Jd_queryRedpacket;
-}(JDHelloWorld2_1.JDHelloWorld));
+}(TS_JDHelloWorld_1.JDHelloWorld));
 new Jd_queryRedpacket().init().then();
