@@ -1,4 +1,19 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,60 +50,51 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __values = (this && this.__values) || function(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-    if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
 exports.__esModule = true;
-var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
-var cookie = '', UserName;
-!(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var cookiesArr, _a, _b, _c, index, value;
-    var e_1, _d;
-    return __generator(this, function (_e) {
-        switch (_e.label) {
-            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)(true)];
-            case 1:
-                cookiesArr = _e.sent();
-                try {
-                    for (_a = __values(cookiesArr.entries()), _b = _a.next(); !_b.done; _b = _a.next()) {
-                        _c = __read(_b.value, 2), index = _c[0], value = _c[1];
-                        cookie = value;
-                        UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
-                        console.log(index + 1, UserName);
-                    }
+var TS_JDHelloWorld_1 = require("./TS_JDHelloWorld");
+var Check_cookie = /** @class */ (function (_super) {
+    __extends(Check_cookie, _super);
+    function Check_cookie() {
+        return _super.call(this, "Cookie检测") || this;
+    }
+    Check_cookie.prototype.init = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.run(new Check_cookie())];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
                 }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
-                    }
-                    finally { if (e_1) throw e_1.error; }
+            });
+        });
+    };
+    Check_cookie.prototype.main = function (user) {
+        return __awaiter(this, void 0, void 0, function () {
+            var data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.get("https://api.m.jd.com/client.action?functionId=GetJDUserInfoUnion&appid=jd-cphdeveloper-m&body=".concat(encodeURIComponent(JSON.stringify({ "orgFlag": "JD_PinGou_New", "callSource": "mainorder", "channel": 4, "isHomewhite": 0, "sceneval": 2 })), "&loginType=2&_=").concat(Date.now(), "&sceneval=2&g_login_type=1&callback=GetJDUserInfoUnion&g_ty=ls"), {
+                            'authority': 'api.m.jd.com',
+                            'user-agent': user.UserAgent,
+                            'referer': 'https://home.m.jd.com/',
+                            'cookie': user.cookie
+                        })];
+                    case 1:
+                        data = _a.sent();
+                        data = JSON.parse(data.match(/GetJDUserInfoUnion\((.*)\)/)[1]);
+                        if (data.retcode === '0') {
+                            console.log('Cookie有效');
+                        }
+                        else {
+                            console.log('Cookie无效');
+                            return [2 /*return*/, { msg: "Cookie\u65E0\u6548 \u8D26\u53F7".concat(user.index + 1, " ").concat(user.UserName) }];
+                        }
+                        return [2 /*return*/];
                 }
-                return [2 /*return*/];
-        }
-    });
-}); })();
+            });
+        });
+    };
+    return Check_cookie;
+}(TS_JDHelloWorld_1.JDHelloWorld));
+new Check_cookie().init().then();
