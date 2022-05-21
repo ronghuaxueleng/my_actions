@@ -1,11 +1,8 @@
 "use strict";
 /**
  * 京东-领现金
- * 兼容panda api和本地sign
- *
- * 使用panda sign
+ * 使用panda sign api
  * export PANDA_TOKEN=""
- * 本地sign算法 import {getSign} from './test/sign'
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -71,7 +68,6 @@ var __values = (this && this.__values) || function(o) {
 };
 exports.__esModule = true;
 var TS_JDHelloWorld_1 = require("./TS_JDHelloWorld");
-var sign_1 = require("./test/sign");
 var CASH = /** @class */ (function (_super) {
     __extends(CASH, _super);
     function CASH() {
@@ -81,7 +77,7 @@ var CASH = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.run(new CASH())];
+                    case 0: return [4 /*yield*/, this.run(this)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -95,7 +91,7 @@ var CASH = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        sign = (0, sign_1.getSign)(fn, body);
+                        sign = this.pandaSign(fn, body);
                         return [4 /*yield*/, this.post("https://api.m.jd.com/client.action?functionId=".concat(fn), sign, {
                                 'Host': 'api.m.jd.com',
                                 'Cookie': this.cookie,
