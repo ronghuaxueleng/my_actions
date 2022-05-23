@@ -1,4 +1,7 @@
 "use strict";
+/**
+ * CK倒1 优先助力HW.ts
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -64,6 +67,7 @@ var __values = (this && this.__values) || function(o) {
 exports.__esModule = true;
 var TS_JDHelloWorld_1 = require("./TS_JDHelloWorld");
 var log_618_1 = require("./utils/log_618");
+var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var Jd_618 = /** @class */ (function (_super) {
     __extends(Jd_618, _super);
     function Jd_618() {
@@ -161,20 +165,13 @@ var Jd_618 = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.api('promote_collectScore', {
                                 "taskId": taskId,
                                 "taskToken": tp.taskToken,
-                                "ss": JSON.stringify({
-                                    extraData: {
-                                        log: encodeURIComponent(log.log),
-                                        sceneid: 'RAhomePageh5'
-                                    },
-                                    secretp: secretp,
-                                    random: log.random
-                                })
+                                "ss": JSON.stringify({ extraData: { log: encodeURIComponent(log.log), sceneid: 'RAhomePageh5' }, secretp: secretp, random: log.random })
                             })];
                     case 5:
                         data = _d.sent();
                         this.o2s(data);
                         times++;
-                        return [4 /*yield*/, this.wait(1000)];
+                        return [4 /*yield*/, this.wait(3000)];
                     case 6:
                         _d.sent();
                         _d.label = 7;
@@ -199,20 +196,20 @@ var Jd_618 = /** @class */ (function (_super) {
     };
     Jd_618.prototype.main = function (user) {
         return __awaiter(this, void 0, void 0, function () {
-            var res, data, log, secretp, loop, _a, _b, t, e_2_1, _c, _d, t, _e, _f, tp, e_3_1, _g, _h, tp, e_4_1, e_5_1, e_6;
-            var e_2, _j, e_5, _k, e_3, _l, e_4, _m;
-            return __generator(this, function (_o) {
-                switch (_o.label) {
+            var res, data, log, secretp, loop, _a, _b, t, e_2_1, _c, _d, t, _e, _f, tp, e_3_1, _g, _h, tp, e_4_1, _j, _k, tp, e_5_1, e_6_1, e_7;
+            var e_2, _l, e_6, _m, e_3, _o, e_4, _p, e_5, _q;
+            return __generator(this, function (_r) {
+                switch (_r.label) {
                     case 0:
                         this.user = user;
                         return [4 /*yield*/, this.api('promote_getHomeData', {})];
                     case 1:
-                        res = _o.sent();
+                        res = _r.sent();
                         secretp = res.data.result.homeMainInfo.secretp;
                         console.log('当前金币', parseInt(res.data.result.homeMainInfo.raiseInfo.totalScore));
                         return [4 /*yield*/, this.getLog()];
                     case 2:
-                        log = _o.sent();
+                        log = _r.sent();
                         return [4 /*yield*/, this.api('promote_collectAutoScore', {
                                 ss: JSON.stringify({
                                     extraData: {
@@ -224,222 +221,260 @@ var Jd_618 = /** @class */ (function (_super) {
                                 })
                             })];
                     case 3:
-                        res = _o.sent();
+                        res = _r.sent();
                         console.log('收金币', parseInt(res.data.result.produceScore));
-                        return [4 /*yield*/, this.wait(1000)];
+                        return [4 /*yield*/, this.wait(3000)];
                     case 4:
-                        _o.sent();
+                        _r.sent();
                         loop = 0;
-                        _o.label = 5;
+                        _r.label = 5;
                     case 5:
-                        if (!(loop < 3)) return [3 /*break*/, 54];
-                        _o.label = 6;
+                        if (!(loop < 3)) return [3 /*break*/, 68];
+                        _r.label = 6;
                     case 6:
-                        _o.trys.push([6, 50, , 51]);
+                        _r.trys.push([6, 64, , 65]);
                         console.log('loop', loop);
                         return [4 /*yield*/, this.api('promote_getTaskDetail', {})];
                     case 7:
-                        res = _o.sent();
+                        res = _r.sent();
                         this.o2s(res);
-                        _o.label = 8;
+                        _r.label = 8;
                     case 8:
-                        _o.trys.push([8, 14, 15, 16]);
+                        _r.trys.push([8, 14, 15, 16]);
                         _a = (e_2 = void 0, __values(res.data.result.lotteryTaskVos[0].badgeAwardVos)), _b = _a.next();
-                        _o.label = 9;
+                        _r.label = 9;
                     case 9:
                         if (!!_b.done) return [3 /*break*/, 13];
                         t = _b.value;
                         if (!(t.status === 3)) return [3 /*break*/, 12];
                         return [4 /*yield*/, this.api('promote_getBadgeAward', { "awardToken": t.awardToken })];
                     case 10:
-                        data = _o.sent();
+                        data = _r.sent();
                         console.log(t.awardName, parseInt(data.data.result.myAwardVos[0].pointVo.score));
-                        return [4 /*yield*/, this.wait(2000)];
+                        return [4 /*yield*/, this.wait(3000)];
                     case 11:
-                        _o.sent();
-                        _o.label = 12;
+                        _r.sent();
+                        _r.label = 12;
                     case 12:
                         _b = _a.next();
                         return [3 /*break*/, 9];
                     case 13: return [3 /*break*/, 16];
                     case 14:
-                        e_2_1 = _o.sent();
+                        e_2_1 = _r.sent();
                         e_2 = { error: e_2_1 };
                         return [3 /*break*/, 16];
                     case 15:
                         try {
-                            if (_b && !_b.done && (_j = _a["return"])) _j.call(_a);
+                            if (_b && !_b.done && (_l = _a["return"])) _l.call(_a);
                         }
                         finally { if (e_2) throw e_2.error; }
                         return [7 /*endfinally*/];
                     case 16:
-                        _o.trys.push([16, 47, 48, 49]);
-                        _c = (e_5 = void 0, __values(res.data.result.taskVos)), _d = _c.next();
-                        _o.label = 17;
+                        _r.trys.push([16, 61, 62, 63]);
+                        _c = (e_6 = void 0, __values(res.data.result.taskVos)), _d = _c.next();
+                        _r.label = 17;
                     case 17:
-                        if (!!_d.done) return [3 /*break*/, 46];
+                        if (!!_d.done) return [3 /*break*/, 60];
                         t = _d.value;
-                        if (!t.browseShopVo) return [3 /*break*/, 29];
-                        _o.label = 18;
+                        if (!t.browseShopVo) return [3 /*break*/, 30];
+                        _r.label = 18;
                     case 18:
-                        _o.trys.push([18, 27, 28, 29]);
+                        _r.trys.push([18, 28, 29, 30]);
                         _e = (e_3 = void 0, __values(t.browseShopVo)), _f = _e.next();
-                        _o.label = 19;
+                        _r.label = 19;
                     case 19:
-                        if (!!_f.done) return [3 /*break*/, 26];
+                        if (!!_f.done) return [3 /*break*/, 27];
                         tp = _f.value;
-                        if (!(tp.status === 1)) return [3 /*break*/, 25];
+                        if (tp.shopName.includes('小程序'))
+                            return [3 /*break*/, 26];
+                        if (!(tp.status === 1)) return [3 /*break*/, 26];
                         console.log(tp.shopName);
                         return [4 /*yield*/, this.getLog()];
                     case 20:
-                        log = _o.sent();
+                        log = _r.sent();
                         return [4 /*yield*/, this.api('followShop', { "shopId": tp.shopId, "follow": true, "type": "0" })];
                     case 21:
-                        data = _o.sent();
+                        data = _r.sent();
                         console.log('followShop', data.msg);
                         return [4 /*yield*/, this.api('promote_collectScore', {
                                 "taskId": t.taskId.toString(),
                                 "taskToken": tp.taskToken,
                                 "actionType": 1,
-                                "ss": JSON.stringify({
-                                    extraData: {
-                                        log: encodeURIComponent(log.log),
-                                        sceneid: 'RAhomePageh5'
-                                    },
-                                    secretp: secretp,
-                                    random: log.random
-                                })
-                            })
-                            // this.o2s(data, 'promote_collectScore')
-                        ];
+                                "ss": JSON.stringify({ extraData: { log: encodeURIComponent(log.log), sceneid: 'RAhomePageh5' }, secretp: secretp, random: log.random })
+                            })];
                     case 22:
-                        data = _o.sent();
-                        // this.o2s(data, 'promote_collectScore')
+                        data = _r.sent();
                         console.log(data.data.bizMsg);
-                        return [4 /*yield*/, this.wait(t.waitDuration * 1000 || 1000)];
+                        return [4 /*yield*/, this.wait(t.waitDuration * 1000 || 3000)];
                     case 23:
-                        _o.sent();
-                        return [4 /*yield*/, this.qryViewkitCallbackResult(tp.taskToken)
-                            // this.o2s(data, 'qryViewkitCallbackResult')
-                        ];
+                        _r.sent();
+                        return [4 /*yield*/, this.qryViewkitCallbackResult(tp.taskToken)];
                     case 24:
-                        data = _o.sent();
-                        // this.o2s(data, 'qryViewkitCallbackResult')
+                        data = _r.sent();
                         console.log(data.toast.subTitle);
-                        _o.label = 25;
+                        return [4 /*yield*/, this.wait(5000)];
                     case 25:
+                        _r.sent();
+                        _r.label = 26;
+                    case 26:
                         _f = _e.next();
                         return [3 /*break*/, 19];
-                    case 26: return [3 /*break*/, 29];
-                    case 27:
-                        e_3_1 = _o.sent();
-                        e_3 = { error: e_3_1 };
-                        return [3 /*break*/, 29];
+                    case 27: return [3 /*break*/, 30];
                     case 28:
+                        e_3_1 = _r.sent();
+                        e_3 = { error: e_3_1 };
+                        return [3 /*break*/, 30];
+                    case 29:
                         try {
-                            if (_f && !_f.done && (_l = _e["return"])) _l.call(_e);
+                            if (_f && !_f.done && (_o = _e["return"])) _o.call(_e);
                         }
                         finally { if (e_3) throw e_3.error; }
                         return [7 /*endfinally*/];
-                    case 29:
-                        if (!t.shoppingActivityVos) return [3 /*break*/, 42];
-                        _o.label = 30;
                     case 30:
-                        _o.trys.push([30, 40, 41, 42]);
-                        _g = (e_4 = void 0, __values(t.shoppingActivityVos)), _h = _g.next();
-                        _o.label = 31;
+                        if (!t.shoppingActivityVos) return [3 /*break*/, 44];
+                        _r.label = 31;
                     case 31:
-                        if (!!_h.done) return [3 /*break*/, 39];
-                        tp = _h.value;
-                        if (!(tp.status === 1)) return [3 /*break*/, 36];
-                        return [4 /*yield*/, this.getLog()];
+                        _r.trys.push([31, 42, 43, 44]);
+                        _g = (e_4 = void 0, __values(t.shoppingActivityVos)), _h = _g.next();
+                        _r.label = 32;
                     case 32:
-                        log = _o.sent();
+                        if (!!_h.done) return [3 /*break*/, 41];
+                        tp = _h.value;
+                        if (!(tp.status === 1)) return [3 /*break*/, 38];
+                        return [4 /*yield*/, this.getLog()];
+                    case 33:
+                        log = _r.sent();
                         console.log(tp.title);
                         return [4 /*yield*/, this.api('promote_collectScore', {
-                                "taskId": t.taskId, "taskToken": tp.taskToken, "actionType": 1, "ss": JSON.stringify({
-                                    extraData: {
-                                        log: encodeURIComponent(log.log),
-                                        sceneid: 'RAhomePageh5'
-                                    },
-                                    secretp: secretp,
-                                    random: log.random
-                                })
+                                "taskId": t.taskId,
+                                "taskToken": tp.taskToken,
+                                "actionType": 1,
+                                "ss": JSON.stringify({ extraData: { log: encodeURIComponent(log.log), sceneid: 'RAhomePageh5' }, secretp: secretp, random: log.random })
                             })];
-                    case 33:
-                        data = _o.sent();
-                        console.log(data.data.bizMsg);
-                        return [4 /*yield*/, this.wait(t.waitDuration * 1000)];
                     case 34:
-                        _o.sent();
-                        return [4 /*yield*/, this.qryViewkitCallbackResult(tp.taskToken)];
+                        data = _r.sent();
+                        console.log(data.data.bizMsg);
+                        return [4 /*yield*/, this.wait(t.waitDuration * 1000 || 3000)];
                     case 35:
-                        data = _o.sent();
+                        _r.sent();
+                        return [4 /*yield*/, this.qryViewkitCallbackResult(tp.taskToken)];
+                    case 36:
+                        data = _r.sent();
                         console.log(data.toast.subTitle);
-                        _o.label = 36;
-                    case 36: return [4 /*yield*/, this.wait(2000)];
+                        return [4 /*yield*/, this.wait(5000)];
                     case 37:
-                        _o.sent();
-                        _o.label = 38;
-                    case 38:
-                        _h = _g.next();
-                        return [3 /*break*/, 31];
-                    case 39: return [3 /*break*/, 42];
+                        _r.sent();
+                        _r.label = 38;
+                    case 38: return [4 /*yield*/, this.wait(5000)];
+                    case 39:
+                        _r.sent();
+                        _r.label = 40;
                     case 40:
-                        e_4_1 = _o.sent();
+                        _h = _g.next();
+                        return [3 /*break*/, 32];
+                    case 41: return [3 /*break*/, 44];
+                    case 42:
+                        e_4_1 = _r.sent();
                         e_4 = { error: e_4_1 };
-                        return [3 /*break*/, 42];
-                    case 41:
+                        return [3 /*break*/, 44];
+                    case 43:
                         try {
-                            if (_h && !_h.done && (_m = _g["return"])) _m.call(_g);
+                            if (_h && !_h.done && (_p = _g["return"])) _p.call(_g);
                         }
                         finally { if (e_4) throw e_4.error; }
                         return [7 /*endfinally*/];
-                    case 42:
-                        if (!t.taskName.includes('加购')) return [3 /*break*/, 45];
+                    case 44:
+                        if (!t.taskName.includes('加购')) return [3 /*break*/, 47];
                         console.log(t.taskName);
                         return [4 /*yield*/, this.api('promote_getTaskDetail', { taskId: t.taskId })];
-                    case 43:
-                        data = _o.sent();
-                        return [4 /*yield*/, this.feed(t.taskId, secretp)];
-                    case 44:
-                        _o.sent();
-                        _o.label = 45;
                     case 45:
-                        _d = _c.next();
-                        return [3 /*break*/, 17];
-                    case 46: return [3 /*break*/, 49];
+                        data = _r.sent();
+                        return [4 /*yield*/, this.feed(t.taskId, secretp)];
+                    case 46:
+                        _r.sent();
+                        _r.label = 47;
                     case 47:
-                        e_5_1 = _o.sent();
-                        e_5 = { error: e_5_1 };
-                        return [3 /*break*/, 49];
+                        if (!(t.taskType === 5)) return [3 /*break*/, 59];
+                        console.log(t.taskName);
+                        return [4 /*yield*/, this.api('promote_getFeedDetail', { taskId: t.taskId })];
                     case 48:
+                        res = _r.sent();
+                        return [4 /*yield*/, this.wait(1000)];
+                    case 49:
+                        _r.sent();
+                        _r.label = 50;
+                    case 50:
+                        _r.trys.push([50, 57, 58, 59]);
+                        _j = (e_5 = void 0, __values(res.data.result.taskVos[0].browseShopVo.slice(0, 4))), _k = _j.next();
+                        _r.label = 51;
+                    case 51:
+                        if (!!_k.done) return [3 /*break*/, 56];
+                        tp = _k.value;
+                        if (!(tp.status === 1)) return [3 /*break*/, 55];
+                        return [4 /*yield*/, this.getLog()];
+                    case 52:
+                        log = _r.sent();
+                        return [4 /*yield*/, this.api('promote_collectScore', {
+                                "taskId": t.taskId,
+                                "taskToken": tp.taskToken,
+                                "ss": JSON.stringify({ extraData: { log: encodeURIComponent(log.log), sceneid: 'RAhomePageh5' }, secretp: secretp, random: log.random })
+                            })];
+                    case 53:
+                        data = _r.sent();
+                        console.log(data.data.result.successToast);
+                        return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
+                    case 54:
+                        _r.sent();
+                        _r.label = 55;
+                    case 55:
+                        _k = _j.next();
+                        return [3 /*break*/, 51];
+                    case 56: return [3 /*break*/, 59];
+                    case 57:
+                        e_5_1 = _r.sent();
+                        e_5 = { error: e_5_1 };
+                        return [3 /*break*/, 59];
+                    case 58:
                         try {
-                            if (_d && !_d.done && (_k = _c["return"])) _k.call(_c);
+                            if (_k && !_k.done && (_q = _j["return"])) _q.call(_j);
                         }
                         finally { if (e_5) throw e_5.error; }
                         return [7 /*endfinally*/];
-                    case 49: return [3 /*break*/, 51];
-                    case 50:
-                        e_6 = _o.sent();
-                        console.log('Error', e_6);
-                        return [3 /*break*/, 54];
-                    case 51: return [4 /*yield*/, this.wait(5000)];
-                    case 52:
-                        _o.sent();
-                        _o.label = 53;
-                    case 53:
+                    case 59:
+                        _d = _c.next();
+                        return [3 /*break*/, 17];
+                    case 60: return [3 /*break*/, 63];
+                    case 61:
+                        e_6_1 = _r.sent();
+                        e_6 = { error: e_6_1 };
+                        return [3 /*break*/, 63];
+                    case 62:
+                        try {
+                            if (_d && !_d.done && (_m = _c["return"])) _m.call(_c);
+                        }
+                        finally { if (e_6) throw e_6.error; }
+                        return [7 /*endfinally*/];
+                    case 63: return [3 /*break*/, 65];
+                    case 64:
+                        e_7 = _r.sent();
+                        console.log('Error', e_7);
+                        return [3 /*break*/, 68];
+                    case 65: return [4 /*yield*/, this.wait(6000)];
+                    case 66:
+                        _r.sent();
+                        _r.label = 67;
+                    case 67:
                         loop++;
                         return [3 /*break*/, 5];
-                    case 54: return [2 /*return*/];
+                    case 68: return [2 /*return*/];
                 }
             });
         });
     };
     Jd_618.prototype.help = function (users) {
         return __awaiter(this, void 0, void 0, function () {
-            var shareCodeHW, users_1, users_1_1, user, res, log, secretp, memberCount, groupJoinInviteId, e_7_1;
-            var e_7, _a;
+            var shareCodeHW, users_1, users_1_1, user, res, log, secretp, memberCount, groupJoinInviteId, e_8_1;
+            var e_8, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -485,19 +520,12 @@ var Jd_618 = /** @class */ (function (_super) {
                         log = _b.sent();
                         return [4 /*yield*/, this.api('promote_pk_joinGroup', {
                                 "inviteId": groupJoinInviteId,
-                                "ss": JSON.stringify({
-                                    extraData: {
-                                        log: encodeURIComponent(log.log),
-                                        sceneid: 'RAhomePageh5'
-                                    },
-                                    secretp: secretp,
-                                    random: log.random
-                                }),
+                                "ss": JSON.stringify({ extraData: { log: encodeURIComponent(log.log), sceneid: 'RAhomePageh5' }, secretp: secretp, random: log.random }),
                                 "confirmFlag": 1
                             })];
                     case 8:
                         res = _b.sent();
-                        return [4 /*yield*/, this.wait(1000)];
+                        return [4 /*yield*/, this.wait(3000)];
                     case 9:
                         _b.sent();
                         if (res.data.bizCode === 0) {
@@ -511,7 +539,7 @@ var Jd_618 = /** @class */ (function (_super) {
                         res = _b.sent();
                         this.o2s(res, 'promote_pk_getHomeData');
                         _b.label = 11;
-                    case 11: return [4 /*yield*/, this.wait(3000)];
+                    case 11: return [4 /*yield*/, this.wait(5000)];
                     case 12:
                         _b.sent();
                         _b.label = 13;
@@ -520,14 +548,14 @@ var Jd_618 = /** @class */ (function (_super) {
                         return [3 /*break*/, 2];
                     case 14: return [3 /*break*/, 17];
                     case 15:
-                        e_7_1 = _b.sent();
-                        e_7 = { error: e_7_1 };
+                        e_8_1 = _b.sent();
+                        e_8 = { error: e_8_1 };
                         return [3 /*break*/, 17];
                     case 16:
                         try {
                             if (users_1_1 && !users_1_1.done && (_a = users_1["return"])) _a.call(users_1);
                         }
-                        finally { if (e_7) throw e_7.error; }
+                        finally { if (e_8) throw e_8.error; }
                         return [7 /*endfinally*/];
                     case 17: return [2 /*return*/];
                 }
