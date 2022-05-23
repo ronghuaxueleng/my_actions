@@ -224,6 +224,8 @@ var Jd_speed_wabao = /** @class */ (function (_super) {
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
+                        console.log('内部助力');
+                        this.o2s(this.shareCodesSelf);
                         shareCodesHW = [];
                         _d.label = 1;
                     case 1:
