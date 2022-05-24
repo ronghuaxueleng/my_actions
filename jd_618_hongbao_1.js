@@ -84,50 +84,60 @@ var shareCodeHW = [], shareCodeSelf = [], shareCode = [];
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
     var cookiesArr, tool, i, e_1, i, shareCode_1, shareCode_1_1, code, e_2_1, e_3;
     var e_2, _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                if (new Date().getHours() < 20) {
+                    console.log('20点开始');
+                    process.exit(0);
+                }
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
             case 1:
-                cookiesArr = _b.sent();
+                cookiesArr = _c.sent();
                 tool = new log_618_1.Log_618();
                 i = 0;
-                _b.label = 2;
+                _c.label = 2;
             case 2:
                 if (!(i < cookiesArr.length)) return [3 /*break*/, 13];
-                _b.label = 3;
+                _c.label = 3;
             case 3:
-                _b.trys.push([3, 9, 10, 12]);
+                _c.trys.push([3, 9, 10, 12]);
                 cookie = cookiesArr[i];
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 index = i + 1;
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index, "\u3011").concat(UserName, "\n"));
                 return [4 /*yield*/, api('promote_getHomeData', {})];
             case 4:
-                res = _b.sent();
+                res = _c.sent();
                 secretp = res.data.result.homeMainInfo.secretp;
+                if (!((_b = res.data.result) === null || _b === void 0 ? void 0 : _b.userAward)) {
+                    console.log('组队失败');
+                    return [3 /*break*/, 12];
+                }
                 return [4 /*yield*/, api('promote_pk_getAmountForecast', {})];
             case 5:
-                res = _b.sent();
+                res = _c.sent();
                 console.log('🧧', parseFloat(res.data.result.userAward));
                 return [4 /*yield*/, tool.main()];
             case 6:
-                log = _b.sent();
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
+                log = _c.sent();
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(4000)];
             case 7:
-                _b.sent();
+                _c.sent();
                 return [4 /*yield*/, api('promote_pk_getExpandDetail', { "ss": JSON.stringify({ extraData: { log: encodeURIComponent(log.log), sceneid: 'RAhomePageh5' }, secretp: secretp, random: log.random }) })];
             case 8:
-                res = _b.sent();
+                res = _c.sent();
                 console.log('助力码', res.data.result.inviteId);
                 shareCodeSelf.push(res.data.result.inviteId);
                 return [3 /*break*/, 12];
             case 9:
-                e_1 = _b.sent();
+                e_1 = _c.sent();
                 console.log('error', e_1);
                 return [3 /*break*/, 12];
             case 10: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
             case 11:
-                _b.sent();
+                _c.sent();
                 return [7 /*endfinally*/];
             case 12:
                 i++;
@@ -136,25 +146,25 @@ var shareCodeHW = [], shareCodeSelf = [], shareCode = [];
                 console.log('内部互助');
                 (0, TS_USER_AGENTS_1.o2s)(shareCodeSelf);
                 i = 0;
-                _b.label = 14;
+                _c.label = 14;
             case 14:
                 if (!(i < cookiesArr.length)) return [3 /*break*/, 33];
-                _b.label = 15;
+                _c.label = 15;
             case 15:
-                _b.trys.push([15, 29, 30, 32]);
+                _c.trys.push([15, 29, 30, 32]);
                 cookie = cookiesArr[i];
                 UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
                 index = i + 1;
                 console.log("\n\u5F00\u59CB\u3010\u4EAC\u4E1C\u8D26\u53F7".concat(index, "\u3011").concat(UserName, "\n"));
                 return [4 /*yield*/, api('promote_getHomeData', {})];
             case 16:
-                res = _b.sent();
+                res = _c.sent();
                 secretp = res.data.result.homeMainInfo.secretp;
                 if (!(shareCodeHW.length === 0)) return [3 /*break*/, 18];
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.getshareCodeHW)('lyb_pz')];
             case 17:
-                shareCodeHW = _b.sent();
-                _b.label = 18;
+                shareCodeHW = _c.sent();
+                _c.label = 18;
             case 18:
                 if (i === 0) {
                     shareCode = Array.from(new Set(__spreadArray(__spreadArray([], __read(shareCodeHW), false), __read(shareCodeSelf), false)));
@@ -162,36 +172,32 @@ var shareCodeHW = [], shareCodeSelf = [], shareCode = [];
                 else {
                     shareCode = Array.from(new Set(__spreadArray(__spreadArray([], __read(shareCodeSelf), false), __read(shareCodeHW), false)));
                 }
-                _b.label = 19;
+                _c.label = 19;
             case 19:
-                _b.trys.push([19, 26, 27, 28]);
+                _c.trys.push([19, 26, 27, 28]);
                 shareCode_1 = (e_2 = void 0, __values(shareCode)), shareCode_1_1 = shareCode_1.next();
-                _b.label = 20;
+                _c.label = 20;
             case 20:
                 if (!!shareCode_1_1.done) return [3 /*break*/, 25];
                 code = shareCode_1_1.value;
                 console.log('去助力', code);
                 return [4 /*yield*/, tool.main()];
             case 21:
-                log = _b.sent();
-                return [4 /*yield*/, api('promote_pk_collectPkExpandScore', {
-                        "ss": JSON.stringify({ extraData: { log: encodeURIComponent(log.log), sceneid: 'RAhomePageh5' }, secretp: secretp, random: log.random }),
-                        "actionType": "0",
-                        "inviteId": code
-                    })];
+                log = _c.sent();
+                return [4 /*yield*/, api('promote_pk_collectPkExpandScore', { "ss": JSON.stringify({ extraData: { log: encodeURIComponent(log.log), sceneid: 'RAhomePageh5' }, secretp: secretp, random: log.random }), "actionType": "0", "inviteId": code })];
             case 22:
-                res = _b.sent();
+                res = _c.sent();
                 console.log(res.data.bizMsg);
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(4000)];
             case 23:
-                _b.sent();
-                _b.label = 24;
+                _c.sent();
+                _c.label = 24;
             case 24:
                 shareCode_1_1 = shareCode_1.next();
                 return [3 /*break*/, 20];
             case 25: return [3 /*break*/, 28];
             case 26:
-                e_2_1 = _b.sent();
+                e_2_1 = _c.sent();
                 e_2 = { error: e_2_1 };
                 return [3 /*break*/, 28];
             case 27:
@@ -202,12 +208,12 @@ var shareCodeHW = [], shareCodeSelf = [], shareCode = [];
                 return [7 /*endfinally*/];
             case 28: return [3 /*break*/, 32];
             case 29:
-                e_3 = _b.sent();
+                e_3 = _c.sent();
                 console.log('error', e_3);
                 return [3 /*break*/, 32];
             case 30: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
             case 31:
-                _b.sent();
+                _c.sent();
                 return [7 /*endfinally*/];
             case 32:
                 i++;
