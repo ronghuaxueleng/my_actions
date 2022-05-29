@@ -1,6 +1,7 @@
 "use strict";
 /**
- * 领现金1.5
+ * 小程序-领现金-1.5
+ * cron: 15 7,18 * * *
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -91,14 +92,14 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 exports.__esModule = true;
 var TS_JDHelloWorld_1 = require("./TS_JDHelloWorld");
-var Jd_cash_help = /** @class */ (function (_super) {
-    __extends(Jd_cash_help, _super);
-    function Jd_cash_help() {
+var Jd_cash_wechat = /** @class */ (function (_super) {
+    __extends(Jd_cash_wechat, _super);
+    function Jd_cash_wechat() {
         var _this = _super.call(this) || this;
         _this.shareCodeSelf = [];
         return _this;
     }
-    Jd_cash_help.prototype.init = function () {
+    Jd_cash_wechat.prototype.init = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -110,7 +111,7 @@ var Jd_cash_help = /** @class */ (function (_super) {
             });
         });
     };
-    Jd_cash_help.prototype.doSign = function () {
+    Jd_cash_wechat.prototype.doSign = function () {
         return __awaiter(this, void 0, void 0, function () {
             var body, data;
             return __generator(this, function (_a) {
@@ -131,7 +132,7 @@ var Jd_cash_help = /** @class */ (function (_super) {
             });
         });
     };
-    Jd_cash_help.prototype.api = function (fn, body) {
+    Jd_cash_wechat.prototype.api = function (fn, body) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -155,7 +156,7 @@ var Jd_cash_help = /** @class */ (function (_super) {
             });
         });
     };
-    Jd_cash_help.prototype.main = function (user) {
+    Jd_cash_wechat.prototype.main = function (user) {
         return __awaiter(this, void 0, void 0, function () {
             var res, _a, _b, t, e_1_1, e_2;
             var e_1, _c;
@@ -239,29 +240,28 @@ var Jd_cash_help = /** @class */ (function (_super) {
             });
         });
     };
-    Jd_cash_help.prototype.help = function (users) {
+    Jd_cash_wechat.prototype.help = function (users) {
         var _a, _b, _c, _d, _e, _f;
         return __awaiter(this, void 0, void 0, function () {
-            var shareCodeHW, shareCode, users_1, users_1_1, user, res, shareCode_1, shareCode_1_1, code, e_3_1, e_4, e_5_1;
-            var e_5, _g, e_3, _h;
-            return __generator(this, function (_j) {
-                switch (_j.label) {
+            var shareCodeHW, shareCode, res, users_1, users_1_1, user, shareCode_1, shareCode_1_1, code, e_3_1, e_4, e_5_1, users_2, users_2_1, user, i, e_6, e_7_1;
+            var e_5, _g, e_3, _h, e_7, _j;
+            return __generator(this, function (_k) {
+                switch (_k.label) {
                     case 0:
                         shareCodeHW = [], shareCode = [];
                         this.o2s(this.shareCodeSelf, '内部助力');
-                        _j.label = 1;
+                        _k.label = 1;
                     case 1:
-                        _j.trys.push([1, 15, 16, 17]);
+                        _k.trys.push([1, 15, 16, 17]);
                         users_1 = __values(users), users_1_1 = users_1.next();
-                        _j.label = 2;
+                        _k.label = 2;
                     case 2:
                         if (!!users_1_1.done) return [3 /*break*/, 14];
                         user = users_1_1.value;
-                        _j.label = 3;
+                        _k.label = 3;
                     case 3:
-                        _j.trys.push([3, 12, , 13]);
+                        _k.trys.push([3, 12, , 13]);
                         this.user = user;
-                        res = void 0;
                         if (shareCodeHW.length === 0) {
                             shareCodeHW = this.getshareCodeHW('cash');
                         }
@@ -271,29 +271,29 @@ var Jd_cash_help = /** @class */ (function (_super) {
                         else {
                             shareCode = __spreadArray(__spreadArray([], __read(this.shareCodeSelf), false), __read(shareCodeHW), false);
                         }
-                        _j.label = 4;
+                        _k.label = 4;
                     case 4:
-                        _j.trys.push([4, 9, 10, 11]);
+                        _k.trys.push([4, 9, 10, 11]);
                         shareCode_1 = (e_3 = void 0, __values(shareCode)), shareCode_1_1 = shareCode_1.next();
-                        _j.label = 5;
+                        _k.label = 5;
                     case 5:
                         if (!!shareCode_1_1.done) return [3 /*break*/, 8];
                         code = shareCode_1_1.value;
                         console.log("\u8D26\u53F7".concat(user.index + 1, " ").concat(user.UserName, " \u53BB\u52A9\u529B ").concat(code.inviteCode));
                         return [4 /*yield*/, this.api('redpack_limited_assist', { "inviteCode": code.inviteCode, "shareDate": code.shareDate })];
                     case 6:
-                        res = _j.sent();
+                        res = _k.sent();
                         console.log((_c = (_b = (_a = res.data) === null || _a === void 0 ? void 0 : _a.result) === null || _b === void 0 ? void 0 : _b.limitTimeAssist) === null || _c === void 0 ? void 0 : _c.tips);
                         if (((_f = (_e = (_d = res.data) === null || _d === void 0 ? void 0 : _d.result) === null || _e === void 0 ? void 0 : _e.limitTimeAssist) === null || _f === void 0 ? void 0 : _f.assistCode) === '207') {
                             return [3 /*break*/, 8];
                         }
-                        _j.label = 7;
+                        _k.label = 7;
                     case 7:
                         shareCode_1_1 = shareCode_1.next();
                         return [3 /*break*/, 5];
                     case 8: return [3 /*break*/, 11];
                     case 9:
-                        e_3_1 = _j.sent();
+                        e_3_1 = _k.sent();
                         e_3 = { error: e_3_1 };
                         return [3 /*break*/, 11];
                     case 10:
@@ -304,7 +304,7 @@ var Jd_cash_help = /** @class */ (function (_super) {
                         return [7 /*endfinally*/];
                     case 11: return [3 /*break*/, 13];
                     case 12:
-                        e_4 = _j.sent();
+                        e_4 = _k.sent();
                         console.log('error', e_4.message);
                         return [3 /*break*/, 13];
                     case 13:
@@ -312,7 +312,7 @@ var Jd_cash_help = /** @class */ (function (_super) {
                         return [3 /*break*/, 2];
                     case 14: return [3 /*break*/, 17];
                     case 15:
-                        e_5_1 = _j.sent();
+                        e_5_1 = _k.sent();
                         e_5 = { error: e_5_1 };
                         return [3 /*break*/, 17];
                     case 16:
@@ -321,11 +321,54 @@ var Jd_cash_help = /** @class */ (function (_super) {
                         }
                         finally { if (e_5) throw e_5.error; }
                         return [7 /*endfinally*/];
-                    case 17: return [2 /*return*/];
+                    case 17:
+                        _k.trys.push([17, 27, 28, 29]);
+                        users_2 = __values(users), users_2_1 = users_2.next();
+                        _k.label = 18;
+                    case 18:
+                        if (!!users_2_1.done) return [3 /*break*/, 26];
+                        user = users_2_1.value;
+                        _k.label = 19;
+                    case 19:
+                        _k.trys.push([19, 24, , 25]);
+                        this.user = user;
+                        console.log("\u8D26\u53F7".concat(user.index + 1, " ").concat(user.UserName));
+                        i = 1;
+                        _k.label = 20;
+                    case 20:
+                        if (!(i < 5)) return [3 /*break*/, 23];
+                        return [4 /*yield*/, this.api('cash_open_limited_redpacket', { "node": i })];
+                    case 21:
+                        res = _k.sent();
+                        console.log(res.data);
+                        _k.label = 22;
+                    case 22:
+                        i++;
+                        return [3 /*break*/, 20];
+                    case 23: return [3 /*break*/, 25];
+                    case 24:
+                        e_6 = _k.sent();
+                        console.log('error', e_6.message);
+                        return [3 /*break*/, 25];
+                    case 25:
+                        users_2_1 = users_2.next();
+                        return [3 /*break*/, 18];
+                    case 26: return [3 /*break*/, 29];
+                    case 27:
+                        e_7_1 = _k.sent();
+                        e_7 = { error: e_7_1 };
+                        return [3 /*break*/, 29];
+                    case 28:
+                        try {
+                            if (users_2_1 && !users_2_1.done && (_j = users_2["return"])) _j.call(users_2);
+                        }
+                        finally { if (e_7) throw e_7.error; }
+                        return [7 /*endfinally*/];
+                    case 29: return [2 /*return*/];
                 }
             });
         });
     };
-    return Jd_cash_help;
+    return Jd_cash_wechat;
 }(TS_JDHelloWorld_1.JDHelloWorld));
-new Jd_cash_help().init().then();
+new Jd_cash_wechat().init().then();
