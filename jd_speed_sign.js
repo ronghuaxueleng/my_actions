@@ -686,8 +686,8 @@ function invite2() {
     "4AVQao+eH8Q8kvmXnWmkG8ef/fNr5fdejnD9+9Ugbec=",
     "jbGBRBPo5DmwB9ntTCSVOGXuh1YQyccCuZpWwb3PlIc=",
     "m95y+Pagsmn6cXWtNhfrV9ymDN4QK1ivsmbN32lpEHw=",
-    "mCvmrmFghpDCLcL3VZs53BkAhucziHAYn3HhPmURJJE=",
     "DuqL56/3h17VpbHIW+v8uJRRyPL6k9E1Hu5UhCyHw/s=",
+    "mCvmrmFghpDCLcL3VZs53BkAhucziHAYn3HhPmURJJE=",
   ]
   let inviterId = inviterIdArr[Math.floor((Math.random() * inviterIdArr.length))]
   let options = {
@@ -720,8 +720,8 @@ function invite() {
     "4AVQao+eH8Q8kvmXnWmkG8ef/fNr5fdejnD9+9Ugbec=",
     "jbGBRBPo5DmwB9ntTCSVOGXuh1YQyccCuZpWwb3PlIc=",
     "m95y+Pagsmn6cXWtNhfrV9ymDN4QK1ivsmbN32lpEHw=",
-    "mCvmrmFghpDCLcL3VZs53BkAhucziHAYn3HhPmURJJE=",
     "DuqL56/3h17VpbHIW+v8uJRRyPL6k9E1Hu5UhCyHw/s=",
+    "mCvmrmFghpDCLcL3VZs53BkAhucziHAYn3HhPmURJJE=",
     "zPiP6uq7hi9AS7VecMnRvA==",
     "YQ5wwbSWDzNIudDC2OWvSw==",
     "+vbK7QKOtpHM4dsSRqUPPX/11g/P71iBYh46dyiMuKk=",
