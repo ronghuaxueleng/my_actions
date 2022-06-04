@@ -80,7 +80,7 @@ exports.__esModule = true;
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var cookie, cookiesArr = [], res, UserName;
 var shareCodesSelf = [], shareCodes = [], shareCodesHW = [], fullCode = [];
-var step = -1, ck_type = -1, random = '', log = '';
+var remote_ua = null, step = -1, ck_type = -1, random = '', log = '';
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
     var allCookie, allCookie_1, allCookie_1_1, ck;
     var e_1, _a;
@@ -413,10 +413,15 @@ function api(fn, body) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    ua = 'Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1';
-                    if (ck_type === 0) {
-                        ua = 'jdapp;android;10.5.4;;;appBuild/96906;ef/1;ep/%7B%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22ts%22%3A1654261134084%2C%22ridx%22%3A-1%2C%22cipher%22%3A%7B%22sv%22%3A%22CJO%3D%22%2C%22ad%22%3A%22ZWDuCwU2DQYzYWCyZWO4Yq%3D%3D%22%2C%22od%22%3A%22%22%2C%22ov%22%3A%22CzK%3D%22%2C%22ud%22%3A%22ZWDuCwU2DQYzYWCyZWO4Yq%3D%3D%22%7D%2C%22ciphertype%22%3A5%2C%22version%22%3A%221.2.0%22%2C%22appname%22%3A%22com.jingdong.app.mall%22%7D;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 11; sdk_gphone_arm64 Build/RSR1.201216.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36';
-                    }
+                    if (!!remote_ua) return [3 /*break*/, 2];
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.get)('https://api.jdsharecode.xyz/api/jlhb_ua')];
+                case 1:
+                    remote_ua = _a.sent();
+                    _a.label = 2;
+                case 2:
+                    ua = ck_type === 0
+                        ? remote_ua
+                        : 'Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1';
                     return [4 /*yield*/, (0, TS_USER_AGENTS_1.post)('https://api.m.jd.com/api', new URLSearchParams({
                             'appid': 'jinlihongbao',
                             'body': JSON.stringify(body),
@@ -434,7 +439,7 @@ function api(fn, body) {
                             "User-Agent": ua,
                             "Cookie": cookie
                         })];
-                case 1: return [2 /*return*/, _a.sent()];
+                case 3: return [2 /*return*/, _a.sent()];
             }
         });
     });
