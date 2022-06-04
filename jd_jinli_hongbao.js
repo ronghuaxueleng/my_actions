@@ -79,21 +79,21 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 exports.__esModule = true;
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var cookie, cookiesArr = [], res, UserName;
-var shareCodesSelf = [], shareCodes = [], shareCodesHW = [], fullCode = [], log;
-var step = -1, ck_type = -1;
+var shareCodesSelf = [], shareCodes = [], shareCodesHW = [], fullCode = [];
+var step = -1, ck_type = -1, random = '', log = '';
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var temp, temp_1, temp_1_1, ck;
+    var allCookie, allCookie_1, allCookie_1_1, ck;
     var e_1, _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
             case 1:
-                temp = _b.sent();
+                allCookie = _b.sent();
                 try {
-                    for (temp_1 = __values(temp), temp_1_1 = temp_1.next(); !temp_1_1.done; temp_1_1 = temp_1.next()) {
-                        ck = temp_1_1.value;
+                    for (allCookie_1 = __values(allCookie), allCookie_1_1 = allCookie_1.next(); !allCookie_1_1.done; allCookie_1_1 = allCookie_1.next()) {
+                        ck = allCookie_1_1.value;
                         if (ck.includes('pt_key=app_open')) {
-                            temp = [ck];
+                            cookiesArr = [ck];
                             break;
                         }
                     }
@@ -101,16 +101,12 @@ var step = -1, ck_type = -1;
                 catch (e_1_1) { e_1 = { error: e_1_1 }; }
                 finally {
                     try {
-                        if (temp_1_1 && !temp_1_1.done && (_a = temp_1["return"])) _a.call(temp_1);
+                        if (allCookie_1_1 && !allCookie_1_1.done && (_a = allCookie_1["return"])) _a.call(allCookie_1);
                     }
                     finally { if (e_1) throw e_1.error; }
                 }
-                console.log('temp', temp);
-                if (temp.length !== 0) {
-                    cookiesArr = temp;
-                }
-                else {
-                    cookiesArr = cookiesArr.slice(0, 1);
+                if (cookiesArr.length === 0) {
+                    cookiesArr = allCookie.slice(0, 1);
                 }
                 step = 0;
                 return [4 /*yield*/, join()];
@@ -119,21 +115,18 @@ var step = -1, ck_type = -1;
                 return [4 /*yield*/, help()];
             case 3:
                 _b.sent();
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
-            case 4:
-                cookiesArr = _b.sent();
-                cookiesArr = cookiesArr.slice(0, 9);
+                cookiesArr = allCookie.slice(0, 9);
                 step = 1;
-                if (![0, 1].includes(new Date().getHours())) return [3 /*break*/, 6];
+                if (![0, 1].includes(new Date().getHours())) return [3 /*break*/, 5];
                 return [4 /*yield*/, join()];
-            case 5:
+            case 4:
                 _b.sent();
-                _b.label = 6;
-            case 6: return [4 /*yield*/, getShareCodeSelf()];
-            case 7:
+                _b.label = 5;
+            case 5: return [4 /*yield*/, getShareCodeSelf()];
+            case 6:
                 _b.sent();
                 return [4 /*yield*/, help()];
-            case 8:
+            case 7:
                 _b.sent();
                 return [2 /*return*/];
         }
@@ -168,8 +161,8 @@ function join() {
                     _e.trys.push([4, 7, , 9]);
                     return [4 /*yield*/, getLog(-1)];
                 case 5:
-                    log = _e.sent();
-                    return [4 /*yield*/, api('h5launch', { followShop: 0, random: log.match(/"random":"(\d+)"/)[1], log: log.match(/"log":"(.*)"/)[1], sceneid: 'JLHBhPageh5' })];
+                    _e.sent();
+                    return [4 /*yield*/, api('h5launch', { followShop: 0, random: random, log: log, sceneid: 'JLHBhPageh5' })];
                 case 6:
                     res = _e.sent();
                     console.log('活动初始化：', res.data.result.statusDesc);
@@ -179,7 +172,7 @@ function join() {
                     return [3 /*break*/, 9];
                 case 7:
                     e_2 = _e.sent();
-                    console.log('join error', res.rtn_code);
+                    console.log('join error', res === null || res === void 0 ? void 0 : res.rtn_code);
                     return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
                 case 8:
                     _e.sent();
@@ -270,8 +263,8 @@ function help() {
                         return [3 /*break*/, 19];
                     return [4 /*yield*/, getLog(index)];
                 case 9:
-                    log = _f.sent();
-                    return [4 /*yield*/, api('jinli_h5assist', { "redPacketId": code, "followShop": 0, random: log.match(/"random":"(\d+)"/)[1], log: log.match(/"log":"(.*)"/)[1], sceneid: 'JLHBhPageh5' })];
+                    _f.sent();
+                    return [4 /*yield*/, api('jinli_h5assist', { "redPacketId": code, "followShop": 0, random: random, log: log, sceneid: 'JLHBhPageh5' })];
                 case 10:
                     res = _f.sent();
                     if (!(res.rtn_code !== 0)) return [3 /*break*/, 12];
@@ -424,7 +417,16 @@ function api(fn, body) {
                     if (ck_type === 0) {
                         ua = 'jdapp;android;10.5.4;;;appBuild/96906;ef/1;ep/%7B%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22ts%22%3A1654261134084%2C%22ridx%22%3A-1%2C%22cipher%22%3A%7B%22sv%22%3A%22CJO%3D%22%2C%22ad%22%3A%22ZWDuCwU2DQYzYWCyZWO4Yq%3D%3D%22%2C%22od%22%3A%22%22%2C%22ov%22%3A%22CzK%3D%22%2C%22ud%22%3A%22ZWDuCwU2DQYzYWCyZWO4Yq%3D%3D%22%7D%2C%22ciphertype%22%3A5%2C%22version%22%3A%221.2.0%22%2C%22appname%22%3A%22com.jingdong.app.mall%22%7D;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 11; sdk_gphone_arm64 Build/RSR1.201216.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36';
                     }
-                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.post)("https://api.m.jd.com/api?appid=jinlihongbao&functionId=".concat(fn, "&loginType=2&client=jinlihongbao&clientVersion=10.2.4&osVersion=AndroidOS&d_brand=Xiaomi&d_model=Xiaomi"), "body=".concat(encodeURIComponent(JSON.stringify(body))), {
+                    return [4 /*yield*/, (0, TS_USER_AGENTS_1.post)('https://api.m.jd.com/api', new URLSearchParams({
+                            'appid': 'jinlihongbao',
+                            'body': JSON.stringify(body),
+                            'functionId': fn,
+                            'loginType': '2',
+                            'client': 'jinlihongbao',
+                            't': Date.now().toString(),
+                            'clientVersion': '10.5.4',
+                            'osVersion': '-1'
+                        }), {
                             "origin": "https://h5.m.jd.com",
                             "referer": "https://h5.m.jd.com/babelDiy/Zeus/2NUvze9e1uWf4amBhe1AV6ynmSuH/index.html",
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -447,7 +449,8 @@ function getLog(index) {
                 case 1:
                     data = _a.sent();
                     if (data !== '1' && data !== 1) {
-                        return [2 /*return*/, data];
+                        random = data.match(/"random":"(\d+)"/)[1];
+                        log = data.match(/"log":"(.*)"/)[1];
                     }
                     else {
                         console.log('No log');
