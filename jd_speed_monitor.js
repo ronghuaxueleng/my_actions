@@ -87,7 +87,7 @@ var cookie = '', UserName;
                 if (!!_b.done) return [3 /*break*/, 7];
                 t_1 = _b.value;
                 console.log(t_1.amount);
-                if (!(t_1.amount === '50' || t_1.amount === '10')) return [3 /*break*/, 6];
+                if (!(t_1.amount === '50' || t_1.amount === '120')) return [3 /*break*/, 6];
                 return [4 /*yield*/, (0, sendNotify_1.sendNotify)('极速版金币', "".concat(t_1.amount, "\uD83E\uDDE7"))];
             case 5:
                 _d.sent();
