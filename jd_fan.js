@@ -23,9 +23,12 @@ if ($.isNode()) {
         ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
 let activityList = [
-    {'id':'cebd38c28cf0468c8082082eebde4c32','endTime':1656626274000},//
-		{'id':'c88ffa4a17b04cc994a6e66f161471','endTime':1656626274000},//
-    {'id':'4f49c21967e24e62aa60efc28b015c82','endTime':1656626274000},//
+    {'id':'a5af3f9c0af6450bbb93fef7d5f98ce','endTime':1656626274000},//
+		{'id':'cdce9f67e577420084fcf7a749a86241','endTime':1656626274000},//
+		{'id':'b7ec89d5067f4f86bb77c8c371832280','endTime':1656626274000},//
+		{'id':'c923f03a1cc144edab77975e6c792436','endTime':1656626274000},//
+		{'id':'afc7e69486954594987afc57a055c6a9','endTime':1656626274000},//
+
 		
 ];
 !(async()=>{
