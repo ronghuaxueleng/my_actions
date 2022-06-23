@@ -82,60 +82,43 @@ var cookie, cookiesArr = [], res, UserName;
 var shareCodesSelf = [], shareCodes = [], shareCodesHW = [], fullCode = [];
 var remote_ua = null, step = -1, ck_type = -1, random = '', log = '';
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var allCookie, allCookie_1, allCookie_1_1, ck;
-    var e_1, _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var allCookie;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getCookie)()];
             case 1:
-                allCookie = _b.sent();
-                try {
-                    for (allCookie_1 = __values(allCookie), allCookie_1_1 = allCookie_1.next(); !allCookie_1_1.done; allCookie_1_1 = allCookie_1.next()) {
-                        ck = allCookie_1_1.value;
-                        if (ck.includes('pt_key=app_open')) {
-                            cookiesArr = [ck];
-                            break;
-                        }
-                    }
-                }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (allCookie_1_1 && !allCookie_1_1.done && (_a = allCookie_1["return"])) _a.call(allCookie_1);
-                    }
-                    finally { if (e_1) throw e_1.error; }
-                }
-                if (cookiesArr.length === 0) {
-                    cookiesArr = allCookie.slice(0, 1);
-                }
+                allCookie = _a.sent();
+                cookiesArr = cookiesArr.filter(function (item) {
+                    return item.includes('app_open');
+                });
+                cookiesArr = allCookie.slice(0, 1);
                 step = 0;
                 return [4 /*yield*/, join()];
             case 2:
-                _b.sent();
+                _a.sent();
                 return [4 /*yield*/, help()];
             case 3:
-                _b.sent();
+                _a.sent();
                 cookiesArr = allCookie.slice(0, 9);
-                step = 1;
                 if (![0, 1].includes(new Date().getHours())) return [3 /*break*/, 5];
                 return [4 /*yield*/, join()];
             case 4:
-                _b.sent();
-                _b.label = 5;
+                _a.sent();
+                _a.label = 5;
             case 5: return [4 /*yield*/, getShareCodeSelf()];
             case 6:
-                _b.sent();
+                _a.sent();
                 return [4 /*yield*/, help()];
             case 7:
-                _b.sent();
+                _a.sent();
                 return [2 /*return*/];
         }
     });
 }); })();
 function join() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, index, value, i, e_2, e_3, e_4_1;
-        var e_4, _d;
+        var _a, _b, _c, index, value, i, e_1, e_2, e_3_1;
+        var e_3, _d;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
@@ -171,7 +154,7 @@ function join() {
                     }
                     return [3 /*break*/, 9];
                 case 7:
-                    e_2 = _e.sent();
+                    e_1 = _e.sent();
                     console.log('join error', res === null || res === void 0 ? void 0 : res.rtn_code);
                     return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
                 case 8:
@@ -182,8 +165,8 @@ function join() {
                     return [3 /*break*/, 3];
                 case 10: return [3 /*break*/, 12];
                 case 11:
-                    e_3 = _e.sent();
-                    console.log(e_3);
+                    e_2 = _e.sent();
+                    console.log(e_2);
                     return [3 /*break*/, 12];
                 case 12: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
                 case 13:
@@ -194,14 +177,14 @@ function join() {
                     return [3 /*break*/, 1];
                 case 15: return [3 /*break*/, 18];
                 case 16:
-                    e_4_1 = _e.sent();
-                    e_4 = { error: e_4_1 };
+                    e_3_1 = _e.sent();
+                    e_3 = { error: e_3_1 };
                     return [3 /*break*/, 18];
                 case 17:
                     try {
                         if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
                     }
-                    finally { if (e_4) throw e_4.error; }
+                    finally { if (e_3) throw e_3.error; }
                     return [7 /*endfinally*/];
                 case 18: return [2 /*return*/];
             }
@@ -210,8 +193,8 @@ function join() {
 }
 function help() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, index, value, me, remain, shareCodes_1, shareCodes_1_1, code, success, i, e_5_1, e_6, e_7_1;
-        var e_7, _d, e_5, _e;
+        var _a, _b, _c, index, value, me, remain, shareCodes_1, shareCodes_1_1, code, success, i, e_4_1, e_5, e_6_1;
+        var e_6, _d, e_4, _e;
         return __generator(this, function (_f) {
             switch (_f.label) {
                 case 0:
@@ -245,7 +228,7 @@ function help() {
                     _f.label = 6;
                 case 6:
                     _f.trys.push([6, 21, 22, 23]);
-                    shareCodes_1 = (e_5 = void 0, __values(shareCodes)), shareCodes_1_1 = shareCodes_1.next();
+                    shareCodes_1 = (e_4 = void 0, __values(shareCodes)), shareCodes_1_1 = shareCodes_1.next();
                     _f.label = 7;
                 case 7:
                     if (!!shareCodes_1_1.done) return [3 /*break*/, 20];
@@ -307,19 +290,19 @@ function help() {
                     return [3 /*break*/, 7];
                 case 20: return [3 /*break*/, 23];
                 case 21:
-                    e_5_1 = _f.sent();
-                    e_5 = { error: e_5_1 };
+                    e_4_1 = _f.sent();
+                    e_4 = { error: e_4_1 };
                     return [3 /*break*/, 23];
                 case 22:
                     try {
                         if (shareCodes_1_1 && !shareCodes_1_1.done && (_e = shareCodes_1["return"])) _e.call(shareCodes_1);
                     }
-                    finally { if (e_5) throw e_5.error; }
+                    finally { if (e_4) throw e_4.error; }
                     return [7 /*endfinally*/];
                 case 23: return [3 /*break*/, 25];
                 case 24:
-                    e_6 = _f.sent();
-                    console.log(e_6);
+                    e_5 = _f.sent();
+                    console.log(e_5);
                     return [3 /*break*/, 25];
                 case 25: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
                 case 26:
@@ -330,14 +313,14 @@ function help() {
                     return [3 /*break*/, 1];
                 case 28: return [3 /*break*/, 31];
                 case 29:
-                    e_7_1 = _f.sent();
-                    e_7 = { error: e_7_1 };
+                    e_6_1 = _f.sent();
+                    e_6 = { error: e_6_1 };
                     return [3 /*break*/, 31];
                 case 30:
                     try {
                         if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
                     }
-                    finally { if (e_7) throw e_7.error; }
+                    finally { if (e_6) throw e_6.error; }
                     return [7 /*endfinally*/];
                 case 31: return [2 /*return*/];
             }
@@ -348,8 +331,8 @@ function getShareCodeSelf(one) {
     var _a, _b, _c;
     if (one === void 0) { one = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var _d, _e, _f, index, value, e_8, e_9_1;
-        var e_9, _g;
+        var _d, _e, _f, index, value, e_7, e_8_1;
+        var e_8, _g;
         return __generator(this, function (_h) {
             switch (_h.label) {
                 case 0:
@@ -378,8 +361,8 @@ function getShareCodeSelf(one) {
                     shareCodesSelf.push(res.data.result.redpacketInfo.id);
                     return [3 /*break*/, 7];
                 case 6:
-                    e_8 = _h.sent();
-                    console.log('getShareCodeSelf error', e_8);
+                    e_7 = _h.sent();
+                    console.log('getShareCodeSelf error', e_7);
                     return [3 /*break*/, 7];
                 case 7: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
                 case 8:
@@ -390,14 +373,14 @@ function getShareCodeSelf(one) {
                     return [3 /*break*/, 3];
                 case 10: return [3 /*break*/, 13];
                 case 11:
-                    e_9_1 = _h.sent();
-                    e_9 = { error: e_9_1 };
+                    e_8_1 = _h.sent();
+                    e_8 = { error: e_8_1 };
                     return [3 /*break*/, 13];
                 case 12:
                     try {
                         if (_e && !_e.done && (_g = _d["return"])) _g.call(_d);
                     }
-                    finally { if (e_9) throw e_9.error; }
+                    finally { if (e_8) throw e_8.error; }
                     return [7 /*endfinally*/];
                 case 13:
                     (0, TS_USER_AGENTS_1.o2s)(shareCodesSelf);
@@ -430,8 +413,8 @@ function api(fn, body) {
                             'clientVersion': '10.5.4',
                             'osVersion': '-1'
                         }), {
-                            "origin": "https://h5.m.jd.com",
-                            "referer": "https://h5.m.jd.com/babelDiy/Zeus/2NUvze9e1uWf4amBhe1AV6ynmSuH/index.html",
+                            'origin': 'https://happy.m.jd.com',
+                            "referer": "https://happy.m.jd.com/babelDiy/zjyw/3ugedFa7yA6NhxLN5gw2L3PF9sQC/index.html",
                             'Content-Type': 'application/x-www-form-urlencoded',
                             "X-Requested-With": "com.jingdong.app.mall",
                             "User-Agent": ua,
