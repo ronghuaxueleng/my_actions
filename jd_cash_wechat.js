@@ -157,62 +157,63 @@ var Jd_cash_wechat = /** @class */ (function (_super) {
         });
     };
     Jd_cash_wechat.prototype.main = function (user) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var res, _a, _b, t, e_1_1, e_2;
-            var e_1, _c;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            var res, _c, _d, t, e_1_1, e_2;
+            var e_1, _e;
+            return __generator(this, function (_f) {
+                switch (_f.label) {
                     case 0:
                         this.user = user;
-                        _d.label = 1;
+                        _f.label = 1;
                     case 1:
-                        _d.trys.push([1, 17, , 18]);
+                        _f.trys.push([1, 17, , 18]);
                         return [4 /*yield*/, this.api('cash_mob_home', { "isLTRedPacket": "1" })];
                     case 2:
-                        res = _d.sent();
+                        res = _f.sent();
                         if (!(res.data.result.signedStatus !== 1)) return [3 /*break*/, 4];
                         console.log('开始签到');
                         return [4 /*yield*/, this.doSign()];
                     case 3:
-                        _d.sent();
+                        _f.sent();
                         console.log('签到成功');
-                        _d.label = 4;
+                        _f.label = 4;
                     case 4:
-                        _d.trys.push([4, 10, 11, 12]);
-                        _a = __values(res.data.result.taskInfos), _b = _a.next();
-                        _d.label = 5;
+                        _f.trys.push([4, 10, 11, 12]);
+                        _c = __values(res.data.result.taskInfos), _d = _c.next();
+                        _f.label = 5;
                     case 5:
-                        if (!!_b.done) return [3 /*break*/, 9];
-                        t = _b.value;
+                        if (!!_d.done) return [3 /*break*/, 9];
+                        t = _d.value;
                         if (!(t.doTimes !== t.times)) return [3 /*break*/, 8];
                         console.log(t.name);
                         return [4 /*yield*/, this.api('cash_doTask', { "type": t.type, "taskInfo": t.desc })];
                     case 6:
-                        res = _d.sent();
+                        res = _f.sent();
                         console.log(res.data.result.totalMoney);
                         return [4 /*yield*/, this.api('cash_mob_home', { "isLTRedPacket": "1" })];
                     case 7:
-                        res = _d.sent();
-                        _d.label = 8;
+                        res = _f.sent();
+                        _f.label = 8;
                     case 8:
-                        _b = _a.next();
+                        _d = _c.next();
                         return [3 /*break*/, 5];
                     case 9: return [3 /*break*/, 12];
                     case 10:
-                        e_1_1 = _d.sent();
+                        e_1_1 = _f.sent();
                         e_1 = { error: e_1_1 };
                         return [3 /*break*/, 12];
                     case 11:
                         try {
-                            if (_b && !_b.done && (_c = _a["return"])) _c.call(_a);
+                            if (_d && !_d.done && (_e = _c["return"])) _e.call(_c);
                         }
                         finally { if (e_1) throw e_1.error; }
                         return [7 /*endfinally*/];
                     case 12:
-                        if (!(new Date().getHours() >= 7 && new Date().getHours() <= 19 && res.data.result.limitTimeRedPacket.receiveStatus === '0')) return [3 /*break*/, 15];
+                        if (!(new Date().getHours() >= 7 && new Date().getHours() <= 19 && ((_b = (_a = res.data.result) === null || _a === void 0 ? void 0 : _a.limitTimeRedPacket) === null || _b === void 0 ? void 0 : _b.receiveStatus) === '0')) return [3 /*break*/, 15];
                         return [4 /*yield*/, this.api('cash_join_limited_redpacket', { "id": 5, "level": 3 })];
                     case 13:
-                        res = _d.sent();
+                        res = _f.sent();
                         if (res.data.bizCode === 0) {
                             console.log('开启成功');
                         }
@@ -221,7 +222,7 @@ var Jd_cash_wechat = /** @class */ (function (_super) {
                         }
                         return [4 /*yield*/, this.api('cash_mob_home', { "isLTRedPacket": "1" })];
                     case 14:
-                        res = _d.sent();
+                        res = _f.sent();
                         if (res.data.result.inviteCode && res.data.result.shareDate) {
                             this.shareCodeSelf.push({
                                 inviteCode: res.data.result.inviteCode,
@@ -232,10 +233,10 @@ var Jd_cash_wechat = /** @class */ (function (_super) {
                         return [3 /*break*/, 16];
                     case 15:
                         console.log('不在时间范围内');
-                        _d.label = 16;
+                        _f.label = 16;
                     case 16: return [3 /*break*/, 18];
                     case 17:
-                        e_2 = _d.sent();
+                        e_2 = _f.sent();
                         console.log('error', e_2.message);
                         return [3 /*break*/, 18];
                     case 18: return [2 /*return*/];
