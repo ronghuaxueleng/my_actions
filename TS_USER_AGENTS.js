@@ -153,9 +153,9 @@ function getFarmShareCode(cookie) {
 exports.getFarmShareCode = getFarmShareCode;
 function getCookie() {
     return __awaiter(this, void 0, void 0, function () {
-        var cookiesArr, jdCookieNode, _a, _b, keys;
-        var e_1, _c;
-        return __generator(this, function (_d) {
+        var cookiesArr, jdCookieNode, _a, _b, keys, ptpin_temp, uniqueCookieArr, cookiesArr_1, cookiesArr_1_1, cookie, UserName;
+        var e_1, _c, e_2, _d;
+        return __generator(this, function (_e) {
             cookiesArr = [];
             jdCookieNode = require('./jdCookie.js');
             try {
@@ -171,6 +171,25 @@ function getCookie() {
                 }
                 finally { if (e_1) throw e_1.error; }
             }
+            ptpin_temp = [], uniqueCookieArr = [];
+            try {
+                for (cookiesArr_1 = __values(cookiesArr), cookiesArr_1_1 = cookiesArr_1.next(); !cookiesArr_1_1.done; cookiesArr_1_1 = cookiesArr_1.next()) {
+                    cookie = cookiesArr_1_1.value;
+                    UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)[1]);
+                    if (!ptpin_temp.includes(UserName)) {
+                        ptpin_temp.push(UserName);
+                        uniqueCookieArr.push(cookie);
+                    }
+                }
+            }
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            finally {
+                try {
+                    if (cookiesArr_1_1 && !cookiesArr_1_1.done && (_d = cookiesArr_1["return"])) _d.call(cookiesArr_1);
+                }
+                finally { if (e_2) throw e_2.error; }
+            }
+            cookiesArr = uniqueCookieArr;
             console.log("\u5171".concat(cookiesArr.length, "\u4E2A\u4EAC\u4E1C\u8D26\u53F7\n"));
             return [2 /*return*/, cookiesArr];
         });
@@ -252,7 +271,7 @@ function randomWord(n) {
 exports.randomWord = randomWord;
 function getshareCodeHW(key) {
     return __awaiter(this, void 0, void 0, function () {
-        var shareCodeHW, i, data, e_2;
+        var shareCodeHW, i, data, e_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -273,7 +292,7 @@ function getshareCodeHW(key) {
                     }
                     return [3 /*break*/, 6];
                 case 4:
-                    e_2 = _a.sent();
+                    e_3 = _a.sent();
                     console.log("getshareCodeHW Error, Retry...");
                     return [4 /*yield*/, wait(getRandomNumberByRange(2000, 6000))];
                 case 5:
@@ -290,7 +309,7 @@ function getshareCodeHW(key) {
 exports.getshareCodeHW = getshareCodeHW;
 function getShareCodePool(key, num) {
     return __awaiter(this, void 0, void 0, function () {
-        var shareCode, i, data, e_3;
+        var shareCode, i, data, e_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -312,7 +331,7 @@ function getShareCodePool(key, num) {
                     }
                     return [3 /*break*/, 6];
                 case 4:
-                    e_3 = _a.sent();
+                    e_4 = _a.sent();
                     console.log("getShareCodePool Error, Retry...");
                     return [4 /*yield*/, wait(getRandomNumberByRange(2000, 6000))];
                 case 5:
