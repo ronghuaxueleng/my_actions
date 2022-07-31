@@ -40,8 +40,12 @@ if ($.isNode()) {
             }
             continue
         }
-        await main();
-        //if (i == 0 && $.flag) return;
+        try {
+            await main();
+        }catch (e) {
+            console.log(`好像账号黑号~~~`);
+        }
+        if ($.flag) return;
     }
 
 })().catch((e) => { $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '') }).finally(() => { $.done(); })
@@ -50,7 +54,7 @@ async function main() {
     $.runFlag = false;
     $.activityInfo = {};
     await takeRequest('showStarGiftInfo');
-    if (JSON.stringify($.activityInfo) === '{}') {
+    if($.bizCode == 'MP001'){
         console.log(`本期活动结束，等待下期。。。`);
         $.flag = true
         return;
@@ -161,6 +165,7 @@ function dealReturn(type, data) {
     }
     switch (type) {
         case 'showStarGiftInfo':
+            $.bizCode = data.data.bizCode;
             if (data.code === '0' && data.data && data.data.result) {
                 $.activityInfo = data.data.result;
             }
