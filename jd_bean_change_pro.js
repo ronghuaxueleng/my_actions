@@ -418,7 +418,7 @@ if(DisableIndex!=-1){
 
 						await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 							url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-						}, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
+						}, '\n\n本通知 By https://github.com/===4===/KR',TempMessage)
 					}
 					if ($.isNode() && allMessageMonth) {
 						await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
@@ -487,7 +487,7 @@ if(DisableIndex!=-1){
 				
 				await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 					url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-				}, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
+				}, '\n\n本通知 By https://github.com/===4===/KR',TempMessage)
 			}
 			if ($.isNode() && allMessageMonth) {
 				await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
@@ -503,7 +503,7 @@ if(DisableIndex!=-1){
 				allMessageGp2=strAllNotify+`\n`+allMessageGp2;
 			await notify.sendNotify(`${$.name}#2`, `${allMessageGp2}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
+			}, '\n\n本通知 By https://github.com/===4===/KR',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessageGp3) {
@@ -512,7 +512,7 @@ if(DisableIndex!=-1){
 				allMessageGp3=strAllNotify+`\n`+allMessageGp3;
 			await notify.sendNotify(`${$.name}#3`, `${allMessageGp3}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
+			}, '\n\n本通知 By https://github.com/===4===/KR',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessageGp4) {
@@ -521,7 +521,7 @@ if(DisableIndex!=-1){
 				allMessageGp4=strAllNotify+`\n`+allMessageGp4;
 			await notify.sendNotify(`${$.name}#4`, `${allMessageGp4}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
+			}, '\n\n本通知 By https://github.com/===4===/KR',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessage) {
@@ -531,7 +531,7 @@ if(DisableIndex!=-1){
 			
 			await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
+			}, '\n\n本通知 By https://github.com/===4===/KR',TempMessage)
 			await $.wait(10 * 1000);
 		}
 
@@ -718,20 +718,24 @@ async function showMsg() {
 			strsummary += `【当前京豆】${$.beanCount-$.beanChangeXi}豆(≈${(($.beanCount-$.beanChangeXi)/ 100).toFixed(2)}元)\n`;
 		}			
 	}
-	
+
 	if (EnableJxBeans) {
-		ReturnMessage += `【今日喜豆】收${$.todayinJxBean}豆`;		
-		if ($.todayOutJxBean != 0) {
-			ReturnMessage += `,支${$.todayOutJxBean}豆`;			
-		}
-		ReturnMessage += `\n`;		
-		ReturnMessage += `【昨日喜豆】收${$.inJxBean}豆`;		
-		if ($.OutJxBean != 0) {
-			ReturnMessage += `,支${$.OutJxBean}豆`;			
-		}
-		ReturnMessage += `\n`;		
-		ReturnMessage += `【当前喜豆】${$.xibeanCount}喜豆(≈${($.xibeanCount/ 100).toFixed(2)}元)\n`;
-		strsummary += `【当前喜豆】${$.xibeanCount}豆(≈${($.xibeanCount/ 100).toFixed(2)}元)\n`;
+	    if ($.todayinJxBean || $.todayOutJxBean) {
+	        ReturnMessage += `【今日喜豆】收${$.todayinJxBean}豆`;
+	        if ($.todayOutJxBean != 0) {
+	            ReturnMessage += `,支${$.todayOutJxBean}豆`;
+	        }
+	        ReturnMessage += `\n`;
+	    }
+	    if ($.inJxBean || $.OutJxBean) {
+	        ReturnMessage += `【昨日喜豆】收${$.inJxBean}豆`;
+	        if ($.OutJxBean != 0) {
+	            ReturnMessage += `,支${$.OutJxBean}豆`;
+	        }
+			ReturnMessage += `\n`;
+	    }	    
+	    ReturnMessage += `【当前喜豆】${$.xibeanCount}喜豆(≈${($.xibeanCount/ 100).toFixed(2)}元)\n`;
+	    strsummary += `【当前喜豆】${$.xibeanCount}豆(≈${($.xibeanCount/ 100).toFixed(2)}元)\n`;
 	}
 
 
@@ -1018,7 +1022,7 @@ async function showMsg() {
 		if(strAllNotify)
 			ReturnMessage=strAllNotify+`\n`+ReturnMessage;
 		
-		await notify.sendNotifybyWxPucher(strTitle, `${ReturnMessage}`, `${$.UserName}`,'\n\n本通知 By https://github.com/KingRan/KR',strsummary);
+		await notify.sendNotifybyWxPucher(strTitle, `${ReturnMessage}`, `${$.UserName}`,'\n\n本通知 By https://github.com/===4===/KR',strsummary);
 	}
 
 	//$.msg($.name, '', ReturnMessage , {"open-url": "https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean"});
@@ -1047,9 +1051,9 @@ async function bean() {
 	            if (detailList && detailList.length > 0) {
 	                for (let item of detailList) {
 	                    const date = item.date.replace(/-/g, '/') + "+08:00";
-	                    if (new Date(date).getTime() >= tm1 && (!item['eventMassage'].includes("退还") && !item['eventMassage'].includes('扣赠'))) {
+	                    if (new Date(date).getTime() >= tm1 && (!item['eventMassage'].includes("退还") && !item['eventMassage'].includes("物流") && !item['eventMassage'].includes('扣赠'))) {
 	                        todayArr.push(item);
-	                    } else if (tm <= new Date(date).getTime() && new Date(date).getTime() < tm1 && (!item['eventMassage'].includes("退还") && !item['eventMassage'].includes('扣赠'))) {
+	                    } else if (tm <= new Date(date).getTime() && new Date(date).getTime() < tm1 && (!item['eventMassage'].includes("退还") && !item['eventMassage'].includes("物流") && !item['eventMassage'].includes('扣赠'))) {
 	                        //昨日的
 	                        yesterdayArr.push(item);
 	                    } else if (tm > new Date(date).getTime()) {
@@ -1694,7 +1698,7 @@ function getCoupon() {
             url: `https://wq.jd.com/activeapi/queryjdcouponlistwithfinance?state=1&wxadd=1&filterswitch=1&_=${Date.now()}&sceneval=2&g_login_type=1&callback=jsonpCBKB&g_ty=ls`,
             headers: {
                 'authority': 'wq.jd.com',
-                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                "User-Agent": "jdapp;iPhone;10.1.2;15.0;network/wifi;Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1",
                 'accept': '*/*',
                 'referer': 'https://wqs.jd.com/',
                 'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
@@ -1703,7 +1707,7 @@ function getCoupon() {
 			timeout: 10000
         }
         $.get(options, async(err, resp, data) => {
-            try {
+            try {				
                 data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1]);
                 let couponTitle = '';
                 let couponId = '';

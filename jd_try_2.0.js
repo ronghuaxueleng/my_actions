@@ -1,6 +1,6 @@
 /*
  * 2022-07-20 修复获取试用列表风控问题；  
- * By https://github.com/6dylan6/jdpro/
+ * By https://github.com/11111129/jdpro/
  * 基于X1a0He版本修改
  * @Address: https://github.com/X1a0He/jd_scripts_fixed/blob/main/jd_try_xh.js
 

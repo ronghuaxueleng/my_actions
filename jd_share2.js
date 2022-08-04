@@ -1,5 +1,5 @@
 /*
-https://t.me/okyydsnb
+https://t.me/11111130nb
 活动可能只限制，店铺会员参与， 不会自动入会。
 export jd_fxyl_activityId="xxx" 活动id
 export OWN_COOKIE_NUM="4" 需要助力数量  非必须

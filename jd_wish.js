@@ -1,8 +1,22 @@
 /*
 众筹许愿池
 活动入口：京东-京东众筹-众筹许愿池
-40 0,2 * * * jd_wish.js
-*/
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+===============Quantumultx===============
+[task_local]
+#众筹许愿池
+40 0,2 * * * https://raw.githubusercontent.com/===4===/JDJB/main/jd_wish.js, tag=众筹许愿池, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+
+================Loon==============
+[Script]
+cron "40 0,2 * * *" script-path=https://raw.githubusercontent.com/===4===/JDJB/main/jd_wish.js,tag=众筹许愿池
+
+===============Surge=================
+众筹许愿池 = type=cron,cronexp="40 0,2 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/===4===/JDJB/main/jd_wish.js
+
+============小火箭=========
+众筹许愿池 = type=cron,script-path=https://raw.githubusercontent.com/===4===/JDJB/main/jd_wish.js, cronexpr="40 0,2 * * *", timeout=3600, enable=true
+ */
 const $ = new Env('众筹许愿池');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -36,7 +50,7 @@ if ($.isNode()) {
       $.isLogin = true;
       $.nickName = '';
       message = '';
-      await TotalBean();
+      //await TotalBean();
       console.log(`\n*******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -58,7 +72,7 @@ if ($.isNode()) {
     if ($.isNode()) await notify.sendNotify($.name, allMessage);
     $.msg($.name, '', allMessage)
   }
-  let res = await getAuthorShareCode('https://gitee.com/KingRan521/JD-Scripts/raw/master/shareCodes/wish.json')
+  let res = await getAuthorShareCode('https://gitee.com/===4===521/JD-Scripts/raw/master/shareCodes/===27===')
   $.shareCode = [...$.shareCode, ...(res || [])]
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
