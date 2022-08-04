@@ -1,6 +1,6 @@
 #!/bin/bash
 ## Author: SuperManito
-## Modified: 2022-05-10
+## Modified: 2022-06-22
 
 ShellDir=${WORK_DIR}/shell
 . $ShellDir/share.sh
@@ -1020,7 +1020,7 @@ function Accounts_Control() {
             FormatPin=$(echo ${pt_pin} | perl -pe '{s|[\.\<\>\/\[\]\!\@\#\$\%\^\&\*\(\)\-\+]|\\$&|g;}')
             ## 转义 pt_pin 中的 UrlEncode 输出中文
             EscapePin=$(printf $(echo ${FormatPin} | perl -pe "s|%|\\\x|g;"))
-            echo -e "${BLUE}${EscapePin}${PLAIN}\n"
+            echo -e "账号：${BLUE}${EscapePin}${PLAIN}\n"
             ## 定义账号状态
             State="$(CheckCookie $(grep -E "Cookie[1-9].*${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}'))"
             ## 查询上次更新时间并计算过期时间
@@ -1136,7 +1136,7 @@ function Accounts_Control() {
                 $(cat $FileAccountConf | jq '.[] | {pt_pin:.pt_pin,}' | grep -F "\"pt_pin\":" | grep -v "ptpin的值" | awk -F '\"' '{print$4}' | grep -v '^$')
             )
             if [[ ${#pt_pin_array[@]} -ge 1 ]]; then
-                UserNum=1
+                local num=1
                 ## 定义日志文件路径
                 LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S").log"
                 echo -e "\n$WORKING 检测到已配置 ${BLUE}${#pt_pin_array[@]}${PLAIN} 个账号，开始更新...\n"
@@ -1167,9 +1167,9 @@ function Accounts_Control() {
                     ## 判断结果
                     if [[ $(grep "Cookie => \[${FormatPin}\]  更新成功" ${LogFile}) ]]; then
                         ## 格式化输出
-                        printf "%-3s ${BLUE}%-$((20 + ${EscapePinLength}))s${PLAIN} ${GREEN}%-s${PLAIN}\n" "$UserNum." "${EscapePin}" "${SUCCESS_ICON}"
+                        printf "%-3s ${BLUE}%-$((20 + ${EscapePinLength}))s${PLAIN} ${GREEN}%-s${PLAIN}\n" "$num." "${EscapePin}" "${SUCCESS_ICON}"
                     else
-                        printf "%-3s ${BLUE}%-$((20 + ${EscapePinLength}))s${PLAIN} ${RED}%-s${PLAIN}\n" "$UserNum." "${EscapePin}" "${FAIL_ICON}"
+                        printf "%-3s ${BLUE}%-$((20 + ${EscapePinLength}))s${PLAIN} ${RED}%-s${PLAIN}\n" "$num." "${EscapePin}" "${FAIL_ICON}"
                         ## 账号更新异常告警与状态检测
                         local UserNum=$(grep -E "Cookie[0-9]{1,3}=.*pt_pin=${FormatPin}" $FileConfUser | awk -F '=' '{print$1}' | awk -F 'Cookie' '{print$2}')
                         local CheckTmp="$(curl -s --noproxy "*" "${INTERFACE_URL}" -H "cookie: wskey=${WS_KEY_TMP}" | jq '.retcode' | sed "s/\"//g")"
@@ -1189,7 +1189,7 @@ function Accounts_Control() {
                             echo ''
                         fi
                     fi
-                    let UserNum++
+                    let num++
                 done
                 ## 优化日志排版
                 sed -i '/更新Cookies,.*\!/d; /^$/d; s/===.*//g' ${LogFile}
@@ -1528,7 +1528,6 @@ function Add_OwnRepo() {
         grep -vwf $ListOwnScripts $ListCrontabUser | grep -Eq " $TaskCmd $OwnDir"
         local ExitStatus=$?
         [[ $ExitStatus -eq 0 ]] && grep -vwf $ListOwnScripts $ListCrontabUser | grep -E " $TaskCmd $OwnDir" | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" | sort -u >$ListCrontabOwnTmp
-        [ ! -f $ListCrontabOwnTmp ] && touch $ListCrontabOwnTmp
         rm -rf $LogTmpDir/own*.list
         for ((i = 0; i < ${#array_own_scripts_path[*]}; i++)); do
             cd ${array_own_scripts_path[i]}
@@ -1545,7 +1544,7 @@ function Add_OwnRepo() {
                 if [[ -z ${OwnRepoCronShielding} ]]; then
                     local Matching=$(ls *.js 2>/dev/null)
                 else
-                    local ShieldTmp=$(echo ${OwnRepoCronShielding} | perl -pe '{s|\" |\"|g; s| \"|\"|g; s# #\|#g;}')
+                    local ShieldTmp=$(echo ${OwnRepoCronShielding} | perl -pe '{s|^ ||g; s| $||g; s# #\|#g;}')
                     local Matching=$(ls *.js 2>/dev/null | grep -Ev ${ShieldTmp})
                 fi
                 if [[ $(ls *.js 2>/dev/null) ]]; then
@@ -1713,30 +1712,35 @@ function Add_RawFile() {
             DownloadUrl=${InputContent}
         fi
 
-        ## 处理仓库地址
-        FormatUrl=$(echo ${DownloadUrl} | perl -pe "{s|${RawFileName}||g;}" | awk -F '.com' '{print$NF}' | sed 's/.$//')
-        ## 判断仓库平台
-        case $(echo ${DownloadUrl} | grep -Eo "github|gitee|gitlab") in
-        github)
-            RepoPlatformUrl="https://github.com"
-            RepoBranch=$(echo $FormatUrl | awk -F '/' '{print$4}')
-            ReformatUrl=$(echo $FormatUrl | sed "s|$RepoBranch|tree/$RepoBranch|g")
-            ## 定义脚本来源仓库地址链接
-            RepoUrl="${RepoPlatformUrl}${ReformatUrl}"
-            ;;
-        gitee)
-            RepoPlatformUrl="https://gitee.com"
-            ReformatUrl=$(echo $FormatUrl | sed "s|/raw/|/tree/|g")
-            ## 定义脚本来源仓库地址链接
-            RepoUrl="${RepoPlatformUrl}${ReformatUrl}"
-            ;;
-        gitlab)
-            ## 定义脚本来源仓库地址链接
-            RepoUrl=${DownloadUrl}
-            ;;
-        esac
-        ## 拉取脚本
-        echo -e "\n$WORKING 开始从仓库 ${BLUE}${RepoUrl}${PLAIN} 下载 ${BLUE}${RawFileName}${PLAIN} 脚本..."
+        echo ${DownloadUrl} | grep -E "git.*\.io/" -q
+        if [ $? -eq 0 ]; then
+            echo -e "\n$WORKING 开始从网站 ${BLUE}$(echo ${InputContent} | perl -pe "{s|\/${RawFileName}||g;}")${PLAIN} 下载 ${BLUE}${RawFileName}${PLAIN} 脚本..."
+        else
+            ## 处理仓库地址
+            FormatUrl=$(echo ${DownloadUrl} | perl -pe "{s|${RawFileName}||g;}" | awk -F '.com' '{print$NF}' | sed 's/.$//')
+            ## 判断仓库平台
+            case $(echo ${DownloadUrl} | grep -Eo "github|gitee|gitlab") in
+            github)
+                RepoPlatformUrl="https://github.com"
+                RepoBranch=$(echo $FormatUrl | awk -F '/' '{print$4}')
+                ReformatUrl=$(echo $FormatUrl | sed "s|$RepoBranch|tree/$RepoBranch|g")
+                ## 定义脚本来源仓库地址链接
+                RepoUrl="${RepoPlatformUrl}${ReformatUrl}"
+                ;;
+            gitee)
+                RepoPlatformUrl="https://gitee.com"
+                ReformatUrl=$(echo $FormatUrl | sed "s|/raw/|/tree/|g")
+                ## 定义脚本来源仓库地址链接
+                RepoUrl="${RepoPlatformUrl}${ReformatUrl}"
+                ;;
+            gitlab)
+                ## 定义脚本来源仓库地址链接
+                RepoUrl=${DownloadUrl}
+                ;;
+            esac
+            ## 拉取脚本
+            echo -e "\n$WORKING 开始从仓库 ${BLUE}${RepoUrl}${PLAIN} 下载 ${BLUE}${RawFileName}${PLAIN} 脚本..."
+        fi
         wget -q --no-check-certificate -O "$RawDir/${RawFileName}.new" ${DownloadUrl} -T 20
     else
         ## 拉取脚本
@@ -1950,7 +1954,7 @@ function Manage_Env() {
         grep "# 可在下方编写您需要用到的额外环境变量" $FileConfUser -q
         ## 插入内容
         if [ $? -eq 0 ]; then
-            perl -i -pe "s|(# 可在下方编写您需要用到的额外环境变量.+\n)|\1\n${FullContent}\n|" $FileConfUser
+            perl -i -pe "s|(# 可在下方编写您需要用到的额外环境变量.+\n)|\1\n${FullContent}|" $FileConfUser
         else
             sed -i "9 i ${FullContent}" $FileConfUser
         fi
@@ -2386,7 +2390,7 @@ function List_Local_Scripts() {
             local NumTmp=0
             for ((i = 0; i < ${#ListFiles[*]}; i++)); do
                 if [ -f ${ListFiles[i]} ]; then
-                    Query_Name ${ListFiles[i]}
+                    Query_ScriptName ${ListFiles[i]}
                     let NumTmp++
                     printf "%-5s %-22s %s\n" "[$NumTmp]" "${ListFiles[i]}" "${ScriptName}"
                 fi
@@ -2438,7 +2442,7 @@ function List_Local_Scripts() {
                 FileName=${ListFiles[i]##*/}
                 FileDir=$(echo ${ListFiles[i]} | awk -F "$FileName" '{print$1}')
                 cd $FileDir
-                Query_Name $FileName
+                Query_ScriptName $FileName
                 printf "%-6s %-50s %s\n" "[$(($i + 1))]" "${ListFiles[i]:8}" "${ScriptName}"
             done
         fi
@@ -2454,7 +2458,7 @@ function List_Local_Scripts() {
             if [ ${#ListFiles[*]} != 0 ]; then
                 echo -e "\n❖ 第三方脚本："
                 for ((i = 0; i < ${#ListFiles[*]}; i++)); do
-                    Query_Name ${ListFiles[i]}
+                    Query_ScriptName ${ListFiles[i]}
                     printf "%-5s %-28s   %s\n" "[$(($i + 1))]" "${ListFiles[i]}" "${ScriptName}"
                 done
             fi
@@ -2501,9 +2505,9 @@ function List_Local_Scripts() {
         if [ -d $WorkDir ]; then
             if [ "$(ls -A $WorkDir | grep -E "${ScriptType}")" = "" ]; then
                 if [ "$(ls -A $WorkDir)" = "" ]; then
-                    echo -e "\n$ERROR 目标路径 ${BLUE}$WorkDir${PLAIN} 为空！\n"
+                    echo -e "\n$ERROR 路径 ${BLUE}$WorkDir${PLAIN} 为空！\n"
                 else
-                    echo -e "\n$FAIL 在目标路径 ${BLUE}$WorkDir${PLAIN} 下未检测到任何脚本！\n"
+                    echo -e "\n$FAIL 在 ${BLUE}$WorkDir${PLAIN} 路径下未检测到任何脚本！\n"
                 fi
                 exit ## 终止退出
             fi
@@ -2513,23 +2517,34 @@ function List_Local_Scripts() {
         fi
 
         cd $WorkDir
+        ## 打印仓库地址
+        if [ -d .git ]; then
+            local RemoteUrl=$(git remote -v | head -n 1 | awk -F ' ' '{print$2}')
+            echo "$RemoteUrl" | grep "git@" -q
+            if [ $? -ne 0 ]; then
+                echo -e "\n❖ 远程仓库地址: ${BLUE}${RemoteUrl%\.*}${PLAIN}"
+            fi
+        fi
         local ListFiles=($(
             ls | grep -E "${ScriptType}" | grep -Ev "${ShieldingKeywords}"
         ))
         [ ${#ListFiles[*]} = 0 ] && exit ## 终止退出
-        echo -e "\n❖ 检测到的脚本："
-        echo $WorkDir | grep -Eq "^$OwnDir.*"
-        if [ $? -eq 0 ]; then
-            for ((i = 0; i < ${#ListFiles[*]}; i++)); do
-                Query_Name ${ListFiles[i]}
-                printf "%-6s %-50s %s\n" "[$(($i + 1))]" "${ListFiles[i]}" "${ScriptName}"
-            done
+        if [[ ${#ListFiles[*]} -ge "10" ]]; then
+            if [[ ${#ListFiles[*]} -ge "100" ]]; then
+                TmpNum="3"
+            else
+                TmpNum="2"
+            fi
         else
-            for ((i = 0; i < ${#ListFiles[*]}; i++)); do
-                Query_Name ${ListFiles[i]}
-                printf "%-5s %-28s   %s\n" "[$(($i + 1))]" "${ListFiles[i]}" "${ScriptName}"
-            done
+            TmpNum="1"
         fi
+        printf "\n${BLUE}%$((13 + ${TmpNum}))s${PLAIN} ${BLUE}%40s${PLAIN} ${BLUE}%s${PLAIN} ${BLUE}%s${PLAIN}\n" "[脚本名]" "[修改时间]" " [大小]" "[活动名称]"
+        for ((i = 0; i < ${#ListFiles[*]}; i++)); do
+            Query_ScriptName ${ListFiles[i]}
+            Query_ScriptSize ${ListFiles[i]}
+            Query_ScriptEditTimes ${ListFiles[i]}
+            printf "%${TmpNum}s  %-34s %s %5s  %s\n" "$(($i + 1))" "${ListFiles[i]}" "${ScriptEditTimes}" "${ScriptSize}" "${ScriptName}"
+        done
     }
 
     case $# in

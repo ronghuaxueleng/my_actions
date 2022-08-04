@@ -1,6 +1,6 @@
 #!/bin/bash
 ## Author: SuperManito
-## Modified: 2022-03-20
+## Modified: 2022-06-09
 
 ## 目录
 RootDir=${WORK_DIR}
@@ -88,9 +88,9 @@ EXAMPLE="[${GREEN}参考命令${PLAIN}]"
 TIPS="[${GREEN}友情提示${PLAIN}]"
 COMMAND_ERROR="$ERROR 命令错误，请确认后重新输入！"
 TOO_MANY_COMMANDS="$ERROR 输入命令过多，请确认后重新输入！"
-RawDirUtils="jdCookie\.js|USER_AGENTS|sendNotify\.js|node_modules|\.json\b"
-ShieldingScripts="\.json\b|jd_update\.js|jd_env_copy\.js|index\.js|ql\.js|jd_enen\.js|jd_disable\.py|jd_updateCron\.ts"
-ShieldingKeywords="AGENTS|Cookie|cookie|Token|ShareCodes|sendNotify|^JDJR|Validator|validate|ZooFaker|MovementFaker|tencentscf|^api_test|^app\.|^main\.|jdEnv|${ShieldingScripts}"
+ShieldingScripts="jd_update\.js|jd_env_copy\.js|index\.js|ql\.js|jd_enen\.js|jd_disable\.py|jd_updateCron\.ts|jd_scripts_check_dependence\.py|jd_UpdateUIDtoRemark\.js|magic\.js|magic\.py|test\.js|jd_wskey\.py|h5\.js"
+ShieldingKeywords="\.json\b|AGENTS|^TS_|Cookie|cookie|Token|ShareCodes|sendNotify\.|^JDJR|Validator|validate|ZooFaker|MovementFaker|tencentscf|^api_test|^app\.|^main\.|\.bak\b|jdEnv|${ShieldingScripts}"
+RawDirUtils="node_modules|${ShieldingKeywords}"
 CoreFiles="jdCookie.js USER_AGENTS.js"
 ScriptsDirReplaceFiles=""
 
@@ -180,6 +180,29 @@ function Import_Config_Not_Check() {
     if [ -f $FileConfUser ]; then
         . $FileConfUser >/dev/null 2>&1
     fi
+}
+
+## URL编码
+function UrlEncode() {
+    local LANG=C
+    local length="${#1}"
+    i=0
+    while :; do
+        [ $length -gt $i ] && {
+            local c="${1:$i:1}"
+            case $c in
+            [a-zA-Z0-9.~_-]) printf "$c" ;;
+            *) printf '%%%02X' "'$c" ;;
+            esac
+        } || break
+        let i++
+    done
+}
+
+## URL解码
+function UrlDecode() {
+    u="${1//+/ }"
+    echo -e "${u//%/\\x}"
 }
 
 ## 输出命令错误提示
@@ -293,8 +316,12 @@ function Synchronize_Crontab() {
     fi
 }
 
+function b() {
+    echo "$(printf "$1" | base64 -d)"
+}
+
 ## 查询脚本名，$1 为脚本名
-function Query_Name() {
+function Query_ScriptName() {
     local FileName=$1
     grep "\$ \=" $FileName | grep -Eiq ".*Env"
     if [ $? -eq 0 ]; then
@@ -307,6 +334,63 @@ function Query_Name() {
     else
         ScriptName="<未知>"
     fi
+}
+
+## 查询脚本大小，$1 为脚本名
+function Query_ScriptSize() {
+    local FileName=$1
+    ScriptSize=$(ls -lth | grep "\b$FileName\b" | awk -F ' ' '{print$5}')
+}
+
+## 查询脚本修改时间，$1 为脚本名
+function Query_ScriptEditTimes() {
+    local FileName=$1
+    local Data=$(ls -lth | grep "\b$FileName\b" | awk -F 'root' '{print$NF}')
+    local MonthTmp=$(echo $Data | awk -F ' ' '{print$2}')
+    case $MonthTmp in
+    Jan)
+        Month="01"
+        ;;
+    Feb)
+        Month="02"
+        ;;
+    Mar)
+        Month="03"
+        ;;
+    Apr)
+        Month="04"
+        ;;
+    May)
+        Month="05"
+        ;;
+    Jun)
+        Month="06"
+        ;;
+    Jul)
+        Month="07"
+        ;;
+    Aug)
+        Month="08"
+        ;;
+    Sept)
+        Month="09"
+        ;;
+    Oct)
+        Month="10"
+        ;;
+    Nov)
+        Month="11"
+        ;;
+    Dec)
+        Month="12"
+        ;;
+    esac
+    local Day=$(echo $Data | awk -F ' ' '{print$3}')
+    if [[ $Day -lt "10" ]]; then
+        Day="0$Day"
+    fi
+    local Time=$(echo $Data | awk -F ' ' '{print$4}')
+    ScriptEditTimes="$Month-$Day $Time"
 }
 
 ## 命令帮助
@@ -345,7 +429,7 @@ function Help() {
  ❋ 基本命令注释：
     ${BLUE}<name>${PLAIN} 脚本名（仅限scripts目录）;  ${BLUE}<path>${PLAIN} 相对路径或绝对路径;  ${BLUE}<url>${PLAIN} 脚本链接地址;  ${BLUE}<cmd>${PLAIN} 固定可选的子命令
 
- ❋ 用于执行脚本的可选参数： 
+ ❋ 用于执行脚本的可选参数：
     ${BLUE}-l${PLAIN} | ${BLUE}--loop${PLAIN}          循环运行，连续多次的执行脚本，参数后需跟循环次数
     ${BLUE}-m${PLAIN} | ${BLUE}--mute${PLAIN}          静默运行，不推送任何通知消息
     ${BLUE}-w${PLAIN} | ${BLUE}--wait${PLAIN}          等待执行，等待指定时间后再运行任务，参数后需跟时间值

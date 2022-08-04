@@ -406,28 +406,23 @@ app.get('/api/captcha', function (req, res) {
  */
 async function ip2Address(ip) {
     try {
-        const {
-            body
-        } = await got.get(`https://ip.cn/api/index?ip=${ip}&type=1`, {
-            encoding: 'utf-8',
+        const {body} = await got(`http://ip.360.cn/IPShare/info?ip=${ip}`, {
             responseType: 'json',
             timeout: 2000,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.53',
+                Referer: 'http://ip.360.cn/',
+                Host: 'ip.360.cn',
+            },
         });
-        if (body.code === 0 && body.address) {
-            let address = body.address;
-            if (address.indexOf("内网IP") > -1) {
-                return {
-                    ip: ip,
-                    address: "局域网"
-                };
-            }
-            let type = address.substring(address.lastIndexOf(" "));
-            address = address.replace(type, '').replace(/\s*/g, '');
-            return {
-                ip: ip,
-                address: address + type
-            };
-        }
+        let address = body.location;
+        address === '* ' ? '未知' : address;
+        address = address.replace(/\t/g, ' ');
+
+        return {
+            ip: ip,
+            address: address,
+        };
     } catch (e) {
         console.error("IP 转为地址失败", e);
     }
@@ -489,9 +484,9 @@ app.post('/api/auth', async function (request, response) {
             con['authErrorCount'] = 0;
             //记录本次登录信息
             await ip2Address(getClientIP(request)).then(({
-                ip,
-                address
-            }) => {
+                                                             ip,
+                                                             address
+                                                         }) => {
                 con.lastLoginInfo = {
                     loginIp: ip,
                     loginAddress: address,
@@ -600,7 +595,6 @@ app.get('/api/scripts', function (request, response) {
 /**
  * save scripts
  */
-
 app.post('/api/scripts/save', function (request, response) {
     let postContent = request.body.content;
     let postFile = request.body.name;
@@ -737,7 +731,7 @@ app.post('/api/sms/checkCode', async function (request, response) {
 
 
 /**
- * 更新已经存在的人的cookie & 自动添加新用户
+ * 更新已经存在的cookie & 自动添加新用户
  *
  * {"cookie":"","userMsg":""}
  * */
@@ -805,22 +799,6 @@ app.get('/openApi/count', function (request, response) {
 });
 
 /**
- * 修改账号排序
- * body: {"ptPin":"", "sort":1}
- * */
-app.post('/openApi/account/sort', function (request, response) {
-    try {
-        let {
-            ptPin,
-            sort
-        } = request.body;
-        response.send(API_STATUS_CODE.okData(getCount()))
-    } catch (e) {
-        response.send(API_STATUS_CODE.fail(e.message));
-    }
-});
-
-/**
  * CK 回调
  * Body 内容为 {
             ck: "",
@@ -854,9 +832,10 @@ try {
     const extraServer = require(extraServerFile);
     if (typeof extraServer === 'function') {
         extraServer(app);
-        console.log('自定义api初始化成功');
+        console.log('用户自定义API => 初始化成功');
     }
-} catch (e) {}
+} catch (e) {
+}
 
 app.listen(5678, '0.0.0.0', () => {
     console.log('应用正在监听 5678 端口!');

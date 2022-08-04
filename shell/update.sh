@@ -1,6 +1,6 @@
 #!/bin/bash
 ## Author: SuperManito
-## Modified: 2022-04-27
+## Modified: 2022-05-26
 
 ShellDir=${WORK_DIR}/shell
 . $ShellDir/share.sh
@@ -134,8 +134,8 @@ function Gen_Own_Dir_And_Path() {
 ## 生成 Scripts仓库的定时任务清单，内容为去掉后缀的脚本名
 function Gen_ListTask() {
     Make_Dir $LogTmpDir
-    grep -E "node.+j[drx]_\w+\.js" $ListCronScripts | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >$ListTaskScripts
-    grep -E " $TaskCmd j[drx]_\w+" $ListCrontabUser | perl -pe "s|.*$TaskCmd (j[drx]_\w+).*|\1|" | sort -u >$ListTaskUser
+    grep -E "node.+j[drx]_\w+\.js" $ListCronScripts | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | grep -v "$(b amRfNjE4X3JlZAo=)" | sort -u >$ListTaskScripts
+    grep -E " $TaskCmd j[drx]_\w+" $ListCrontabUser | perl -pe "s|.*$TaskCmd (j[drx]_\w+).*|\1|" | grep -v "$(b amRfNjE4X3JlZAo=)" | sort -u >$ListTaskUser
 }
 
 ## 生成 own 脚本的绝对路径清单
@@ -148,7 +148,6 @@ function Gen_ListOwn() {
     grep -vwf $ListOwnScripts $ListCrontabUser | grep -Eq " $TaskCmd $OwnDir"
     local ExitStatus=$?
     [[ $ExitStatus -eq 0 ]] && grep -vwf $ListOwnScripts $ListCrontabUser | grep -E " $TaskCmd $OwnDir" | perl -pe "s|.*$TaskCmd ([^\s]+)( .+\|$)|\1|" | sort -u >$ListCrontabOwnTmp
-    [ ! -f $ListCrontabOwnTmp ] && touch $ListCrontabOwnTmp
     rm -rf $LogTmpDir/own*.list
     for ((i = 0; i < ${#array_own_scripts_path[*]}; i++)); do
         cd ${array_own_scripts_path[i]}
@@ -165,7 +164,7 @@ function Gen_ListOwn() {
             if [[ -z ${OwnRepoCronShielding} ]]; then
                 local Matching=$(ls *.js 2>/dev/null)
             else
-                local ShieldTmp=$(echo ${OwnRepoCronShielding} | perl -pe '{s|\" |\"|g; s| \"|\"|g; s# #\|#g;}')
+                local ShieldTmp=$(echo ${OwnRepoCronShielding} | perl -pe '{s|^ ||g; s| $||g; s# #\|#g;}')
                 local Matching=$(ls *.js 2>/dev/null | grep -Ev ${ShieldTmp})
             fi
             if [[ $(ls *.js 2>/dev/null) ]]; then
@@ -490,30 +489,35 @@ function Update_RawFile() {
                 DownloadUrl=${OwnRawFile[i]}
             fi
 
-            ## 处理仓库地址
-            FormatUrl=$(echo ${DownloadUrl} | perl -pe "{s|${RawFileName[$i]}||g;}" | awk -F '.com' '{print$NF}' | sed 's/.$//')
-            ## 判断仓库平台
-            case $(echo ${DownloadUrl} | grep -Eo "github|gitee|gitlab") in
-            github)
-                RepoPlatformUrl="https://github.com"
-                RepoBranch=$(echo $FormatUrl | awk -F '/' '{print$4}')
-                ReformatUrl=$(echo $FormatUrl | sed "s|$RepoBranch|tree/$RepoBranch|g")
-                ## 定义脚本来源仓库地址链接
-                RepoUrl="${RepoPlatformUrl}${ReformatUrl}"
-                ;;
-            gitee)
-                RepoPlatformUrl="https://gitee.com"
-                ReformatUrl=$(echo $FormatUrl | sed "s|/raw/|/tree/|g")
-                ## 定义脚本来源仓库地址链接
-                RepoUrl="${RepoPlatformUrl}${ReformatUrl}"
-                ;;
-            gitlab)
-                ## 定义脚本来源仓库地址链接
-                RepoUrl=${DownloadUrl}
-                ;;
-            esac
-            ## 拉取脚本
-            echo -e "\n$WORKING 开始从仓库 ${BLUE}${RepoUrl}${PLAIN} 下载 ${BLUE}${RawFileName[$i]}${PLAIN} 脚本..."
+            echo ${DownloadUrl} | grep -E "git.*\.io/" -q
+            if [ $? -eq 0 ]; then
+                echo -e "\n$WORKING 开始从网站 ${BLUE}$(echo ${OwnRawFile[i]} | perl -pe "{s|\/${RawFileName[$i]}||g;}")${PLAIN} 下载 ${BLUE}${RawFileName[$i]}${PLAIN} 脚本..."
+            else
+                ## 处理仓库地址
+                FormatUrl=$(echo ${DownloadUrl} | perl -pe "{s|${RawFileName[$i]}||g;}" | awk -F '.com' '{print$NF}' | sed 's/.$//')
+                ## 判断仓库平台
+                case $(echo ${DownloadUrl} | grep -Eo "github|gitee|gitlab") in
+                github)
+                    RepoPlatformUrl="https://github.com"
+                    RepoBranch=$(echo $FormatUrl | awk -F '/' '{print$4}')
+                    ReformatUrl=$(echo $FormatUrl | sed "s|$RepoBranch|tree/$RepoBranch|g")
+                    ## 定义脚本来源仓库地址链接
+                    RepoUrl="${RepoPlatformUrl}${ReformatUrl}"
+                    ;;
+                gitee)
+                    RepoPlatformUrl="https://gitee.com"
+                    ReformatUrl=$(echo $FormatUrl | sed "s|/raw/|/tree/|g")
+                    ## 定义脚本来源仓库地址链接
+                    RepoUrl="${RepoPlatformUrl}${ReformatUrl}"
+                    ;;
+                gitlab)
+                    ## 定义脚本来源仓库地址链接
+                    RepoUrl=${DownloadUrl}
+                    ;;
+                esac
+                ## 拉取脚本
+                echo -e "\n$WORKING 开始从仓库 ${BLUE}${RepoUrl}${PLAIN} 下载 ${BLUE}${RawFileName[$i]}${PLAIN} 脚本..."
+            fi
             wget -q --no-check-certificate -O "$RawDir/${RawFileName[$i]}.new" ${DownloadUrl} -T 20
         else
             ## 拉取脚本

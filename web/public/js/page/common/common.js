@@ -119,18 +119,8 @@ let MenuTools = {
         customClass: "highlight",
         subMenuCustomClass: "double",
         bottomContent: '<div class="content">' +
-            // '<div class="item bottom-left" ><img class="qr-img" src="/icon/jx.png"/><a target="_blank" href="https://"><span class="title red-font">打开京东/微信扫码，每日可领取三次红包！</span></a></div>' +
-            '<div class="item bottom-right"><span class="title"><i class="fa fa-comments"></i> 关注官方 Telegram 频道获取最新消息 </span><a class="link-btn" href="https://t.me/jdhelloworld">立即关注</a></div></div>',
+            '<div class="item bottom-right"><span class="title" style="margin:.25em 0"><i class="fa fa-comments"></i> 关注官方 Telegram 频道获取最新消息 </span><a class="link-btn" href="https://t.me/jdhelloworld">立即关注</a></div></div>',
         children: [
-            // {
-            //     title: "京东1111红包",
-            //     faIcon: "fa-thumbs-up",
-            //     titleFaIcon: "fa-hand-o-right",
-            //     subText: "京东1111红包",
-            //     platform: "mobile",
-            //     customClass: 'red-font',
-            //     path: "https://",
-            // },
             {
                 title: "环境变量",
                 faIcon: "fa-home",
@@ -281,7 +271,7 @@ let MenuTools = {
             menu.children.map((child, index) => {
                 if (!child.platform || (child.platform && child.platform === 'mobile')) {
                     content = content.concat(
-                        `<li class="'${child.customClass}' ${child.mobileCustom && child.mobileCustom.customClass || ''}">`,
+                        `<li class="${child.customClass} ${child.mobileCustom && child.mobileCustom.customClass || ''}">`,
                         child.mobileCustom ? child.mobileCustom.customContent : `<a href="${child.path || '#'}"><i class="fa ${child.faIcon}"></i> ${child.title}</a>`,
                         child.customContent || '',
                         `</li>`
@@ -375,8 +365,7 @@ let panelUtils = {
             position: 'top-end',
             width: 300,
             showConfirmButton: false,
-            timer: 4000,
-            timerProgressBar: true,
+            timer: 3500,
             showClass: {
                 popup: 'animate__animated animate__fadeInRight animate__faster'
             },
