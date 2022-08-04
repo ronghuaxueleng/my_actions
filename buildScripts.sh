@@ -200,6 +200,20 @@ replaceShareCode jd_sgmh yyds
 replaceShareCode jd_jxmc yyds
 cd ${ShellDir}
 
+git clone https://github.com/Akali5/jd-depot.git jddepot
+cd jddepot
+replaceShareCode jd_cash jddepot
+replaceShareCode jd_cfd jddepot
+replaceShareCode jd_dreamFactory jddepot
+replaceShareCode jd_fruit jddepot
+replaceShareCode jd_health jddepot
+replaceShareCode jd_jdfactory jddepot
+replaceShareCodeV1 jd_pet jddepot
+replaceShareCode jd_plantBean jddepot
+replaceShareCode jd_sgmh jddepot
+replaceShareCode jd_jxmc jddepot
+cd ${ShellDir}
+
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
 ScriptsDir=${ShellDir}/jd_scripts
@@ -251,4 +265,5 @@ cp -rf $(ls Aaron | grep -v docker | sed "s:^:Aaron/:" | xargs) ${ScriptsDir}
 cp -rf $(ls faker2 | grep -v docker | sed "s:^:faker2/:" | xargs) ${ScriptsDir}
 cp -rf $(ls yyds | grep -v docker | sed "s:^:yyds/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
+cp -rf $(ls jddepot | grep -v docker | sed "s:^:jddepot/:" | xargs) ${ScriptsDir}
 cp -rf package.json ${ScriptsDir}
