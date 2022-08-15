@@ -7,7 +7,7 @@ api_hashs=(${api_hash//@/ })
 sharedCodesJsonPaths=(${sharedCodesJsonPath//@/ })
 
 for ((i = 0; i < ${#phones[@]}; i++)); do
-    /usr/local/bin/python3 /jd/shareCode1.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]} '@JDShareCodebot' 'true'
+    /usr/local/bin/python3 /jd/shareCode1.py ${phones[i]} ${passwords[i]} ${api_ids[i]} ${api_hashs[i]} ${sharedCodesJsonPaths[i]} '@chriszhuli_bot' 'true'
 done
 
 # /usr/local/bin/python3 /jd/verificationShareCodeUrl.py ${sharedCodesJsonPaths[0]}
