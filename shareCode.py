@@ -45,6 +45,7 @@ if __name__ == "__main__":
                         row["name"],
                     )
                 )
+                print("bot is {}".format(bot))
                 await client.send_message(bot, "{} {}".format(row["cmd"], row["codes"]))
                 time.sleep(5)
 
