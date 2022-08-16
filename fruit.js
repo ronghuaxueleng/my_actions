@@ -112,7 +112,7 @@ var message = '', h5stTool = new h5st_1.H5ST("0c010", TS_USER_AGENTS_1["default"
             case 6:
                 // 初始化
                 res = _x.sent();
-                (0, TS_USER_AGENTS_1.o2s)(res);
+                (0, TS_USER_AGENTS_1.o2s)(res, 'initForFarm');
                 if (!(res.code === '6')) return [3 /*break*/, 8];
                 console.log('黑号');
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
@@ -133,69 +133,67 @@ var message = '', h5stTool = new h5st_1.H5ST("0c010", TS_USER_AGENTS_1["default"
                 (0, TS_USER_AGENTS_1.o2s)(res, 'initForFarm');
                 totalEnergy = res.farmUserPro.totalEnergy // 背包剩余水滴
                 ;
+                console.log('背包剩余水滴', totalEnergy);
                 if (!(res.farmUserPro.treeState === 2)) return [3 /*break*/, 13];
                 console.log("可以兑换奖品了");
                 return [4 /*yield*/, (0, sendNotify_1.sendNotify)("东东农场", "\u8D26\u53F7".concat(index + 1, "  ").concat(UserName, "\n\n\u5DF2\u6210\u719F"))];
             case 12:
                 _x.sent();
-                return [3 /*break*/, 14];
-            case 13:
-                if (res.farmUserPro.treeState === 0) {
-                    console.log("自动种植");
-                }
-                _x.label = 14;
-            case 14: return [4 /*yield*/, api('friendListInitForFarm', { "lastId": null, "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 15:
-                // 添加好友
-                // for (let i = 0; i < 30; i++) {
+                _x.label = 13;
+            case 13: return [4 /*yield*/, api('friendListInitForFarm', { "lastId": null, "version": 14, "channel": 1, "babelChannel": "120" })];
+            case 14:
+                // for (let i = 0; i < 460; i++) {
                 //   res = await api('waterGoodForFarm', {"version": 16, "channel": 1, "babelChannel": "121"})
                 //   o2s(res, 'waterGoodForFarm')
-                //   await wait(3000)
+                //   await wait(4000)
+                //   if (res.finished || res.code !== '0') {
+                //     break
+                //   }
                 // }
                 // 删除好友
                 res = _x.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 16:
+            case 15:
                 _x.sent();
-                if (!!res.newFriendMsg) return [3 /*break*/, 25];
+                if (!!res.newFriendMsg) return [3 /*break*/, 24];
+                _x.label = 16;
+            case 16:
+                _x.trys.push([16, 22, 23, 24]);
+                _d = (e_1 = void 0, __values(res.friends)), _e = _d.next();
                 _x.label = 17;
             case 17:
-                _x.trys.push([17, 23, 24, 25]);
-                _d = (e_1 = void 0, __values(res.friends)), _e = _d.next();
-                _x.label = 18;
-            case 18:
-                if (!!_e.done) return [3 /*break*/, 22];
+                if (!!_e.done) return [3 /*break*/, 21];
                 fr = _e.value;
                 return [4 /*yield*/, api('deleteFriendForFarm', { "shareCode": fr.shareCode, "version": 14, "channel": 1, "babelChannel": "121" })];
-            case 19:
+            case 18:
                 res = _x.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 20:
+            case 19:
                 _x.sent();
                 if (res.code === '0') {
                     console.log("\u5220\u9664\u597D\u53CB".concat(fr.nickName, "\u6210\u529F"));
                 }
                 else {
                     console.log("\u5220\u9664\u597D\u53CB".concat(fr.nickName, "\u5931\u8D25"));
-                    return [3 /*break*/, 22];
+                    return [3 /*break*/, 21];
                 }
-                _x.label = 21;
-            case 21:
+                _x.label = 20;
+            case 20:
                 _e = _d.next();
-                return [3 /*break*/, 18];
-            case 22: return [3 /*break*/, 25];
-            case 23:
+                return [3 /*break*/, 17];
+            case 21: return [3 /*break*/, 24];
+            case 22:
                 e_1_1 = _x.sent();
                 e_1 = { error: e_1_1 };
-                return [3 /*break*/, 25];
-            case 24:
+                return [3 /*break*/, 24];
+            case 23:
                 try {
                     if (_e && !_e.done && (_q = _d["return"])) _q.call(_d);
                 }
                 finally { if (e_1) throw e_1.error; }
                 return [7 /*endfinally*/];
-            case 25: return [4 /*yield*/, api('friendListInitForFarm', { "lastId": null, "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 26:
+            case 24: return [4 /*yield*/, api('friendListInitForFarm', { "lastId": null, "version": 14, "channel": 1, "babelChannel": "120" })];
+            case 25:
                 // 背包
                 // process.env.jdFruitBeanCard = 'True'
                 // if (process.env.jdFruitBeanCard.toLowerCase() === 'true') {
@@ -219,40 +217,40 @@ var message = '', h5stTool = new h5st_1.H5ST("0c010", TS_USER_AGENTS_1["default"
                 res = _x.sent();
                 (0, TS_USER_AGENTS_1.o2s)(res, 'friendListInitForFarm');
                 friendList = res.friends;
-                if (!(res.inviteFriendCount > res.inviteFriendGotAwardCount)) return [3 /*break*/, 29];
+                if (!(res.inviteFriendCount > res.inviteFriendGotAwardCount)) return [3 /*break*/, 28];
                 return [4 /*yield*/, api('awardInviteFriendForFarm', {})];
-            case 27:
+            case 26:
                 data = _x.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 28:
+            case 27:
                 _x.sent();
                 (0, TS_USER_AGENTS_1.o2s)(data, '好友邀请奖励');
-                _x.label = 29;
-            case 29: return [4 /*yield*/, api('taskInitForFarm', { "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 30:
+                _x.label = 28;
+            case 28: return [4 /*yield*/, api('taskInitForFarm', { "version": 14, "channel": 1, "babelChannel": "120" })];
+            case 29:
                 // 给好友浇水
                 res = _x.sent();
                 (0, TS_USER_AGENTS_1.o2s)(res, 'taskInitForFarm');
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 31:
+            case 30:
                 _x.sent();
                 console.log("\u4ECA\u65E5\u5DF2\u7ED9".concat(res.waterFriendTaskInit.waterFriendCountKey, "\u4E2A\u597D\u53CB\u6D47\u6C34"));
-                if (!(res.waterFriendTaskInit.waterFriendCountKey < res.waterFriendTaskInit.waterFriendMax)) return [3 /*break*/, 43];
+                if (!(res.waterFriendTaskInit.waterFriendCountKey < res.waterFriendTaskInit.waterFriendMax)) return [3 /*break*/, 42];
                 i = res.waterFriendTaskInit.waterFriendCountKey;
+                _x.label = 31;
+            case 31:
+                if (!(i < res.waterFriendTaskInit.waterFriendMax)) return [3 /*break*/, 41];
                 _x.label = 32;
             case 32:
-                if (!(i < res.waterFriendTaskInit.waterFriendMax)) return [3 /*break*/, 42];
+                _x.trys.push([32, 38, 39, 40]);
+                friendList_1 = (e_2 = void 0, __values(friendList)), friendList_1_1 = friendList_1.next();
                 _x.label = 33;
             case 33:
-                _x.trys.push([33, 39, 40, 41]);
-                friendList_1 = (e_2 = void 0, __values(friendList)), friendList_1_1 = friendList_1.next();
-                _x.label = 34;
-            case 34:
-                if (!!friendList_1_1.done) return [3 /*break*/, 38];
+                if (!!friendList_1_1.done) return [3 /*break*/, 37];
                 fr = friendList_1_1.value;
-                if (!(fr.friendState === 1)) return [3 /*break*/, 37];
+                if (!(fr.friendState === 1)) return [3 /*break*/, 36];
                 return [4 /*yield*/, api('waterFriendForFarm', { "shareCode": fr.shareCode, "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 35:
+            case 34:
                 data = _x.sent();
                 if (data.code === '0')
                     console.log("\u7ED9\u597D\u53CB".concat(fr.nickName, "\u6D47\u6C34\u6210\u529F"));
@@ -260,47 +258,47 @@ var message = '', h5stTool = new h5st_1.H5ST("0c010", TS_USER_AGENTS_1["default"
                     console.log('获得卡片');
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 36:
+            case 35:
                 _x.sent();
-                return [3 /*break*/, 38];
-            case 37:
+                return [3 /*break*/, 37];
+            case 36:
                 friendList_1_1 = friendList_1.next();
-                return [3 /*break*/, 34];
-            case 38: return [3 /*break*/, 41];
-            case 39:
+                return [3 /*break*/, 33];
+            case 37: return [3 /*break*/, 40];
+            case 38:
                 e_2_1 = _x.sent();
                 e_2 = { error: e_2_1 };
-                return [3 /*break*/, 41];
-            case 40:
+                return [3 /*break*/, 40];
+            case 39:
                 try {
                     if (friendList_1_1 && !friendList_1_1.done && (_r = friendList_1["return"])) _r.call(friendList_1);
                 }
                 finally { if (e_2) throw e_2.error; }
                 return [7 /*endfinally*/];
-            case 41:
+            case 40:
                 i++;
-                return [3 /*break*/, 32];
-            case 42: return [3 /*break*/, 46];
-            case 43:
-                if (!(res.waterFriendTaskInit.waterFriendCountKey === res.waterFriendTaskInit.waterFriendMax && !res.waterFriendTaskInit.waterFriendGotAward)) return [3 /*break*/, 46];
+                return [3 /*break*/, 31];
+            case 41: return [3 /*break*/, 45];
+            case 42:
+                if (!(res.waterFriendTaskInit.waterFriendCountKey === res.waterFriendTaskInit.waterFriendMax && !res.waterFriendTaskInit.waterFriendGotAward)) return [3 /*break*/, 45];
                 return [4 /*yield*/, api('waterFriendGotAwardForFarm', { "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 44:
+            case 43:
                 data = _x.sent();
                 console.log('给好友浇水奖励', data.addWater);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 45:
+            case 44:
                 _x.sent();
-                _x.label = 46;
-            case 46: return [4 /*yield*/, api('clockInInitForFarm', { "timestamp": Date.now(), "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 47:
+                _x.label = 45;
+            case 45: return [4 /*yield*/, api('clockInInitForFarm', { "timestamp": Date.now(), "version": 14, "channel": 1, "babelChannel": "120" })];
+            case 46:
                 // 签到
                 res = _x.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 48:
+            case 47:
                 _x.sent();
-                if (!!res.todaySigned) return [3 /*break*/, 51];
+                if (!!res.todaySigned) return [3 /*break*/, 50];
                 return [4 /*yield*/, api('clockInForFarm', { "type": 1, "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 49:
+            case 48:
                 data = _x.sent();
                 if (data.signDay === 7) {
                     // data = await api('gotClockInGift', {"type": 2, "version": 14, "channel": 1, "babelChannel": "120"})
@@ -308,208 +306,208 @@ var message = '', h5stTool = new h5st_1.H5ST("0c010", TS_USER_AGENTS_1["default"
                     // await wait(1000)
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 50:
+            case 49:
                 _x.sent();
-                _x.label = 51;
-            case 51: return [4 /*yield*/, api('clockInInitForFarm', { "timestamp": Date.now(), "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 52:
+                _x.label = 50;
+            case 50: return [4 /*yield*/, api('clockInInitForFarm', { "timestamp": Date.now(), "version": 14, "channel": 1, "babelChannel": "120" })];
+            case 51:
                 res = _x.sent();
+                _x.label = 52;
+            case 52:
+                _x.trys.push([52, 59, 60, 61]);
+                _f = (e_3 = void 0, __values(res.themes || [])), _g = _f.next();
                 _x.label = 53;
             case 53:
-                _x.trys.push([53, 60, 61, 62]);
-                _f = (e_3 = void 0, __values(res.themes || [])), _g = _f.next();
-                _x.label = 54;
-            case 54:
-                if (!!_g.done) return [3 /*break*/, 59];
+                if (!!_g.done) return [3 /*break*/, 58];
                 t = _g.value;
-                if (!!t.hadGot) return [3 /*break*/, 58];
+                if (!!t.hadGot) return [3 /*break*/, 57];
                 console.log('关注', t.name);
                 return [4 /*yield*/, api('clockInFollowForFarm', { "id": t.id, "type": "theme", "step": 1, "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 55:
+            case 54:
                 res = _x.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(5000)];
-            case 56:
+            case 55:
                 _x.sent();
                 return [4 /*yield*/, api('clockInFollowForFarm', { "id": t.id, "type": "theme", "step": 2, "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 57:
+            case 56:
                 res = _x.sent();
                 console.log('获得水滴', res.amount);
-                _x.label = 58;
-            case 58:
+                _x.label = 57;
+            case 57:
                 _g = _f.next();
-                return [3 /*break*/, 54];
-            case 59: return [3 /*break*/, 62];
-            case 60:
+                return [3 /*break*/, 53];
+            case 58: return [3 /*break*/, 61];
+            case 59:
                 e_3_1 = _x.sent();
                 e_3 = { error: e_3_1 };
-                return [3 /*break*/, 62];
-            case 61:
+                return [3 /*break*/, 61];
+            case 60:
                 try {
                     if (_g && !_g.done && (_s = _f["return"])) _s.call(_f);
                 }
                 finally { if (e_3) throw e_3.error; }
                 return [7 /*endfinally*/];
-            case 62: return [4 /*yield*/, api('taskInitForFarm', { "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 63:
+            case 61: return [4 /*yield*/, api('taskInitForFarm', { "version": 14, "channel": 1, "babelChannel": "120" })];
+            case 62:
                 // 任务
                 res = _x.sent();
                 (0, TS_USER_AGENTS_1.o2s)(res);
-                if (!res.signInit.todaySigned) return [3 /*break*/, 64];
+                if (!res.signInit.todaySigned) return [3 /*break*/, 63];
                 console.log("\u4ECA\u5929\u5DF2\u7B7E\u5230,\u5DF2\u7ECF\u8FDE\u7EED\u7B7E\u5230".concat(res.signInit.totalSigned, "\u5929,\u4E0B\u6B21\u7B7E\u5230\u53EF\u5F97").concat(res.signInit.signEnergyEachAmount, "g"));
-                return [3 /*break*/, 67];
-            case 64: return [4 /*yield*/, api('signForFarm', { "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 65:
+                return [3 /*break*/, 66];
+            case 63: return [4 /*yield*/, api('signForFarm', { "version": 14, "channel": 1, "babelChannel": "120" })];
+            case 64:
                 data = _x.sent();
                 (0, TS_USER_AGENTS_1.o2s)(data, 'signForFarm');
                 console.log('签到成功', data.amount);
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 66:
+            case 65:
                 _x.sent();
+                _x.label = 66;
+            case 66:
+                if (!!res.gotBrowseTaskAdInit.f) return [3 /*break*/, 78];
                 _x.label = 67;
             case 67:
-                if (!!res.gotBrowseTaskAdInit.f) return [3 /*break*/, 79];
+                _x.trys.push([67, 76, 77, 78]);
+                _h = (e_4 = void 0, __values(res.gotBrowseTaskAdInit.userBrowseTaskAds)), _j = _h.next();
                 _x.label = 68;
             case 68:
-                _x.trys.push([68, 77, 78, 79]);
-                _h = (e_4 = void 0, __values(res.gotBrowseTaskAdInit.userBrowseTaskAds)), _j = _h.next();
-                _x.label = 69;
-            case 69:
-                if (!!_j.done) return [3 /*break*/, 76];
+                if (!!_j.done) return [3 /*break*/, 75];
                 t = _j.value;
-                if (!(t.hadFinishedTimes !== t.limit)) return [3 /*break*/, 73];
+                if (!(t.hadFinishedTimes !== t.limit)) return [3 /*break*/, 72];
                 return [4 /*yield*/, api('browseAdTaskForFarm', { "advertId": t.advertId, "type": 0, "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 70:
+            case 69:
                 data = _x.sent();
                 (0, TS_USER_AGENTS_1.o2s)(data, 'browseAdTaskForFarm');
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(t.time * 1000 || 1000)];
-            case 71:
+            case 70:
                 _x.sent();
                 return [4 /*yield*/, api('browseAdTaskForFarm', { "advertId": t.advertId, "type": 1, "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 72:
+            case 71:
                 data = _x.sent();
                 console.log('任务完成，获得', data.amount);
-                _x.label = 73;
-            case 73: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 74:
+                _x.label = 72;
+            case 72: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
+            case 73:
                 _x.sent();
-                _x.label = 75;
-            case 75:
+                _x.label = 74;
+            case 74:
                 _j = _h.next();
-                return [3 /*break*/, 69];
-            case 76: return [3 /*break*/, 79];
-            case 77:
+                return [3 /*break*/, 68];
+            case 75: return [3 /*break*/, 78];
+            case 76:
                 e_4_1 = _x.sent();
                 e_4 = { error: e_4_1 };
-                return [3 /*break*/, 79];
-            case 78:
+                return [3 /*break*/, 78];
+            case 77:
                 try {
                     if (_j && !_j.done && (_t = _h["return"])) _t.call(_h);
                 }
                 finally { if (e_4) throw e_4.error; }
                 return [7 /*endfinally*/];
-            case 79:
-                if (!!res.gotThreeMealInit.f) return [3 /*break*/, 82];
-                if (!![10, 15, 16, 22, 23].includes(new Date().getHours())) return [3 /*break*/, 82];
+            case 78:
+                if (!!res.gotThreeMealInit.f) return [3 /*break*/, 81];
+                if (!![10, 15, 16, 22, 23].includes(new Date().getHours())) return [3 /*break*/, 81];
                 return [4 /*yield*/, api('gotThreeMealForFarm', { "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 80:
+            case 79:
                 data = _x.sent();
                 if (data.code === '0') {
                     console.log('定时奖励成功', data.amount);
                 }
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 81:
+            case 80:
                 _x.sent();
-                _x.label = 82;
-            case 82:
-                if (!!res.waterRainInit.f) return [3 /*break*/, 84];
-                if (!(Date.now < res.waterRainInit.lastTime + 3 * 60 * 60 * 1000)) return [3 /*break*/, 84];
+                _x.label = 81;
+            case 81:
+                if (!!res.waterRainInit.f) return [3 /*break*/, 83];
+                if (!(Date.now < res.waterRainInit.lastTime + 3 * 60 * 60 * 1000)) return [3 /*break*/, 83];
                 return [4 /*yield*/, api('waterRainForFarm', { "type": 1, "hongBaoTimes": 100, "version": 3 })];
-            case 83:
+            case 82:
                 data = _x.sent();
                 (0, TS_USER_AGENTS_1.o2s)(data, 'waterRainForFarm');
                 if (data.code === '0') {
                     console.log('获得水滴', data.addEnergy);
                 }
-                _x.label = 84;
-            case 84:
-                if (!(!res.firstWaterInit.f && res.firstWaterInit.totalWaterTimes !== 0)) return [3 /*break*/, 86];
+                _x.label = 83;
+            case 83:
+                if (!(!res.firstWaterInit.f && res.firstWaterInit.totalWaterTimes !== 0)) return [3 /*break*/, 85];
                 return [4 /*yield*/, api('firstWaterTaskForFarm', { "version": 14, "channel": 1, "babelChannel": "120" })];
-            case 85:
+            case 84:
                 data = _x.sent();
                 console.log('firstWaterTaskForFarm', data.amount);
-                _x.label = 86;
-            case 86: return [4 /*yield*/, api('initForTurntableFarm', { "version": 4, "channel": 1 })];
-            case 87:
+                _x.label = 85;
+            case 85: return [4 /*yield*/, api('initForTurntableFarm', { "version": 4, "channel": 1 })];
+            case 86:
                 // 红包
                 res = _x.sent();
                 (0, TS_USER_AGENTS_1.o2s)(res, 'initForTurntableFarm');
+                _x.label = 87;
+            case 87:
+                _x.trys.push([87, 94, 95, 96]);
+                _k = (e_5 = void 0, __values(res.turntableBrowserAds)), _l = _k.next();
                 _x.label = 88;
             case 88:
-                _x.trys.push([88, 95, 96, 97]);
-                _k = (e_5 = void 0, __values(res.turntableBrowserAds)), _l = _k.next();
-                _x.label = 89;
-            case 89:
-                if (!!_l.done) return [3 /*break*/, 94];
+                if (!!_l.done) return [3 /*break*/, 93];
                 t = _l.value;
-                if (!!t.status) return [3 /*break*/, 93];
+                if (!!t.status) return [3 /*break*/, 92];
                 console.log("browserForTurntableFarm", t.main);
                 return [4 /*yield*/, api('browserForTurntableFarm', { "type": 1, "adId": t.adId, "version": 4, "channel": 1 })];
-            case 90:
+            case 89:
                 data = _x.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(t.browserTimes * 1000 || 1000)];
-            case 91:
+            case 90:
                 _x.sent();
                 return [4 /*yield*/, api('browserForTurntableFarm', { "type": 2, "adId": t.adId, "version": 4, "channel": 1 })];
-            case 92:
+            case 91:
                 data = _x.sent();
-                _x.label = 93;
-            case 93:
+                _x.label = 92;
+            case 92:
                 _l = _k.next();
-                return [3 /*break*/, 89];
-            case 94: return [3 /*break*/, 97];
-            case 95:
+                return [3 /*break*/, 88];
+            case 93: return [3 /*break*/, 96];
+            case 94:
                 e_5_1 = _x.sent();
                 e_5 = { error: e_5_1 };
-                return [3 /*break*/, 97];
-            case 96:
+                return [3 /*break*/, 96];
+            case 95:
                 try {
                     if (_l && !_l.done && (_u = _k["return"])) _u.call(_k);
                 }
                 finally { if (e_5) throw e_5.error; }
                 return [7 /*endfinally*/];
-            case 97:
-                if (!(!res.timingGotStatus && res.remainLotteryTimes)) return [3 /*break*/, 101];
-                if (!(Date.now() > (res.timingLastSysTime + 60 * 60 * res.timingIntervalHours * 1000))) return [3 /*break*/, 100];
+            case 96:
+                if (!(!res.timingGotStatus && res.remainLotteryTimes)) return [3 /*break*/, 100];
+                if (!(Date.now() > (res.timingLastSysTime + 60 * 60 * res.timingIntervalHours * 1000))) return [3 /*break*/, 99];
                 return [4 /*yield*/, api('timingAwardForTurntableFarm', { "version": 4, "channel": 1 })];
-            case 98:
+            case 97:
                 data = _x.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(1000)];
-            case 99:
+            case 98:
                 _x.sent();
                 (0, TS_USER_AGENTS_1.o2s)(data, 'timingAwardForTurntableFarm');
-                return [3 /*break*/, 101];
-            case 100:
+                return [3 /*break*/, 100];
+            case 99:
                 console.log("\u514D\u8D39\u8D60\u9001\u7684\u62BD\u5956\u673A\u4F1A\u672A\u5230\u65F6\u95F4");
-                _x.label = 101;
-            case 101: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getShareCodePool)('farm', 30)];
-            case 102:
+                _x.label = 100;
+            case 100: return [4 /*yield*/, (0, TS_USER_AGENTS_1.getShareCodePool)('farm', 30)];
+            case 101:
                 // 天天红包助力
                 shareCodePool = _x.sent();
                 shareCode = Array.from(new Set(__spreadArray(__spreadArray([], __read(shareCodeSelf), false), __read(shareCodePool), false)));
+                _x.label = 102;
+            case 102:
+                _x.trys.push([102, 108, 109, 110]);
+                shareCodeSelf_1 = (e_6 = void 0, __values(shareCodeSelf)), shareCodeSelf_1_1 = shareCodeSelf_1.next();
                 _x.label = 103;
             case 103:
-                _x.trys.push([103, 109, 110, 111]);
-                shareCodeSelf_1 = (e_6 = void 0, __values(shareCodeSelf)), shareCodeSelf_1_1 = shareCodeSelf_1.next();
-                _x.label = 104;
-            case 104:
-                if (!!shareCodeSelf_1_1.done) return [3 /*break*/, 108];
+                if (!!shareCodeSelf_1_1.done) return [3 /*break*/, 107];
                 code = shareCodeSelf_1_1.value;
                 console.log('去红包助力', code);
                 return [4 /*yield*/, api('initForFarm', { "shareCode": "".concat(code, "-3"), "lng": "0.000000", "lat": "0.000000", "sid": "2871ac0252645ef0e2731aa7d03c1d3w", "un_area": "16_1341_1347_44750", "version": 14, "channel": 1, "babelChannel": 0 })];
-            case 105:
+            case 104:
                 data = _x.sent();
                 return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(3000)];
-            case 106:
+            case 105:
                 _x.sent();
                 if (data.code === '0') {
                     console.log('红包助力成功');
@@ -519,30 +517,30 @@ var message = '', h5stTool = new h5st_1.H5ST("0c010", TS_USER_AGENTS_1["default"
                 }
                 else if (data.code === '13') {
                     console.log('上限');
-                    return [3 /*break*/, 108];
+                    return [3 /*break*/, 107];
                 }
-                _x.label = 107;
-            case 107:
+                _x.label = 106;
+            case 106:
                 shareCodeSelf_1_1 = shareCodeSelf_1.next();
-                return [3 /*break*/, 104];
-            case 108: return [3 /*break*/, 111];
-            case 109:
+                return [3 /*break*/, 103];
+            case 107: return [3 /*break*/, 110];
+            case 108:
                 e_6_1 = _x.sent();
                 e_6 = { error: e_6_1 };
-                return [3 /*break*/, 111];
-            case 110:
+                return [3 /*break*/, 110];
+            case 109:
                 try {
                     if (shareCodeSelf_1_1 && !shareCodeSelf_1_1.done && (_v = shareCodeSelf_1["return"])) _v.call(shareCodeSelf_1);
                 }
                 finally { if (e_6) throw e_6.error; }
                 return [7 /*endfinally*/];
-            case 111:
+            case 110:
                 i = 0;
-                _x.label = 112;
-            case 112:
-                if (!(i < res.remainLotteryTimes)) return [3 /*break*/, 116];
+                _x.label = 111;
+            case 111:
+                if (!(i < res.remainLotteryTimes)) return [3 /*break*/, 115];
                 return [4 /*yield*/, api('lotteryForTurntableFarm', { "type": 1, "version": 4, "channel": 1 })];
-            case 113:
+            case 112:
                 data = _x.sent();
                 if (data.type === 'thanks') {
                     console.log('抽奖获得 空气');
@@ -550,14 +548,19 @@ var message = '', h5stTool = new h5st_1.H5ST("0c010", TS_USER_AGENTS_1["default"
                 else {
                     console.log('抽奖获得', data.type);
                 }
-                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(2000)];
-            case 114:
+                return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(4000)];
+            case 113:
                 _x.sent();
-                _x.label = 115;
-            case 115:
+                _x.label = 114;
+            case 114:
                 i++;
-                return [3 /*break*/, 112];
-            case 116: return [4 /*yield*/, api('farmAssistInit', { "version": 14, "channel": 1, "babelChannel": "120" })];
+                return [3 /*break*/, 111];
+            case 115: return [4 /*yield*/, (0, TS_USER_AGENTS_1.wait)(4000)
+                // 助力奖励
+            ];
+            case 116:
+                _x.sent();
+                return [4 /*yield*/, api('farmAssistInit', { "version": 14, "channel": 1, "babelChannel": "120" })];
             case 117:
                 // 助力奖励
                 res = _x.sent();
