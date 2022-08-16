@@ -1,13 +1,13 @@
 import {sendNotify} from './sendNotify';
-import USER_AGENT, {get, getShareCodePool, o2s, requireConfig, wait} from './TS_USER_AGENTS'
+import USER_AGENT, {get, getShareCodePool, o2s, getCookie, wait} from './TS_USER_AGENTS'
 import {H5ST} from "./utils/h5st";
 
 let cookie: string = '', res: any = '', data: any, UserName: string
 let shareCodeSelf: string[] = [], shareCodePool: string[] = [], shareCode: string[] = [], shareCodeFile: object = require('./jdFruitShareCodes')
-let message: string = '', h5stTool: H5ST = new H5ST("0c010", USER_AGENT, "8389547038003203")
+let message: string = '', h5stTool: H5ST = new H5ST("0c010", USER_AGENT, process.env.FP_0C010 || "")
 
 !(async () => {
-  let cookiesArr: string[] = await requireConfig()
+  let cookiesArr: string[] = await getCookie()
   for (let [index, value] of cookiesArr.entries()) {
     cookie = value
     UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)![1])
@@ -19,7 +19,7 @@ let message: string = '', h5stTool: H5ST = new H5ST("0c010", USER_AGENT, "838954
       if (Object.keys(shareCodeFile)[index]) {
         shareCodeSelf = shareCodeFile[Object.keys(shareCodeFile)[index]].split('@')
       }
-      console.log(`第${index + 1}个账号获取的内部互助`, shareCodeSelf)
+      o2s(shareCodeSelf, `第${index + 1}个账号获取的内部互助`)
 
       // 初始化
       res = await api('initForFarm', {"version": 11, "channel": 3})
@@ -46,7 +46,11 @@ let message: string = '', h5stTool: H5ST = new H5ST("0c010", USER_AGENT, "838954
       }
 
       // 添加好友
-
+      // for (let i = 0; i < 30; i++) {
+      //   res = await api('waterGoodForFarm', {"version": 16, "channel": 1, "babelChannel": "121"})
+      //   o2s(res, 'waterGoodForFarm')
+      //   await wait(3000)
+      // }
 
       // 删除好友
       res = await api('friendListInitForFarm', {"lastId": null, "version": 14, "channel": 1, "babelChannel": "120"})
@@ -246,30 +250,6 @@ let message: string = '', h5stTool: H5ST = new H5ST("0c010", USER_AGENT, "838954
         await wait(2000)
       }
 
-      // 助力
-      shareCodePool = await getShareCodePool('farm', 30)
-      shareCode = Array.from(new Set([...shareCodeSelf, ...shareCodePool]))
-      for (let code of shareCodeSelf) {
-        console.log('去助力', code)
-        res = await api('initForFarm', {"mpin": "", "utm_campaign": "t_335139774", "utm_medium": "appshare", "shareCode": code, "utm_term": "Wxfriends", "utm_source": "iosapp", "imageUrl": "", "nickName": "", "version": 14, "channel": 2, "babelChannel": 0})
-        await wait(6000)
-        o2s(res, '助力')
-        if (res.helpResult.code === '7') {
-          console.log('不给自己助力')
-        } else if (res.helpResult.code === '0') {
-          console.log('助力成功,获得', res.helpResult.salveHelpAddWater)
-        } else if (res.helpResult.code === '8') {
-          console.log('上限')
-          break
-        } else if (res.helpResult.code === '9') {
-          console.log('已助力')
-        } else if (res.helpResult.code === '10') {
-          console.log('已满')
-        } else if (res.helpResult.remainTimes === 0) {
-          console.log('次数用完')
-          break
-        }
-      }
       // 助力奖励
       res = await api('farmAssistInit', {"version": 14, "channel": 1, "babelChannel": "120"})
       await wait(1000)
