@@ -2,7 +2,7 @@
 name: 向telegram提交sharedcode
 on:
   schedule:
-    - cron: "0 1,13 * * 1,6"
+    - cron: "0 1,13 * * 1,5,6"
   workflow_dispatch:
   watch:
     types: started
