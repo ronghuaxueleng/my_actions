@@ -68,7 +68,7 @@ var __values = (this && this.__values) || function(o) {
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 exports.__esModule = true;
-var log_1 = require("./utils/log");
+var h5st_pro_1 = require("./utils/h5st_pro");
 var date_fns_1 = require("date-fns");
 var TS_JDHelloWorld_1 = require("./TS_JDHelloWorld");
 var Joy_Park_Run = /** @class */ (function (_super) {
@@ -101,14 +101,16 @@ var Joy_Park_Run = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         timestamp = Date.now();
-                        h5st = this.teamTool.__genH5st({
-                            appid: "activities_platform",
-                            body: JSON.stringify(body),
-                            client: "ios",
-                            clientVersion: "3.9.2",
-                            functionId: fn,
-                            t: timestamp.toString()
-                        });
+                        return [4 /*yield*/, this.teamTool.__genH5st({
+                                appid: "activities_platform",
+                                body: JSON.stringify(body),
+                                client: "ios",
+                                clientVersion: "3.9.2",
+                                functionId: fn,
+                                t: timestamp.toString()
+                            })];
+                    case 1:
+                        h5st = _a.sent();
                         return [4 /*yield*/, this.get("https://api.m.jd.com/?functionId=".concat(fn, "&body=").concat(encodeURIComponent(JSON.stringify(body)), "&t=").concat(timestamp, "&appid=activities_platform&client=ios&clientVersion=3.9.2&cthr=1&h5st=").concat(h5st), {
                                 'Host': 'api.m.jd.com',
                                 'User-Agent': this.user.UserAgent,
@@ -117,7 +119,7 @@ var Joy_Park_Run = /** @class */ (function (_super) {
                                 'Referer': 'https://h5platform.jd.com/',
                                 'Cookie': this.user.cookie
                             })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2: return [2 /*return*/, _a.sent()];
                 }
             });
         });
@@ -129,16 +131,19 @@ var Joy_Park_Run = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         timestamp = Date.now(), h5st = '';
-                        if (fn === 'runningOpenBox') {
-                            h5st = this.apiTool.__genH5st({
+                        if (!(fn === 'runningOpenBox')) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.apiTool.__genH5st({
                                 appid: "activities_platform",
                                 body: JSON.stringify(body),
                                 client: "ios",
                                 clientVersion: "3.9.2",
                                 functionId: fn,
                                 t: timestamp.toString()
-                            });
-                        }
+                            })];
+                    case 1:
+                        h5st = _a.sent();
+                        _a.label = 2;
+                    case 2:
                         params = "functionId=".concat(fn, "&body=").concat(JSON.stringify(body), "&t=").concat(timestamp, "&appid=activities_platform&client=ios&clientVersion=3.9.2&cthr=1");
                         h5st && (params += "&h5st=".concat(h5st));
                         return [4 /*yield*/, this.post('https://api.m.jd.com/', params, {
@@ -149,7 +154,7 @@ var Joy_Park_Run = /** @class */ (function (_super) {
                                 'referer': 'https://h5platform.jd.com/',
                                 'User-Agent': this.user.UserAgent
                             })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/, _a.sent()];
                 }
             });
         });
@@ -169,48 +174,52 @@ var Joy_Park_Run = /** @class */ (function (_super) {
     };
     Joy_Park_Run.prototype.startRunning = function (res, assets) {
         return __awaiter(this, void 0, void 0, function () {
-            var i, assets_1;
+            var i;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!!res.data.runningHomeInfo.nextRunningTime) return [3 /*break*/, 10];
+                        if (!!res.data.runningHomeInfo.nextRunningTime) return [3 /*break*/, 11];
                         console.log('终点目标', assets);
                         i = 0;
                         _a.label = 1;
                     case 1:
-                        if (!(i < 5)) return [3 /*break*/, 10];
+                        if (!(i < 5)) return [3 /*break*/, 11];
                         return [4 /*yield*/, this.api('runningOpenBox', { "linkId": "L-sOanK_5RJCz7I314FpnQ" })];
                     case 2:
                         res = _a.sent();
-                        if (!(parseFloat(res.data.assets) >= assets)) return [3 /*break*/, 4];
-                        assets_1 = parseFloat(res.data.assets);
-                        return [4 /*yield*/, this.api('runningPreserveAssets', { "linkId": "L-sOanK_5RJCz7I314FpnQ" })];
+                        if (!(parseFloat(res.data.assets) >= assets)) return [3 /*break*/, 5];
+                        assets = parseFloat(res.data.assets);
+                        return [4 /*yield*/, this.api('runningFail', { "linkId": "L-sOanK_5RJCz7I314FpnQ" })];
                     case 3:
                         res = _a.sent();
-                        console.log('领取成功', assets_1);
-                        return [3 /*break*/, 10];
+                        this.o2s(res, 'runningFail');
+                        return [4 /*yield*/, this.api('runningPreserveAssets', { "linkId": "L-sOanK_5RJCz7I314FpnQ" })];
                     case 4:
-                        if (!res.data.doubleSuccess) return [3 /*break*/, 6];
+                        res = _a.sent();
+                        console.log('领取成功', assets);
+                        return [3 /*break*/, 11];
+                    case 5:
+                        if (!res.data.doubleSuccess) return [3 /*break*/, 7];
                         console.log('翻倍成功', parseFloat(res.data.assets));
                         return [4 /*yield*/, this.wait(10000)];
-                    case 5:
-                        _a.sent();
-                        return [3 /*break*/, 9];
                     case 6:
-                        if (!(!res.data.doubleSuccess && !res.data.runningHomeInfo.runningFinish)) return [3 /*break*/, 8];
+                        _a.sent();
+                        return [3 /*break*/, 10];
+                    case 7:
+                        if (!(!res.data.doubleSuccess && !res.data.runningHomeInfo.runningFinish)) return [3 /*break*/, 9];
                         console.log('开始跑步', parseFloat(res.data.assets));
                         return [4 /*yield*/, this.wait(10000)];
-                    case 7:
-                        _a.sent();
-                        return [3 /*break*/, 9];
                     case 8:
-                        console.log('翻倍失败');
+                        _a.sent();
                         return [3 /*break*/, 10];
                     case 9:
+                        console.log('翻倍失败');
+                        return [3 /*break*/, 11];
+                    case 10:
                         i++;
                         return [3 /*break*/, 1];
-                    case 10: return [4 /*yield*/, this.wait(3000)];
-                    case 11:
+                    case 11: return [4 /*yield*/, this.wait(3000)];
+                    case 12:
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -232,7 +241,7 @@ var Joy_Park_Run = /** @class */ (function (_super) {
                         _p.label = 1;
                     case 1:
                         _p.trys.push([1, 59, , 61]);
-                        this.teamTool = new log_1.H5ST('448de', this.user.UserAgent, process.env.FP_448DE || '', 'https://h5platform.jd.com/swm-stable/people-run/index?activityId=L-sOanK_5RJCz7I314FpnQ', 'https://h5platform.jd.com');
+                        this.teamTool = new h5st_pro_1.H5ST('448de', this.user.UserAgent, process.env.FP_448DE || "", 'https://h5platform.jd.com/swm-stable/people-run/index?activityId=L-sOanK_5RJCz7I314FpnQ', 'https://h5platform.jd.com');
                         return [4 /*yield*/, this.teamTool.__genAlgo()];
                     case 2:
                         _p.sent();
@@ -437,7 +446,7 @@ var Joy_Park_Run = /** @class */ (function (_super) {
                         console.log('战队收益', res.data.teamSumPrize);
                         _p.label = 40;
                     case 40:
-                        this.apiTool = new log_1.H5ST('b6ac3', this.user.UserAgent, process.env.FP_B6AC3 || '', 'https://h5platform.jd.com/swm-stable/people-run/index?activityId=L-sOanK_5RJCz7I314FpnQ', 'https://h5platform.jd.com');
+                        this.apiTool = new h5st_pro_1.H5ST('b6ac3', this.user.UserAgent, process.env.FP_B6AC3 || "", 'https://h5platform.jd.com/swm-stable/people-run/index?activityId=L-sOanK_5RJCz7I314FpnQ', 'https://h5platform.jd.com');
                         return [4 /*yield*/, this.apiTool.__genAlgo()];
                     case 41:
                         _p.sent();
