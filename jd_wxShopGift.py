@@ -10,6 +10,7 @@ TgChat: https://t.me/HarbourSailing
 cron: 1 1 1 1 1 1
 new Env('店铺特效关注有礼');
 ActivityEntry: https://lzkj-isv.isvjcloud.com/wxShopGift/activity?activityId=971e85d5dfd445e1acfc63bafffb8ecc
+               变量 export jd_wxShopGiftId="971e85d5dfd445e1axxxxxxxxxxxx"
 """
 
 import time
@@ -31,7 +32,7 @@ try:
     from jdCookie import get_cookies
     getCk = get_cookies()
 except:
-    print("请先下载依赖脚本，\n下载链接: https://raw.githubusercontent.com/HarbourJ/HarbourToulu/main/jdCookie.py")
+    print("请先下载依赖脚本，\n下载链接: https://raw.githubusercontent.com/555555/faker2/main/jdCookie.py")
     sys.exit(3)
 redis_url = os.environ.get("redis_url") if os.environ.get("redis_url") else "172.17.0.1"
 redis_pwd = os.environ.get("redis_pwd") if os.environ.get("redis_pwd") else ""
@@ -65,44 +66,15 @@ def getToken(ck, r=None):
     except:
         # redis缓存Token 活动域名+ck前7位(获取pin失败)
         pt_pin = ck[:8]
-    try:
-        if r is not None:
-            Token = r.get(f'{activityUrl.split("https://")[1].split("-")[0]}_{pt_pin}')
-            # print("Token过期时间", r.ttl(f'{activityUrl.split("https://")[1].split("-")[0]}_{pt_pin}'))
-            if Token is not None:
-                # print(f"♻️获取缓存Token->: {Token}")
-                print(f"♻️获取缓存Token")
-                return Token
-            else:
-                print("🈳去设置Token缓存")
-                s.headers = {
-                    'Connection': 'keep-alive',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                    'User-Agent': '',
-                    'Cookie': ck,
-                    'Host': 'api.m.jd.com',
-                    'Referer': '',
-                    'Accept-Language': 'zh-Hans-CN;q=1 en-CN;q=0.9',
-                    'Accept': '*/*'
-                }
-                sign_txt = sign({"url": f"{host}", "id": ""}, 'isvObfuscator')
-                # print(sign_txt)
-                f = s.post('https://api.m.jd.com/client.action', verify=False, timeout=30)
-                if f.status_code != 200:
-                    print(f.status_code)
-                    return
-                else:
-                    if "参数异常" in f.text:
-                        return
-                Token_new = f.json()['token']
-                # print(f"Token->: {Token_new}")
-                if r.set(f'{activityUrl.split("https://")[1].split("-")[0]}_{pt_pin}', Token_new, ex=1800):
-                    print("✅Token缓存设置成功")
-                else:
-                    print("❌Token缓存设置失败")
-                return Token_new
+    if r is not None:
+        Token = r.get(f'{activityUrl.split("https://")[1].split("-")[0]}_{pt_pin}')
+        # print("Token过期时间", r.ttl(f'{activityUrl.split("https://")[1].split("-")[0]}_{pt_pin}'))
+        if Token is not None:
+            # print(f"♻️获取缓存Token->: {Token}")
+            print(f"♻️获取缓存Token")
+            return Token
         else:
+            print("🈳去设置Token缓存")
             s.headers = {
                 'Connection': 'keep-alive',
                 'Accept-Encoding': 'gzip, deflate, br',
@@ -123,11 +95,37 @@ def getToken(ck, r=None):
             else:
                 if "参数异常" in f.text:
                     return
-            Token = f.json()['token']
-            print(f"Token->: {Token}")
-            return Token
-    except:
-        return
+            Token_new = f.json()['token']
+            # print(f"Token->: {Token_new}")
+            if r.set(f'{activityUrl.split("https://")[1].split("-")[0]}_{pt_pin}', Token_new, ex=1800):
+                print("✅Token缓存设置成功")
+            else:
+                print("❌Token缓存设置失败")
+            return Token_new
+    else:
+        s.headers = {
+            'Connection': 'keep-alive',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'User-Agent': '',
+            'Cookie': ck,
+            'Host': 'api.m.jd.com',
+            'Referer': '',
+            'Accept-Language': 'zh-Hans-CN;q=1 en-CN;q=0.9',
+            'Accept': '*/*'
+        }
+        sign_txt = sign({"url": f"{host}", "id": ""}, 'isvObfuscator')
+        # print(sign_txt)
+        f = s.post('https://api.m.jd.com/client.action', verify=False, timeout=30)
+        if f.status_code != 200:
+            print(f.status_code)
+            return
+        else:
+            if "参数异常" in f.text:
+                return
+        Token = f.json()['token']
+        print(f"Token->: {Token}")
+        return Token
 
 def getJdTime():
     jdTime = int(round(time.time() * 1000))

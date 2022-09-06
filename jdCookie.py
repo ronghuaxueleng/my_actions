@@ -7,6 +7,8 @@
 
 import os
 import time
+from functools import partial
+print = partial(print, flush=True)
 
 
 def get_cookies():
