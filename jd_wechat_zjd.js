@@ -169,9 +169,9 @@ var Zjd = /** @class */ (function (_super) {
                             encPin: res.data.encPin,
                             id: res.data.id
                         });
-                        return [3 /*break*/, 14];
+                        return [3 /*break*/, 17];
                     case 4:
-                        if (!(res.data.assistStatus === 2 && res.data.canStartNewAssist && this.openNum < this.zjd_open)) return [3 /*break*/, 9];
+                        if (!(res.data.assistStatus === 2 && res.data.canStartNewAssist && this.openNum < this.zjd_open)) return [3 /*break*/, 10];
                         // 没开团
                         this.openNum++;
                         this.h5stTool = new h5st_pro_1.H5ST('dde2b', this.user.UserAgent, fp, 'https://servicewechat.com/wxa5bf5ee667d91626/173/page-frame.html', 'https://servicewechat.com', this.user.UserName);
@@ -181,7 +181,6 @@ var Zjd = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.api('vvipclub_distributeBean_startAssist', { "activityIdEncrypted": res.data.id, "channel": "FISSION_BEAN" })];
                     case 6:
                         res = _a.sent();
-                        this.o2s(res);
                         if (!res.success) return [3 /*break*/, 8];
                         console.log("\u5F00\u56E2\u6210\u529F\uFF0C\u7ED3\u675F\u65F6\u95F4\uFF1A".concat(res.data.endTime));
                         return [4 /*yield*/, this.api('distributeBeanActivityInfo', { "paramData": { "channel": "FISSION_BEAN" } })];
@@ -192,33 +191,43 @@ var Zjd = /** @class */ (function (_super) {
                             encPin: res.data.encPin,
                             id: res.data.id
                         });
-                        _a.label = 8;
-                    case 8: return [3 /*break*/, 14];
-                    case 9:
-                        if (!(res.data.assistedRecords.length === res.data.assistNum)) return [3 /*break*/, 13];
-                        console.log('已成团');
-                        if (!res.data.canStartNewAssist) return [3 /*break*/, 12];
-                        return [4 /*yield*/, this.api('vvipclub_distributeBean_startAssist', { "activityIdEncrypted": res.data.id, "channel": "FISSION_BEAN" })];
+                        return [3 /*break*/, 9];
+                    case 8:
+                        this.o2s(res, '开团失败');
+                        _a.label = 9;
+                    case 9: return [3 /*break*/, 17];
                     case 10:
+                        if (!(res.data.assistedRecords.length === res.data.assistNum)) return [3 /*break*/, 16];
+                        console.log('已成团');
+                        if (!res.data.canStartNewAssist) return [3 /*break*/, 15];
+                        this.h5stTool = new h5st_pro_1.H5ST('dde2b', this.user.UserAgent, fp, 'https://servicewechat.com/wxa5bf5ee667d91626/173/page-frame.html', 'https://servicewechat.com', this.user.UserName);
+                        return [4 /*yield*/, this.h5stTool.__genAlgo()];
+                    case 11:
+                        _a.sent();
+                        return [4 /*yield*/, this.api('vvipclub_distributeBean_startAssist', { "activityIdEncrypted": res.data.id, "channel": "FISSION_BEAN" })];
+                    case 12:
                         res = _a.sent();
-                        if (!res.success) return [3 /*break*/, 12];
+                        if (!res.success) return [3 /*break*/, 14];
                         console.log("\u5F00\u56E2\u6210\u529F\uFF0C\u7ED3\u675F\u65F6\u95F4\uFF1A".concat(res.data.endTime));
                         return [4 /*yield*/, this.api('distributeBeanActivityInfo', { "paramData": { "channel": "FISSION_BEAN" } })];
-                    case 11:
+                    case 13:
                         res = _a.sent();
                         shareCodeSelf.push({
                             assistStartRecordId: res.data.assistStartRecordId,
                             encPin: res.data.encPin,
                             id: res.data.id
                         });
-                        _a.label = 12;
-                    case 12: return [3 /*break*/, 14];
-                    case 13:
+                        return [3 /*break*/, 15];
+                    case 14:
+                        this.o2s(res, '开团失败');
+                        _a.label = 15;
+                    case 15: return [3 /*break*/, 17];
+                    case 16:
                         if (!res.data.canStartNewAssist) {
                             console.log('不可开团');
                         }
-                        _a.label = 14;
-                    case 14: return [2 /*return*/];
+                        _a.label = 17;
+                    case 17: return [2 /*return*/];
                 }
             });
         });
@@ -268,7 +277,7 @@ var Zjd = /** @class */ (function (_super) {
                         _c.label = 9;
                     case 9:
                         _c.trys.push([9, 11, , 12]);
-                        console.log("\u8D26\u53F7".concat(user.index + 1, " ").concat(user.UserName, " \u53BB\u52A9\u529B ").concat(JSON.stringify(code)));
+                        console.log("\u8D26\u53F7".concat(user.index + 1, " ").concat(user.UserName, " \u53BB\u52A9\u529B ").concat(code.encPin.replace("\n", "")));
                         return [4 /*yield*/, this.api('vvipclub_distributeBean_assist', { "assistStartRecordId": code.assistStartRecordId, "assistedPinEncrypted": code.encPin, "activityIdEncrypted": code.id, "channel": "FISSION_BEAN" })];
                     case 10:
                         res = _c.sent();
