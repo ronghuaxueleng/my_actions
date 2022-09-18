@@ -323,6 +323,7 @@ function Bot_Control() {
         cd $BotDir
         pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
         pip3 --default-timeout=300 install -r requirements.txt
+        pip3 --default-timeout=3600 install async_timeout==4.0.2
         pip3 install aiohttp Telethon==1.24.0
         if [[ $? -eq 0 ]]; then
             echo -e "\n$COMPLETE 模块安装完成\n"
