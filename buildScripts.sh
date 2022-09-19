@@ -172,19 +172,6 @@ replaceShareCode jd_sgmh Aaron
 replaceShareCode jd_jxmc Aaron
 cd ${ShellDir}
 
-git clone -b main https://github.com/shufflewzc/faker2.git faker2
-cd faker2
-replaceShareCode jd_cash faker2
-replaceShareCode jd_cfd faker2
-replaceShareCode jd_dreamFactory faker2
-replaceShareCode jd_fruit faker2
-replaceShareCode jd_health faker2
-replaceShareCode jd_jdfactory faker2
-replaceShareCodeV1 jd_pet faker2
-replaceShareCode jd_plantBean faker2
-replaceShareCode jd_sgmh faker2
-replaceShareCode jd_jxmc faker2
-cd ${ShellDir}
 
 git clone -b master https://github.com/okyyds/yyds.git yyds
 cd yyds
@@ -227,42 +214,21 @@ ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
 ListCronScripts4=MyScript/docker/crontab_list.sh
 ListCronScripts5=JDHelp/docker/crontab_list.sh
 ListCronScripts6=Aaron/docker/crontab_list.sh
-ListCronScripts7=faker2/docker/crontab_list.sh
 ListCronScripts8=yyds/docker/crontab_list.sh
 
-# cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} ${ListCronScripts7} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
+# cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
-cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} ${ListCronScripts7} ${ListCronScripts8} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
-
-RootDir=./
-FileDiy=diy.sh
-ProxyJudge=true
-GithubProxy="https://ghproxy.com/"
-EnableExtraShellProxy="true"
-EnableExtraShellURL="https://gitee.com/SuperManito/scripts/raw/master/extra.sh"
-wget -q $EnableExtraShellURL -O ${FileDiy}
-
-if [ $? -eq 0 ]; then
-    echo -e "自定义 DIY 脚本同步完成......"
-    echo -e ''
-    # sed -i 's/https:\/\/raw.githubusercontent.com/https:\/\/cdn.staticaly.com\/gh/' ${FileDiy}
-    sed -i 's/ListCrontabUser/ListCronSh/g' ${FileDiy}
-    sed -i '/exit 1/d' ${FileDiy}
-    sed -i 's/wget -q --no-check-certificate \$url -O "\$ScriptsDir\/\$name.new" -T 20/echo \$url\nwget -q --no-check-certificate \$url -O "\$ScriptsDir\/\$name.new" -T 20/g' ${FileDiy}
-    sleep 2s
-    . ${FileDiy}
-fi
+cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} ${ListCronScripts8} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 cd ${ShellDir}
 
-jq -s 'reduce .[] as $item ({}; . * $item)' MyActions/package.json JDHelloWorld/package.json JDHelp/package.json Aaron/package.json faker2/package.json yyds/package.json > package.json
+jq -s 'reduce .[] as $item ({}; . * $item)' MyActions/package.json JDHelloWorld/package.json JDHelp/package.json Aaron/package.json yyds/package.json > package.json
 
 cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
 # cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelp | grep -v docker | sed "s:^:JDHelp/:" | xargs) ${ScriptsDir}
 cp -rf $(ls Aaron | grep -v docker | sed "s:^:Aaron/:" | xargs) ${ScriptsDir}
-cp -rf $(ls faker2 | grep -v docker | sed "s:^:faker2/:" | xargs) ${ScriptsDir}
 cp -rf $(ls yyds | grep -v docker | sed "s:^:yyds/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
 cp -rf $(ls jddepot | grep -v docker | sed "s:^:jddepot/:" | xargs) ${ScriptsDir}
