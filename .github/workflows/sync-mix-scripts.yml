@@ -40,7 +40,7 @@ jobs:
       - name: 使用Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: "12.x"
       - name: 开始同步
         run: |
           shopt -s extglob
@@ -49,6 +49,7 @@ jobs:
           npm install -g ts-node typescript @types/node date-fns axios require tslib fs
           git clone git@jd_scripts_githup:ronghuaxueleng/my_actions.git
           cp -f ./my_actions/buildScripts.sh ./
+          cp -rf ./my_actions/replace ./
           cd ./my_actions
           git checkout j_scripts
           rm -rf !(.git | .githup)
