@@ -114,69 +114,6 @@ rm -rf node_modules
 rm -rf package-lock.json
 cd ${ShellDir}
 
-git clone https://github.com/he1pu/JDHelp.git JDHelp
-[ ! -d JDHelp/docker ] && mkdir -p JDHelp/docker
-json=$(cat JDHelp/QuantumultX/gallery.json)
-crontab_list=""
-for row in $(echo "${json}" | jq -r '.task[] | @base64'); do
-    _jq() {
-        echo ${row} | base64 --decode | jq -r ${1}
-    }
-
-    config=$(_jq '.config')
-    # configs=(${config//,/ })
-    crontab_list+=$(echo "${config}" | perl -pe "s|(\S+\s\S+\s\S+\s\S+\s(?:\S+\s)?)https:\/\/raw\.githubusercontent\.com\/he1pu\/JDHelp\/main\/(\S+_?\w+)\.js(?:\s+)?,(?:\s+)?tag=(.+)(?:\s+)?,(?:\s+)?img-url=.+|\n# \3\n\1node /scripts/\2.js >> /scripts/logs/\2.log 2>&1|")
-done
-cat > JDHelp/docker/crontab_list.sh <<EOF
-$(echo -e "$crontab_list")
-EOF
-sed '/^$/d' JDHelp/docker/crontab_list.sh
-
-cd JDHelp
-cp -rf ${ShellDir}/replace/* ./
-replaceShareCode jd_cash JDHelp
-deleteShareCode jd_cfd JDHelp
-replaceShareCodeV1 jd_dreamFactory JDHelp
-replaceShareCodeV1 jd_fruit JDHelp
-replaceShareCode jd_health JDHelp
-replaceShareCode jd_jdfactory JDHelp
-replaceShareCodeV1 jd_pet JDHelp
-replaceShareCode jd_plantBean JDHelp
-replaceShareCode jd_sgmh JDHelp
-replaceShareCode jd_jxmc JDHelp
-cd ${ShellDir}
-
-git clone https://github.com/wuzhi05/MyActions.git MyActions
-cd MyActions
-cp -rf ${ShellDir}/replace/* ./
-replaceShareCode jd_cash MyActions
-replaceShareCode jd_cfd MyActions
-replaceShareCode jd_dreamFactory MyActions
-replaceShareCode jd_fruit MyActions
-replaceShareCode jd_health MyActions
-replaceShareCode jd_jdfactory MyActions
-replaceShareCode jd_pet MyActions
-replaceShareCode jd_plantBean MyActions
-replaceShareCode jd_sgmh MyActions
-replaceShareCode jd_jxmc MyActions
-cd ${ShellDir}
-
-git clone https://github.com/Aaron-lv/sync.git Aaron
-cd Aaron
-cp -rf ${ShellDir}/replace/* ./
-replaceShareCode jd_cash Aaron
-replaceShareCode jd_cfd Aaron
-replaceShareCode jd_dreamFactory Aaron
-replaceShareCode jd_fruit Aaron
-replaceShareCode jd_health Aaron
-replaceShareCode jd_jdfactory Aaron
-replaceShareCodeV1 jd_pet Aaron
-replaceShareCode jd_plantBean Aaron
-replaceShareCode jd_sgmh Aaron
-replaceShareCode jd_jxmc Aaron
-cd ${ShellDir}
-
-
 git clone -b master https://github.com/okyyds/yyds.git yyds
 cd yyds
 cp -rf ${ShellDir}/replace/* ./
@@ -214,27 +151,18 @@ ScriptsDir=${ShellDir}/jd_scripts
 DockerDir=${ScriptsDir}/docker
 [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
 ListCronSh=${DockerDir}/crontab_list.sh
-ListCronScripts=MyActions/docker/crontab_list.sh
 ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
-# ListCronScripts3=sngxprov2p/docker/crontab_list.sh
 ListCronScripts4=MyScript/docker/crontab_list.sh
-ListCronScripts5=JDHelp/docker/crontab_list.sh
-ListCronScripts6=Aaron/docker/crontab_list.sh
 ListCronScripts8=yyds/docker/crontab_list.sh
 
-# cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
-cat ${ListCronScripts} ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts5} ${ListCronScripts6} ${ListCronScripts8} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
+cat ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts8} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 cd ${ShellDir}
 
-jq -s 'reduce .[] as $item ({}; . * $item)' MyActions/package.json JDHelloWorld/package.json JDHelp/package.json Aaron/package.json yyds/package.json > package.json
+jq -s 'reduce .[] as $item ({}; . * $item)' JDHelloWorld/package.json Aaron/package.json yyds/package.json > package.json
 
-cp -rf $(ls MyActions | grep -v docker | sed "s:^:MyActions/:" | xargs) ${ScriptsDir}
 cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
-# cp -rf $(ls sngxprov2p | grep -v docker | sed "s:^:sngxprov2p/:" | xargs) ${ScriptsDir}
-cp -rf $(ls JDHelp | grep -v docker | sed "s:^:JDHelp/:" | xargs) ${ScriptsDir}
-cp -rf $(ls Aaron | grep -v docker | sed "s:^:Aaron/:" | xargs) ${ScriptsDir}
 cp -rf $(ls yyds | grep -v docker | sed "s:^:yyds/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
 cp -rf $(ls jddepot | grep -v docker | sed "s:^:jddepot/:" | xargs) ${ScriptsDir}
