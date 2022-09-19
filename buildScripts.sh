@@ -94,6 +94,7 @@ EOF
 sed '/^$/d' JDHelloWorld/docker/crontab_list.sh
 
 cd JDHelloWorld
+cp -rf ${ShellDir}/replace/* ./
 
 replaceShareCode jd_dreamFactory JDHelloWorld
 replaceShareCode jd_fruit JDHelloWorld
@@ -132,6 +133,7 @@ EOF
 sed '/^$/d' JDHelp/docker/crontab_list.sh
 
 cd JDHelp
+cp -rf ${ShellDir}/replace/* ./
 replaceShareCode jd_cash JDHelp
 deleteShareCode jd_cfd JDHelp
 replaceShareCodeV1 jd_dreamFactory JDHelp
@@ -146,6 +148,7 @@ cd ${ShellDir}
 
 git clone https://github.com/wuzhi05/MyActions.git MyActions
 cd MyActions
+cp -rf ${ShellDir}/replace/* ./
 replaceShareCode jd_cash MyActions
 replaceShareCode jd_cfd MyActions
 replaceShareCode jd_dreamFactory MyActions
@@ -160,6 +163,7 @@ cd ${ShellDir}
 
 git clone https://github.com/Aaron-lv/sync.git Aaron
 cd Aaron
+cp -rf ${ShellDir}/replace/* ./
 replaceShareCode jd_cash Aaron
 replaceShareCode jd_cfd Aaron
 replaceShareCode jd_dreamFactory Aaron
@@ -175,6 +179,7 @@ cd ${ShellDir}
 
 git clone -b master https://github.com/okyyds/yyds.git yyds
 cd yyds
+cp -rf ${ShellDir}/replace/* ./
 replaceShareCode jd_cash yyds
 replaceShareCode jd_cfd yyds
 replaceShareCode jd_dreamFactory yyds
@@ -189,6 +194,7 @@ cd ${ShellDir}
 
 git clone https://github.com/Akali5/jd-depot.git jddepot
 cd jddepot
+cp -rf ${ShellDir}/replace/* ./
 replaceShareCode jd_cash jddepot
 replaceShareCode jd_cfd jddepot
 replaceShareCode jd_dreamFactory jddepot
