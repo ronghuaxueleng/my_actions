@@ -131,7 +131,6 @@ cd ${ShellDir}
 
 git clone https://github.com/Akali5/jd-depot.git jddepot
 cd jddepot
-cp -rf ${ShellDir}/replace/* ./
 replaceShareCode jd_cash jddepot
 replaceShareCode jd_cfd jddepot
 replaceShareCode jd_dreamFactory jddepot
