@@ -143,6 +143,20 @@ replaceShareCode jd_sgmh jddepot
 replaceShareCode jd_jxmc jddepot
 cd ${ShellDir}
 
+git clone https://github.com/ShuaiLeiLu/JD_Scripts.git ShuaiLeiLu
+cd ShuaiLeiLu
+replaceShareCode jd_cash ShuaiLeiLu
+replaceShareCode jd_cfd ShuaiLeiLu
+replaceShareCode jd_dreamFactory ShuaiLeiLu
+replaceShareCode jd_fruit ShuaiLeiLu
+replaceShareCode jd_health ShuaiLeiLu
+replaceShareCode jd_jdfactory ShuaiLeiLu
+replaceShareCodeV1 jd_pet ShuaiLeiLu
+replaceShareCode jd_plantBean ShuaiLeiLu
+replaceShareCode jd_sgmh ShuaiLeiLu
+replaceShareCode jd_jxmc ShuaiLeiLu
+cd ${ShellDir}
+
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
 ScriptsDir=${ShellDir}/jd_scripts
@@ -151,11 +165,12 @@ DockerDir=${ScriptsDir}/docker
 [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
 ListCronSh=${DockerDir}/crontab_list.sh
 ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
+ListCronScripts3=ShuaiLeiLu/docker/crontab_list.sh
 ListCronScripts4=MyScript/docker/crontab_list.sh
 ListCronScripts8=yyds/docker/crontab_list.sh
 
 
-cat ${ListCronScripts2} ${ListCronScripts4} ${ListCronScripts8} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
+cat ${ListCronScripts2} ${ListCronScripts3} ${ListCronScripts4} ${ListCronScripts8} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' > ${ListCronSh}
 
 cd ${ShellDir}
 
@@ -165,4 +180,5 @@ cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${
 cp -rf $(ls yyds | grep -v docker | sed "s:^:yyds/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
 cp -rf $(ls jddepot | grep -v docker | sed "s:^:jddepot/:" | xargs) ${ScriptsDir}
+cp -rf $(ls ShuaiLeiLu | grep -v docker | sed "s:^:ShuaiLeiLu/:" | xargs) ${ScriptsDir}
 cp -rf package.json ${ScriptsDir}
