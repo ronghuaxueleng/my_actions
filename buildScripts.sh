@@ -143,7 +143,7 @@ replaceShareCode jd_sgmh jddepot
 replaceShareCode jd_jxmc jddepot
 cd ${ShellDir}
 
-git https://github.com/ShuaiLeiLu/JD_Scripts.git ShuaiLeiLu
+git clone https://github.com/ShuaiLeiLu/JD_Scripts.git ShuaiLeiLu
 cd ShuaiLeiLu
 replaceShareCode jd_cash ShuaiLeiLu
 replaceShareCode jd_cfd ShuaiLeiLu
