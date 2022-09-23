@@ -33,11 +33,7 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 $.invitePinTaskList = []
-$.invitePin = [
-  "",
-  "",
-  ""
-]
+$.invitePin = []
 const JD_API_HOST = `https://api.m.jd.com/client.action`;
 message = ""
 !(async () => {
