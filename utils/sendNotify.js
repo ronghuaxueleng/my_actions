@@ -344,6 +344,7 @@ function textPage(text = '', pageSize = 1500) {
 
 function goCQhttp(text = '', desp = '') {
     if (GO_CQHTTP_URL && GO_CQHTTP_QQ && GO_CQHTTP_METHOD) {
+        desp = desp.replace(/红包/g, "讧包");
         let msg = (text + '\n' + desp);
         let recv_id = ''
         if (GO_CQHTTP_METHOD === 'send_private_msg') {
