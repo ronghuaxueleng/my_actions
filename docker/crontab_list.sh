@@ -278,8 +278,6 @@
 20 0 * * * node /scripts/jd_zjb.js >> /scripts/logs/jd_zjb.log 2>&1
 # 赚喜豆-TS版
 15,30,45 0 * * * node /scripts/jd_zjd.ts >> /scripts/logs/jd_zjb.log 2>&1
-# 平行时空
-10 6,20 * * * node /scripts/jd_pxsk.js >> /scripts/logs/jd_pxsk.log 2>&1
 # 导出所有互助码清单，日志在log/export_sharecodes下
 48 5 * * * bash export_sharecodes
 #拾取好友与自己零件、厂长翻倍任务、点击厂长任务
