@@ -13,12 +13,6 @@ if ($.isNode()) {
         cookiesArr.push(jdCookieNode[item])
     })
 }
-let WP_APP_TOKEN_ONE = "";
-if ($.isNode()) {
-	if (process.env.WP_APP_TOKEN_ONE) {
-		WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
-	}
-}
 
 let arrCkPtPin = [];
 let arrEnvPtPin = [];
@@ -27,15 +21,6 @@ let arrEnvOnebyOne = [];
 let strCk = "";
 let strNoFoundCk = "";
 let strMessage = "";
-let strNotify = "";
-if ($.isNode() && process.env.SEQCK_DisableCKNOTIFY) {
-	strNotify=process.env.SEQCK_DisableCKNOTIFY;
-	console.log(`检测到设定了公告,禁用的CK将推送信息...`);
-	strNotify = `【✨✨✨✨公告✨✨✨✨】\n`+strNotify;
-	console.log(strNotify+"\n");
-}else{
-	WP_APP_TOKEN_ONE = "";
-}
 
 const fs = require('fs');
 let TempCKUid = [];
@@ -69,10 +54,11 @@ if (UidFileexists) {
             var tempptpin = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
             var intSeq = inArray(tempptpin, arrEnvPtPin);
             if (intSeq != -1) {
+                intSeq += 1;
                 arrCkPtPin.push(tempptpin);
-                strCk += "【"+(intSeq+1) + "】" + tempptpin ;
-				if (arrEnvOnebyOne[intSeq]) {
-					strCk += "(已启用一对一推送)"
+                strCk += "【"+intSeq + "】" + tempptpin ;
+				if (arrEnvOnebyOne[i]) {
+					strCk += "(账号已启用一对一推送)"
 				}
 				strCk +="\n";
             }
@@ -83,30 +69,26 @@ if (UidFileexists) {
         var tempptpin = arrEnvPtPin[i];
         var intSeq = inArray(tempptpin, arrCkPtPin);
         if (intSeq == -1) {
-            strNoFoundCk += "【" + (i + 1) + "】" + tempptpin;
+            strNoFoundCk += "【"+(i + 1) + "】" + tempptpin;
             if (arrEnvStatus[i] == 1) {
-                strNoFoundCk += "(已禁用)"
-                if ($.isNode() && WP_APP_TOKEN_ONE) {
-                    await notify.sendNotifybyWxPucher("账号下线通知", strNotify, tempptpin);
-					await $.wait(1000);
-                }
+                strNoFoundCk += "(状态已禁用)"
             }
-            if (arrEnvOnebyOne[i]) {
-                strNoFoundCk += "(已启用一对一推送)"
+			if (arrEnvOnebyOne[i]) {
+                strNoFoundCk += "(账号已启用一对一推送)"
             }
-            strNoFoundCk += "\n";
+			strNoFoundCk +="\n";
 
         }
     }
-
+	
     if (strNoFoundCk) {
         console.log("没有出现在今日CK队列中的账号: \n" + strNoFoundCk);
 		strMessage+="没有出现在今日CK队列中的账号: \n" + strNoFoundCk;
     }
-
-	console.log("\n今日执行任务的账号顺序: \n" + strCk);
+	
+	console.log("\n今日执行任务的账号顺序: \n" + strCk);	
 	strMessage+="\n今日执行任务的账号顺序: \n" + strCk;
-
+	
     if ($.isNode()) {
         await notify.sendNotify(`${$.name}`, strMessage);
     }
@@ -117,14 +99,13 @@ if (UidFileexists) {
 
 function inArray(search, array) {
     var lnSeq = -1;
-    for (let i = 0; i < array.length; i++) {
+    for (var i in array) {
         if (array[i] == search) {
             lnSeq = i;
         }
     }
     return parseInt(lnSeq);
 }
-
 
 function getuuid(strRemark, PtPin) {
     var strTempuuid = "";
@@ -142,7 +123,7 @@ function getuuid(strRemark, PtPin) {
                         }
                     }
                 }
-            }
+            }            
         }
     }
     if (!strTempuuid && TempCKUid) {

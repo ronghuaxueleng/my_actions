@@ -20,7 +20,7 @@ if ($.isNode()) {
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === "false")
     console.log = () => {};
   if (process.env.ACT_URL && process.env.ACT_URL === '') console.log = () => {};
-  actURL = process.env.ACT_URL || 'https://raw.githubusercontent.com/11111130/yyds/master/docker/mall.json'
+  actURL = process.env.ACT_URL || 'https://raw.githubusercontent.com/okyyds/yyds/master/docker/mall.json'
 } else {
   cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
@@ -32,7 +32,7 @@ if ($.isNode()) {
   $.getCodeListerr = false;
   mallActiveList = await getCodeList(actURL)
   if ($.getCodeListerr === false) {
-    mallActiveList = await getCodeList('https://gitee.com/11111131/code/raw/master/mall.json')
+    mallActiveList = await getCodeList('https://gitee.com/fatelight/code/raw/master/mall.json')
   }
   if ($.getCodeListerr === true) {
     for (let i = 0; i < cookiesArr.length; i++) {
