@@ -1,5 +1,5 @@
 /* 
-关注 https://t.me/okyydsnb
+关注 https://t.me/11111130nb
 7 7 7 7 7 jd_share.js
 注意控制ck数量
 */

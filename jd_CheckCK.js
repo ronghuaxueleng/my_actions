@@ -1,7 +1,7 @@
 /*
-cron "30 * * * *" jd_CheckCK.js, tag:京东CK检测by-ccwav
+京东CK检测
+cron:30 * * * *
  */
-//详细说明参考 https://github.com/ccwav/QLScript2.
 const $ = new Env('京东CK检测');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -138,7 +138,7 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
     }
 
     for (let i = 0; i < envs.length; i++) {
-        if (envs[i].value) {			
+        if (envs[i].value) {
 			var tempid=0;
 			if(envs[i]._id){
 				tempid=envs[i]._id;
@@ -146,7 +146,7 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
 			if(envs[i].id){
 				tempid=envs[i].id;
 			}
-            cookie = await getEnvById(tempid);				
+            cookie = await getEnvById(tempid);
             $.UserName = (cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.UserName2 = decodeURIComponent($.UserName);
             $.index = i + 1;
@@ -472,7 +472,7 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
             console.log(allMessage);
 			if (strAllNotify)
                     allMessage += `\n` + strAllNotify;
-				
+
             await notify.sendNotify(`${$.name}`, `${allMessage}`, {
                 url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
             })
