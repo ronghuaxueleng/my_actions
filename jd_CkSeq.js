@@ -15,9 +15,9 @@ if ($.isNode()) {
 }
 let WP_APP_TOKEN_ONE = "";
 if ($.isNode()) {
-	if (process.env.WP_APP_TOKEN_ONE) {		
+	if (process.env.WP_APP_TOKEN_ONE) {
 		WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
-	}	
+	}
 }
 
 let arrCkPtPin = [];
@@ -28,11 +28,11 @@ let strCk = "";
 let strNoFoundCk = "";
 let strMessage = "";
 let strNotify = "";
-if ($.isNode() && process.env.SEQCK_DisableCKNOTIFY) {	
+if ($.isNode() && process.env.SEQCK_DisableCKNOTIFY) {
 	strNotify=process.env.SEQCK_DisableCKNOTIFY;
 	console.log(`检测到设定了公告,禁用的CK将推送信息...`);
 	strNotify = `【✨✨✨✨公告✨✨✨✨】\n`+strNotify;
-	console.log(strNotify+"\n");	
+	console.log(strNotify+"\n");
 }else{
 	WP_APP_TOKEN_ONE = "";
 }
@@ -68,7 +68,7 @@ if (UidFileexists) {
             cookie = cookiesArr[i];
             var tempptpin = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
             var intSeq = inArray(tempptpin, arrEnvPtPin);
-            if (intSeq != -1) {                
+            if (intSeq != -1) {
                 arrCkPtPin.push(tempptpin);
                 strCk += "【"+(intSeq+1) + "】" + tempptpin ;
 				if (arrEnvOnebyOne[intSeq]) {
@@ -98,15 +98,15 @@ if (UidFileexists) {
 
         }
     }
-	
+
     if (strNoFoundCk) {
         console.log("没有出现在今日CK队列中的账号: \n" + strNoFoundCk);
 		strMessage+="没有出现在今日CK队列中的账号: \n" + strNoFoundCk;
     }
-	
-	console.log("\n今日执行任务的账号顺序: \n" + strCk);	
+
+	console.log("\n今日执行任务的账号顺序: \n" + strCk);
 	strMessage+="\n今日执行任务的账号顺序: \n" + strCk;
-	
+
     if ($.isNode()) {
         await notify.sendNotify(`${$.name}`, strMessage);
     }
@@ -142,7 +142,7 @@ function getuuid(strRemark, PtPin) {
                         }
                     }
                 }
-            }            
+            }
         }
     }
     if (!strTempuuid && TempCKUid) {
