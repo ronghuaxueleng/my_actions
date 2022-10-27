@@ -1,6 +1,6 @@
 #!/bin/bash
 ## Author: SuperManito
-## Modified: 2022-05-26
+## Modified: 2022-10-27
 
 ShellDir=${WORK_DIR}/shell
 . $ShellDir/share.sh
@@ -27,7 +27,7 @@ function Random_Update_Cron() {
         for ((i = 1; i < ${#RanHourArray[*]}; i++)); do
             RanHour="${RanHour},${RanHourArray[i]}"
         done
-        perl -i -pe "s|.+(update.+update.+log.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCrontabUser}
+        perl -i -pe "s|.+(update shell.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCrontabUser}
         cat ${ListCrontabUser} | sort -k2n | uniq > ${ListCrontabUser}.uniq
         mv ${ListCrontabUser}.uniq ${ListCrontabUser}
         cat ${ListCrontabUser} ${UtilsDir}/ext_crontab_list.sh > ${ListCrontabUser}.mix
@@ -134,8 +134,8 @@ function Gen_Own_Dir_And_Path() {
 ## 生成 Scripts仓库的定时任务清单，内容为去掉后缀的脚本名
 function Gen_ListTask() {
     Make_Dir $LogTmpDir
-    grep -E "node.+j[drx]_\w+\.js" $ListCronScripts | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | grep -v "$(b amRfNjE4X3JlZAo=)" | sort -u >$ListTaskScripts
-    grep -E " $TaskCmd j[drx]_\w+" $ListCrontabUser | perl -pe "s|.*$TaskCmd (j[drx]_\w+).*|\1|" | grep -v "$(b amRfNjE4X3JlZAo=)" | sort -u >$ListTaskUser
+    grep -E "node.+j[drx]_\w+\.js" $ListCronScripts | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u >$ListTaskScripts
+    grep -E " $TaskCmd j[drx]_\w+" $ListCrontabUser | perl -pe "s|.*$TaskCmd (j[drx]_\w+).*|\1|" | sort -u >$ListTaskUser
 }
 
 ## 生成 own 脚本的绝对路径清单
@@ -300,7 +300,9 @@ function Del_Cron() {
         crontab $ListCrontabUser
         Detail2=$(echo $Detail | perl -pe "s| |\\\n|g")
         echo -e "$SUCCESS 成功删除失效的定时任务\n"
-        Notify "失效定时任务通知" "已删除以下失效的定时任务：\n\n$Detail2"
+        if [[ ${EnableDelCronNotify} == true ]]; then
+            Notify "失效定时任务通知" "已删除以下失效的定时任务：\n\n$Detail2"
+        fi
     fi
 }
 
@@ -318,7 +320,7 @@ function Add_Cron_Scripts() {
         local Detail=$(cat $ListAdd)
         for cron in $Detail; do
             ## 新增定时任务自动禁用
-            if [[ $cron == jd_bean_sign ]]; then
+            if [[ $cron == "jd_bean_sign" ]]; then
                 if [[ ${DisableNewCron} == "true" ]]; then
                     echo "# 4 0,9 * * * $TaskCmd $cron" >>$ListCrontabUser
                 else
@@ -326,9 +328,9 @@ function Add_Cron_Scripts() {
                 fi
             else
                 if [[ ${DisableNewCron} == "true" ]]; then
-                    cat $ListCronScripts | grep -E "\/$cron\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.js.+|\1$TaskCmd \2|; s|^|# |" >>$ListCrontabUser
+                    cat $ListCronScripts | grep -E "\/$cron\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.[jspyth]{2,2}.+|\1$TaskCmd \2|; s|^|# |" >>$ListCrontabUser
                 else
-                    cat $ListCronScripts | grep -E "\/$cron\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.js.+|\1$TaskCmd \2|" >>$ListCrontabUser
+                    cat $ListCronScripts | grep -E "\/$cron\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.[jspyth]{2,2}.+|\1$TaskCmd \2|" >>$ListCrontabUser
                 fi
             fi
         done
@@ -416,10 +418,14 @@ function Add_Cron_Notify() {
         mv ${ListCrontabUser}.mix ${ListCrontabUser}
         crontab $ListCrontabUser
         echo -e "$SUCCESS 成功添加新的定时任务\n"
-        Notify "新增定时任务通知" "已添加新的定时任务（$Type）：\n\n$Detail"
+        if [[ ${EnableAddCronNotify} == true ]]; then
+            Notify "新增定时任务通知" "已添加新的定时任务（$Type）：\n\n$Detail"
+        fi
     else
         echo -e "添加新的定时任务出错，请手动添加...\n"
-        Notify "新任务添加失败通知" "尝试自动添加以下新的定时任务出错，请尝试手动添加（$Type）：\n\n$Detail"
+        if [[ ${EnableAddCronNotify} == true ]]; then
+            Notify "新任务添加失败通知" "尝试自动添加以下新的定时任务出错，请尝试手动添加（$Type）：\n\n$Detail"
+        fi
     fi
 }
 
@@ -557,7 +563,7 @@ function Update_Shell() {
     Random_Update_Cron
     ## 更新仓库
     cd $RootDir
-    echo -e "\n$WORKING 开始更新源码：$RootDir\n"
+    echo -e "\n$WORKING 开始更新项目源码：\n"
     git fetch --all
     git pull
     git reset --hard origin/$(git status | head -n 1 | awk -F ' ' '{print$NF}')
@@ -823,41 +829,38 @@ function Title() {
     local RunMod
     case $1 in
     all)
-        RunMod="    全 部    "
+        RunMod=" 全 部 内 容 "
         ;;
     shell)
-        RunMod="    源 码    "
+        RunMod=" 项 目 源 码 "
         ;;
     scripts)
-        RunMod=" Scripts 仓库"
+        RunMod=" 主 要 仓 库"
         ;;
     own)
-        RunMod=" 仅 Own 仓库 "
+        RunMod=" 扩 展 仓 库 "
         ;;
     repo)
         RunMod=" 所 有 仓 库 "
         ;;
     raw)
-        RunMod=" 仅 Raw 脚本 "
+        RunMod=" 扩 展 脚 本 "
         ;;
     extra)
-        RunMod="仅 Extra 脚本"
+        RunMod="  自定义脚本 "
         ;;
     designated)
         RunMod=" 指 定 仓 库 "
         ;;
     esac
-    echo -e "\n+----------------- 开 始 执 行 更 新 脚 本 -----------------+"
+    echo -e "\n+-------------------- 执 行 更 新 程 序 --------------------+"
     echo -e ''
     echo -e "                   更新模式：${BLUE}${RunMod}${PLAIN}  "
     echo -e ''
     echo -e "                系统时间：${BLUE}$(date "+%Y-%m-%d %T")${PLAIN}"
     echo -e ''
-    echo -e "         脚本根目录：${BLUE}$RootDir${PLAIN}   主要仓库目录：${BLUE}$ScriptsDir${PLAIN}"
-    echo -e ''
-    echo -e "      扩展仓库目录：${BLUE}$OwnDir${PLAIN}   扩展脚本目录：${BLUE}$RawDir${PLAIN}"
-    echo -e ''
 }
+
 function Notice() {
     echo -e "+----------------------- 郑 重 提 醒 -----------------------+
 
@@ -872,84 +875,83 @@ function Notice() {
 +--------------- 请遵循本项目宗旨 - 低调使用 ---------------+\n"
 }
 
-case $# in
-0)
-    Title "all"
-    Update_Shell
-    Update_Scripts
-    Update_Own "all"
-    ExtraShell
-    Processing_Crontab
-    Notice
-    exit ## 终止退出
-    ;;
-1)
-    case $1 in
-    all)
-        Title $1
-        Update_Shell
-        Update_Scripts
-        Update_Own "all"
-        ExtraShell
+function UpdateMain() {
+
+    case $# in
+    0)
+        Output_Command_Error 1 ## 命令错误
+        exit                   ## 终止退出
         ;;
-    shell)
-        Title $1
-        Update_Shell
-        ;;
-    scripts)
-        if [ -d $ScriptsDir/.git ]; then
+    1)
+        case $1 in
+        all)
+            Title $1
+            Update_Shell
+            Update_Scripts
+            Update_Own "all"
+            ExtraShell
+            ;;
+        shell)
+            Title $1
+            Update_Shell
+            ;;
+        scripts)
+            if [ -d $ScriptsDir/.git ]; then
+                Title $1
+                Update_Scripts
+            else
+                echo -e "\n$ERROR 请先配置 Sciprts 主要仓库！\n"
+            fi
+            ;;
+        own)
+            Title $1
+            Update_Own "all"
+            ;;
+        repo)
             Title $1
             Update_Scripts
-        else
-            echo -e "\n$ERROR 请先配置 Sciprts 主要仓库！\n"
-        fi
-        ;;
-    own)
-        Title $1
-        Update_Own "all"
-        ;;
-    repo)
-        Title $1
-        Update_Scripts
-        Update_Own "repo"
-        ;;
-    raw)
-        Update_Own "raw"
-        ;;
-    extra)
-        if [[ $EnableExtraShellSync == "true" ]] || [[ $EnableExtraShell == "true" ]]; then
-            Title $1
-            ExtraShell
-        else
-            echo -e "\n$ERROR 请先在 $FileConfUser 中启用关于 Extra 自定义脚本的相关变量！\n"
-        fi
+            Update_Own "repo"
+            ;;
+        raw)
+            Update_Own "raw"
+            ;;
+        extra)
+            if [[ $EnableExtraShellSync == "true" ]] || [[ $EnableExtraShell == "true" ]]; then
+                Title $1
+                ExtraShell
+            else
+                echo -e "\n$ERROR 请先在 $FileConfUser 中启用关于 Extra 自定义脚本的相关变量！\n"
+            fi
+            ;;
+        *)
+            ## 判断传入参数
+            echo $1 | grep "\/" -q
+            if [ $? -eq 0 ]; then
+                Update_Designated $1
+            else
+                if [ -d "$(pwd)/$1" ]; then
+                    if [[ "$1" = "." ]]; then
+                        Update_Designated "$(pwd)"
+                    elif [[ "$1" = "./" ]]; then
+                        Update_Designated "$(pwd)"
+                    else
+                        Update_Designated "$(pwd)/$1"
+                    fi
+                else
+                    Output_Command_Error 1 ## 命令错误
+                    exit                   ## 终止退出
+                fi
+            fi
+            ;;
+        esac
+        Processing_Crontab
+        Notice
+        exit ## 终止退出
         ;;
     *)
-        ## 判断传入参数
-        echo $1 | grep "\/" -q
-        if [ $? -eq 0 ]; then
-            Update_Designated $1
-        else
-            if [ -d "$(pwd)/$1" ]; then
-                if [[ "$1" = "." ]]; then
-                    Update_Designated "$(pwd)"
-                elif [[ "$1" = "./" ]]; then
-                    Update_Designated "$(pwd)"
-                else
-                    Update_Designated "$(pwd)/$1"
-                fi
-            else
-                Output_Command_Error 1 ## 命令错误
-                exit                   ## 终止退出
-            fi
-        fi
+        Output_Command_Error 2 ## 命令过多
         ;;
     esac
-    Processing_Crontab
-    Notice
-    exit ## 终止退出
-    ;;
-*)
-    Output_Command_Error 2 ## 命令过多
-    ;;
-esac
+}
+
+UpdateMain $@ | tee -a $LogDir/update.log

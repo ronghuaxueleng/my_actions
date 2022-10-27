@@ -1,6 +1,6 @@
 #!/bin/bash
 ## Author: SuperManito
-## Modified: 2022-06-22
+## Modified: 2022-10-27
 
 ShellDir=${WORK_DIR}/shell
 . $ShellDir/share.sh
@@ -43,13 +43,19 @@ function Find_Script() {
                 PwdTmp=$(pwd | perl -pe "{s|/$(pwd | awk -F '/' '{printf$NF}')||g;}")
                 AbsolutePath=$(echo "${InputContent}" | perl -pe "{s|\.\./|${PwdTmp}/|;}")
             else
-                ## 适配在定时清单中使用相对路径时将自动纠正为绝对路径
-                if [[ $(pwd) == "/root" ]]; then
-                    AbsolutePath=$(echo "${InputContent}" | perl -pe "{s|\.\/||; s|^*|$RootDir/|;}")
+                local TmpDirName=$(echo ${InputContent} | awk -F '/' '{printf$1}')
+                if [ -d "$OwnDir/$TmpDirName" ]; then
+                    AbsolutePath=$(echo "${InputContent}" | perl -pe "{s|^|$OwnDir/|;}")
                 else
-                    AbsolutePath=$(echo "${InputContent}" | perl -pe "{s|\.\/||; s|^*|$(pwd)/|;}")
+                    ## 适配在定时清单中使用相对路径时将自动纠正为绝对路径
+                    if [[ $(pwd) == "/root" ]]; then
+                        AbsolutePath=$(echo "${InputContent}" | perl -pe "{s|\.\/||; s|^*|$RootDir/|;}")
+                    else
+                        AbsolutePath=$(echo "${InputContent}" | perl -pe "{s|\.\/||; s|^*|$(pwd)/|;}")
+                    fi
                 fi
             fi
+            echo ${InputContent} | grep "\.\./" -q
         fi
         ## 判定传入是否含有后缀格式
         FileNameTmp=${AbsolutePath##*/}
@@ -160,8 +166,9 @@ function Find_Script() {
                     break
                 fi
             done
-        ## 模糊查找
+
         else
+            ## 模糊查找
             FileNameTmp1=$(echo ${InputContent} | perl -pe "{s|\.js||; s|\.py||; s|\.ts||; s|\.sh||}")
             FileNameTmp2=$(echo ${FileNameTmp1} | perl -pe "{s|jd_||; s|^|jd_|}")
             FileNameTmp3=$(echo ${FileNameTmp1} | perl -pe "{s|jx_||; s|^|jx_|}")
@@ -246,7 +253,7 @@ function Find_Script() {
             exit ## 终止退出
             ;;
         *)
-            echo -e "\n$ERROR 项目不支持运行 ${BLUE}.${FileSuffix}${PLAIN} 类型的脚本！\n"
+            echo -e "\n$ERROR 本项目不支持运行 ${BLUE}.${FileSuffix}${PLAIN} 类型的脚本！\n"
             exit ## 终止退出
             ;;
         esac
@@ -270,7 +277,7 @@ function Find_Script() {
                 exit ## 终止退出
             fi
             ## 判定是否使用下载代理参数
-            if [[ ${DOWNLOAD_PROXY} == "true" ]]; then
+            if [[ ${DOWNLOAD_PROXY} == true ]]; then
                 local Branch=$(echo "${Tmp}" | sed "s/https:\/\/raw\.githubusercontent\.com\///g" | awk -F '/' '{print$3}')
                 FormatInputContent=$(echo "${Tmp}" | perl -pe "{s|raw\.githubusercontent\.com|cdn\.jsdelivr\.net\/gh|g; s|\/${Branch}\/|\@${Branch}\/|g}")
                 ProxyJudge="使用代理"
@@ -330,12 +337,14 @@ function Find_Script() {
             ## 等待动画
             local spin=('.   ' '..  ' '... ' '....')
             local n=0
+            tput civis
             while (true); do
                 ((n++))
-                echo -en "\033[?25l$COMPLETE 下载完成，倒计时 3 秒后开始${RunModJudge}执行${spin[$((n % 4))]}${PLAIN}" "\r"
+                echo -en "$COMPLETE 下载完毕，倒计时 3 秒后开始${RunModJudge}执行${spin[$((n % 4))]}${PLAIN}" "\r"
                 sleep 0.3
                 [ $n = 10 ] && echo -e "\033[?25h\n${PLAIN}" && break
             done
+            tput cnorm
             FileName=${FileNameTmp%.*}
             FileDir=$ScriptsDir
             ## 添加依赖文件
@@ -346,7 +355,7 @@ function Find_Script() {
             RUN_REMOTE="true"
         else
             [ -f "$ScriptsDir/${FileNameTmp}.new" ] && rm -rf "$ScriptsDir/${FileNameTmp}.new"
-            echo -e "\n$FAIL 脚本 ${FileNameTmp} 下载失败，请检查网络连通性并对目标 URL 地址是否正确进行验证！\n"
+            echo -e "\n$FAIL 脚本 ${FileNameTmp} 下载异常，请检查网络连通性并对目标 URL 地址是否正确进行验证！\n"
             exit ## 终止退出
         fi
     }
@@ -395,7 +404,7 @@ function Find_Script() {
 
 ## 随机延迟
 function Random_Delay() {
-    if [[ ${RUN_DELAY} == "true" ]]; then
+    if [[ ${RUN_DELAY} == true ]]; then
         if [[ -n ${RandomDelay} ]] && [[ ${RandomDelay} -gt 0 ]]; then
             local CurMin=$(date "+%-M")
             local CurDelay=$((${RANDOM} % ${RandomDelay} + 1))
@@ -418,7 +427,7 @@ function Random_Delay() {
 ## 等待执行
 function RunWait() {
     local FormatPrint
-    if [[ ${RUN_WAIT} == "true" ]]; then
+    if [[ ${RUN_WAIT} == true ]]; then
         echo ${RUN_WAIT_TIMES} | grep -E "\.[smd]$|\.$"
         if [ $? -eq 0 ]; then
             echo -e "\n$ERROR 等待时间值格式有误！\n"
@@ -451,7 +460,7 @@ function Account_ExistenceJudgment() {
     local Tmp=Cookie$Num
     if [[ -z ${!Tmp} ]]; then
         echo -e "\n$ERROR 账号 ${BLUE}$Num${PLAIN} 不存在，请重新确认！\n"
-        exit ## 终止退出
+        exit 1 ## 终止退出
     fi
 }
 
@@ -505,16 +514,16 @@ function Run_Normal() {
     ## 统计账号数量
     Count_UserSum
     ## 静默运行
-    [[ ${RUN_MUTE} == "true" ]] && NoPushNotify
+    [[ ${RUN_MUTE} == true ]] && NoPushNotify
 
     ## 运行主命令
     function Main() {
-        if [[ ${RUN_BACKGROUND} == "true" ]]; then
+        if [[ ${RUN_BACKGROUND} == true ]]; then
             ## 记录执行开始时间
             echo -e "[$(date "${TIME_FORMAT}" | cut -c1-23)] 执行开始，后台运行不记录结束时间\n" >>${LogFile}
             case ${FileFormat} in
             JavaScript)
-                if [[ ${EnableGlobalProxy} == "true" ]]; then
+                if [[ ${EnableGlobalProxy} == true ]]; then
                     node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 &>>${LogFile} &
                 else
                     node ${FileName}.js 2>&1 &>>${LogFile} &
@@ -536,7 +545,7 @@ function Run_Normal() {
             echo -e "[$(date "${TIME_FORMAT}" | cut -c1-23)] 执行开始\n" >>${LogFile}
             case ${FileFormat} in
             JavaScript)
-                if [[ ${EnableGlobalProxy} == "true" ]]; then
+                if [[ ${EnableGlobalProxy} == true ]]; then
                     node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 | tee -a ${LogFile}
                 else
                     node ${FileName}.js 2>&1 | tee -a ${LogFile}
@@ -573,13 +582,13 @@ function Run_Normal() {
             echo "${UserNum}" | grep "-" -q
             if [ $? -eq 0 ]; then
                 ## 格式检测
-                if [[ $(echo "${UserNum}" | perl -pe "{s|-|-\\n|g}" | grep "-" -c) -gt 2 ]]; then
+                if [[ $(echo "${UserNum}" | perl -pe "{s|-|-\\n|g}" | grep "-" -c) -ge 2 ]]; then
                     Help
-                    echo -e "$ERROR 检测到无效参数值 ${BLUE}${UserNum}${PLAIN} ，账号区间语法有误，存在多个连接符(${BLUE}-${PLAIN})！\n"
+                    echo -e "$ERROR 检测到无效参数值 ${BLUE}${UserNum}${PLAIN} ，存在多个连接符 ${BLUE}-${PLAIN} ，账号区间语法有误 ！\n"
                     exit ## 终止退出
-                elif [[ $(echo "${UserNum}" | perl -pe "{s|\%|\%\\n|g}" | grep "%" -c) -gt 2 ]]; then
+                elif [[ $(echo "${UserNum}" | perl -pe "{s|\%|\%\\n|g}" | grep "%" -c) -ge 2 ]]; then
                     Help
-                    echo -e "$ERROR 检测到无效参数值 ${BLUE}${UserNum}${PLAIN} ，账号区间语法有误，存在多个账号总数代符(${BLUE}%${PLAIN})！\n"
+                    echo -e "$ERROR 检测到无效参数值 ${BLUE}${UserNum}${PLAIN} ，存在多个账号总数代符 ${BLUE}%${PLAIN} ，账号区间语法有误！\n"
                     exit ## 终止退出
                 fi
                 if [[ ${UserNum%-*} -lt ${UserNum##*-} ]]; then
@@ -603,6 +612,40 @@ function Run_Normal() {
         export JD_COOKIE=${COOKIE_TMP}
     }
 
+    ## 后台挂起（守护进程）
+    function Daemon_Process() {
+        pm2 list | sed "/─/d" | perl -pe "{s| ||g; s#│#|#g}" | sed "1d" >$FilePm2List
+        cat $FilePm2List | awk -F '|' '{print$3}' | grep $FileName -wq
+        ExitStatus=$?
+        ## 删除原有
+        pm2 stop $FileName >/dev/null 2>&1
+        pm2 flush >/dev/null 2>&1
+        pm2 delete $FileName >/dev/null 2>&1
+        ## 启用
+        echo -e "[$(date "${TIME_FORMAT}" | cut -c1-23)] 守护进程启动\n" >>${LogFile}
+        case ${FileFormat} in
+        JavaScript)
+            pm2 start "${FileName}.${FileSuffix}" --name "$FileName" --watch --log ${LogFile}
+            ;;
+        Python)
+            pm2 start "${FileName}.${FileSuffix}" --interpreter /usr/bin/python3 --log ${LogFile}  -- -u
+            ;;
+        TypeScript)
+            pm2 start "${FileName}.${FileSuffix}" --interpreter /usr/bin/ts-node-transpile-only --name "$FileName" --log ${LogFile}
+            ;;
+        Shell)
+            pm2 start "${FileName}.${FileSuffix}" --interpreter bash --name "$FileName" --log ${LogFile}
+            ;;
+        esac
+        if [[ $ExitStatus -eq 0 ]]; then
+            echo -e "\n$COMPLETE 已重启 ${BLUE}$FileName${PLAIN} 守护进程，日志位于 ${BLUE}${LogFile}${PLAIN}\n"
+        else
+            echo -e "\n$SUCCESS 已启动 ${BLUE}$FileName${PLAIN} 守护进程，日志位于 ${BLUE}${LogFile}${PLAIN}\n"
+        fi
+        ## 删除 PM2 进程日志清单
+        [ -f $FilePm2List ] && rm -rf $FilePm2List
+    }
+
     ## 迅速模式
     if [[ ${RUN_RAPID} != "true" ]]; then
         ## 同步定时清单
@@ -616,7 +659,7 @@ function Run_Normal() {
     LogFile="${LogPath}/$(date "+%Y-%m-%d-%H-%M-%S").log"
 
     ## 账号分组
-    if [[ ${RUN_GROUPING} == "true" ]]; then
+    if [[ ${RUN_GROUPING} == true ]]; then
         ## 定义分组
         local Groups=$(echo ${GROUPING_VALUE} | perl -pe "{s|@| |g}")
         for g in ${Groups}; do
@@ -624,7 +667,7 @@ function Run_Normal() {
             Designated_Account "${Accounts}"
 
             ## 执行脚本
-            if [[ ${RUN_LOOP} == "true" ]]; then
+            if [[ ${RUN_LOOP} == true ]]; then
                 ## 循环运行
                 Run_Times=$(($RUN_LOOP_TIMES + 1))
             else
@@ -636,7 +679,12 @@ function Run_Normal() {
                 ## 等待执行
                 RunWait
                 ## 运行
-                Main
+                if [[ ${RUN_DAEMON} == true ]]; then
+                    ## 后台挂起（守护进程）
+                    Daemon_Process
+                else
+                    Main
+                fi
             done
 
             ## 重新组合变量
@@ -644,7 +692,7 @@ function Run_Normal() {
         done
     else
         ## 指定账号
-        if [[ ${RUN_DESIGNATED} == "true" ]]; then
+        if [[ ${RUN_DESIGNATED} == true ]]; then
             local Accounts=$(echo ${DESIGNATED_VALUE} | perl -pe "{s|%|${UserSum}|g, s|,| |g}")
             Designated_Account "${Accounts}"
         else
@@ -653,7 +701,7 @@ function Run_Normal() {
         fi
 
         ## 执行脚本
-        if [[ ${RUN_LOOP} == "true" ]]; then
+        if [[ ${RUN_LOOP} == true ]]; then
             ## 循环运行
             Run_Times=$(($RUN_LOOP_TIMES + 1))
         else
@@ -665,13 +713,18 @@ function Run_Normal() {
             ## 等待执行
             RunWait
             ## 运行
-            Main
+            if [[ ${RUN_DAEMON} == true ]]; then
+                ## 后台挂起（守护进程）
+                Daemon_Process
+            else
+                Main
+            fi
         done
 
     fi
 
     ## 判断远程脚本执行后是否删除
-    if [[ ${RUN_REMOTE} == "true" && ${AutoDelRawFiles} == "true" ]]; then
+    if [[ ${RUN_REMOTE} == true && ${AutoDelRawFiles} == true ]]; then
         rm -rf "${FileDir}/${FileName}.${FileSuffix}"
     fi
 }
@@ -687,7 +740,7 @@ function Run_Concurrent() {
     ## 统计账号数量
     Count_UserSum
     ## 静默运行参数
-    [[ ${RUN_MUTE} == "true" ]] && NoPushNotify
+    [[ ${RUN_MUTE} == true ]] && NoPushNotify
 
     ## 运行主命令
     function Main() {
@@ -701,7 +754,7 @@ function Run_Concurrent() {
         ## 执行脚本
         case ${FileFormat} in
         JavaScript)
-            if [[ ${EnableGlobalProxy} == "true" ]]; then
+            if [[ ${EnableGlobalProxy} == true ]]; then
                 node -r 'global-agent/bootstrap' ${FileName}.js 2>&1 &>>${LogFile} &
             else
                 node ${FileName}.js 2>&1 &>>${LogFile} &
@@ -735,7 +788,7 @@ function Run_Concurrent() {
     ## 等待执行
     RunWait
     ## 加载账号并执行
-    if [[ ${RUN_DESIGNATED} == "true" ]]; then
+    if [[ ${RUN_DESIGNATED} == true ]]; then
         ## 判定账号是否存在
         local Accounts=$(echo ${DESIGNATED_VALUE} | perl -pe "{s|%|${UserSum}|g, s|,| |g}")
         for UserNum in ${Accounts}; do
@@ -803,7 +856,7 @@ function Run_Concurrent() {
     echo -e "\n$COMPLETE 已部署当前任务并于后台运行中，如需查询脚本运行记录请前往 ${BLUE}${LogPath:4}${PLAIN} 目录查看相关日志\n"
 
     ## 判断远程脚本执行后是否删除
-    if [[ ${RUN_REMOTE} == "true" && ${AutoDelRawFiles} == "true" ]]; then
+    if [[ ${RUN_REMOTE} == true && ${AutoDelRawFiles} == true ]]; then
         rm -rf "${FileDir}/${FileName}.${FileSuffix}"
     fi
 }
@@ -836,7 +889,7 @@ function Process_Kill() {
         ps -ef | grep -Ev "grep|pkill" | grep "\.${FileSuffix}$" -wq
         if [ $? -eq 0 ]; then
             ps -axo pid,command | less | grep "${ProcessKeywords}" | grep -Ev "${ProcessShielding}"
-            echo -e "\n$FAIL 进程终止失败，请尝试手动终止 ${BLUE}kill -9 <pid>${PLAIN}\n"
+            echo -e "\n$FAIL 未能成功终止进程，请尝试手动 ${BLUE}kill -9 <pid>${PLAIN}\n"
         else
             echo -e "\n$SUCCESS 已终止相关进程\n"
         fi
@@ -906,14 +959,18 @@ function Accounts_Control() {
     ## 检测
     function CheckCookie() {
         local InputContent=$1
-        local Check="$(curl -s --noproxy "*" "${INTERFACE_URL}" -H "cookie: ${InputContent}" | jq '.retcode' | sed "s/\"//g")"
-        if [[ ${Check} == "0" ]]; then
-            echo -e ${Valid}
-        elif [[ ${Check} == "1001" ]]; then
-            echo -e ${Invalid}
-        else
+        local Check="$(curl -s --noproxy "*" "${INTERFACE_URL}" -H "cookie: ${InputContent}" | jq -r '.retcode')"
+        case $Check in
+        0)
+            echo -e "${Valid}"
+            ;;
+        1001)
+            echo -e "${Invalid}"
+            ;;
+        *)
             echo -e "${RED}未知${PLAIN}"
-        fi
+            ;;
+        esac
     }
 
     case $1 in
@@ -921,11 +978,10 @@ function Accounts_Control() {
     check)
         ## 导入配置文件
         Import_Config
-        [ -f $FileSendMark ] && rm -rf $FileSendMark
 
         ## 检测全部账号
-        function Print_Info_Normal() {
-            local TmpA TmpB pt_pin pt_pin_temp FormatPin EscapePin EscapePinLength State CookieUpdatedDate UpdateTimes TmpDays TmpTime Tmp1 Tmp2 Tmp3 num
+        function CheckCookie_All() {
+            local TmpA TmpB pt_pin pt_pin_temp FormatPin EscapePin EscapePin_Length_Add State CookieUpdatedDate UpdateTimes TmpDays TmpTime Tmp1 Tmp2 Tmp3 num
 
             ## 统计账号数量
             Count_UserSum
@@ -948,28 +1004,20 @@ function Accounts_Control() {
                 ## 转义pt_pin中的汉字
                 EscapePin=$(printf $(echo ${pt_pin[m]} | perl -pe "s|%|\\\x|g;"))
                 ## 定义pt_pin中的长度（受限于编码，汉字多占1长度，短横杠长度为0）
-                EscapePinLength=$(($(echo ${EscapePin} | perl -pe '{s|[0-9a-zA-Z\.\=\:\_]||g;}' | wc -m) - $(echo ${EscapePin} | grep -o "-" | grep -c "") - 1))
+                EscapePin_Length_Add=$(StringLength $(echo ${EscapePin} | perl -pe '{s|[0-9a-zA-Z\.\=\:\_-]||g;}'))
                 ## 定义账号状态
                 State="$(CheckCookie $(grep -E "Cookie[1-9].*${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}'))"
                 ## 查询上次更新时间并计算过期时间
                 CookieUpdatedDate=$(grep "\#.*上次更新：" $FileConfUser | grep "${FormatPin}" | head -1 | awk -F '上次更新：' '{print$NF}' | awk -F '  ' '{print$1}' | perl -pe "{s|;||g}")
                 if [[ ${CookieUpdatedDate} ]]; then
                     UpdateTimes="${CookieUpdatedDate}"
-                    Tmp1=$(($(date -d $(date "+%Y-%m-%d") +%s) - $(date -d "$(echo ${CookieUpdatedDate} | grep -Eo "20[2-9][0-9]-[0-9]{1,2}-[0-9]{1,2}")" +%s)))
-                    Tmp2=$(($Tmp1 / 86400))
-                    Tmp3=$((30 - $Tmp2))
-                    [ -z $CheckCookieDaysAgo ] && TmpDays="2" || TmpDays=$(($CheckCookieDaysAgo - 1))
-                    if [ $Tmp3 -ge 0 ] && [ $Tmp3 -le $TmpDays ]; then
-                        [ $Tmp3 = 0 ] && TmpTime="今天" || TmpTime=" $Tmp3 天后"
-                        echo -e "账号$((m + 1)): ${EscapePin} 将在${TmpTime}过期" >>$FileSendMark
-                    fi
                 else
-                    UpdateTimes="Unknow"
+                    UpdateTimes="未知"
                 fi
                 sleep 1 ## 降低频率以减少出现因查询太快导致API请求失败的情况
                 num=$((m + 1))
                 ## 格式化输出
-                printf "%-3s ${BLUE}%-$((18 + ${EscapePinLength}))s${PLAIN} %-s${BLUE}%-s${PLAIN}\n" "$num." "${EscapePin}" " ${State}   上次更新: " "${UpdateTimes}"
+                printf "%-3s ${BLUE}%-$((18 + ${EscapePin_Length_Add}))s${PLAIN} %-s${BLUE}%-s${PLAIN}\n" "$num." "${EscapePin}" " ${State}   上次更新: " "${UpdateTimes}"
             done
 
             ## 检测 wskey
@@ -978,8 +1026,8 @@ function Accounts_Control() {
             if [[ ${ArrayLength} -ge 1 ]]; then
                 num=1
                 for ((i = 0; i <= ${ArrayLength}; i++)); do
-                    PT_PIN_TMP=$(cat $FileAccountConf | jq ".[$i] | .pt_pin" | sed "s/[\"\']//g; s/null//g; s/ //g")
-                    WS_KEY_TMP=$(cat $FileAccountConf | jq ".[$i] | .ws_key" | sed "s/[\"\']//g; s/null//g; s/ //g")
+                    PT_PIN_TMP=$(cat $FileAccountConf | jq -r ".[$i] | .pt_pin" | sed "s/null//g; s/ //g")
+                    WS_KEY_TMP=$(cat $FileAccountConf | jq -r ".[$i] | .ws_key" | sed "s/null//g; s/ //g")
                     ## 没有配置相应值就跳出当前循环
                     [ -z ${PT_PIN_TMP} ] && continue
                     if [ -z ${WS_KEY_TMP} ]; then
@@ -991,17 +1039,17 @@ function Accounts_Control() {
                 done
 
                 for ((i = 0; i <= ${ArrayLength}; i++)); do
-                    local PT_PIN_TMP=$(cat $FileAccountConf | jq ".[$i] | .pt_pin" | sed "s/[\"\']//g; s/null//g; s/ //g")
-                    local WS_KEY_TMP=$(cat $FileAccountConf | jq ".[$i] | .ws_key" | sed "s/[\"\']//g; s/null//g; s/ //g")
+                    local PT_PIN_TMP=$(cat $FileAccountConf | jq -r ".[$i] | .pt_pin" | sed "s/null//g; s/ //g")
+                    local WS_KEY_TMP=$(cat $FileAccountConf | jq -r ".[$i] | .ws_key" | sed "s/null//g; s/ //g")
                     ## 没有配置相应值就跳出当前循环
                     [ -z ${PT_PIN_TMP} ] && continue
                     [ -z ${WS_KEY_TMP} ] && continue
                     ## 转义pt_pin中的汉字
                     EscapePin=$(printf $(echo ${PT_PIN_TMP} | perl -pe "s|%|\\\x|g;"))
                     ## 定义pt_pin中的长度（受限于编码，汉字多占1长度，短横杠长度为0）
-                    EscapePinLength=$(($(echo ${EscapePin} | perl -pe '{s|[0-9a-zA-Z\.\=\:\_]||g;}' | wc -m) - $(echo ${EscapePin} | grep -o "-" | grep -c "") - 1))
+                    EscapePin_Length_Add=$(StringLength $(echo ${EscapePin} | perl -pe '{s|[0-9a-zA-Z\.\=\:\_-]||g;}'))
                     ## 打印
-                    printf "%-3s ${BLUE}%-$((19 + ${EscapePinLength}))s${PLAIN} %-s\n" "$num." "${EscapePin}" "$(CheckCookie "wskey=${WS_KEY_TMP}")"
+                    printf "%-3s ${BLUE}%-$((19 + ${EscapePin_Length_Add}))s${PLAIN} %-s\n" "$num." "${EscapePin}" "$(CheckCookie "wskey=${WS_KEY_TMP}")"
                     sleep 1 ## 降低频率以减少出现因查询太快导致API请求失败的情况
                     let num++
                 done
@@ -1009,7 +1057,7 @@ function Accounts_Control() {
         }
 
         ## 检测指定账号
-        function Print_Info_Designated() {
+        function CheckCookie_Designated() {
             local pt_pin FormatPin State CookieUpdatedDate UpdateTimes TmpDays TmpTime Tmp1 Tmp2 Tmp3
             local UserNum=$1
             ## 判定账号是否存在
@@ -1027,16 +1075,8 @@ function Accounts_Control() {
             CookieUpdatedDate=$(grep "\#.*上次更新：" $FileConfUser | grep "${FormatPin}" | head -1 | awk -F '上次更新：' '{print$NF}' | awk -F '  ' '{print$1}' | perl -pe "{s|;||g}")
             if [[ ${CookieUpdatedDate} ]]; then
                 UpdateTimes="${CookieUpdatedDate}"
-                Tmp1=$(($(date -d $(date "+%Y-%m-%d") +%s) - $(date -d "$(echo ${CookieUpdatedDate} | grep -Eo "20[2-9][0-9]-[0-9]{1,2}-[0-9]{1,2}")" +%s)))
-                Tmp2=$(($Tmp1 / 86400))
-                Tmp3=$((30 - $Tmp2))
-                [ -z $CheckCookieDaysAgo ] && TmpDays="2" || TmpDays=$(($CheckCookieDaysAgo - 1))
-                if [ $Tmp3 -ge 0 ] && [ $Tmp3 -le $TmpDays ]; then
-                    [ $Tmp3 = 0 ] && TmpTime="今天" || TmpTime=" $Tmp3 天后"
-                    echo -e "账号${UserNum}: ${EscapePin} 将在${TmpTime}过期" >>$FileSendMark
-                fi
             else
-                UpdateTimes="Unknow"
+                UpdateTimes="未知"
             fi
             ## 输出
             echo -en "Cookie => ${State}"
@@ -1044,12 +1084,12 @@ function Accounts_Control() {
             ## 检测 wskey
             grep -q "${pt_pin}" $FileAccountConf
             if [[ $? -eq 0 ]]; then
-                ## 统计 account.json 的数组总数，即最多配置了多少个账号，即使数组为空值
+                ## 统计 account.json 数组中的元素数量，即最多配置了多少个账号，即使元素为空值
                 local ArrayLength=$(cat $FileAccountConf | jq 'keys' | tail -n 2 | head -n 1 | grep -Eo "[0-9]{1,3}")
 
                 for ((i = 0; i <= ${ArrayLength}; i++)); do
-                    local PT_PIN_TMP=$(cat $FileAccountConf | jq ".[$i] | .pt_pin" | sed "s/[\"\']//g; s/null//g; s/ //g")
-                    local WS_KEY_TMP=$(cat $FileAccountConf | jq ".[$i] | .ws_key" | sed "s/[\"\']//g; s/null//g; s/ //g")
+                    local PT_PIN_TMP=$(cat $FileAccountConf | jq -r ".[$i] | .pt_pin" | sed "s/null//g; s/ //g")
+                    local WS_KEY_TMP=$(cat $FileAccountConf | jq -r ".[$i] | .ws_key" | sed "s/null//g; s/ //g")
                     ## 没有配置相应值就跳出当前循环
                     [ -z ${PT_PIN_TMP} ] && continue
                     if [[ ${PT_PIN_TMP} == ${pt_pin} ]]; then
@@ -1081,23 +1121,14 @@ function Accounts_Control() {
         ## 汇总
         case $# in
         1)
-            Print_Info_Normal
+            CheckCookie_All
             ;;
         2)
-            Print_Info_Designated $2
+            CheckCookie_Designated $2
             ;;
         esac
 
-        ## 过期提醒推送通知
-        if [ -f $FileSendMark ]; then
-            echo -e "\n${YELLOW}检测到下面的账号将在近期失效，请注意即时更新！${PLAIN}\n"
-            cat $FileSendMark
-            sed -i 's/$/&\\n/g' $FileSendMark
-            echo ''
-            Notify "账号过期提醒" "$(cat $FileSendMark)"
-            rm -rf $FileSendMark
-        fi
-        echo -e "\n$COMPLETE 检测完成\n"
+        echo -e "\n$COMPLETE 检测完毕\n"
         ;;
 
     ## 使用 WSKEY 更新账号
@@ -1127,13 +1158,13 @@ function Accounts_Control() {
         }
 
         ## 更新全部账号
-        function UpdateNormal() {
-            local UserNum PT_PIN_TMP WS_KEY_TMP FormatPin EscapePin EscapePinLength CookieTmp LogFile
+        function UpdateCookie_All() {
+            local UserNum PT_PIN_TMP WS_KEY_TMP FormatPin EscapePin EscapePin_Length_Add CookieTmp LogFile
             ## 统计 account.json 的数组总数，即最多配置了多少个账号，即使数组为空值
             local ArrayLength=$(cat $FileAccountConf | jq 'keys' | tail -n 2 | head -n 1 | grep -Eo "[0-9]{1,3}")
             ## 生成 pt_pin 数组
             local pt_pin_array=(
-                $(cat $FileAccountConf | jq '.[] | {pt_pin:.pt_pin,}' | grep -F "\"pt_pin\":" | grep -v "ptpin的值" | awk -F '\"' '{print$4}' | grep -v '^$')
+                $(cat $FileAccountConf | jq -r '.[] | {pt_pin:.pt_pin,} | .pt_pin' | grep -Ev "pt_pin的值|null|^$")
             )
             if [[ ${#pt_pin_array[@]} -ge 1 ]]; then
                 local num=1
@@ -1144,8 +1175,8 @@ function Accounts_Control() {
                 echo -e "[$(date "${TIME_FORMAT}" | cut -c1-23)] 执行开始\n" >>${LogFile}
 
                 for ((i = 0; i <= ${ArrayLength}; i++)); do
-                    PT_PIN_TMP=$(cat $FileAccountConf | jq ".[$i] | .pt_pin" | sed "s/[\"\']//g; s/null//g; s/ //g")
-                    WS_KEY_TMP=$(cat $FileAccountConf | jq ".[$i] | .ws_key" | sed "s/[\"\']//g; s/null//g; s/ //g")
+                    PT_PIN_TMP=$(cat $FileAccountConf | jq -r ".[$i] | .pt_pin" | sed "s/null//g; s/ //g")
+                    WS_KEY_TMP=$(cat $FileAccountConf | jq -r ".[$i] | .ws_key" | sed "s/null//g; s/ //g")
                     ## 没有配置相应值就跳出当前循环
                     [ -z ${PT_PIN_TMP} ] && continue
                     [ -z ${WS_KEY_TMP} ] && continue
@@ -1156,9 +1187,9 @@ function Accounts_Control() {
                     ## 转义pt_pin中的汉字
                     EscapePin=$(printf $(echo ${PT_PIN_TMP} | perl -pe "s|%|\\\x|g;"))
                     ## 定义pt_pin中的长度（受限于编码，汉字多占1长度，短横杠长度为0）
-                    EscapePinLength=$(($(echo ${EscapePin} | perl -pe '{s|[0-9a-zA-Z\.\=\:\_]||g;}' | wc -m) - $(echo ${EscapePin} | grep -o "-" | grep -c "") - 1))
+                    EscapePin_Length_Add=$(StringLength $(echo ${EscapePin} | perl -pe '{s|[0-9a-zA-Z\.\=\:\_ -]||g;}'))
                     ## 执行脚本
-                    if [[ ${EnableGlobalProxy} == "true" ]]; then
+                    if [[ ${EnableGlobalProxy} == true ]]; then
                         node -r 'global-agent/bootstrap' ${FileUpdateCookie##*/} &>>${LogFile} &
                     else
                         node ${FileUpdateCookie##*/} &>>${LogFile} &
@@ -1167,12 +1198,12 @@ function Accounts_Control() {
                     ## 判断结果
                     if [[ $(grep "Cookie => \[${FormatPin}\]  更新成功" ${LogFile}) ]]; then
                         ## 格式化输出
-                        printf "%-3s ${BLUE}%-$((20 + ${EscapePinLength}))s${PLAIN} ${GREEN}%-s${PLAIN}\n" "$num." "${EscapePin}" "${SUCCESS_ICON}"
+                        printf "%-3s ${BLUE}%-$((20 + ${EscapePin_Length_Add}))s${PLAIN} ${GREEN}%-s${PLAIN}\n" "$num." "${EscapePin}" "${SUCCESS_ICON}"
                     else
-                        printf "%-3s ${BLUE}%-$((20 + ${EscapePinLength}))s${PLAIN} ${RED}%-s${PLAIN}\n" "$num." "${EscapePin}" "${FAIL_ICON}"
+                        printf "%-3s ${BLUE}%-$((20 + ${EscapePin_Length_Add}))s${PLAIN} ${RED}%-s${PLAIN}\n" "$num." "${EscapePin}" "${FAIL_ICON}"
                         ## 账号更新异常告警与状态检测
                         local UserNum=$(grep -E "Cookie[0-9]{1,3}=.*pt_pin=${FormatPin}" $FileConfUser | awk -F '=' '{print$1}' | awk -F 'Cookie' '{print$2}')
-                        local CheckTmp="$(curl -s --noproxy "*" "${INTERFACE_URL}" -H "cookie: wskey=${WS_KEY_TMP}" | jq '.retcode' | sed "s/\"//g")"
+                        local CheckTmp="$(curl -s --noproxy "*" "${INTERFACE_URL}" -H "cookie: wskey=${WS_KEY_TMP}" | jq -r '.retcode')"
                         if [[ ${CheckTmp} == "0" ]]; then
                             echo -e "    该账号的WSKEY状态 => ${Valid}\n"
                         elif [[ ${CheckTmp} == "1001" ]]; then
@@ -1180,7 +1211,7 @@ function Accounts_Control() {
                         else
                             echo -e "    该账号的WSKEY状态 => ${RED}未知${PLAIN}\n"
                         fi
-                        if [[ ${EnableCookieUpdateFailureNotify} == "true" ]]; then
+                        if [[ ${EnableCookieUpdateFailureNotify} == true ]]; then
                             if [[ ${CheckTmp} == "1001" ]]; then
                                 Notify "账号更新异常通知" "检测到第$UserNum个账号 ${EscapePin} 的 wskey 已经失效，导致未能正常更新，请尽快处理"
                             else
@@ -1212,7 +1243,7 @@ function Accounts_Control() {
                     ## 格式化通知内容
                     perl -pe '{s|Cookie => ||g; s|\[||g; s|\]|\ \ \-|g}' -i $FileSendMark
                     echo "" >>$FileSendMark
-                    echo -e "\n$COMPLETE 更新完成\n"
+                    echo -e "\n$COMPLETE 更新完毕\n"
                 else
                     echo -e "\n$ERROR 更新异常，请检查当前网络环境并查看 ${BLUE}log/UpdateCookies${PLAIN} 目录下的运行日志！\n"
                 fi
@@ -1223,7 +1254,7 @@ function Accounts_Control() {
         }
 
         ## 更新指定账号
-        function UpdateDesignated() {
+        function UpdateCookie_Designated() {
             local UserNum=$1
             local ArrayNum PT_PIN_TMP WS_KEY_TMP FormatPin EscapePin CookieTmp LogFile
             local COOKIE_TMP=Cookie$UserNum
@@ -1236,7 +1267,7 @@ function Accounts_Control() {
             grep "${FormatPin}" -q $FileAccountConf
             if [ $? -eq 0 ]; then
                 ArrayNum=$(($(cat $FileAccountConf | jq 'map_values(.pt_pin)' | grep -n "${FormatPin}" | awk -F ':' '{print$1}') - 2))
-                WS_KEY_TMP=$(cat $FileAccountConf | jq ".[$ArrayNum] | .ws_key" | sed "s/[\"\']//g; s/null//g; s/ //g")
+                WS_KEY_TMP=$(cat $FileAccountConf | jq -r ".[$ArrayNum] | .ws_key" | sed "s/null//g; s/ //g")
                 ## 没有配置 ws_key 就退出
                 if [ -z ${WS_KEY_TMP} ]; then
                     echo -e "\n$ERROR 请先在 ${BLUE}$FileAccountConf${PLAIN} 中配置该账号的 ${BLUE}ws_key${PLAIN} ！\n"
@@ -1252,7 +1283,7 @@ function Accounts_Control() {
                     ## 记录执行开始时间
                     echo -e "[$(date "${TIME_FORMAT}" | cut -c1-23)] 执行开始\n" >>${LogFile}
                     ## 执行脚本
-                    if [[ ${EnableGlobalProxy} == "true" ]]; then
+                    if [[ ${EnableGlobalProxy} == true ]]; then
                         node -r 'global-agent/bootstrap' ${FileUpdateCookie##*/} &>>${LogFile} &
                     else
                         node ${FileUpdateCookie##*/} &>>${LogFile} &
@@ -1269,22 +1300,14 @@ function Accounts_Control() {
                         # echo -e "Cookie：$(grep -E "^Cookie[1-9].*pt_pin=${FormatPin}" $FileConfUser | awk -F "[\"\']" '{print$2}')\n"
                     else
                         echo -e "${BLUE}${EscapePin}${PLAIN}  ${Invalid}"
-                        ## 账号更新异常告警与状态检测
-                        local CheckTmp="$(curl -s --noproxy "*" "${INTERFACE_URL}" -H "cookie: wskey=${WS_KEY_TMP}" | jq '.retcode' | sed "s/\"//g")"
+                        ## 账号状态检测
+                        local CheckTmp="$(curl -s --noproxy "*" "${INTERFACE_URL}" -H "cookie: wskey=${WS_KEY_TMP}" | jq -r '.retcode')"
                         if [[ ${CheckTmp} == "0" ]]; then
-                            echo -e "该账号WSKEY状态 => ${Valid}\n"
+                            echo -e "该账号wskey状态 => ${Valid}\n"
                         elif [[ ${CheckTmp} == "1001" ]]; then
-                            echo -e "该账号WSKEY状态 => ${Invalid}\n"
+                            echo -e "该账号wskey状态 => ${Invalid}\n"
                         else
-                            echo -e "该账号WSKEY状态 => ${RED}未知${PLAIN}\n"
-                        fi
-                        if [[ ${EnableCookieUpdateFailureNotify} == "true" ]]; then
-                            if [[ ${CheckTmp} == "1001" ]]; then
-                                Notify "账号更新异常通知" "检测到第$UserNum个账号 ${EscapePin} 的 wskey 已经失效，导致未能正常更新，请尽快处理"
-                            else
-                                Notify "账号更新异常通知" "检测到第$UserNum个账号 ${EscapePin} 的 wskey 更新出现异常，请尽快处理"
-                            fi
-                            echo ''
+                            echo -e "该账号wskey状态 => ${RED}未知${PLAIN}\n"
                         fi
                     fi
                     ## 推送通知
@@ -1299,7 +1322,7 @@ function Accounts_Control() {
                         ## 格式化通知内容
                         perl -pe '{s|Cookie => ||g; s|\[||g; s|\]|\ \ \-|g}' -i $FileSendMark
                         echo "" >>$FileSendMark
-                        echo -e "\n$COMPLETE 更新完成\n"
+                        echo -e "\n$COMPLETE 更新完毕\n"
                     else
                         echo -e "\n$ERROR 更新异常，请检查当前网络环境并查看 ${BLUE}log/UpdateCookies${PLAIN} 目录下的运行日志！\n"
                     fi
@@ -1320,20 +1343,20 @@ function Accounts_Control() {
                     cd $UtilsDir
                     case $# in
                     1)
-                        UpdateNormal
+                        UpdateCookie_All
                         ;;
                     2)
-                        UpdateDesignated $2
+                        UpdateCookie_Designated $2
                         ;;
                     esac
                     ## 推送通知
                     [ -f $FileSendMark ] && sed -i "/未设置ws_key跳过更新/d" $FileSendMark
                     if [ -s $FileSendMark ]; then
-                        [[ ${EnableCookieUpdateNotify} == "true" ]] && Notify "账号更新结果通知" "$(cat $FileSendMark)"
+                        [[ ${EnableCookieUpdateNotify} == true ]] && Notify "账号更新结果通知" "$(cat $FileSendMark)"
                     fi
                     [ -f $FileSendMark ] && rm -rf $FileSendMark
                 else
-                    echo -e "\n$FAIL 签名更新失败，请检查网络环境后重试！\n"
+                    echo -e "\n$FAIL 签名更新异常，请检查网络环境后重试！\n"
                 fi
             else
                 echo -e "\n$ERROR 请先在 ${BLUE}$FileAccountConf${PLAIN} 中配置好 ${BLUE}ws_key${PLAIN} ！\n"
@@ -1341,6 +1364,204 @@ function Accounts_Control() {
         else
             echo -e "\n$ERROR 账号更新脚本不存在，请确认是否移动！\n"
         fi
+        ;;
+    beans)
+        Import_Config
+        Count_UserSum
+
+        function getJingBeanBalanceDetail() {
+            local pageNum=$1
+            body="body=$(UrlEncode "{\"pageSize\": \"20\",\"page\": \"${pageNum}\"}")&appid=ld"
+            curl -s -X POST "https://api.m.jd.com/client.action?functionId=getJingBeanBalanceDetail" \
+            -H "Host: api.m.jd.com" \
+            -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" \
+            -H "User-Agent: jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1" \
+            -H "Cookie: ${CK}" \
+            --data-raw "$body" | jq .detailList | jq -c '.[]'
+        }
+
+        function QueryBeanInfo() {
+            local TMP_LOG=".tmp.log"
+            local DATA_LOG=".data.log"
+            local DATA_FILE=".data.json"
+            rm -rf $TMP_LOG $DATA_LOG $DATA_FILE
+            local page lines todayStr data date dateStr amount eventMassage Name_Array Beans_Array Name LengthTmp Time Beans Income Expense defaultLength
+
+            todayStr=$(date +%s -d "$(date "+%Y-%m-%d")")
+            for ((page = 1; page <= 100; page++)); do
+                ## 获取页面数据（一页20条）
+                getJingBeanBalanceDetail $page >$DATA_LOG
+                if [ -s $DATA_LOG ]; then
+                    for ((lines = 0; lines <= 19; lines++)); do
+                        date=$(cat $DATA_LOG | sed -n "$(($lines + 1)),$(($lines + 1))p" | jq -r ".date")
+                        dateStr=$(date -d "${date}" +%s)
+                        amount=$(cat $DATA_LOG | sed -n "$(($lines + 1)),$(($lines + 1))p" | jq -r ".amount")
+                        eventMassage=$(cat $DATA_LOG | sed -n "$(($lines + 1)),$(($lines + 1))p" | jq -r ".eventMassage")
+                        data="{\"date\":\"${dateStr}\",\"amount\":\"${amount}\",\"eventMassage\":\"${eventMassage}\"}"
+                        ## 判断是否为今天的数据，否则跳出
+                        # echo $data
+                        if [[ ${dateStr} -lt ${todayStr} ]]; then
+                            break 2
+                        fi
+                        if [[ $page == "1" ]] && [[ $lines == "0" ]]; then
+                            echo "$data" | jq >>$TMP_LOG
+                        else
+                            echo -e "," >>$TMP_LOG
+                            echo "$data" | jq >>$TMP_LOG
+                        fi
+                    done
+                else
+                    echo -e "$FAIL 当前账号已被接口限制或网络环境异常！"
+                    return
+                fi
+            done
+            if [[ ! -s $TMP_LOG ]]; then
+                echo -e "未查询到今日京豆变动明细数据，快去参与活动获取吧~"
+                return
+            fi
+            echo -e "[\n$(cat $TMP_LOG)\n]" >$TMP_LOG
+            cat $TMP_LOG | jq >$DATA_FILE
+            # cat $DATA_FILE
+
+            ## 根据时间排序定义名称数组（空格临时换成了下划线）
+            ## 减少使用管道出现的异常
+            cat $DATA_FILE | jq .[] | jq '{eventMassage: .eventMassage}' >$TMP_LOG
+            cat $TMP_LOG | jq -r '.eventMassage' >$DATA_LOG
+            # cat $DATA_FILE
+            Name_Array=(
+                $(cat $DATA_LOG | sed "s/ /_/g" | awk '!a[$0]++')
+            )
+            if [[ ${#Name_Array[@]} -gt 0 ]]; then
+                Income=0
+                Expense=0
+                echo -e "[最新时间]                         [变动渠道]                          [明细]\n"
+                ## 遍历数组，打印数据
+                for i in ${Name_Array[@]}; do
+                    defaultLength=50
+                    i=$(echo "$i" | sed "s/_/ /g")
+                    Name=$(printf "%ls\n" "$i")
+                    Beans_Array=$(cat $DATA_FILE | jq -c '.[]' | grep -F "\"$i\"" | jq -r .amount | tr "\n" " ")
+                    Time=$(date -d @$(cat $DATA_FILE | jq -c '.[]' | grep -F "$i" | head -n 1 | jq -r .date) +"%H:%M:%S")
+                    Time=$(echo $Time | sed "s/^0/ /g")
+                    Beans=0
+                    for i in ${Beans_Array[@]}; do
+                        let Beans+=$i
+                    done
+                    ## 格式化名称
+                    Name=$(echo "${Name}" | sed "s/（商品:.*）//g; s/订单.*使用京豆.*个/订单使用京豆/g")
+                    echo "${Name}" | grep -q "参加\[.*\].*-奖励"
+                    if [ $? -eq 0 ]; then
+                        Name=$(echo "${Name}" | perl -pe "{s|参加\[||g; s|\].*||g;}")
+                    fi
+                    LengthTmp=$(StringLength $(echo "${Name}" | sed "s/ //g" | perl -pe "{s|[0-9a-zA-Z\.\=\:\_\(\)\'\"-\/\!]||g;}"))
+                    ## 中文的引号在等宽字体中占1格而非2格
+                    [[ $(echo "${Name}" | grep -c "“") -gt 0 ]] && let defaultLength+=$(echo "${Name}" | grep -c "“")
+                    [[ $(echo "${Name}" | grep -c "”") -gt 0 ]] && let defaultLength+=$(echo "${Name}" | grep -c "”")
+                    [[ $(echo "${Name}" | grep -c "‘") -gt 0 ]] && let defaultLength+=$(echo "${Name}" | grep -c "‘")
+                    [[ $(echo "${Name}" | grep -c "’") -gt 0 ]] && let defaultLength+=$(echo "${Name}" | grep -c "’")
+                    spacesNums=$(($(($defaultLength - ${LengthTmp} - ${#Name})) / 2))
+                    for ((i = 1; i <= ${spacesNums}; i++)); do
+                        Name=" ${Name}"
+                    done
+                    Name=$(echo "${Name}" | sed "s/“/ “/g; s/”/” /g; s/‘/ ‘/g; s/’/’ /g")
+                    if [[ $Beans -gt 0 ]]; then
+                        Income=$(($Income + $Beans))
+                        printf "· %-12s ${BLUE}%-$(($defaultLength + ${LengthTmp}))s${PLAIN}    ${GREEN}%8s${PLAIN}\n" "$Time" "$Name" "+$Beans"
+                    else
+                        Expense=$(($Expense + $Beans))
+                        printf "· %-12s ${BLUE}%-$(($defaultLength + ${LengthTmp}))s${PLAIN}    ${RED}%8s${PLAIN}\n" "$Time" "$Name" "-$((0 - $Beans))"
+                    fi
+                done
+                echo -e "\n                [${BLUE}今日收入${PLAIN}] ${Income}🐶                    [${BLUE}今日支出${PLAIN}] $((0 - $Expense))🐶"
+            else
+                echo -e "未查询到今日京豆变动明细数据，快去参与活动获取吧~"
+            fi
+            rm -rf $DATA_FILE $TMP_LOG $DATA_LOG
+        }
+
+        function CheckStatus() {
+            local InputContent="$1"
+            local CHECK_LOG=".check.log"
+            curl -s --noproxy "*" "${INTERFACE_URL}" -H "cookie: ${InputContent}" >$CHECK_LOG
+            StatusCode="$(cat $CHECK_LOG | jq -r '.retcode')"
+            [[ ${StatusCode} == "0" ]] && nickName="$(cat $CHECK_LOG | jq -r '.data.userInfo.baseInfo.nickname')"
+            rm -rf $CHECK_LOG
+        }
+
+        local Cookie_Tmp CK nickName StatusCode
+        ## 汇总
+        case $# in
+        1)
+            for ((i = 1; i <= ${UserSum}; i++)); do
+                echo -e "\n$WORKING 正在请求接口获取账号 ${BLUE}$i${PLAIN} 的今日收支数据...\n"
+                nickName=""
+                StatusCode=""
+                Cookie_Tmp=Cookie$i
+                CK=${!Cookie_Tmp}
+                CheckStatus "${CK}"
+                if [[ ${StatusCode} == "0" ]]; then
+                    echo -e "❖ 账号$i · [${BLUE}${nickName}${PLAIN}]\n"
+                    QueryBeanInfo
+                else
+                    echo -e "$WARN 账号$i · [${BLUE}$(echo "$CK" | perl -pe "{s|.*pt_pin=([^; ]+)(?=;?).*|\1|g;}")${PLAIN}] 无效，跳过查询..."
+                fi
+                echo -e "\n............................................."
+                sleep 1
+            done
+            ;;
+        2)
+            echo -e "\n$WORKING 正在请求接口获取账号 ${BLUE}$2${PLAIN} 的今日收支数据...\n"
+            nickName=""
+            StatusCode=""
+            Cookie_Tmp=Cookie$2
+            CK=${!Cookie_Tmp}
+            CheckStatus "${CK}"
+            if [[ ${StatusCode} == "0" ]]; then
+                echo -e "❖ ${BLUE}${nickName}${PLAIN}\n"
+                QueryBeanInfo
+            else
+                echo -e "$WARN ${BLUE}$(echo "$CK" | perl -pe "{s|.*pt_pin=([^; ]+)(?=;?).*|\1|g;}")${PLAIN} 无效！"
+            fi
+            ;;
+        esac
+
+        echo -e "\n$COMPLETE 查询完毕\n"
+        ;;
+
+    list)
+        Import_Config
+        Count_UserSum
+        local Tmp1 Tmp2 num pt_pin_arr pt_pin_len_add remark phone phone_len_add remark_len_add
+        for ((n = 1; n <= $UserSum; n++)); do
+            Tmp1=Cookie$n
+            Tmp2=${!Tmp1}
+            num=$(($n - 1))
+            pt_pin_arr[num]=$(echo $Tmp2 | perl -pe "{s|.*pt_pin=([^; ]+)(?=;?).*|\1|g;}")
+            pt_pin_len_add[num]=$(StringLength $(UrlDecode "${pt_pin_arr[num]}" | perl -pe '{s|[0-9a-zA-Z\.\=\:\_ -]||g;}'))
+        done
+
+        echo ''
+        for ((i = 0; i < ${#pt_pin_arr[@]}; i++)); do
+            grep -Eq "^## pt_pin=${pt_pin_arr[i]};  联系方式：.*;  上次更新：.*;  备注：.*;" $FileConfUser
+            if [ $? -eq 0 ]; then
+                remark=$(grep -E "^## pt_pin=${pt_pin_arr[i]};  联系方式：.*;  上次更新：.*;  备注：.*;" $FileConfUser | grep -Eo "备注：.*;" | awk -F ';' '{print$1}' | sed "s/备注：//g")
+
+                if [[ -z ${remark} || ${remark} == "无" ]]; then
+                    remark="未登记"
+                fi
+                phone=$(grep -E "^## pt_pin=${pt_pin_arr[i]};  联系方式：.*;  上次更新：.*;  备注：.*;" $FileConfUser | grep -Eo "联系方式：.*;" | awk -F ';' '{print$1}' | sed "s/联系方式：//g")
+                if [[ -z ${phone} || ${phone} == "无" ]]; then
+                    phone="未登记"
+                fi
+                phone_len_add=$(StringLength $(echo "${phone}" | perl -pe '{s|[0-9a-zA-Z\.\=\:\_\(\)\[\] \-]||g;}'))
+                remark_len_add=$(StringLength $(echo "${remark}" | perl -pe '{s|[0-9a-zA-Z\.\=\:\_\(\)\[\] \-]||g;}'))
+
+                printf "%-3s ${BLUE}%-$((22 + ${pt_pin_len_add[i]}))s${PLAIN} 备注：${BLUE}%-$((24 + ${remark_len_add}))s${PLAIN} 联系方式：${BLUE}%-s${PLAIN}\n" "$(($i + 1))." "$(UrlDecode "${pt_pin_arr[i]}")" "${remark}" "${phone}"
+            else
+                printf "%-3s ${BLUE}%-$((22 + ${pt_pin_len_add[i]}))s${PLAIN} 备注：${BLUE}未登记${PLAIN}                联系方式：${BLUE}未登记${PLAIN}\n" "$(($i + 1))." "$(UrlDecode "${pt_pin_arr[i]}")"
+            fi
+        done
+        echo ''
         ;;
     esac
 }
@@ -1597,7 +1818,7 @@ function Add_OwnRepo() {
         local ListCrontabOwnTmp=$LogTmpDir/crontab_own.list
         [ -f $ListCrontabOwnTmp ] && rm -f $ListCrontabOwnTmp
         if [ -s $ListOwnRepoAdd ]; then
-            if [[ ${AutoAddOwnRepoCron} == "true" ]]; then
+            if [[ ${AutoAddOwnRepoCron} == true ]]; then
                 echo ''
                 if [ -s $ListOwnRepoAdd ] && [ -s $ListCrontabUser ]; then
                     local Detail=$(cat $ListOwnRepoAdd)
@@ -1606,13 +1827,13 @@ function Add_OwnRepo() {
                         if [ -f ${FilePath} ]; then
                             local Cron=$(perl -ne "print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*${FileName}/" ${FilePath} | perl -pe "{s|[^\d\*]*(([\d\*]*[\*-\/,\d]*[\d\*] ){4,5}[\d\*]*[\*-\/,\d]*[\d\*])( \|,\|\").*/?${FileName}.*|\1 $TaskCmd ${FilePath}|g;s|  | |g; s|^[^ ]+ (([^ ]+ ){5}$TaskCmd ${FilePath})|\1|;}" | sort -u | head -1)
                             ## 新增定时任务自动禁用
-                            if [[ ${DisableNewOwnRepoCron} == "true" ]]; then
+                            if [[ ${DisableNewOwnRepoCron} == true ]]; then
                                 echo "${Cron}" | perl -pe '{s|^|# |}' >>$ListCrontabOwnTmp
                             else
                                 grep -E " $TaskCmd $OwnDir/" $ListCrontabUser | grep -Ev "^#" | awk -F '/' '{print$NF}' | grep "${FileName}" -q
                                 if [ $? -eq 0 ]; then
                                     ## 重复定时任务自动禁用
-                                    if [[ ${DisableDuplicateOwnRepoCron} == "true" ]]; then
+                                    if [[ ${DisableDuplicateOwnRepoCron} == true ]]; then
                                         echo "${Cron}" | perl -pe '{s|^|# |}' >>$ListCrontabOwnTmp
                                     else
                                         echo "${Cron}" >>$ListCrontabOwnTmp
@@ -1752,7 +1973,7 @@ function Add_RawFile() {
     ## 判断下载结果
     if [ $? -eq 0 ]; then
         mv -f "$RawDir/${RawFileName}.new" "$RawDir/${RawFileName}"
-        echo -e "\n$COMPLETE ${RawFileName} 下载完成，脚本保存路径：$RawDir/${RawFileName}"
+        echo -e "\n$COMPLETE ${RawFileName} 下载完毕，脚本保存路径：$RawDir/${RawFileName}"
 
         ## 定义脚本路径
         RawFilePath="$RawDir/${RawFileName}"
@@ -1780,7 +2001,7 @@ function Add_RawFile() {
         Import_Config_Not_Check
 
         ## 添加定时任务
-        if [[ ${AutoAddOwnRawCron} == "true" ]]; then
+        if [[ ${AutoAddOwnRawCron} == true ]]; then
             FormatRawFilePath=$(echo ${RawFilePath} | perl -pe '{s|[\.\<\>\/\[\]\!\@\#\$\%\^\&\*\(\)\-\+]|\\$&|g;}')
             if [ $(grep -c " $TaskCmd ${FormatRawFilePath}" $ListCrontabUser) -eq 0 ]; then
                 perl -i -pe "s|(# 自用own任务结束.+)|${FullContent}\n\1|" $ListCrontabUser
@@ -1793,7 +2014,7 @@ function Add_RawFile() {
                     echo -e "\n${GREEN}+${PLAIN} ${FullContent}"
                     echo -e "\n$COMPLETE 定时任务已添加"
                 else
-                    echo -e "\n$FAIL 定时任务添加失败"
+                    echo -e "\n$FAIL 无法添加定时任务，可能遇到了一些问题~"
                 fi
             else
                 echo -e "\n$WARN 该脚本定时任务已存在，跳过添加"
@@ -1815,7 +2036,7 @@ function Add_RawFile() {
         if [ $? -eq 0 ]; then
             echo -e "\n$COMPLETE 变量已添加\n"
         else
-            echo -e "\n$FAIL 变量添加失败\n"
+            echo -e "\n$FAIL 未能添加变量，可能遇到了一些问题~\n"
         fi
 
     else
@@ -1895,7 +2116,7 @@ function Manage_Env() {
                     ;;
                 disable)
                     echo -e "\n$COMPLETE 该环境变量已经禁用，不执行任何操作\n"
-                    exit ## 终止退出
+                    exit 1 ## 终止退出
                     ;;
                 *)
                     Output_Command_Error 1 ## 命令错误
@@ -1906,7 +2127,7 @@ function Manage_Env() {
                 case ${Mod} in
                 enable)
                     echo -e "\n$COMPLETE 该环境变量已经启用，不执行任何操作\n"
-                    exit ## 终止退出
+                    exit 1 ## 终止退出
                     ;;
                 disable)
                     sed -i "s/.*export ${VariableTmp}=/# export ${VariableTmp}=/g" $FileConfUser
@@ -1925,7 +2146,7 @@ function Manage_Env() {
         echo -e "\n${RED}-${PLAIN} \033[41;37m${OldContent}${PLAIN}\n${GREEN}+${PLAIN} \033[42;30m${NewContent}${PLAIN}"
         ## 结果判定
         if [[ ${OldContent} = ${NewContent} ]]; then
-            echo -e "\n$FAIL 环境变量修改失败\n"
+            echo -e "\n$FAIL 未能修改环境变量，可能遇到了一些问题~\n"
         else
             case ${Mod} in
             enable)
@@ -2012,7 +2233,7 @@ function Manage_Env() {
         if [[ $ExitStatus -eq 0 ]]; then
             echo -e "\n$COMPLETE 环境变量修改完毕\n"
         else
-            echo -e "\n$FAIL 环境变量修改失败\n"
+            echo -e "\n$FAIL 未能修改环境变量，可能遇到了一些问题~\n"
         fi
     }
 
@@ -2199,7 +2420,7 @@ function Manage_Env() {
                     if [ $ExitStatus -eq 0 ]; then
                         ModifyEnv "${Variable}" "${Value}"
                     else
-                        echo -e "\n$WARN 由于未检测到该环境变量因此将自动为您添加"
+                        echo -e "\n$WARN 由于未检测到该环境变量因此将自动添加"
                         AddEnv "${Variable}" "${Value}" "添加时间：$(date "+%Y-%m-%d %T")"
                     fi
                     ;;
@@ -2207,7 +2428,7 @@ function Manage_Env() {
                     if [ $ExitStatus -eq 0 ]; then
                         ModifyEnv "${Variable}" "${Value}" "$4"
                     else
-                        echo -e "\n$WARN 由于未检测到该环境变量因此将自动为您添加"
+                        echo -e "\n$WARN 由于未检测到该环境变量因此将自动添加"
                         AddEnv "${Variable}" "${Value}" "添加时间：$(date "+%Y-%m-%d %T")"
                     fi
                     ;;
@@ -2237,6 +2458,7 @@ function Manage_Env() {
             echo -e "\n$COMPLETE 查询完毕\n"
         else
             echo -e "\n$ERROR 未查询到包含 ${BLUE}${Keys}${PLAIN} 内容的相关环境变量！\n"
+            exit 1
         fi
         ;;
     esac
@@ -2320,6 +2542,7 @@ function Remove_LogFiles() {
         Rm_UpdateLog
         Rm_BotLog
         Rm_EmptyDir
+        [ -f $RootDir/core ] && rm -rf $RootDir/core
         echo -e "\n$COMPLETE 运行结束\n"
     fi
 }
@@ -2392,7 +2615,7 @@ function List_Local_Scripts() {
                 if [ -f ${ListFiles[i]} ]; then
                     Query_ScriptName ${ListFiles[i]}
                     let NumTmp++
-                    printf "%-5s %-22s %s\n" "[$NumTmp]" "${ListFiles[i]}" "${ScriptName}"
+                    printf "%3s  %-30s %s\n" "$NumTmp" "${ListFiles[i]}" "${ScriptName}"
                 fi
             done
         else
@@ -2443,7 +2666,7 @@ function List_Local_Scripts() {
                 FileDir=$(echo ${ListFiles[i]} | awk -F "$FileName" '{print$1}')
                 cd $FileDir
                 Query_ScriptName $FileName
-                printf "%-6s %-50s %s\n" "[$(($i + 1))]" "${ListFiles[i]:8}" "${ScriptName}"
+                printf "%4s  %-50s %s\n" "$(($i + 1))" "${ListFiles[i]:8}" "${ScriptName}"
             done
         fi
     }
@@ -2459,7 +2682,7 @@ function List_Local_Scripts() {
                 echo -e "\n❖ 第三方脚本："
                 for ((i = 0; i < ${#ListFiles[*]}; i++)); do
                     Query_ScriptName ${ListFiles[i]}
-                    printf "%-5s %-28s   %s\n" "[$(($i + 1))]" "${ListFiles[i]}" "${ScriptName}"
+                    printf "%3s  %-36s   %s\n" "$(($i + 1))" "${ListFiles[i]}" "${ScriptName}"
                 done
             fi
         fi
@@ -2467,7 +2690,7 @@ function List_Local_Scripts() {
 
     ## 列出指定目录下的脚本
     function List_Designated() {
-        local InputContent WorkDir PwdTmp
+        local InputContent WorkDir PwdTmp LengthTmp spacesNums
         ## 去掉传入参数中的最后一个/
         echo $1 | grep "/$" -q
         if [ $? -eq 0 ]; then
@@ -2513,7 +2736,7 @@ function List_Local_Scripts() {
             fi
         else
             echo -e "\n$ERROR 目标路径 ${BLUE}$WorkDir${PLAIN} 不存在，请重新确认！\n"
-            exit ## 终止退出
+            exit 1 ## 终止退出
         fi
 
         cd $WorkDir
@@ -2525,9 +2748,9 @@ function List_Local_Scripts() {
                 echo -e "\n❖ 远程仓库地址: ${BLUE}${RemoteUrl%\.*}${PLAIN}"
             fi
         fi
-        local ListFiles=($(
-            ls | grep -E "${ScriptType}" | grep -Ev "${ShieldingKeywords}"
-        ))
+        local ListFiles=(
+            $(ls | grep -E "${ScriptType}" | grep -Ev "${ShieldingKeywords}")
+        )
         [ ${#ListFiles[*]} = 0 ] && exit ## 终止退出
         if [[ ${#ListFiles[*]} -ge "10" ]]; then
             if [[ ${#ListFiles[*]} -ge "100" ]]; then
@@ -2538,18 +2761,29 @@ function List_Local_Scripts() {
         else
             TmpNum="1"
         fi
-        printf "\n${BLUE}%$((13 + ${TmpNum}))s${PLAIN} ${BLUE}%40s${PLAIN} ${BLUE}%s${PLAIN} ${BLUE}%s${PLAIN}\n" "[脚本名]" "[修改时间]" " [大小]" "[活动名称]"
+        printf "\n${BLUE}%$((28 + ${TmpNum}))s${PLAIN} ${BLUE}%29s${PLAIN}  ${BLUE}%6s${PLAIN}             ${BLUE}%s${PLAIN}\n" "[文件名称]" "[修改时间]" " [大小]" "[脚本名称]"
+
         for ((i = 0; i < ${#ListFiles[*]}; i++)); do
+            echo ''
             Query_ScriptName ${ListFiles[i]}
             Query_ScriptSize ${ListFiles[i]}
             Query_ScriptEditTimes ${ListFiles[i]}
-            printf "%${TmpNum}s  %-34s %s %5s  %s\n" "$(($i + 1))" "${ListFiles[i]}" "${ScriptEditTimes}" "${ScriptSize}" "${ScriptName}"
+            LengthTmp1=$(StringLength $(echo ${ListFiles[i]} | perl -pe '{s|[0-9a-zA-Z\,\.\=\:\_\-\(\)\[\]\<\>\~]||g;}'))
+            spacesNums1=$(($((34 - ${LengthTmp1} - ${#ListFiles[i]})) / 2))
+            for ((a = 1; a <= ${spacesNums1}; a++)); do
+                ListFiles[i]=" ${ListFiles[i]}"
+            done
+            LengthTmp2=$(StringLength $(echo ${ScriptName} | perl -pe '{s|[0-9a-zA-Z\,\.\=\:\_\-\(\)\[\]\<\>\~]||g;}'))
+            spacesNums2=$(($((34 - ${LengthTmp2} - ${#ScriptName})) / 2))
+            for ((a = 1; a <= ${spacesNums2}; a++)); do
+                ScriptName=" ${ScriptName}"
+            done
+            printf "%${TmpNum}s  %-$((34 + ${LengthTmp1}))s %14s %6s  %-$((34 + ${LengthTmp2}))s\n" "$(($i + 1))" "${ListFiles[i]}" "$(echo ${ScriptEditTimes} | sed "s/ /  /g")" "${ScriptSize}" "${ScriptName}"
         done
     }
 
     case $# in
     0)
-        echo -e "#############################  本  地  脚  本  清  单  #############################"
         List_Scripts
         List_Own
         List_Other
@@ -2622,7 +2856,7 @@ case $# in
     pkill)
         Process_Kill $1
         ;;
-    update | check)
+    update | check | list | beans)
         case $1 in
         cookie)
             Accounts_Control $2
@@ -2717,6 +2951,18 @@ case $# in
             -r | --rapid)
                 RUN_RAPID="true"
                 ;;
+            -h | --hang)
+                case ${RUN_MODE} in
+                normal)
+                    RUN_DAEMON="true"
+                    ;;
+                concurrent)
+                    Help
+                    echo -e "$ERROR 检测到 ${BLUE}$3${PLAIN} 为无效参数，该参数仅适用于普通执行！\n"
+                    exit ## 终止退出
+                    ;;
+                esac
+                ;;
             -c | --cookie)
                 Help
                 echo -e "$ERROR 检测到 ${BLUE}$3${PLAIN} 为无效参数，请在该参数后指定运行账号！\n"
@@ -2764,7 +3010,7 @@ case $# in
             ;;
         esac
         ;;
-    update | check)
+    update | check | beans)
         case $1 in
         cookie)
             case $3 in
@@ -2772,7 +3018,12 @@ case $# in
                 Accounts_Control $2 $3
                 ;;
             *)
-                Output_Command_Error 1 ## 命令错误
+                grep -Eq "Cookie[0-9]{1,3}=.*pt_pin=$3;.*" $FileConfUser
+                if [ $? -eq 0 ]; then
+                    Accounts_Control $2 $(grep -E "Cookie[0-9]{1,3}=.*pt_pin=$3;.*" $FileConfUser | awk -F '=' '{print$1}' | awk -F 'Cookie' '{print$2}')
+                else
+                    Output_Command_Error 1 ## 命令错误
+                fi
                 ;;
             esac
             ;;
@@ -2818,7 +3069,7 @@ case $# in
     ;;
 
 ## 多个参数（ 2 + 参数个数 + 参数值个数 ）
-4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15)
+4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16)
     case $2 in
     now | conc)
         ## 定义执行内容，下面的判断会把参数打乱
@@ -2898,6 +3149,18 @@ case $# in
             -r | --rapid)
                 RUN_RAPID="true"
                 ;;
+            -h | --hang)
+                case ${RUN_MODE} in
+                normal)
+                    RUN_DAEMON="true"
+                    ;;
+                concurrent)
+                    Help
+                    echo -e "$ERROR 检测到 ${BLUE}$3${PLAIN} 为无效参数，该参数仅适用于普通执行！\n"
+                    exit ## 终止退出
+                    ;;
+                esac
+                ;;
             -c | --cookie)
                 if [[ $4 ]]; then
                     echo "$4" | grep -Eq "[a-zA-Z\.;:\<\>/\!@#$^&*|\-_=\+]|\(|\)|\[|\]|\{|\}"
@@ -2906,7 +3169,7 @@ case $# in
                         echo -e "$ERROR 检测到无效参数值 ${BLUE}$4${PLAIN} ，语法有误请确认后重新输入！\n"
                         exit ## 终止退出
                     else
-                        if [[ ${RUN_GROUPING} == "true" ]]; then
+                        if [[ ${RUN_GROUPING} == true ]]; then
                             Help
                             echo -e "$ERROR 检测到无效参数 ${BLUE}$3${PLAIN} ，不可与账号分组参数同时使用！\n"
                             exit ## 终止退出
@@ -2932,7 +3195,7 @@ case $# in
                             echo -e "$ERROR 检测到无效参数值 ${BLUE}$4${PLAIN} ，语法有误请确认后重新输入！\n"
                             exit ## 终止退出
                         else
-                            if [[ ${RUN_DESIGNATED} == "true" ]]; then
+                            if [[ ${RUN_DESIGNATED} == true ]]; then
                                 Help
                                 echo -e "$ERROR 检测到无效参数 ${BLUE}$3${PLAIN} ，不可与指定账号参数同时使用！\n"
                                 exit ## 终止退出
