@@ -71,7 +71,7 @@ async def cmd(cmdtext):
             await jdbot.edit_message(msg, '❌ 已执行命令但返回值为空，可能遇到了某些错误～')
         elif len(res) <= 4000:
             await jdbot.delete_messages(chat_id, msg)
-            await jdbot.send_message(chat_id, res)
+            await jdbot.send_message(chat_id, res, link_preview=False)
         elif len(res) > 4000:
             tmp_log = f'{LOG_DIR}/TelegramBot/{cmdtext.split("/")[-1].split(".js")[0]}-{datetime.datetime.now().strftime("%H-%M-%S")}.log'
             with open(tmp_log, 'w+', encoding='utf-8') as f:
@@ -117,14 +117,18 @@ def get_ch_names(path, dir):
 
 async def log_btn(conv, sender, path, msg, page, files_list):
     '''定义log日志按钮'''
-    my_btns = [Button.inline('上一页', data='up'), Button.inline(
-        '下一页', data='next'), Button.inline('上级', data='updir'), Button.inline('取消', data='cancel')]
+    buttons = [
+        Button.inline("上一页", data="up"), 
+        Button.inline("下一页", data="next"), 
+        Button.inline("上级", data="updir"), 
+        Button.inline("取消", data="cancel")
+    ]
     try:
         if files_list:
             markup = files_list
             new_markup = markup[page]
-            if my_btns not in new_markup:
-                new_markup.append(my_btns)
+            if buttons not in new_markup:
+                new_markup.append(buttons)
         else:
             dir = os.listdir(path)
             dir.sort()
@@ -141,7 +145,7 @@ async def log_btn(conv, sender, path, msg, page, files_list):
             if len(markup) > 30:
                 markup = split_list(markup, 30)
                 new_markup = markup[page]
-                new_markup.append(my_btns)
+                new_markup.append(buttons)
             else:
                 new_markup = markup
                 if path == WORK_DIR:
@@ -190,16 +194,22 @@ async def log_btn(conv, sender, path, msg, page, files_list):
 
 async def run_btn(conv, sender, path, msg, page, files_list):
     '''定义scripts脚本按钮'''
-    my_btns = [Button.inline('上一页', data='up'), Button.inline(
-        '下一页', data='next'), Button.inline('上级', data='updir'), Button.inline('取消', data='cancel')]
+    buttons = [
+        Button.inline('上一页', data='up'),
+        Button.inline('下一页', data='next'),
+        Button.inline('上级', data='updir'),
+        Button.inline('取消', data='cancel')
+    ]
     try:
         if files_list:
             markup = files_list
             new_markup = markup[page]
-            if my_btns not in new_markup:
-                new_markup.append(my_btns)
+            if buttons not in new_markup:
+                new_markup.append(buttons)
         else:
-            dir = ['scripts', OWN_DIR.split('/')[-1]]
+            dir = os.listdir(path)
+            if BOT_SET["中文"].lower() == "true":
+                dir = get_ch_names(path, dir)
             dir.sort()
             markup = [Button.inline(file.split('--->')[0], data=str(file.split('--->')[-1]))
                       for file in dir if os.path.isdir(f'{path}/{file}') or file.endswith('.js')]
@@ -207,7 +217,7 @@ async def run_btn(conv, sender, path, msg, page, files_list):
             if len(markup) > 30:
                 markup = split_list(markup, 30)
                 new_markup = markup[page]
-                new_markup.append(my_btns)
+                new_markup.append(buttons)
             else:
                 new_markup = markup
                 if path == WORK_DIR:
