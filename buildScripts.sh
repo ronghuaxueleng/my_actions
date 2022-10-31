@@ -114,20 +114,20 @@ function deleteShareCode() {
 # rm -rf package-lock.json
 # cd ${ShellDir}
 
-git clone -b master https://github.com/okyyds/yyds.git yyds
-cd yyds
+# git clone -b master https://github.com/okyyds/yyds.git yyds
+# cd yyds
 # cp -rf ${ShellDir}/replace/* ./
-replaceShareCode jd_cash yyds
-replaceShareCode jd_cfd yyds
-replaceShareCode jd_dreamFactory yyds
-replaceShareCode jd_fruit yyds
-replaceShareCode jd_health yyds
-replaceShareCode jd_jdfactory yyds
-replaceShareCodeV1 jd_pet yyds
-replaceShareCode jd_plantBean yyds
-replaceShareCode jd_sgmh yyds
-replaceShareCode jd_jxmc yyds
-cd ${ShellDir}
+# replaceShareCode jd_cash yyds
+# replaceShareCode jd_cfd yyds
+# replaceShareCode jd_dreamFactory yyds
+# replaceShareCode jd_fruit yyds
+# replaceShareCode jd_health yyds
+# replaceShareCode jd_jdfactory yyds
+# replaceShareCodeV1 jd_pet yyds
+# replaceShareCode jd_plantBean yyds
+# replaceShareCode jd_sgmh yyds
+# replaceShareCode jd_jxmc yyds
+# cd ${ShellDir}
 
 # git clone https://github.com/Akali5/jd-depot.git jddepot
 # cd jddepot
@@ -144,20 +144,20 @@ cd ${ShellDir}
 # replaceShareCode jd_jxmc jddepot
 # cd ${ShellDir}
 
-# git clone https://github.com/ShuaiLeiLu/JD_Scripts.git ShuaiLeiLu
-# cd ShuaiLeiLu
-# cp -rf ${ShellDir}/replace/* ./
-# replaceShareCode jd_cash ShuaiLeiLu
-# replaceShareCode jd_cfd ShuaiLeiLu
-# replaceShareCode jd_dreamFactory ShuaiLeiLu
-# replaceShareCode jd_fruit ShuaiLeiLu
-# replaceShareCode jd_health ShuaiLeiLu
-# replaceShareCode jd_jdfactory ShuaiLeiLu
-# replaceShareCodeV1 jd_pet ShuaiLeiLu
-# replaceShareCode jd_plantBean ShuaiLeiLu
-# replaceShareCode jd_sgmh ShuaiLeiLu
-# replaceShareCode jd_jxmc ShuaiLeiLu
-# cd ${ShellDir}
+git clone https://github.com/ShuaiLeiLu/JD_Scripts.git ShuaiLeiLu
+cd ShuaiLeiLu
+cp -rf ${ShellDir}/replace/* ./
+replaceShareCode jd_cash ShuaiLeiLu
+replaceShareCode jd_cfd ShuaiLeiLu
+replaceShareCode jd_dreamFactory ShuaiLeiLu
+replaceShareCode jd_fruit ShuaiLeiLu
+replaceShareCode jd_health ShuaiLeiLu
+replaceShareCode jd_jdfactory ShuaiLeiLu
+replaceShareCodeV1 jd_pet ShuaiLeiLu
+replaceShareCode jd_plantBean ShuaiLeiLu
+replaceShareCode jd_sgmh ShuaiLeiLu
+replaceShareCode jd_jxmc ShuaiLeiLu
+cd ${ShellDir}
 
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
@@ -167,19 +167,19 @@ DockerDir=${ScriptsDir}/docker
 [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
 ListCronSh=${DockerDir}/crontab_list.sh
 # ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
-# ListCronScripts3=ShuaiLeiLu/docker/crontab_list.sh
+ListCronScripts3=ShuaiLeiLu/docker/crontab_list.sh
 ListCronScripts4=MyScript/docker/crontab_list.sh
-ListCronScripts8=yyds/docker/crontab_list.sh
+# ListCronScripts8=yyds/docker/crontab_list.sh
 
-cat ${ListCronScripts4} ${ListCronScripts8} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' >${ListCronSh}
+cat ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' >${ListCronSh}
 
 cd ${ShellDir}
 
 jq -s 'reduce .[] as $item ({}; . * $item)' ShuaiLeiLu/package.json >package.json
 
 # cp -rf $(ls JDHelloWorld | grep -v docker | sed "s:^:JDHelloWorld/:" | xargs) ${ScriptsDir}
-# cp -rf $(ls ShuaiLeiLu | grep -v docker | sed "s:^:ShuaiLeiLu/:" | xargs) ${ScriptsDir}
+cp -rf $(ls ShuaiLeiLu | grep -v docker | sed "s:^:ShuaiLeiLu/:" | xargs) ${ScriptsDir}
 cp -rf $(ls MyScript | grep -v docker | sed "s:^:MyScript/:" | xargs) ${ScriptsDir}
 # cp -rf $(ls jddepot | grep -v docker | sed "s:^:jddepot/:" | xargs) ${ScriptsDir}
-cp -rf $(ls yyds | grep -v docker | sed "s:^:yyds/:" | xargs) ${ScriptsDir}
+# cp -rf $(ls yyds | grep -v docker | sed "s:^:yyds/:" | xargs) ${ScriptsDir}
 cp -rf package.json ${ScriptsDir}
