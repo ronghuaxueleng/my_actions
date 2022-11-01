@@ -51,7 +51,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html%22%20%7D`;
 let lnrun = 0;
 !(async() => {
-	await requireConfig();
+    await requireConfig();
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
@@ -76,16 +76,16 @@ let lnrun = 0;
             message = '';
             subTitle = '';
             option = {};
-						$.UA = require('./USER_AGENTS').UARAM();
+            $.UA = require('./USER_AGENTS').UARAM();
             $.retry = 0;
             lnrun++;
             await jdFruit();
-						if (lnrun == 3) {
-										console.log(`\n【访问接口次数达到3次，休息一分钟.....】\n`);
-										await $.wait(60 * 1000);
-										lnrun = 0;
-						}
-						await $.wait(30 * 1000);
+            if (lnrun == 3) {
+                console.log(`\n【访问接口次数达到3次，休息一分钟.....】\n`);
+                await $.wait(60 * 1000);
+                lnrun = 0;
+            }
+            await $.wait(30 * 1000);
         }
     }
     if ($.isNode() && allMessage && $.ctrTemp) {
@@ -103,7 +103,7 @@ async function jdFruit() {
     try {
         await initForFarm();
         if ($.farmInfo.farmUserPro) {
-                // option['media-url'] = $.farmInfo.farmUserPro.goodsImage;
+            // option['media-url'] = $.farmInfo.farmUserPro.goodsImage;
             message = `【水果名称】${$.farmInfo.farmUserPro.name}\n`;
             //console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}\n`);
             console.log(`\n【已成功兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`);
@@ -254,35 +254,35 @@ async function doDailyTask() {
     // ])
     //await getAwardInviteFriend();
     await getTreasureBoxAwardTask(); //去首页逛逛“领京豆”
-		await clockInIn(); //打卡领水
+    await clockInIn(); //打卡领水
     await executeWaterRains(); //水滴雨
     await getExtraAward(); //领取额外水滴奖励
     await turntableFarm() //天天抽奖得好礼
 }
 async function getTreasureBoxAwardTask() {
-  await taskInitForFarm();
-  const treasureBox = $.farmTask['treasureBoxInit-getBean'];
-  if (!treasureBox) {
-    console.log(`此帐号不支持去首页逛逛“领京豆”任务`);
-    return;
-  }
-
-  if (!treasureBox.f) {
-    console.log(`正在进行任务：${treasureBox.taskMainTitle}`);
-    await ddnc_getTreasureBoxAward(1);
-    if ($.treasureResult.code == '0') {
-      await beanTaskList();
-      await $.wait(1000);
-      await ddnc_getTreasureBoxAward(2);
-      if ($.treasureRwardResult.code == '0') {
-        console.log(`领取${treasureBox.taskMainTitle}奖励：${$.treasureRwardResult.waterGram}g水滴`);
-      } else {
-        console.log(`领取${treasureBox.taskMainTitle}奖励失败`);
-      }
+    await taskInitForFarm();
+    const treasureBox = $.farmTask['treasureBoxInit-getBean'];
+    if (!treasureBox) {
+        console.log(`此帐号不支持去首页逛逛“领京豆”任务`);
+        return;
     }
-  } else {
-    console.log(`${treasureBox.taskMainTitle} 已完成`);
-  }
+
+    if (!treasureBox.f) {
+        console.log(`正在进行任务：${treasureBox.taskMainTitle}`);
+        await ddnc_getTreasureBoxAward(1);
+        if ($.treasureResult.code == '0') {
+            await beanTaskList();
+            await $.wait(1000);
+            await ddnc_getTreasureBoxAward(2);
+            if ($.treasureRwardResult.code == '0') {
+                console.log(`领取${treasureBox.taskMainTitle}奖励：${$.treasureRwardResult.waterGram}g水滴`);
+            } else {
+                console.log(`领取${treasureBox.taskMainTitle}奖励失败`);
+            }
+        }
+    } else {
+        console.log(`${treasureBox.taskMainTitle} 已完成`);
+    }
 
 }
 async function predictionFruit() {
@@ -324,7 +324,7 @@ async function doTenWater() {
         for (; waterCount < $.farmTask.totalWaterTaskInit.totalWaterTaskLimit - $.farmTask.totalWaterTaskInit.totalWaterTaskTimes; waterCount++) {
             console.log(`第${waterCount + 1}次浇水`);
             await waterGoodForFarm();
-			await $.wait(2000);
+            await $.wait(2000);
             console.log(`本次浇水结果:   ${JSON.stringify($.waterResult)}`);
             if ($.waterResult.code === '0') {
                 console.log(`剩余水滴${$.waterResult.totalEnergy}g`);
@@ -399,7 +399,7 @@ async function doTenWaterAgain() {
     console.log(`剩余水滴${totalEnergy}g\n`);
     await myCardInfoForFarm();
     const { fastCard, doubleCard, beanCard, signCard } = $.myCardInfoRes;
-    console.log(`背包已有道具:\n快速浇水卡:${fastCard === -1 ? '未解锁': fastCard + '张'}\n水滴翻倍卡:${doubleCard === -1 ? '未解锁': doubleCard + '张'}\n水滴换京豆卡:${beanCard === -1 ? '未解锁' : beanCard + '张'}\n加签卡:${signCard === -1 ? '未解锁' : signCard + '张'}\n`)
+    console.log(`背包已有道具:\n快速浇水卡:${fastCard === -1 ? '未解锁' : fastCard + '张'}\n水滴翻倍卡:${doubleCard === -1 ? '未解锁' : doubleCard + '张'}\n水滴换京豆卡:${beanCard === -1 ? '未解锁' : beanCard + '张'}\n加签卡:${signCard === -1 ? '未解锁' : signCard + '张'}\n`)
     if (totalEnergy >= 100 && doubleCard > 0) {
         //使用翻倍水滴卡
         for (let i = 0; i < new Array(doubleCard).fill('').length; i++) {
@@ -447,12 +447,12 @@ async function doTenWaterAgain() {
     //   totalEnergy  = $.farmInfo.farmUserPro.totalEnergy;
     // }
     // 所有的浇水(10次浇水)任务，获取水滴任务完成后，如果剩余水滴大于等于60g,则继续浇水(保留部分水滴是用于完成第二天的浇水10次的任务)
-  if (totalEnergy < retainWater) {
-    console.log('保留水滴不足,停止继续浇水')
-    return
-  }
+    if (totalEnergy < retainWater) {
+        console.log('保留水滴不足,停止继续浇水')
+        return
+    }
     let overageEnergy = totalEnergy - retainWater;
-  if (overageEnergy >= ($.farmInfo.farmUserPro.treeTotalEnergy - $.farmInfo.farmUserPro.treeEnergy)) {
+    if (overageEnergy >= ($.farmInfo.farmUserPro.treeTotalEnergy - $.farmInfo.farmUserPro.treeEnergy)) {
         //如果现有的水滴，大于水果可兑换所需的对滴(也就是把水滴浇完，水果就能兑换了)
         isFruitFinished = false;
         for (let i = 0; i < ($.farmInfo.farmUserPro.treeTotalEnergy - $.farmInfo.farmUserPro.treeEnergy) / 10; i++) {
@@ -551,7 +551,7 @@ async function turntableFarm() {
         let { timingIntervalHours, timingLastSysTime, sysTime, timingGotStatus, remainLotteryTimes, turntableInfos } = $.initForTurntableFarmRes;
 
         if (!timingGotStatus) {
-            console.log(`是否到了领取免费赠送的抽奖机会----${sysTime > (timingLastSysTime + 60*60*timingIntervalHours*1000)}`)
+            console.log(`是否到了领取免费赠送的抽奖机会----${sysTime > (timingLastSysTime + 60 * 60 * timingIntervalHours * 1000)}`)
             if (sysTime > (timingLastSysTime + 60 * 60 * timingIntervalHours * 1000)) {
                 await timingAwardForTurntableFarm();
                 console.log(`领取定时奖励结果${JSON.stringify($.timingAwardRes)}`);
@@ -622,68 +622,34 @@ async function turntableFarm() {
 }
 //领取额外奖励水滴
 async function getExtraAward() {
-  await farmAssistInit();
-  if ($.farmAssistResult.code === "0") {
-    if ($.farmAssistResult.assistFriendList && $.farmAssistResult.assistFriendList.length >= 2) {
-      if ($.farmAssistResult.status === 2) {
-        let num = 0;
-        for (let key of Object.keys($.farmAssistResult.assistStageList)) {
-          let vo = $.farmAssistResult.assistStageList[key]
-          if (vo.stageStaus === 2) {
-            await receiveStageEnergy()
-            if ($.receiveStageEnergy.code === "0") {
-              console.log(`已成功领取第${key + 1}阶段好友助力奖励：【${$.receiveStageEnergy.amount}】g水`)
-              num += $.receiveStageEnergy.amount
+    await farmAssistInit();
+    if ($.farmAssistResult.code === "0") {
+        if ($.farmAssistResult.assistFriendList && $.farmAssistResult.assistFriendList.length >= 2) {
+            if ($.farmAssistResult.status === 2) {
+                let num = 0;
+                for (let key of Object.keys($.farmAssistResult.assistStageList)) {
+                    let vo = $.farmAssistResult.assistStageList[key]
+                    if (vo.stageStaus === 2) {
+                        await receiveStageEnergy()
+                        if ($.receiveStageEnergy.code === "0") {
+                            console.log(`已成功领取第${key + 1}阶段好友助力奖励：【${$.receiveStageEnergy.amount}】g水`)
+                            num += $.receiveStageEnergy.amount
+                        }
+                    }
+                }
+                message += `【额外奖励】${num}g水领取成功\n`;
+            } else if ($.farmAssistResult.status === 3) {
+                console.log("已经领取过8好友助力额外奖励");
+                message += `【额外奖励】已被领取过\n`;
             }
-          }
-        }
-        message += `【额外奖励】${num}g水领取成功\n`;
-      } else if ($.farmAssistResult.status === 3) {
-        console.log("已经领取过8好友助力额外奖励");
-        message += `【额外奖励】已被领取过\n`;
-      }
-    } else {
-      console.log("助力好友未达到2个");
-      message += `【额外奖励】领取失败,原因：给您助力的人未达2个\n`;
-    }
-    if ($.farmAssistResult.assistFriendList && $.farmAssistResult.assistFriendList.length > 0) {
-      let str = '';
-      $.farmAssistResult.assistFriendList.map((item, index) => {
-        if (index === ($.farmAssistResult.assistFriendList.length - 1)) {
-          str += item.nickName || "匿名用户";
         } else {
-          str += (item.nickName || "匿名用户") + ',';
+            console.log("助力好友未达到2个");
+            message += `【额外奖励】领取失败,原因：给您助力的人未达2个\n`;
         }
-        let date = new Date(item.time);
-        let time = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getMinutes();
-        console.log(`\n京东昵称【${item.nickName || "匿名用户"}】 在 ${time} 给您助过力\n`);
-      })
-      message += `【助力您的好友】${str}\n`;
-    }
-    console.log('领取额外奖励水滴结束\n');
-  } else {
-    await masterHelpTaskInitForFarm();
-    if ($.masterHelpResult.code === '0') {
-      if ($.masterHelpResult.masterHelpPeoples && $.masterHelpResult.masterHelpPeoples.length >= 5) {
-        // 已有五人助力。领取助力后的奖励
-        if (!$.masterHelpResult.masterGotFinal) {
-          await masterGotFinishedTaskForFarm();
-          if ($.masterGotFinished.code === '0') {
-            console.log(`已成功领取好友助力奖励：【${$.masterGotFinished.amount}】g水`);
-            message += `【额外奖励】${$.masterGotFinished.amount}g水领取成功\n`;
-          }
-        } else {
-          console.log("已经领取过5好友助力额外奖励");
-          message += `【额外奖励】已被领取过\n`;
-        }
-      } else {
-        console.log("助力好友未达到5个");
-        message += `【额外奖励】领取失败,原因：给您助力的人未达5个\n`;
-        }
-        if ($.masterHelpResult.masterHelpPeoples && $.masterHelpResult.masterHelpPeoples.length > 0) {
+        if ($.farmAssistResult.assistFriendList && $.farmAssistResult.assistFriendList.length > 0) {
             let str = '';
-            $.masterHelpResult.masterHelpPeoples.map((item, index) => {
-                if (index === ($.masterHelpResult.masterHelpPeoples.length - 1)) {
+            $.farmAssistResult.assistFriendList.map((item, index) => {
+                if (index === ($.farmAssistResult.assistFriendList.length - 1)) {
                     str += item.nickName || "匿名用户";
                 } else {
                     str += (item.nickName || "匿名用户") + ',';
@@ -695,8 +661,42 @@ async function getExtraAward() {
             message += `【助力您的好友】${str}\n`;
         }
         console.log('领取额外奖励水滴结束\n');
+    } else {
+        await masterHelpTaskInitForFarm();
+        if ($.masterHelpResult.code === '0') {
+            if ($.masterHelpResult.masterHelpPeoples && $.masterHelpResult.masterHelpPeoples.length >= 5) {
+                // 已有五人助力。领取助力后的奖励
+                if (!$.masterHelpResult.masterGotFinal) {
+                    await masterGotFinishedTaskForFarm();
+                    if ($.masterGotFinished.code === '0') {
+                        console.log(`已成功领取好友助力奖励：【${$.masterGotFinished.amount}】g水`);
+                        message += `【额外奖励】${$.masterGotFinished.amount}g水领取成功\n`;
+                    }
+                } else {
+                    console.log("已经领取过5好友助力额外奖励");
+                    message += `【额外奖励】已被领取过\n`;
+                }
+            } else {
+                console.log("助力好友未达到5个");
+                message += `【额外奖励】领取失败,原因：给您助力的人未达5个\n`;
+            }
+            if ($.masterHelpResult.masterHelpPeoples && $.masterHelpResult.masterHelpPeoples.length > 0) {
+                let str = '';
+                $.masterHelpResult.masterHelpPeoples.map((item, index) => {
+                    if (index === ($.masterHelpResult.masterHelpPeoples.length - 1)) {
+                        str += item.nickName || "匿名用户";
+                    } else {
+                        str += (item.nickName || "匿名用户") + ',';
+                    }
+                    let date = new Date(item.time);
+                    let time = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getMinutes();
+                    console.log(`\n京东昵称【${item.nickName || "匿名用户"}】 在 ${time} 给您助过力\n`);
+                })
+                message += `【助力您的好友】${str}\n`;
+            }
+            console.log('领取额外奖励水滴结束\n');
+        }
     }
-  }
 }
 
 //水滴雨
@@ -818,7 +818,7 @@ async function doFriendsWater() {
                 cardInfoStr = '';
             for (let index = 0; index < needWaterFriends.length; index++) {
                 await waterFriendForFarm(needWaterFriends[index]);
-                console.log(`为第${index+1}个好友浇水结果:${JSON.stringify($.waterFriendForFarmRes)}\n`)
+                console.log(`为第${index + 1}个好友浇水结果:${JSON.stringify($.waterFriendForFarmRes)}\n`)
                 if ($.waterFriendForFarmRes.code === '0') {
                     waterFriendsCount++;
                     if ($.waterFriendForFarmRes.cardInfo) {
@@ -937,38 +937,39 @@ async function getFullCollectionReward() {
         })
     })
 }
+
 function beanTaskList() {
-  return new Promise(resolve => {
-    const options = {
-      "url": "https://api.m.jd.com/client.action?functionId=beanTaskList",
-      "body": "body=%7B%22viewChannel%22%3A%22AppHome%22%7D&build=167853&client=apple&clientVersion=10.2.0&d_brand=apple&d_model=iPhone11%2C8&ef=1&eid=eidIf12a8121eas2urxgGc%2BzS5%2BUYGu1Nbed7bq8YY%2BgPd0Q0t%2BiviZdQsxnK/HTA7AxZzZBrtu1ulwEviYSV3QUuw2XHHC%2BPFHdNYx1A/3Zt8xYR%2Bd3&ep=%7B%22ciphertype%22%3A5%2C%22cipher%22%3A%7B%22screen%22%3A%22ENS4AtO3EJS%3D%22%2C%22osVersion%22%3A%22CJGkDy4n%22%2C%22openudid%22%3A%22ENq3CzTwENGmYtc3ENSnYtC0DWTwCNdwZNcnZtYmEWU2ZwYnCwY0Cm%3D%3D%22%2C%22area%22%3A%22CJvpCJYmCV81CNS1EP82Ctq1EK%3D%3D%22%2C%22uuid%22%3A%22aQf1ZRdxb2r4ovZ1EJZhcxYlVNZSZz09%22%7D%2C%22ts%22%3A1637625634%2C%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22version%22%3A%221.0.3%22%2C%22appname%22%3A%22com.360buy.jdmobile%22%2C%22ridx%22%3A-1%7D&ext=%7B%22prstate%22%3A%220%22%7D&isBackground=N&joycious=117&lang=zh_CN&networkType=4g&networklibtype=JDNetworkBaseAF&partner=apple&rfs=0000&scope=11&sign=778b3d3d83e0d3f45508a958f306abda&st=1637627411874&sv=101&uemps=0-0&uts=0f31TVRjBSsqndu4/jgUPz6uymy50MQJ1DpIH6AlcMry0eQsMwEN/GgP2FpcEJvoNVODK8ho6G6xfFEYSmOOdwauVOUqIQFPdxhcdWdM05U%2BMN5h6umteQ78SpJGXOymjKiTiGjvSOiTpoqO8k%2BT6stsfe0WS9QQ41HfWeVF6cdpDTzsmufz0XDdJ6CcltPUazK5UqRSuo0UyDMBmw/oWg%3D%3D",
-      "headers": {
-        "Cookie": cookie,
-        "Host": "api.m.jd.com",
-        "Accept": "*/*",
-        "Connection": "keep-alive",
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-        "Accept-Language": "zh-Hans-CN;q=1,en-CN;q=0.9",
-        "Accept-Encoding": "gzip,deflate,br",
-        "Content-Type": "application/x-www-form-urlencoded"
-      }
-    }
-    $.post(options, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} beanTaskList API请求失败，请检查网路重试`)
-        } else {
-          // console.log('data-----beanTaskList', data)
-          data = $.toObj(data);
+    return new Promise(resolve => {
+        const options = {
+            "url": "https://api.m.jd.com/client.action?functionId=beanTaskList",
+            "body": "body=%7B%22viewChannel%22%3A%22AppHome%22%7D&build=167853&client=apple&clientVersion=10.2.0&d_brand=apple&d_model=iPhone11%2C8&ef=1&eid=eidIf12a8121eas2urxgGc%2BzS5%2BUYGu1Nbed7bq8YY%2BgPd0Q0t%2BiviZdQsxnK/HTA7AxZzZBrtu1ulwEviYSV3QUuw2XHHC%2BPFHdNYx1A/3Zt8xYR%2Bd3&ep=%7B%22ciphertype%22%3A5%2C%22cipher%22%3A%7B%22screen%22%3A%22ENS4AtO3EJS%3D%22%2C%22osVersion%22%3A%22CJGkDy4n%22%2C%22openudid%22%3A%22ENq3CzTwENGmYtc3ENSnYtC0DWTwCNdwZNcnZtYmEWU2ZwYnCwY0Cm%3D%3D%22%2C%22area%22%3A%22CJvpCJYmCV81CNS1EP82Ctq1EK%3D%3D%22%2C%22uuid%22%3A%22aQf1ZRdxb2r4ovZ1EJZhcxYlVNZSZz09%22%7D%2C%22ts%22%3A1637625634%2C%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22version%22%3A%221.0.3%22%2C%22appname%22%3A%22com.360buy.jdmobile%22%2C%22ridx%22%3A-1%7D&ext=%7B%22prstate%22%3A%220%22%7D&isBackground=N&joycious=117&lang=zh_CN&networkType=4g&networklibtype=JDNetworkBaseAF&partner=apple&rfs=0000&scope=11&sign=778b3d3d83e0d3f45508a958f306abda&st=1637627411874&sv=101&uemps=0-0&uts=0f31TVRjBSsqndu4/jgUPz6uymy50MQJ1DpIH6AlcMry0eQsMwEN/GgP2FpcEJvoNVODK8ho6G6xfFEYSmOOdwauVOUqIQFPdxhcdWdM05U%2BMN5h6umteQ78SpJGXOymjKiTiGjvSOiTpoqO8k%2BT6stsfe0WS9QQ41HfWeVF6cdpDTzsmufz0XDdJ6CcltPUazK5UqRSuo0UyDMBmw/oWg%3D%3D",
+            "headers": {
+                "Cookie": cookie,
+                "Host": "api.m.jd.com",
+                "Accept": "*/*",
+                "Connection": "keep-alive",
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                "Accept-Language": "zh-Hans-CN;q=1,en-CN;q=0.9",
+                "Accept-Encoding": "gzip,deflate,br",
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
         }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
+        $.post(options, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} beanTaskList API请求失败，请检查网路重试`)
+                } else {
+                    // console.log('data-----beanTaskList', data)
+                    data = $.toObj(data);
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
     })
-  })
 }
 /**
  * 领取10次浇水奖励API
@@ -1069,13 +1070,13 @@ async function masterHelpTaskInitForFarm() {
 }
 //新版助力好友信息API
 async function farmAssistInit() {
-  const functionId = arguments.callee.name.toString();
-  $.farmAssistResult = await request(functionId, {"version":14,"channel":1,"babelChannel":"120"});
+    const functionId = arguments.callee.name.toString();
+    $.farmAssistResult = await request(functionId, { "version": 14, "channel": 1, "babelChannel": "120" });
 }
 //新版领取助力奖励API
 async function receiveStageEnergy() {
-  const functionId = arguments.callee.name.toString();
-  $.receiveStageEnergy = await request(functionId, {"version":14,"channel":1,"babelChannel":"120"});
+    const functionId = arguments.callee.name.toString();
+    $.receiveStageEnergy = await request(functionId, { "version": 14, "channel": 1, "babelChannel": "120" });
 }
 //接受对方邀请,成为对方好友的API
 async function inviteFriend() {
@@ -1159,12 +1160,12 @@ async function gotThreeMealForFarm() {
  * type为1时, 领取浏览任务奖励
  */
 async function browseAdTaskForFarm(advertId, type) {
-  const functionId = arguments.callee.name.toString();
-  if (type === 0) {
-    $.browseResult = await request(functionId, {advertId, type});
-  } else if (type === 1) {
-    $.browseRwardResult = await request(functionId, {advertId, type});
-  }
+    const functionId = arguments.callee.name.toString();
+    if (type === 0) {
+        $.browseResult = await request(functionId, { advertId, type });
+    } else if (type === 1) {
+        $.browseRwardResult = await request(functionId, { advertId, type });
+    }
 }
 
 /**
@@ -1172,14 +1173,14 @@ async function browseAdTaskForFarm(advertId, type) {
  * type为1时, 完成任务
  * type为2时, 领取任务奖励
  */
- async function ddnc_getTreasureBoxAward(type) {
-  const functionId = arguments.callee.name.toString();
-  const body = {"type":type,"babelChannel":"45","line":"getBean","version":18,"channel":1};
-  if (type === 1) {
-    $.treasureResult = await request(functionId, body);
-  } else if (type === 2) {
-    $.treasureRwardResult = await request(functionId, body);
-  }
+async function ddnc_getTreasureBoxAward(type) {
+    const functionId = arguments.callee.name.toString();
+    const body = { "type": type, "babelChannel": "45", "line": "getBean", "version": 18, "channel": 1 };
+    if (type === 1) {
+        $.treasureResult = await request(functionId, body);
+    } else if (type === 2) {
+        $.treasureRwardResult = await request(functionId, body);
+    }
 }
 // 被水滴砸中API
 async function gotWaterGoalTaskForFarm() {
@@ -1194,68 +1195,66 @@ async function signForFarm() {
  * 初始化农场, 可获取果树及用户信息API
  */
 async function initForFarm() {
-  const functionId = arguments.callee.name.toString();
-  $.farmInfo = await request(functionId, {"babelChannel":"121","sid":"3c52b5f17ab2a42398939a27887eaf8w","version":18,"channel":1});
-  // return new Promise(resolve => {
-  //   const option =  {
-  //     url: `${JD_API_HOST}?functionId=initForFarm`,
-  //     body: `body=${escape(JSON.stringify({"version":4}))}&appid=wh5&clientVersion=9.1.0`,
-  //     headers: {
-  //       "accept": "*/*",
-  //       "accept-encoding": "gzip, deflate, br",
-  //       "accept-language": "zh-CN,zh;q=0.9",
-  //       "cache-control": "no-cache",
-  //       "cookie": cookie,
-  //       "origin": "https://home.m.jd.com",
-  //       "pragma": "no-cache",
-  //       "referer": "https://home.m.jd.com/myJd/newhome.action",
-  //       "sec-fetch-dest": "empty",
-  //       "sec-fetch-mode": "cors",
-  //       "sec-fetch-site": "same-site",
-  //       "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-  //       "Content-Type": "application/x-www-form-urlencoded"
-  //     },
-  //     timeout: 10000,
-  //   };
-  //   $.post(option, (err, resp, data) => {
-  //     try {
-  //       if (err) {
-  //         console.log('\n东东农场: API查询请求失败 ‼️‼️');
-  //         console.log(JSON.stringify(err));
-  //         $.logErr(err);
-  //       } else {
-  //         if (safeGet(data)) {
-  //           $.farmInfo = JSON.parse(data)
-  //         }
-  //       }
-  //     } catch (e) {
-  //       $.logErr(e, resp)
-  //     } finally {
-  //       resolve();
-  //     }
-  //   })
-  // })
+    return new Promise(resolve => {
+        const option = {
+            url: `${JD_API_HOST}?functionId=initForFarm`,
+            body: `body=${escape(JSON.stringify({ "version": 4 }))}&appid=wh5&clientVersion=9.1.0`,
+            headers: {
+                "accept": "*/*",
+                "accept-encoding": "gzip, deflate, br",
+                "accept-language": "zh-CN,zh;q=0.9",
+                "cache-control": "no-cache",
+                "cookie": cookie,
+                "origin": "https://home.m.jd.com",
+                "pragma": "no-cache",
+                "referer": "https://home.m.jd.com/myJd/newhome.action",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-site",
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            timeout: 10000,
+        };
+        $.post(option, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log('\n东东农场: API查询请求失败 ‼️‼️');
+                    console.log(JSON.stringify(err));
+                    $.logErr(err);
+                } else {
+                    if (safeGet(data)) {
+                        $.farmInfo = JSON.parse(data)
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+    })
 }
 
 // 初始化任务列表API
 async function taskInitForFarm() {
-  console.log('\n初始化任务列表')
-  const functionId = arguments.callee.name.toString();
-  $.farmTask = await request(functionId, {"version":18,"channel":1,"babelChannel":"121"});
+    console.log('\n初始化任务列表')
+    const functionId = arguments.callee.name.toString();
+    $.farmTask = await request(functionId, { "version": 18, "channel": 1, "babelChannel": "121" });
 }
 //获取好友列表API
 async function friendListInitForFarm() {
-  $.friendList = await request('friendListInitForFarm', {"version": 18,"channel": 1,"babelChannel":"45"});
-  // console.log('aa', aa);
+    $.friendList = await request('friendListInitForFarm', { "version": 18, "channel": 1, "babelChannel": "45" });
+    // console.log('aa', aa);
 }
 // 领取邀请好友的奖励API
 async function awardInviteFriendForFarm() {
-  $.awardInviteFriendRes = await request('awardInviteFriendForFarm');
+    $.awardInviteFriendRes = await request('awardInviteFriendForFarm');
 }
 //为好友浇水API
 async function waterFriendForFarm(shareCode) {
-  const body = {"shareCode": shareCode, "version": 18, "channel": 1, "babelChannel":"121"};
-  $.waterFriendForFarmRes = await request('waterFriendForFarm', body);
+    const body = { "shareCode": shareCode, "version": 18, "channel": 1, "babelChannel": "121" };
+    $.waterFriendForFarmRes = await request('waterFriendForFarm', body);
 }
 async function showMsg() {
     if ($.isNode() && process.env.FRUIT_NOTIFY_CONTROL) {
@@ -1285,27 +1284,28 @@ function timeFormat(time) {
     }
     return date.getFullYear() + '-' + ((date.getMonth() + 1) >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1)) + '-' + (date.getDate() >= 10 ? date.getDate() : '0' + date.getDate());
 }
+
 function requireConfig() {
-  return new Promise(resolve => {
-    console.log('开始获取配置文件\n')
-    notify = $.isNode() ? require('./sendNotify') : '';
-    //Node.js用户请在jdCookie.js处填写京东ck;
-    const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';   
-    //IOS等用户直接用NobyDa的jd cookie
-    if ($.isNode()) {
-      Object.keys(jdCookieNode).forEach((item) => {
-        if (jdCookieNode[item]) {
-          cookiesArr.push(jdCookieNode[item])
+    return new Promise(resolve => {
+        console.log('开始获取配置文件\n')
+        notify = $.isNode() ? require('./sendNotify') : '';
+        //Node.js用户请在jdCookie.js处填写京东ck;
+        const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+        //IOS等用户直接用NobyDa的jd cookie
+        if ($.isNode()) {
+            Object.keys(jdCookieNode).forEach((item) => {
+                if (jdCookieNode[item]) {
+                    cookiesArr.push(jdCookieNode[item])
+                }
+            })
+            if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+        } else {
+            cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
         }
-      })
-      if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => { };
-    } else {
-      cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
-    }
-    console.log(`共${cookiesArr.length}个京东账号\n`)
-    $.shareCodesArr = [];
-    resolve()
-  })
+        console.log(`共${cookiesArr.length}个京东账号\n`)
+        $.shareCodesArr = [];
+        resolve()
+    })
 }
 
 function TotalBean() {
@@ -1389,20 +1389,20 @@ function safeGet(data) {
 }
 
 function taskUrl(function_id, body = {}) {
-  return {
-    url: `${JD_API_HOST}?functionId=${function_id}&body=${encodeURIComponent(JSON.stringify(body))}&appid=wh5`,
-    headers: {
-      "Host": "api.m.jd.com",
-      "Accept": "*/*",
-      "Origin": "https://carry.m.jd.com",
-      "Accept-Encoding": "gzip, deflate, br",
-      "User-Agent": $.UA,
-      "Accept-Language": "zh-CN,zh-Hans;q=0.9",
-      "Referer": "https://carry.m.jd.com/",
-      "Cookie": cookie
-    },
-    timeout: 10000
-  }
+    return {
+        url: `${JD_API_HOST}?functionId=${function_id}&body=${encodeURIComponent(JSON.stringify(body))}&appid=wh5`,
+        headers: {
+            "Host": "api.m.jd.com",
+            "Accept": "*/*",
+            "Origin": "https://carry.m.jd.com",
+            "Accept-Encoding": "gzip, deflate, br",
+            "User-Agent": $.UA,
+            "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+            "Referer": "https://carry.m.jd.com/",
+            "Cookie": cookie
+        },
+        timeout: 10000
+    }
 }
 
 function jsonParse(str) {
@@ -1417,4 +1417,168 @@ function jsonParse(str) {
     }
 }
 // prettier-ignore
-function Env(t, e) { "undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0); class s { constructor(t) { this.env = t } send(t, e = "GET") { t = "string" == typeof t ? { url: t } : t; let s = this.get; return "POST" === e && (s = this.post), new Promise((e, i) => { s.call(this, t, (t, s, r) => { t ? i(t) : e(s) }) }) } get(t) { return this.send.call(this.env, t) } post(t) { return this.send.call(this.env, t, "POST") } } return new class { constructor(t, e) { this.name = t, this.http = new s(this), this.data = null, this.dataFile = "box.dat", this.logs = [], this.isMute = !1, this.isNeedRewrite = !1, this.logSeparator = "\n", this.startTime = (new Date).getTime(), Object.assign(this, e), this.log("", `🔔${this.name}, 开始!`) } isNode() { return "undefined" != typeof module && !!module.exports } isQuanX() { return "undefined" != typeof $task } isSurge() { return "undefined" != typeof $httpClient && "undefined" == typeof $loon } isLoon() { return "undefined" != typeof $loon } toObj(t, e = null) { try { return JSON.parse(t) } catch { return e } } toStr(t, e = null) { try { return JSON.stringify(t) } catch { return e } } getjson(t, e) { let s = e; const i = this.getdata(t); if (i) try { s = JSON.parse(this.getdata(t)) } catch { } return s } setjson(t, e) { try { return this.setdata(JSON.stringify(t), e) } catch { return !1 } } getScript(t) { return new Promise(e => { this.get({ url: t }, (t, s, i) => e(i)) }) } runScript(t, e) { return new Promise(s => { let i = this.getdata("@chavy_boxjs_userCfgs.httpapi"); i = i ? i.replace(/\n/g, "").trim() : i; let r = this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout"); r = r ? 1 * r : 20, r = e && e.timeout ? e.timeout : r; const [o, h] = i.split("@"), n = { url: `http://${h}/v1/scripting/evaluate`, body: { script_text: t, mock_type: "cron", timeout: r }, headers: { "X-Key": o, Accept: "*/*" } }; this.post(n, (t, e, i) => s(i)) }).catch(t => this.logErr(t)) } loaddata() { if (!this.isNode()) return {}; { this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path"); const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile), s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e); if (!s && !i) return {}; { const i = s ? t : e; try { return JSON.parse(this.fs.readFileSync(i)) } catch (t) { return {} } } } } writedata() { if (this.isNode()) { this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path"); const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile), s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e), r = JSON.stringify(this.data); s ? this.fs.writeFileSync(t, r) : i ? this.fs.writeFileSync(e, r) : this.fs.writeFileSync(t, r) } } lodash_get(t, e, s) { const i = e.replace(/\[(\d+)\]/g, ".$1").split("."); let r = t; for (const t of i) if (r = Object(r)[t], void 0 === r) return s; return r } lodash_set(t, e, s) { return Object(t) !== t ? t : (Array.isArray(e) || (e = e.toString().match(/[^.[\]]+/g) || []), e.slice(0, -1).reduce((t, s, i) => Object(t[s]) === t[s] ? t[s] : t[s] = Math.abs(e[i + 1]) >> 0 == +e[i + 1] ? [] : {}, t)[e[e.length - 1]] = s, t) } getdata(t) { let e = this.getval(t); if (/^@/.test(t)) { const [, s, i] = /^@(.*?)\.(.*?)$/.exec(t), r = s ? this.getval(s) : ""; if (r) try { const t = JSON.parse(r); e = t ? this.lodash_get(t, i, "") : e } catch (t) { e = "" } } return e } setdata(t, e) { let s = !1; if (/^@/.test(e)) { const [, i, r] = /^@(.*?)\.(.*?)$/.exec(e), o = this.getval(i), h = i ? "null" === o ? null : o || "{}" : "{}"; try { const e = JSON.parse(h); this.lodash_set(e, r, t), s = this.setval(JSON.stringify(e), i) } catch (e) { const o = {}; this.lodash_set(o, r, t), s = this.setval(JSON.stringify(o), i) } } else s = this.setval(t, e); return s } getval(t) { return this.isSurge() || this.isLoon() ? $persistentStore.read(t) : this.isQuanX() ? $prefs.valueForKey(t) : this.isNode() ? (this.data = this.loaddata(), this.data[t]) : this.data && this.data[t] || null } setval(t, e) { return this.isSurge() || this.isLoon() ? $persistentStore.write(t, e) : this.isQuanX() ? $prefs.setValueForKey(t, e) : this.isNode() ? (this.data = this.loaddata(), this.data[e] = t, this.writedata(), !0) : this.data && this.data[e] || null } initGotEnv(t) { this.got = this.got ? this.got : require("got"), this.cktough = this.cktough ? this.cktough : require("tough-cookie"), this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar, t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = this.ckjar)) } get(t, e = (() => { })) { t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"]), this.isSurge() || this.isLoon() ? (this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient.get(t, (t, s, i) => { !t && s && (s.body = i, s.statusCode = s.status), e(t, s, i) })) : this.isQuanX() ? (this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, { hints: !1 })), $task.fetch(t).then(t => { const { statusCode: s, statusCode: i, headers: r, body: o } = t; e(null, { status: s, statusCode: i, headers: r, body: o }, o) }, t => e(t))) : this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => { try { if (t.headers["set-cookie"]) { const s = t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString(); s && this.ckjar.setCookieSync(s, null), e.cookieJar = this.ckjar } } catch (t) { this.logErr(t) } }).then(t => { const { statusCode: s, statusCode: i, headers: r, body: o } = t; e(null, { status: s, statusCode: i, headers: r, body: o }, o) }, t => { const { message: s, response: i } = t; e(s, i, i && i.body) })) } post(t, e = (() => { })) { if (t.body && t.headers && !t.headers["Content-Type"] && (t.headers["Content-Type"] = "application/x-www-form-urlencoded"), t.headers && delete t.headers["Content-Length"], this.isSurge() || this.isLoon()) this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient.post(t, (t, s, i) => { !t && s && (s.body = i, s.statusCode = s.status), e(t, s, i) }); else if (this.isQuanX()) t.method = "POST", this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, { hints: !1 })), $task.fetch(t).then(t => { const { statusCode: s, statusCode: i, headers: r, body: o } = t; e(null, { status: s, statusCode: i, headers: r, body: o }, o) }, t => e(t)); else if (this.isNode()) { this.initGotEnv(t); const { url: s, ...i } = t; this.got.post(s, i).then(t => { const { statusCode: s, statusCode: i, headers: r, body: o } = t; e(null, { status: s, statusCode: i, headers: r, body: o }, o) }, t => { const { message: s, response: i } = t; e(s, i, i && i.body) }) } } time(t, e = null) { const s = e ? new Date(e) : new Date; let i = { "M+": s.getMonth() + 1, "d+": s.getDate(), "H+": s.getHours(), "m+": s.getMinutes(), "s+": s.getSeconds(), "q+": Math.floor((s.getMonth() + 3) / 3), S: s.getMilliseconds() }; /(y+)/.test(t) && (t = t.replace(RegExp.$1, (s.getFullYear() + "").substr(4 - RegExp.$1.length))); for (let e in i) new RegExp("(" + e + ")").test(t) && (t = t.replace(RegExp.$1, 1 == RegExp.$1.length ? i[e] : ("00" + i[e]).substr(("" + i[e]).length))); return t } msg(e = t, s = "", i = "", r) { const o = t => { if (!t) return t; if ("string" == typeof t) return this.isLoon() ? t : this.isQuanX() ? { "open-url": t } : this.isSurge() ? { url: t } : void 0; if ("object" == typeof t) { if (this.isLoon()) { let e = t.openUrl || t.url || t["open-url"], s = t.mediaUrl || t["media-url"]; return { openUrl: e, mediaUrl: s } } if (this.isQuanX()) { let e = t["open-url"] || t.url || t.openUrl, s = t["media-url"] || t.mediaUrl; return { "open-url": e, "media-url": s } } if (this.isSurge()) { let e = t.url || t.openUrl || t["open-url"]; return { url: e } } } }; if (this.isMute || (this.isSurge() || this.isLoon() ? $notification.post(e, s, i, o(r)) : this.isQuanX() && $notify(e, s, i, o(r))), !this.isMuteLog) { let t = ["", "==============📣系统通知📣=============="]; t.push(e), s && t.push(s), i && t.push(i), console.log(t.join("\n")), this.logs = this.logs.concat(t) } } log(...t) { t.length > 0 && (this.logs = [...this.logs, ...t]), console.log(t.join(this.logSeparator)) } logErr(t, e) { const s = !this.isSurge() && !this.isQuanX() && !this.isLoon(); s ? this.log("", `❗️${this.name}, 错误!`, t.stack) : this.log("", `❗️${this.name}, 错误!`, t) } wait(t) { return new Promise(e => setTimeout(e, t)) } done(t = {}) { const e = (new Date).getTime(), s = (e - this.startTime) / 1e3; this.log("", `🔔${this.name}, 结束! 🕛 ${s} 秒`), this.log(), (this.isSurge() || this.isQuanX() || this.isLoon()) && $done(t) } }(t, e) }
+function Env(t, e) {
+    "undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0);
+    class s {
+        constructor(t) { this.env = t }
+        send(t, e = "GET") { t = "string" == typeof t ? { url: t } : t; let s = this.get; return "POST" === e && (s = this.post), new Promise((e, i) => { s.call(this, t, (t, s, r) => { t ? i(t) : e(s) }) }) }
+        get(t) { return this.send.call(this.env, t) }
+        post(t) { return this.send.call(this.env, t, "POST") }
+    }
+    return new class {
+        constructor(t, e) { this.name = t, this.http = new s(this), this.data = null, this.dataFile = "box.dat", this.logs = [], this.isMute = !1, this.isNeedRewrite = !1, this.logSeparator = "\n", this.startTime = (new Date).getTime(), Object.assign(this, e), this.log("", `🔔${this.name}, 开始!`) }
+        isNode() { return "undefined" != typeof module && !!module.exports }
+        isQuanX() { return "undefined" != typeof $task }
+        isSurge() { return "undefined" != typeof $httpClient && "undefined" == typeof $loon }
+        isLoon() { return "undefined" != typeof $loon }
+        toObj(t, e = null) { try { return JSON.parse(t) } catch { return e } }
+        toStr(t, e = null) { try { return JSON.stringify(t) } catch { return e } }
+        getjson(t, e) {
+            let s = e;
+            const i = this.getdata(t);
+            if (i) try { s = JSON.parse(this.getdata(t)) } catch {}
+            return s
+        }
+        setjson(t, e) { try { return this.setdata(JSON.stringify(t), e) } catch { return !1 } }
+        getScript(t) { return new Promise(e => { this.get({ url: t }, (t, s, i) => e(i)) }) }
+        runScript(t, e) {
+            return new Promise(s => {
+                let i = this.getdata("@chavy_boxjs_userCfgs.httpapi");
+                i = i ? i.replace(/\n/g, "").trim() : i;
+                let r = this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");
+                r = r ? 1 * r : 20, r = e && e.timeout ? e.timeout : r;
+                const [o, h] = i.split("@"), n = { url: `http://${h}/v1/scripting/evaluate`, body: { script_text: t, mock_type: "cron", timeout: r }, headers: { "X-Key": o, Accept: "*/*" } };
+                this.post(n, (t, e, i) => s(i))
+            }).catch(t => this.logErr(t))
+        }
+        loaddata() {
+            if (!this.isNode()) return {}; {
+                this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path");
+                const t = this.path.resolve(this.dataFile),
+                    e = this.path.resolve(process.cwd(), this.dataFile),
+                    s = this.fs.existsSync(t),
+                    i = !s && this.fs.existsSync(e);
+                if (!s && !i) return {}; { const i = s ? t : e; try { return JSON.parse(this.fs.readFileSync(i)) } catch (t) { return {} } }
+            }
+        }
+        writedata() {
+            if (this.isNode()) {
+                this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path");
+                const t = this.path.resolve(this.dataFile),
+                    e = this.path.resolve(process.cwd(), this.dataFile),
+                    s = this.fs.existsSync(t),
+                    i = !s && this.fs.existsSync(e),
+                    r = JSON.stringify(this.data);
+                s ? this.fs.writeFileSync(t, r) : i ? this.fs.writeFileSync(e, r) : this.fs.writeFileSync(t, r)
+            }
+        }
+        lodash_get(t, e, s) {
+            const i = e.replace(/\[(\d+)\]/g, ".$1").split(".");
+            let r = t;
+            for (const t of i)
+                if (r = Object(r)[t], void 0 === r) return s;
+            return r
+        }
+        lodash_set(t, e, s) { return Object(t) !== t ? t : (Array.isArray(e) || (e = e.toString().match(/[^.[\]]+/g) || []), e.slice(0, -1).reduce((t, s, i) => Object(t[s]) === t[s] ? t[s] : t[s] = Math.abs(e[i + 1]) >> 0 == +e[i + 1] ? [] : {}, t)[e[e.length - 1]] = s, t) }
+        getdata(t) {
+            let e = this.getval(t);
+            if (/^@/.test(t)) {
+                const [, s, i] = /^@(.*?)\.(.*?)$/.exec(t), r = s ? this.getval(s) : "";
+                if (r) try {
+                    const t = JSON.parse(r);
+                    e = t ? this.lodash_get(t, i, "") : e
+                } catch (t) { e = "" }
+            }
+            return e
+        }
+        setdata(t, e) {
+            let s = !1;
+            if (/^@/.test(e)) {
+                const [, i, r] = /^@(.*?)\.(.*?)$/.exec(e), o = this.getval(i), h = i ? "null" === o ? null : o || "{}" : "{}";
+                try {
+                    const e = JSON.parse(h);
+                    this.lodash_set(e, r, t), s = this.setval(JSON.stringify(e), i)
+                } catch (e) {
+                    const o = {};
+                    this.lodash_set(o, r, t), s = this.setval(JSON.stringify(o), i)
+                }
+            } else s = this.setval(t, e);
+            return s
+        }
+        getval(t) { return this.isSurge() || this.isLoon() ? $persistentStore.read(t) : this.isQuanX() ? $prefs.valueForKey(t) : this.isNode() ? (this.data = this.loaddata(), this.data[t]) : this.data && this.data[t] || null }
+        setval(t, e) { return this.isSurge() || this.isLoon() ? $persistentStore.write(t, e) : this.isQuanX() ? $prefs.setValueForKey(t, e) : this.isNode() ? (this.data = this.loaddata(), this.data[e] = t, this.writedata(), !0) : this.data && this.data[e] || null }
+        initGotEnv(t) { this.got = this.got ? this.got : require("got"), this.cktough = this.cktough ? this.cktough : require("tough-cookie"), this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar, t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = this.ckjar)) }
+        get(t, e = (() => {})) {
+            t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"]), this.isSurge() || this.isLoon() ? (this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient.get(t, (t, s, i) => {!t && s && (s.body = i, s.statusCode = s.status), e(t, s, i) })) : this.isQuanX() ? (this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, { hints: !1 })), $task.fetch(t).then(t => {
+                const { statusCode: s, statusCode: i, headers: r, body: o } = t;
+                e(null, { status: s, statusCode: i, headers: r, body: o }, o)
+            }, t => e(t))) : this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
+                try {
+                    if (t.headers["set-cookie"]) {
+                        const s = t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();
+                        s && this.ckjar.setCookieSync(s, null), e.cookieJar = this.ckjar
+                    }
+                } catch (t) { this.logErr(t) }
+            }).then(t => {
+                const { statusCode: s, statusCode: i, headers: r, body: o } = t;
+                e(null, { status: s, statusCode: i, headers: r, body: o }, o)
+            }, t => {
+                const { message: s, response: i } = t;
+                e(s, i, i && i.body)
+            }))
+        }
+        post(t, e = (() => {})) {
+            if (t.body && t.headers && !t.headers["Content-Type"] && (t.headers["Content-Type"] = "application/x-www-form-urlencoded"), t.headers && delete t.headers["Content-Length"], this.isSurge() || this.isLoon()) this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient.post(t, (t, s, i) => {!t && s && (s.body = i, s.statusCode = s.status), e(t, s, i) });
+            else if (this.isQuanX()) t.method = "POST", this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, { hints: !1 })), $task.fetch(t).then(t => {
+                const { statusCode: s, statusCode: i, headers: r, body: o } = t;
+                e(null, { status: s, statusCode: i, headers: r, body: o }, o)
+            }, t => e(t));
+            else if (this.isNode()) {
+                this.initGotEnv(t);
+                const { url: s, ...i } = t;
+                this.got.post(s, i).then(t => {
+                    const { statusCode: s, statusCode: i, headers: r, body: o } = t;
+                    e(null, { status: s, statusCode: i, headers: r, body: o }, o)
+                }, t => {
+                    const { message: s, response: i } = t;
+                    e(s, i, i && i.body)
+                })
+            }
+        }
+        time(t, e = null) { const s = e ? new Date(e) : new Date; let i = { "M+": s.getMonth() + 1, "d+": s.getDate(), "H+": s.getHours(), "m+": s.getMinutes(), "s+": s.getSeconds(), "q+": Math.floor((s.getMonth() + 3) / 3), S: s.getMilliseconds() }; /(y+)/.test(t) && (t = t.replace(RegExp.$1, (s.getFullYear() + "").substr(4 - RegExp.$1.length))); for (let e in i) new RegExp("(" + e + ")").test(t) && (t = t.replace(RegExp.$1, 1 == RegExp.$1.length ? i[e] : ("00" + i[e]).substr(("" + i[e]).length))); return t }
+        msg(e = t, s = "", i = "", r) {
+            const o = t => {
+                if (!t) return t;
+                if ("string" == typeof t) return this.isLoon() ? t : this.isQuanX() ? { "open-url": t } : this.isSurge() ? { url: t } : void 0;
+                if ("object" == typeof t) {
+                    if (this.isLoon()) {
+                        let e = t.openUrl || t.url || t["open-url"],
+                            s = t.mediaUrl || t["media-url"];
+                        return { openUrl: e, mediaUrl: s }
+                    }
+                    if (this.isQuanX()) {
+                        let e = t["open-url"] || t.url || t.openUrl,
+                            s = t["media-url"] || t.mediaUrl;
+                        return { "open-url": e, "media-url": s }
+                    }
+                    if (this.isSurge()) { let e = t.url || t.openUrl || t["open-url"]; return { url: e } }
+                }
+            };
+            if (this.isMute || (this.isSurge() || this.isLoon() ? $notification.post(e, s, i, o(r)) : this.isQuanX() && $notify(e, s, i, o(r))), !this.isMuteLog) {
+                let t = ["", "==============📣系统通知📣=============="];
+                t.push(e), s && t.push(s), i && t.push(i), console.log(t.join("\n")), this.logs = this.logs.concat(t)
+            }
+        }
+        log(...t) { t.length > 0 && (this.logs = [...this.logs, ...t]), console.log(t.join(this.logSeparator)) }
+        logErr(t, e) {
+            const s = !this.isSurge() && !this.isQuanX() && !this.isLoon();
+            s ? this.log("", `❗️${this.name}, 错误!`, t.stack) : this.log("", `❗️${this.name}, 错误!`, t)
+        }
+        wait(t) { return new Promise(e => setTimeout(e, t)) }
+        done(t = {}) {
+            const e = (new Date).getTime(),
+                s = (e - this.startTime) / 1e3;
+            this.log("", `🔔${this.name}, 结束! 🕛 ${s} 秒`), this.log(), (this.isSurge() || this.isQuanX() || this.isLoon()) && $done(t)
+        }
+    }(t, e)
+}
