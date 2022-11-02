@@ -20,24 +20,23 @@ async def code(event):
         text = parameter[1]
 
     try:
-        data = requests.post(url=API, headers={'Content-Type': 'application/json'}, json={"code": text}).json()
+        data = requests.post(url=API, headers={'Content-Type': 'application/json'}, json={"code": text})
 
     except:
         push_msg = "❌ 接口状态异常，请检查网络连接"
+
     try:
-        res = json.loads(data)
+        data = data.json()
+        if (data["code"] == '0'):
+            data = data["data"]
 
-        if (res["code"] == '0'):
-            data = res["data"]
+            push_msg = f"**【活动标题】** {data['title']}\n**【用户昵称】** {data['userName']}\n**【用户头像】** [点此查看]({data['headImg']})\n**【活动链接】** __{data['jumpUrl']}__"
 
-            if (re.match(r'.*:/(?!/).*', text, re.S)) or (re.match(r'.*\([0-9a-zA-Z]{1,12}\).*', text, re.S)) or (re.match(r'.*[￥！][0-9a-zA-Z]{1,12}(?!/).*', text, re.S)):
-
-                push_msg = f"**【活动标题】** {data['title']}\n**【用户昵称】** {data['userName']}\n**【用户头像】** [点此查看]({data['headImg']})\n**【活动链接】** __{data['jumpUrl']}__"
-            else:
-                push_msg = str(json.dumps(res, indent=4, ensure_ascii=False))
+        elif (data["code"] == '400'):
+            push_msg = "❌ 口令不存在，请检查是否正确！"
 
         else:
-            push_msg = "口令不存在或解析失败，请检查口令是否正确！\n\n接口返回数据：\n" + str(json.dumps(res, indent=4, ensure_ascii=False))
+            push_msg = "口令不存在或解析失败，请检查口令是否正确！\n\n接口返回数据：\n" + str(json.dumps(data, indent=4, ensure_ascii=False))
 
     except KeyError:
         push_msg = "❌ 接口回传数据异常"
