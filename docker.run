@@ -30,6 +30,7 @@ docker run -dit \
 -v /home/myid/jd/jishui/log:/jd/log \
 -v /home/myid/jd/jishui/log:/var/run \
 -v /home/myid/jd/jishui/log:/var/log \
+-v /home/myid/jd/jishui/sign:/jd/utils/.sign \
 -p 5680:5678 \
 -p 5900:5900 \
 -p 8087:8080 \
