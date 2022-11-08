@@ -144,34 +144,34 @@ function deleteShareCode() {
 # replaceShareCode jd_jxmc jddepot
 # cd ${ShellDir}
 
-git clone https://github.com/ShuaiLeiLu/JD_Scripts.git ShuaiLeiLu
+git clone https://github.com/shufflewzc/faker2.git ShuaiLeiLu
 cd ShuaiLeiLu
 cp -rf ${ShellDir}/replace/* ./
-replaceShareCode jd_cash ShuaiLeiLu
-replaceShareCode jd_cfd ShuaiLeiLu
-replaceShareCode jd_dreamFactory ShuaiLeiLu
-replaceShareCode jd_fruit ShuaiLeiLu
-replaceShareCode jd_health ShuaiLeiLu
-replaceShareCode jd_jdfactory ShuaiLeiLu
-replaceShareCodeV1 jd_pet ShuaiLeiLu
-replaceShareCode jd_plantBean ShuaiLeiLu
-replaceShareCode jd_sgmh ShuaiLeiLu
-replaceShareCode jd_jxmc ShuaiLeiLu
+# replaceShareCode jd_cash ShuaiLeiLu
+# replaceShareCode jd_cfd ShuaiLeiLu
+# replaceShareCode jd_dreamFactory ShuaiLeiLu
+# replaceShareCode jd_fruit ShuaiLeiLu
+# replaceShareCode jd_health ShuaiLeiLu
+# replaceShareCode jd_jdfactory ShuaiLeiLu
+# replaceShareCodeV1 jd_pet ShuaiLeiLu
+# replaceShareCode jd_plantBean ShuaiLeiLu
+# replaceShareCode jd_sgmh ShuaiLeiLu
+# replaceShareCode jd_jxmc ShuaiLeiLu
 cd ${ShellDir}
 
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
 ScriptsDir=${ShellDir}/jd_scripts
 [ ! -d ${ScriptsDir} ] && mkdir -p ${ScriptsDir}
-DockerDir=${ScriptsDir}/docker
-[ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
-ListCronSh=${DockerDir}/crontab_list.sh
-# ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
-ListCronScripts3=ShuaiLeiLu/docker/crontab_list.sh
-ListCronScripts4=MyScript/docker/crontab_list.sh
-# ListCronScripts8=yyds/docker/crontab_list.sh
+# DockerDir=${ScriptsDir}/docker
+# [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
+# ListCronSh=${DockerDir}/crontab_list.sh
+# # ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
+# ListCronScripts3=ShuaiLeiLu/docker/crontab_list.sh
+# ListCronScripts4=MyScript/docker/crontab_list.sh
+# # ListCronScripts8=yyds/docker/crontab_list.sh
 
-cat ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' >${ListCronSh}
+# cat ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' >${ListCronSh}
 
 cd ${ShellDir}
 
