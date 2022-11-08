@@ -144,7 +144,7 @@ function deleteShareCode() {
 # replaceShareCode jd_jxmc jddepot
 # cd ${ShellDir}
 
-git clone https://github.com/ShuaiLeiLu/JD_Scripts.git ShuaiLeiLu
+git clone https://github.com/shufflewzc/faker2.git ShuaiLeiLu
 cd ShuaiLeiLu
 cp -rf ${ShellDir}/replace/* ./
 replaceShareCode jd_cash ShuaiLeiLu
@@ -162,16 +162,16 @@ cd ${ShellDir}
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
 ScriptsDir=${ShellDir}/jd_scripts
-[ ! -d ${ScriptsDir} ] && mkdir -p ${ScriptsDir}
-DockerDir=${ScriptsDir}/docker
-[ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
-ListCronSh=${DockerDir}/crontab_list.sh
-# ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
-ListCronScripts3=ShuaiLeiLu/docker/crontab_list.sh
-ListCronScripts4=MyScript/docker/crontab_list.sh
-# ListCronScripts8=yyds/docker/crontab_list.sh
+# [ ! -d ${ScriptsDir} ] && mkdir -p ${ScriptsDir}
+# DockerDir=${ScriptsDir}/docker
+# [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
+# ListCronSh=${DockerDir}/crontab_list.sh
+# # ListCronScripts2=JDHelloWorld/docker/crontab_list.sh
+# ListCronScripts3=ShuaiLeiLu/docker/crontab_list.sh
+# ListCronScripts4=MyScript/docker/crontab_list.sh
+# # ListCronScripts8=yyds/docker/crontab_list.sh
 
-cat ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' >${ListCronSh}
+# cat ${ListCronScripts3} ${ListCronScripts4} | tr -s [:space:] | sed '$!N; /^\(.*\)\n\1$/!P; D' >${ListCronSh}
 
 cd ${ShellDir}
 
