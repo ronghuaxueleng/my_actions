@@ -162,7 +162,7 @@ cd ${ShellDir}
 git clone -b scripts https://gitee.com/getready/my_actions.git MyScript
 
 ScriptsDir=${ShellDir}/jd_scripts
-# [ ! -d ${ScriptsDir} ] && mkdir -p ${ScriptsDir}
+[ ! -d ${ScriptsDir} ] && mkdir -p ${ScriptsDir}
 # DockerDir=${ScriptsDir}/docker
 # [ ! -d ${DockerDir} ] && mkdir -p ${DockerDir}
 # ListCronSh=${DockerDir}/crontab_list.sh
