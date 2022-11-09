@@ -1,4 +1,0 @@
-#!/bin/sh
-set -e
-alias ll="ls -l --color='auto'"
-ll "$@"
