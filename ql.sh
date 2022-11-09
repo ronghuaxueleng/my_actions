@@ -13,8 +13,19 @@ echo -e "\e[36m
        ▀                        ▀████▀▀                                 ▀████▀▀
 \e[0m\n"
 
-ql="latest"
-DOCKER_IMG_NAME="whyour/qinglong"
+echo -------------------------------
+echo "目前推荐版本 - 不会白屏" 
+echo "2.11.0   |   2.11.3"
+echo -------------------------------
+read -r -p "请输入要安装的青龙版本:" ql
+if  [ ! -n "$ql" ] ;then
+ ql="2.11.3"
+ echo "本一键仅支持到2.11.3版本"
+ echo "您设置的当前版本${ql}"
+else
+  echo "您设置的当前版本${ql}"
+fi 
+DOCKER_IMG_NAME="yanyuwangluo/qinglong"
 JD_PATH=""
 SHELL_FOLDER=$(pwd)
 CONTAINER_NAME=""
