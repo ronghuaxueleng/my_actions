@@ -133,7 +133,7 @@ check_container_name() {
 
 # 容器名称
 input_container_name() {
-    echo -n -e "\e[33m\n二、请输入要创建的 Docker 容器名称[默认为：qinglong]->\e[0m"
+    echo -n -e "\e[33m\n二、请输入要创建的 Docker 容器名称[默认为：jd]->\e[0m"
     read container_name
     if [ -z "$container_name" ]; then
         CONTAINER_NAME="jd"
