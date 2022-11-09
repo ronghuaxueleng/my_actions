@@ -365,7 +365,7 @@ if [ "$access" != "2" ]; then
             docker exec -it $CONTAINER_NAME bash -c "sed -i \"s/ALLOW_NUM=40/ALLOW_NUM=100/\" /ql/ninja/backend/.env && cd /ql/ninja/backend && pm2 start"
         fi
         log "8.开始青龙内部配置"
-        docker exec -it $CONTAINER_NAME bash -c "$(curl -fsSL https://yanyu.ltd/https://raw.githubusercontent.com/yanyuwangluo/VIP/main/Scripts/sh/1customCDN.sh)"
+        docker exec -it $CONTAINER_NAME bash -c "$(curl -fsSL https://ghproxy.com/https://raw.githubusercontent.com/ronghuaxueleng/my_actions/qinglong/1customCDN.sh)"
     else
         warn "8.未检测到 token，取消内部配置"
     fi
