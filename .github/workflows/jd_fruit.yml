@@ -33,8 +33,7 @@ jobs:
           node-version: "16.x"
       - name: 执行脚本
         run: |
-          npm install
-          node jd_fruit.js
+          npm install && node jd_fruit.js
       - name: 删除过多的workflows
         uses: Mattraks/delete-workflow-runs@main
         with:
