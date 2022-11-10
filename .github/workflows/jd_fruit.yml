@@ -33,7 +33,7 @@ jobs:
           node-version: "14.x"
       - name: 执行脚本
         run: |
-          ls –a
+          more .env
           npm install
           node jd_fruit.js
       - name: 删除过多的workflows
