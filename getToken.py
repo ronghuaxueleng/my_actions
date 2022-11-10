@@ -1,8 +1,6 @@
-'''
-python操作青龙面板接口的封装
-'''
-import requests
 import json
+import base64
+import requests
 
 
 class QingLong():
@@ -92,5 +90,6 @@ class QingLong():
 
 
 if __name__ == "__main__":
-    config = '{"host":"101.43.198.240:5680","ClientID":"SqbV-KZnOQ9q","ClientSecret":"9nG6mAcGJ8_qT99jIDQZdoy9"}'
-    QingLong(config).run()
+    config_base64 = "eyJob3N0IjoiMTAxLjQzLjE5OC4yNDA6NTY4MCIsIkNsaWVudElEIjoiU3FiVi1LWm5PUTlxIiwiQ2xpZW50U2VjcmV0IjoiOW5HNm1BY0dKOF9xVDk5aklEUVpkb3k5In0="
+    config_json = str(base64.b64decode(config_base64), 'utf-8')
+    QingLong(config_json).run()
