@@ -1,7 +1,7 @@
 name: 京东水果
 on:
   schedule:
-    - cron: "5 4,10,22 * * *" #每日6点5分、12点5分、18点5分执行任务
+    - cron: "5 4,10,22 * * *" #每日6点50分、12点50分、18点50分执行任务
   workflow_dispatch:
   watch:
     types: started
