@@ -19,6 +19,7 @@ jobs:
           wget -q https://raw.githubusercontent.com/ronghuaxueleng/my_actions/qinglong/jd_fruit.js -O jd_fruit.js
           wget -q https://raw.githubusercontent.com/ronghuaxueleng/my_actions/qinglong/package.json -O package.json
           wget -q https://raw.githubusercontent.com/ronghuaxueleng/my_actions/qinglong/sendNotify.js -O sendNotify.js
+          ls
       - name: 安装Python 3.8
         uses: actions/setup-python@v1
         with:
