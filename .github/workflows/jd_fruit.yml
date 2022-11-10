@@ -36,7 +36,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "16.x"
-          cache: 'poetry' # 设置缓存
       - name: 执行脚本
         run: |
           npm install && node jd_fruit.js
