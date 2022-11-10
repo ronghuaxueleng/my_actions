@@ -23,9 +23,16 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: 提交shareCode
+      - name: 生成京东token
         run: |
-          
+          python3 getToken.py
+      - name: 安装Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: 执行脚本
+        run: |
+          node jd_fruit.js
       - name: 删除过多的workflows
         uses: Mattraks/delete-workflow-runs@main
         with:
