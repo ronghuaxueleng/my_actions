@@ -107,15 +107,15 @@ dl_extra_shell() {
 }
 # extra.sh 设置区设置
 set_default_extra() {   
-    echo -e "一、集成仓库 Shufflewzc-Faker2"
-    read -p "直接回车拉取Faker2仓库，输入2回车拉取Faker3纯净仓库" CollectedRepo
+    echo -e "一、集成仓库 getready_my_actions"
+    read -p "直接回车拉取my_actions仓库，输入2回车拉取Faker3纯净仓库" CollectedRepo
     echo -e "二、其他仓库（Other Repositories）\n1-passerby-b\n2-curtinlv\n3-smiek2221\n4-cdle\n5-ZCY01\n6-whyour/hundun\n7-moposmall\n8-Ariszy (Zhiyi-N)\n9-photonmang\n10-jiulan\n12-star261\n13-Wenmoux\n14-Tsukasa007"
     read -p "输入您想拉取其他仓库编号(回车默认不拉取)，拉取多个请用空格隔开:" OtherRepo 
     CollectedRepo=${CollectedRepo:-"4"}
     sed -i "s/CollectedRepo=(4)/CollectedRepo=(${CollectedRepo})/g" $extra_shell_path
     sed -i "s/OtherRepo=()/OtherRepo=(${OtherRepo})/g" $extra_shell_path
     echo -e "Ninja\n###（1）默认启动并自动更新\n###（2）！！！未修改容器映射的请勿运行，否则会出现青龙打不开或者设备死机等不良后果，映射参考 https://github.com/MoonBegonia/ninja#%E5%AE%B9%E5%99%A8%E5%86%85"
-    read -p "Ninja="on" ##up为更新，on为启动，down为不运行，请输入您的设置（默认运行） up/on/down：" Ninja
+    read -p "Ninja="down" ##up为更新，on为启动，down为不运行，请输入您的设置（默认运行） up/on/down：" Ninja
     sed -i "s/Ninja=\"on\"/Ninja=\"${Ninja}\"/" $extra_shell_path
 }
 # 将 ql extra 添加到定时任务
