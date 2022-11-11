@@ -870,6 +870,7 @@ async function masterHelpShare() {
                     }
                 }
             } catch (e) {
+                console.log(e);
                 $.logErr(e, resp)
             }
         })
@@ -1164,6 +1165,8 @@ async function GetCollect() {
         // }
         console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
     } catch (e) {
+        console.log("GetCollect");
+        console.log(e);
         $.logErr(e);
     }
 }
@@ -1243,6 +1246,8 @@ async function getFullCollectionReward() {
                     }
                 }
             } catch (e) {
+                console.log("getFullCollectionReward");
+                console.log(e);
                 $.logErr(e, resp)
             } finally {
                 resolve();
@@ -1493,6 +1498,8 @@ async function initForFarm() {
                     }
                 }
             } catch (e) {
+                console.log("initForFarm");
+                console.log(e);
                 $.logErr(e, resp)
             } finally {
                 resolve();
@@ -1632,6 +1639,8 @@ function request(function_id, body = {}, timeout = 1000) {
                         }
                     }
                 } catch (e) {
+                    console.log("request");
+                    console.log(e);
                     $.logErr(e, resp);
                 } finally {
                     resolve(data);
