@@ -167,17 +167,6 @@ async function jdFruit() {
             await GetCollect();
             message = `【水果名称】${$.farmInfo.farmUserPro.name}\n`;
             console.log(`\n【已成功兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`);
-
-            try {
-                if ($.index === 1) {
-                    let submitRes = await submitCode0();
-                    if (submitRes && submitRes.code === 0) { console.log(`🐔东东农场-互助码已提交！🐔`); } else { console.log(`🐔东东农场-互助码提交失败！🐔`); }
-                } else {
-                    let submitCodeRes = await submitCode();
-                    if (submitCodeRes && submitCodeRes.code === 0) { console.log(`🐔东东农场-互助码已提交！🐔`); } else { console.log(`🐔东东农场-互助码提交失败！🐔`); }
-                }
-            } catch (e) {}
-
             message += `【已兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`;
             await masterHelpShare(); //助力好友
             if ($.farmInfo.treeState === 2 || $.farmInfo.treeState === 3) {
@@ -1200,48 +1189,6 @@ function readShareCode(code) {
         })
         await $.wait(10000);
         resolve()
-    })
-}
-
-function submitCode() {
-    return new Promise(async resolve => {
-        $.get({ url: `http://hz.feverrun.top:99/share/submit/farm?code=${$.farmInfo.farmUserPro.shareCode}&user=${$.UserName}`, timeout: 10000 }, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    if (safeGet(data)) {
-                        data = JSON.parse(data);
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-    })
-}
-
-function submitCode0() {
-    return new Promise(async resolve => {
-        $.get({ url: `http://hz.feverrun.top:99/share/submit/farm0?code=${$.farmInfo.farmUserPro.shareCode}&user=${$.UserName}`, timeout: 10000 }, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    if (safeGet(data)) {
-                        data = JSON.parse(data);
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
     })
 }
 
