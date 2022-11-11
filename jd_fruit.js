@@ -1557,6 +1557,7 @@ async function showMsg() {
     } else {
         $.log(`\n${message}\n`);
     }
+    process.exit(0);
 }
 
 function timeFormat(time) {
