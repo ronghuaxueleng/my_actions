@@ -90,6 +90,6 @@ class QingLong():
 
 
 if __name__ == "__main__":
-    config_base64 = "eyJob3N0IjoiMTAxLjQzLjE5OC4yNDA6NTY4MCIsIkNsaWVudElEIjoiODctUXZrNEhrLW5iIiwiQ2xpZW50U2VjcmV0Ijoibi1meHNlcWFRUkU2RjNyQ2xLbzBGMXJsIn0="
+    config_base64 = "eyJob3N0IjoiMTkyLjE0NC4yMTUuMjE4OjU2ODAiLCJDbGllbnRJRCI6Ijg3LVF2azRIay1uYiIsIkNsaWVudFNlY3JldCI6Im4tZnhzZXFhUVJFNkYzckNsS28wRjFybCJ9"
     config_json = str(base64.b64decode(config_base64), 'utf-8')
     QingLong(config_json).run()
