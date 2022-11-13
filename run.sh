@@ -1,0 +1,1 @@
+python3 getToken.py && node jd_fruit.js
