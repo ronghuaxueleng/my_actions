@@ -1451,49 +1451,47 @@ async function signForFarm() {
  * 初始化农场, 可获取果树及用户信息API
  */
 async function initForFarm() {
-    const functionId = arguments.callee.name.toString();
-    $.farmInfo = await request(functionId, { "ver": "750", "babelChannel": "45", "collectionId": "519", "sid": "b5d3a94a30e6f82a1c732e808a464c3w", "un_area": "1_2800_55819_0", "version": 18, "channel": 1 });
-    // return new Promise(resolve => {
-    //     const option = {
-    //         url: `${JD_API_HOST}?functionId=initForFarm`,
-    //         body: `body=${escape(JSON.stringify({ "version": 4 }))}&appid=wh5&clientVersion=9.1.0`,
-    //         headers: {
-    //             "accept": "*/*",
-    //             "accept-encoding": "gzip, deflate, br",
-    //             "accept-language": "zh-CN,zh;q=0.9",
-    //             "cache-control": "no-cache",
-    //             "cookie": cookie,
-    //             "origin": "https://home.m.jd.com",
-    //             "pragma": "no-cache",
-    //             "referer": "https://home.m.jd.com/myJd/newhome.action",
-    //             "sec-fetch-dest": "empty",
-    //             "sec-fetch-mode": "cors",
-    //             "sec-fetch-site": "same-site",
-    //             "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-    //             "Content-Type": "application/x-www-form-urlencoded"
-    //         },
-    //         timeout: 10000,
-    //     };
-    //     $.post(option, (err, resp, data) => {
-    //         try {
-    //             if (err) {
-    //                 console.log('\ninitForFarm: API查询请求失败 ‼️‼️');
-    //                 console.log(JSON.stringify(err));
-    //                 $.logErr(err);
-    //             } else {
-    //                 if (safeGet(data)) {
-    //                     $.farmInfo = JSON.parse(data)
-    //                 }
-    //             }
-    //         } catch (e) {
-    //             console.log("initForFarm");
-    //             console.log(e);
-    //             $.logErr(e, resp)
-    //         } finally {
-    //             resolve();
-    //         }
-    //     })
-    // })
+    return new Promise(resolve => {
+        const option = {
+            url: `${JD_API_HOST}?functionId=initForFarm`,
+            body: `body=${escape(JSON.stringify({ "version": 4 }))}&appid=wh5&clientVersion=9.1.0`,
+            headers: {
+                "accept": "*/*",
+                "accept-encoding": "gzip, deflate, br",
+                "accept-language": "zh-CN,zh;q=0.9",
+                "cache-control": "no-cache",
+                "cookie": cookie,
+                "origin": "https://home.m.jd.com",
+                "pragma": "no-cache",
+                "referer": "https://home.m.jd.com/myJd/newhome.action",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-site",
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            timeout: 10000,
+        };
+        $.post(option, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log('\ninitForFarm: API查询请求失败 ‼️‼️');
+                    console.log(JSON.stringify(err));
+                    $.logErr(err);
+                } else {
+                    if (safeGet(data)) {
+                        $.farmInfo = JSON.parse(data)
+                    }
+                }
+            } catch (e) {
+                console.log("initForFarm");
+                console.log(e);
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+    })
 }
 
 // 初始化任务列表API
