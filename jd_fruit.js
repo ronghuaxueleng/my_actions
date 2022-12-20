@@ -121,11 +121,6 @@ let NoNeedCodes = [];
 
             lnrun++;
             await jdFruit();
-            if (lnrun == 5) {
-                console.log(`访问接口次数达到5次，休息一分钟.....`);
-                await $.wait(60 * 1000);
-                lnrun = 0;
-            }
         }
     }
     if ($.isNode() && allMessage && $.ctrTemp) {
