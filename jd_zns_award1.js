@@ -1,7 +1,7 @@
 
 /*
 炸年兽组队奖励领取
-10 20 * * * jd_zns_award.js
+40 22 * * * jd_zns_award1.js
 updatetime：2022/12/26
  */
 
