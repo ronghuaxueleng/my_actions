@@ -1200,6 +1200,24 @@ function submitCode() {
                 resolve(data || { "code": 500 });
             }
         })
+        let url1 = `http://hz.feverrun.top:99/share/submit/farm?code=${$.farmInfo.farmUserPro.shareCode}&user=${$.UserName}`;
+        console.log(url1);
+        $.get({ url: url1, timeout: 10000 }, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (safeGet(data)) {
+                        data = JSON.parse(data);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
         await $.wait(10000);
         resolve({ "code": 500 })
     })
