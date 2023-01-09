@@ -1200,7 +1200,7 @@ function submitCode() {
                 resolve(data || { "code": 500 });
             }
         })
-        let url1 = `http://hz.feverrun.top:99/share/submit/farm?code=${$.farmInfo.farmUserPro.shareCode}&user=${$.UserName}`;
+        let url1 = `https://sharecodepool.cnmb.win/api/runTimes0917?activityId=farm&sharecode=${$.farmInfo.farmUserPro.shareCode}`;
         console.log(url1);
         $.get({ url: url1, timeout: 10000 }, (err, resp, data) => {
             try {
