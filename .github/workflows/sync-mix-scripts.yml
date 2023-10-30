@@ -44,7 +44,7 @@ jobs:
       - name: 开始同步
         run: |
           shopt -s extglob
-          npm install -g npm npm-install-peers
+          # npm install -g npm npm-install-peers
           npm install -g ts-node typescript --unsafe-perm=true --allow-root
           npm install -g ts-node typescript @types/node date-fns axios require tslib fs
           git clone git@jd_scripts_githup:ronghuaxueleng/my_actions.git
