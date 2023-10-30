@@ -1,1 +1,1 @@
-python3 getToken.py && node jd_fruit.js
+python3 getToken.py && node jd_fruit_task1.js

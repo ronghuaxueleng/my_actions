@@ -57,7 +57,7 @@ class QingLong():
         response = self.request_get_method(url=url)
         if response["code"] == 200:
             with open(".env",'w') as f: # 如果filename不存在会自动创建， 'w'表示写数据，写之前会清空文件中的原有数据！
-                f.write("JD_COOKIE='" + "&".join([cookie["value"] for cookie in response["data"]]) + "'")
+                f.write("JD_COOKIE='" + "&".join([cookie["value"] for cookie in response["data"]]) + "'\nFRUIT_ID='qMaMVvvj9A_PDRBSFcuoKRY_fI1QBuQbCCn2HHVcEtU'")
             return True
         return False
 
