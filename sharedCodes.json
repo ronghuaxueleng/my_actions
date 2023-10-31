@@ -17,6 +17,12 @@
         "codes": "23297cf8ff914ec281f0fcd4579eecd0&b851a8b876154c4188a47a5bc7bff15b&ab35a52d10f0448292dc67967823bc74&abb947fbb54d4c9eabdc50bc3426ac2a&9c1c104e895b44bd88a4d3c2554822eb"
     },
     {
+        "name": "新东东农场",
+        "cmd": "/newfarm",
+        "bot": "@JD_ShareCode_Bot",
+        "codes": "ycXdOaS1kgrLCUdXfc__LN4kkur6l6jw6A&ycXdOf_p-w3KAR5QesGtQn9_p1fItQ&ycXdOaS1knSyW08HA6HxUCSbyPvTIII5&ycXdOaS1kmWUbXckC5jodkWbYh0FKZdn&ycXdOaS1kmWJWWk0J7HBTnvul8nHp6N2&ycXdOStiaNlNoMPQyx8FlRHigVXA8ZMD23s&ycXdOf_k9QTOCBNWc8GqQgOv1y5m4w"
+    },
+    {
         "name": "财富岛",
         "cmd": "/jxcfd",
         "bot": "@JD_ShareCode_Bot",
