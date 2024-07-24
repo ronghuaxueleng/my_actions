@@ -290,6 +290,7 @@ docker run -dit \
 	-v $DEPS_PATH:/ql/deps \
     -v $NINJA_PATH:/ql/ninja \
     -v /root/toutiao/config:/toutiao/config \
+    -v /root/toutiao/logs:/toutiao/logs \
     $MAPPING_JD_PORT \
     $MAPPING_NINJA_PORT \
     --name $CONTAINER_NAME \
