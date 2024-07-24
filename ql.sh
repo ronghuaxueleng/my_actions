@@ -289,6 +289,7 @@ docker run -dit \
     -v $JBOT_PATH:/ql/jbot \
 	-v $DEPS_PATH:/ql/deps \
     -v $NINJA_PATH:/ql/ninja \
+    -v /mitmproxy:/mitmproxy \
     $MAPPING_JD_PORT \
     $MAPPING_NINJA_PORT \
     --name $CONTAINER_NAME \
